@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Fragrance</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --coral: #FF9B7A;
+            --coral-dark: #E8876A;
+            --peach: #FFB8A0;
+            --pink: #FFC4D6;
+            --lavender: #C4B5FD;
+            --mint: #A7F3D0;
+            --sky: #BAE6FD;
+            --cream: #FFF5F0;
+            --dark: #2D2D2D;
+            --gray: #6B7280;
+            --light-gray: #F3F4F6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background-image: url('./assets/hero-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 400;
+            color: white;
+            line-height: 1.2;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-product {
+            width: clamp(280px, 50vw, 500px);
+            height: clamp(350px, 60vw, 600px);
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .hero-product img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-top: -8rem;
+            margin-bottom: -10rem;
+            transform: rotate(-10deg) scale(1.05);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin-top: -20rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            padding: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--coral-dark);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            padding: 6rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, var(--sky) 0%, var(--lavender) 100%);
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .about-content h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .about-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .features {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* ===== GALLERY STRIP ===== */
+        .gallery-strip {
+            background: linear-gradient(90deg, var(--lavender) 0%, var(--pink) 50%, var(--peach) 100%);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .gallery-track {
+            display: flex;
+            animation: scroll 400s linear infinite;
+            width: max-content;
+        }
+
+        .gallery-track img {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ===== COLLECTIONS ===== */
+        .collections {
+            padding: 5rem 1rem;
+            text-align: center;
+            background: white;
+            margin-bottom: -5rem;
+        }
+
+        .collections h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 2rem;
+        }
+
+        .collection-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--light-gray);
+            background: white;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--gray);
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            border-color: var(--coral);
+            color: var(--coral-dark);
+            background: var(--cream);
+        }
+
+        /* ===== PRODUCTS ===== */
+        .products {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 5rem;
+        }
+
+        .product-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .product-card.hidden {
+            display: none !important;
+        }
+
+        .product-card:nth-child(even) {
+            direction: rtl;
+        }
+
+        .product-card:nth-child(even)>* {
+            direction: ltr;
+        }
+
+        .product-card:nth-child(even) .product-info {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .product-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image .shape {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            z-index: 0;
+        }
+
+        .product-card:nth-child(1) .shape {
+            background: var(--peach);
+        }
+
+        .product-card:nth-child(2) .shape {
+            background: var(--sky);
+        }
+
+        .product-card:nth-child(3) .shape {
+            background: var(--pink);
+        }
+
+        .product-card:nth-child(4) .shape {
+            background: var(--lavender);
+        }
+
+        .product-card:nth-child(5) .shape {
+            background: var(--mint);
+        }
+
+        .product-image img {
+            width: 70%;
+            height: auto;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.1));
+        }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-tag {
+            color: var(--coral-dark);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .product-notes {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .product-notes strong {
+            color: var(--dark);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--coral);
+            color: var(--coral-dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--coral);
+            color: white;
+        }
+
+        /* ===== REVIEWS ===== */
+        .reviews {
+            background: var(--light-gray);
+            padding: 5rem 1rem;
+        }
+
+        .reviews h2 {
+            text-align: center;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 3rem;
+        }
+
+        .reviews-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .review-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .review-meta h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .stars {
+            color: #FBBF24;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .review-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .verified {
+            color: #10B981;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta {
+            background-image: url('./assets/footer.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: white;
+            margin-bottom: 1rem;
+            text-align: left;
+            padding: 2rem;
+            margin-top: -10rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 500px;
+            text-align: left;
+            padding: 2rem;
+            margin-top: -4rem;
+        }
+
+        .cta-products {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .cta-products img {
+            width: 150px;
+            height: 200px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 1rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .footer-newsletter {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-newsletter input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .footer-newsletter button {
+            background: var(--coral);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .footer-links h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--coral);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-card {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .product-card:nth-child(even) {
+                direction: ltr;
+            }
+
+            .product-card:nth-child(even) .product-info {
+                text-align: center;
+                align-items: center;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* mobile responsive */
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.7rem;
+            }
+
+            .hero-product {
+                width: 85vw;
+                height: 105vw;
+                max-width: 400px;
+                max-height: 500px;
+            }
+
+            .hero-product img {
+                width: 100%;
+                max-width: 100vw;
+                margin-top: -7rem;
+                padding: 1rem;
+                object-fit: contain;
+                filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            }
+
+            .hero-desc {
+                margin-top: -16rem;
+            }
+
+            .product-info {
+                margin-top: -5rem;
+            }
+
+            .product-image {
+                margin-top: -5rem;
+            }
+
+            .features {
+                justify-content: center;
+            }
+
+            .collection-tabs {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+
+            .product-card {
+                padding: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-newsletter {
+                flex-direction: column;
+            }
+
+            .footer-newsletter button {
+                width: 100%;
+            }
+
+            .cta-products img {
+                width: 100px;
+                height: 140px;
+            }
+        }
+
+        /* Broken image styling */
+        img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        img::before {
+            content: "Image";
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge">New</div>
+        <h1>Elevate Every Moment<br>With Signature Fragrance</h1>
+        <div class="hero-product">
+            <img src="./assets/hero.png" alt="Signature Fragrance" style="width: 100%;" text-anchor='middle'
+                font-family='sans-serif'>
+        </div>
+        <p class="hero-desc">Discover luxury perfumes crafted to express confidence, elegance, and individuality through
+            every scent.</p>
+        <a href="#products" class="btn-primary">Explore Collection</a>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about">
+        <div class="about-grid">
+            <div class="about-image" style="
+                    width: 100%;
+                    min-height: 500px;
+                    background-image: url('./assets/about.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;
+                ">
+                <!-- <img src="./assets/Artboard 18 1.png" alt="Signature Fragrance" style="width: 100%;"
+                    text-anchor='middle' font-family='sans-serif'> -->
+            </div>
+            <div class="about-content">
+                <h2>Crafted Beyond Fragrance</h2>
+                <p>Perfume kami hadir untuk menghadirkan pengalaman wewangian yang lebih dari sekadar aroma. Setiap
+                    koleksi dirancang dengan perpaduan premium ingredients, artistic formulation, dan karakter yang
+                    meninggalkan kesan mendalam.</p>
+                <div class="features">
+                    <div class="feature-item">
+                        <div class="feature-icon">&#10003;</div>
+                        <span class="feature-text">Long Lasting Formula</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">&#10003;</div>
+                        <span class="feature-text">100% extrait de parfum</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">&#10003;</div>
+                        <span class="feature-text">crafted by fragrance expert</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY STRIP -->
+    <section class="gallery-strip">
+        <div class="gallery-track" id="galleryMarquee">
+            <img src="./assets/slide1.png" alt="Gallery">
+            <img src="./assets/slide2.png" alt="Gallery">
+            <img src="./assets/slide3.png" alt="Gallery">
+            <img src="./assets/slide4.png" alt="Gallery">
+            <img src="./assets/slide5.png" alt="Gallery">
+        </div>
+    </section>
+
+    <!-- COLLECTIONS -->
+    <section class="collections" id="products">
+        <h2>A Scent For Every Personality</h2>
+        <div class="collection-tabs">
+            <button class="tab-btn active" data-filter="all">All Collection</button>
+            <button class="tab-btn" data-filter="floral">Floral Collection</button>
+            <button class="tab-btn" data-filter="fresh">Fresh Collection</button>
+            <button class="tab-btn" data-filter="fruity">Fruity Collection</button>
+        </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products">
+        <div class="product-card" data-category="fresh fruity">
+            <div class="product-image" style="
+                    width: 100%;
+                    min-height: 500px;
+                    background-image: url('./assets/prod1.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;">
+            </div>
+            <div class="product-info">
+                <span class="product-tag">Extrait de Parfum</span>
+                <h3>Date Night</h3>
+                <div class="product-notes">
+                    Aroma fruity, fresh, dan green notes langsung memberikan kesan segar yang ringan dan menyenangkan.
+                    Berlanjut ke aroma inti yaitu floral berpadu dengan fruity dan sentuhan amber yang hangat,
+                    menciptakan karakter wangi yang lembut dan sedikit manis. Di fase akhir, woody, fruity, dan ambery
+                    notes memberikan drydown yang hangat, smooth, dan nyaman, meninggalkan jejak wangi yang soft dan
+                    berkesan.<br><br>
+                    <strong>Top Notes:</strong> Fruity, Fresh, Green<br>
+                    <strong>Middle Notes:</strong> Floral, Fruity, Ambery<br>
+                    <strong>Base Notes:</strong> Woody, Fruity, Ambery
+                </div>
+                <a href="#" class="btn-outline">Buy Now</a>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="floral">
+            <div class="product-image" style="
+                    width: 100%;
+                    min-height: 500px;
+                    background-image: url('./assets/prod2.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;">
+            </div>
+            <div class="product-info">
+                <span class="product-tag">Extrait de Parfum</span>
+                <h3>Breezy Girl</h3>
+                <div class="product-notes">
+                    Perpaduan fruity, green notes, dan sentuhan floral menghadirkan kesan segar yang bersih, seperti
+                    habis mandi. Berlanjut ke aroma floral yang dipadukan dengan green dan ambery, menciptakan nuansa
+                    lembut, tenang, dan sedikit hangat. Di fase akhir, aromanya berubah menjadi perpaduan musky, amber,
+                    dan lactonic yang memberikan drydown yang calm dan comforting, meninggalkan jejak wangi yang halus,
+                    bersih, dan terasa dekat di kulit.<br><br>
+                    <strong>Top Notes:</strong> Fruity, Green, Floral<br>
+                    <strong>Middle Notes:</strong> Floral, Green, Ambery<br>
+                    <strong>Base Notes:</strong> Musky, Amber, Lactonic
+                </div>
+                <a href="#" class="btn-outline">Buy Now</a>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="fruity">
+            <div class="product-image" style="
+                    width: 100%;
+                    min-height: 500px;
+                    background-image: url('./assets/prod3.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;">
+            </div>
+            <div class="product-info">
+                <span class="product-tag">Extrait de Parfum</span>
+                <h3>Peppy Cheerleader</h3>
+                <div class="product-notes">
+                    Perpaduan manis dan segar dari buah pear, peach dan berries membuka aroma ini dengan kesan yang
+                    langsung memikat. Diikuti oleh kelembutan floral khususnya aroma Lily yang berpadu dengan nuansa
+                    fruity yang manis dan juice. Ditutup dengan sandalwood yang hangat dan vanilla musk yang creamy
+                    menghadirkan kesan elegan, lembut dan menenangkan sepanjang hari.<br><br>
+                    <strong>Top Notes:</strong> Pear, Peach, Berries<br>
+                    <strong>Middle Notes:</strong> Floral, Lily, Fruity<br>
+                    <strong>Base Notes:</strong> Sandalwood, Vanilla, Musk
+                </div>
+                <a href="#" class="btn-outline">Buy Now</a>
+            </div>
+        </div>
+
+        <div class="product-card" data-category="fruity">
+            <div class="product-image" style="
+                    width: 100%;
+                    min-height: 500px;
+                    background-image: url('./assets/prod4.png');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;">
+            </div>
+            <div class="product-info">
+                <span class="product-tag">Extrait de Parfum</span>
+                <h3>4Ever Young</h3>
+                <div class="product-notes">
+                    Perpaduan aroma segar dari fruity, cucumber, dan green notes memberikan kesan ringan dan watery yang
+                    menyegarkan. Berlanjut ke sentuhan floral dengan green dan watermelon yang juicy, menciptakan nuansa
+                    ceria dan playful. Ditutup dengan aroma musky, sweet, dan fruity menghadirkan wangi yang soft,
+                    manis, dan clean, nyaman dipakai sepanjang hari.<br><br>
+                    <strong>Top Notes:</strong> Fruity, Cucumber, Green<br>
+                    <strong>Middle Notes:</strong> Floral, Green, Watermelon<br>
+                    <strong>Base Notes:</strong> Musky, Sweet, Fruity
+                </div>
+                <a href="#" class="btn-outline">Buy Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="reviews">
+        <h2>Customer Reviews</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='%23666'%3EA%3C/text%3E%3C/svg%3E"
+                        alt="Avatar" class="review-avatar">
+                    <div class="review-meta">
+                        <h4>Charlotte W.</h4>
+                        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    </div>
+                </div>
+                <p class="review-text">"The fragrance lasts surprisingly long and feels very premium."</p><br>
+                <div class="verified">&#10003; Verified Purchase</div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='%23666'%3ES%3C/text%3E%3C/svg%3E"
+                        alt="Avatar" class="review-avatar">
+                    <div class="review-meta">
+                        <h4>Sarah M.</h4>
+                        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                    </div>
+                </div>
+                <p class="review-text">"The packaging is beautiful and perfect for gifting."</p><br>
+                <div class="verified">&#10003; Verified Purchase</div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='%23666'%3EL%3C/text%3E%3C/svg%3E"
+                        alt="Avatar" class="review-avatar">
+                    <div class="review-meta">
+                        <h4>Lily K.</h4>
+                        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+                    </div>
+                </div>
+                <p class="review-text">"My daily body care routine feels much more luxurious now."</p><br>
+                <div class="verified">&#10003; Verified Purchase</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Find Your Signature<br>Scent Today</h2>
+        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p> -->
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Signature Fragrance</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Enter your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Explore</h4>
+                <a href="#">New Arrivals</a>
+                <a href="#">Best Sellers</a>
+                <a href="#">Collections</a>
+                <a href="#">Gift Sets</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Sustainability</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQs</a>
+                <a href="#">Shipping</a>
+                <a href="#">Returns</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Signature Fragrance. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">f</a>
+                <a href="#">t</a>
+                <a href="#">i</a>
+                <a href="#">y</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Infinite Gallery Marquee
+            const track = document.getElementById('galleryMarquee');
+            if (track) {
+                const originalImage = track.innerHTML;
+                // Add enough copies to fill standard screens (e.g., 15 copies)
+                for (let i = 0; i < 15; i++) {
+                    track.innerHTML += originalImage;
+                }
+                // Duplicate the entire content once more to ensure smooth CSS infinite transform: translateX(-50%)
+                track.innerHTML += track.innerHTML;
+            }
+
+            // Collection Filter
+            const filterBtns = document.querySelectorAll('.tab-btn');
+            const products = document.querySelectorAll('.product-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    products.forEach(product => {
+                        if (filterValue === 'all') {
+                            product.classList.remove('hidden');
+                        } else {
+                            const categories = product.getAttribute('data-category');
+                            if (categories && categories.includes(filterValue)) {
+                                product.classList.remove('hidden');
+                            } else {
+                                product.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

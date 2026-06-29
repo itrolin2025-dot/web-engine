@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #202124;
+            --text-secondary: #5F6368;
+            --border: #DADCE0;
+            --hover-bg: #F1F3F4;
+            --accent: #1A73E8;
+            --shadow-sm: 0 1px 2px 0 rgba(60, 64, 67, 0.08);
+            --shadow-md: 0 1px 3px rgba(60, 64, 67, 0.12), 0 1px 2px rgba(60, 64, 67, 0.24);
+            --shadow-lg: 0 4px 12px rgba(60, 64, 67, 0.15), 0 1px 3px rgba(60, 64, 67, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            width: 100%;
+            max-width: 480px;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+        }
+
+        .search-bar input::placeholder {
+            color: #9AA0A6;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9AA0A6;
+            pointer-events: none;
+        }
+
+        /* Grid Container */
+        .client-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.25rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Client Card */
+        .client-card {
+            width: calc(25% - 1rem);
+            min-width: 180px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.75rem 1.25rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .client-card.add-card {
+            border: 2px dashed var(--border);
+            background: transparent;
+        }
+
+        .client-card.add-card:hover {
+            border-color: var(--accent);
+            background: rgba(26, 115, 232, 0.04);
+        }
+
+        .client-card.add-card .logo-wrapper {
+            background: #E8EAED;
+            color: var(--text-secondary);
+        }
+
+        .client-card.add-card:hover .logo-wrapper {
+            background: var(--accent);
+            color: white;
+        }
+
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #34A853, #FBBC05, #EA4335);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .client-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .client-card:hover::before {
+            opacity: 1;
+        }
+
+        .client-card:active {
+            transform: translateY(-2px);
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+            position: relative;
+            transition: transform 0.25s ease;
+        }
+
+        .client-card:hover .logo-wrapper {
+            transform: scale(1.08);
+        }
+
+        /* Brand Colors */
+        .client-card:nth-child(1) .logo-wrapper {
+            background: linear-gradient(135deg, #4285F4, #34A853);
+        }
+
+        .client-card:nth-child(2) .logo-wrapper {
+            background: linear-gradient(135deg, #FF6F00, #FF8F00);
+        }
+
+        .client-card:nth-child(3) .logo-wrapper {
+            background: linear-gradient(135deg, #00BCD4, #0097A7);
+        }
+
+        .client-card:nth-child(4) .logo-wrapper {
+            background: linear-gradient(135deg, #E91E63, #C2185B);
+        }
+
+        .client-card:nth-child(5) .logo-wrapper {
+            background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+        }
+
+        .client-card:nth-child(6) .logo-wrapper {
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+        }
+
+        .client-card:nth-child(7) .logo-wrapper {
+            background: linear-gradient(135deg, #FF5722, #E64A19);
+        }
+
+        .client-card:nth-child(8) .logo-wrapper {
+            background: linear-gradient(135deg, #3F51B5, #303F9F);
+        }
+
+        /* Client Info */
+        .client-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .client-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* External Link Icon */
+        .link-icon {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .client-card:hover .link-icon {
+            opacity: 0.5;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .client-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .client-card {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo-wrapper {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 2rem 1rem;
+            }
+
+            .client-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .client-card {
+                padding: 1.25rem 0.75rem;
+                border-radius: 12px;
+            }
+
+            .logo-wrapper {
+                width: 52px;
+                height: 52px;
+                font-size: 1.25rem;
+            }
+
+            .client-name {
+                font-size: 0.85rem;
+            }
+
+            .client-desc {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+    <base>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Client Portal</h1>
+        <p>Select a client to access their dashboard</p>
+    </div>
+
+    <div class="search-bar">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search clients..." id="searchInput">
+    </div>
+
+    <div class="client-grid" id="clientGrid">
+        <a href="/web-enginge/elska/" class="client-card" target="_blank" rel="noopener">
+            <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            <div class="logo-wrapper" style="
+                background-image:url('./assets/client/elska.png');
+                background-repeat:no-repeat;
+                background-position:center;
+                background-size:contain;
+                width:120px;
+                height:120px;">
+            </div>
+            <div class="client-name">Elska</div>
+            <div class="client-desc">Parfume</div>
+        </a>
+
+        <a href="#" class="client-card add-card">
+            <div class="logo-wrapper">+</div>
+            <div class="client-name">Tambah Data Baru</div>
+            <div class="client-desc">Tambahkan client baru</div>
+        </a>
+
+    </div>
+
+    <div class="footer">
+        <p>powered by rolin</p>
+    </div>
+
+    <script>
+        // Search filter
+        const searchInput = document.getElementById('searchInput');
+        const clientCards = document.querySelectorAll('.client-card');
+
+        searchInput.addEventListener('input', function (e) {
+            const query = e.target.value.toLowerCase();
+
+            clientCards.forEach(card => {
+                const name = card.querySelector('.client-name').textContent.toLowerCase();
+                const desc = card.querySelector('.client-desc').textContent.toLowerCase();
+
+                if (name.includes(query) || desc.includes(query)) {
+                    card.style.display = '';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

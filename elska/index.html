@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>type Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #202124;
+            --text-secondary: #5F6368;
+            --border: #DADCE0;
+            --hover-bg: #F1F3F4;
+            --accent: #1A73E8;
+            --shadow-sm: 0 1px 2px 0 rgba(60, 64, 67, 0.08);
+            --shadow-md: 0 1px 3px rgba(60, 64, 67, 0.12), 0 1px 2px rgba(60, 64, 67, 0.24);
+            --shadow-lg: 0 4px 12px rgba(60, 64, 67, 0.15), 0 1px 3px rgba(60, 64, 67, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* Back Button */
+        .btn-back {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .btn-back:hover {
+            background: var(--hover-bg);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            width: 100%;
+            max-width: 480px;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+        }
+
+        .search-bar input::placeholder {
+            color: #9AA0A6;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9AA0A6;
+            pointer-events: none;
+        }
+
+        /* Grid Container */
+        .type-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* type Card */
+        .type-card {
+            width: calc(50% - 0.75rem);
+            min-width: 320px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: left;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #34A853, #FBBC05, #EA4335);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            z-index: 2;
+        }
+
+        .type-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .type-card:hover::before {
+            opacity: 1;
+        }
+
+        .type-card:active {
+            transform: translateY(-2px);
+        }
+
+        /* Logo Container */
+        .logo-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            margin: 0;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: #E8EAED;
+        }
+
+        .logo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .type-card:hover .logo-wrapper img {
+            transform: scale(1.08);
+        }
+
+        /* type Info */
+        .type-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .type-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .type-desc strong {
+            color: var(--text-primary);
+            display: block;
+            margin-top: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .type-desc ul {
+            padding-left: 1.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .type-desc li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .btn-back {
+                position: static;
+                margin-bottom: 2rem;
+                align-self: center;
+            }
+
+            .type-grid {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                align-items: stretch;
+                overflow-x: auto;
+                gap: 1rem;
+                padding-bottom: 1rem;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .type-grid::-webkit-scrollbar {
+                display: none;
+            }
+            .type-grid {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+
+            .type-card {
+                flex: 0 0 calc(90% - 1rem);
+                max-width: none;
+                scroll-snap-align: center;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 2rem 1rem;
+            }
+
+            .card-content {
+                padding: 1.25rem;
+            }
+
+            .type-name {
+                font-size: 1.1rem;
+            }
+
+            .type-desc {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <base>
+</head>
+
+<body>
+
+    <a href="#" class="btn-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 0.5rem;">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to client list
+    </a>
+
+    <div class="header">
+        <h1>Page Type</h1>
+        <p>Concept of Your Page</p>
+    </div>
+
+    <div class="search-bar" hidden>
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <input type="text" placeholder="Search types..." id="searchInput">
+    </div>
+
+    <div class="type-grid" id="typeGrid">
+        <a href="#" class="type-card">
+            <div class="logo-wrapper">
+                <img src="../assets/web.avif" alt="Landing Page">
+            </div>
+            <div class="card-content">
+                <div class="type-name">Landing Page</div>
+                <div class="type-desc">
+                    Halaman website yang dirancang khusus untuk marketing atau kampanye iklan.
+                    <strong>Benefit:</strong>
+                    <ul>
+                        <li>Fokus pada satu tujuan konversi (CTA)</li>
+                        <li>Desain lebih terarah dan persuasif</li>
+                        <li>Efektif untuk promosi produk atau lead generation</li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+
+        <a href="#" class="type-card">
+            <div class="logo-wrapper">
+                <img src="../assets/ecom.avif" alt="E-Commerce">
+            </div>
+            <div class="card-content">
+                <div class="type-name">E-Commerce</div>
+                <div class="type-desc">
+                    Platform toko online terpadu untuk menjual produk fisik atau digital secara profesional.
+                    <strong>Benefit:</strong>
+                    <ul>
+                        <li>Toko buka 24/7 tanpa batas waktu</li>
+                        <li>Jangkauan pasar yang jauh lebih luas</li>
+                        <li>Manajemen produk dan transaksi yang terintegrasi otomatis</li>
+                    </ul>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="footer">
+        <p>powered by rolin</p>
+    </div>
+
+    <script>
+        // Search filter
+        const searchInput = document.getElementById('searchInput');
+        const typeCards = document.querySelectorAll('.type-card');
+
+        searchInput.addEventListener('input', function (e) {
+            const query = e.target.value.toLowerCase();
+
+            typeCards.forEach(card => {
+                const name = card.querySelector('.type-name').textContent.toLowerCase();
+                const desc = card.querySelector('.type-desc').textContent.toLowerCase();
+
+                if (name.includes(query) || desc.includes(query)) {
+                    card.style.display = '';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
