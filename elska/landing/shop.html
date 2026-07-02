@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Fragrance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --coral: #FF9B7A;
+            --coral-dark: #E8876A;
+            --peach: #FFB8A0;
+            --pink: #FFC4D6;
+            --lavender: #C4B5FD;
+            --mint: #A7F3D0;
+            --sky: #BAE6FD;
+            --cream: #FFF5F0;
+            --dark: #2D2D2D;
+            --gray: #6B7280;
+            --light-gray: #F3F4F6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background-color: transparent;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: white;
+            padding: 0.8rem 5%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .navbar.scrolled .navbar-logo {
+            color: var(--dark);
+        }
+
+        .navbar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .navbar.scrolled .navbar-logo {
+            color: var(--dark);
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .navbar-menu li a {
+            text-decoration: none;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar.scrolled .navbar-menu li a {
+            color: var(--dark);
+        }
+
+        .navbar-menu li a:hover {
+            color: var(--coral);
+        }
+
+        /* ===== FLOATING BUTTONS ===== */
+        .floating-actions {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, background-color 0.3s, opacity 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .fab:hover {
+            transform: translateY(-5px);
+        }
+
+        .fab-wa {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .fab-wa:hover {
+            background-color: #128C7E;
+        }
+
+        .fab-top {
+            background-color: var(--dark);
+            font-size: 1.2rem;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .fab-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled .hamburger span {
+            background-color: var(--dark);
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .hamburger.active span {
+            background-color: var(--dark) !important;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.8rem 5%;
+            }
+
+            .navbar.scrolled {
+                padding: 0.6rem 5%;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .navbar-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-menu.active {
+                right: 0;
+            }
+
+            .navbar-menu li a {
+                color: var(--dark);
+                font-size: 1.2rem;
+            }
+
+            .navbar-logo {
+                z-index: 1001;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-logo {
+                font-size: 1.2rem;
+            }
+
+            .navbar-menu {
+                width: 80%;
+            }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background-image: url('./assets/shop/hero-bg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: white;
+            margin-bottom: 1rem;
+            margin-top: 3rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            font-weight: 400;
+            color: white;
+            line-height: 1.2;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-product {
+            width: clamp(280px, 50vw, 500px);
+            height: clamp(350px, 60vw, 600px);
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .hero-product img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-top: -8rem;
+            margin-bottom: -10rem;
+            transform: rotate(-10deg) scale(1.05);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            max-width: 500px;
+            margin-top: -20rem;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            padding: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--coral-dark);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about {
+            padding: 6rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            background: linear-gradient(135deg, var(--sky) 0%, var(--lavender) 100%);
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-image img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .about-content h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .about-content p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .features {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-text {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* ===== GALLERY STRIP ===== */
+        .gallery-strip {
+            background: linear-gradient(90deg, var(--lavender) 0%, var(--pink) 50%, var(--peach) 100%);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .gallery-track {
+            display: flex;
+            animation: scroll 400s linear infinite;
+            width: max-content;
+        }
+
+        .gallery-track img {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ===== COLLECTIONS ===== */
+        .collections {
+            padding: 5rem 1rem;
+            text-align: center;
+            background: white;
+            margin-bottom: -5rem;
+        }
+
+        .collections h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 2rem;
+        }
+
+        .collection-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 2rem;
+            border: 2px solid var(--light-gray);
+            background: white;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--gray);
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            border-color: var(--coral);
+            color: var(--coral-dark);
+            background: var(--cream);
+        }
+
+        /* ===== PRODUCTS ===== */
+        .products {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem 5rem;
+        }
+
+        .product-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .product-card.hidden {
+            display: none !important;
+        }
+
+        .product-card:nth-child(even) {
+            direction: rtl;
+        }
+
+        .product-card:nth-child(even)>* {
+            direction: ltr;
+        }
+
+        .product-card:nth-child(even) .product-info {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .product-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image .shape {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            z-index: 0;
+        }
+
+        .product-card:nth-child(1) .shape {
+            background: var(--peach);
+        }
+
+        .product-card:nth-child(2) .shape {
+            background: var(--sky);
+        }
+
+        .product-card:nth-child(3) .shape {
+            background: var(--pink);
+        }
+
+        .product-card:nth-child(4) .shape {
+            background: var(--lavender);
+        }
+
+        .product-card:nth-child(5) .shape {
+            background: var(--mint);
+        }
+
+        .product-image img {
+            width: 70%;
+            height: auto;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.1));
+        }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-tag {
+            color: var(--coral-dark);
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .product-notes {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .product-notes strong {
+            color: var(--dark);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--coral);
+            color: var(--coral-dark);
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--coral);
+            color: white;
+        }
+
+        /* ===== REVIEWS ===== */
+        .reviews {
+            background: var(--light-gray);
+            padding: 5rem 1rem;
+        }
+
+        .reviews h2 {
+            text-align: center;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 3rem;
+        }
+
+        .reviews-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .review-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .review-meta h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .stars {
+            color: #FBBF24;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .review-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .verified {
+            color: #10B981;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta {
+            background-image: url('./assets/shop/footer.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: white;
+            margin-bottom: 1rem;
+            text-align: left;
+            padding: 2rem;
+            margin-top: -10rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 500px;
+            text-align: left;
+            padding: 2rem;
+            margin-top: -4rem;
+        }
+
+        .cta-products {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .cta-products img {
+            width: 150px;
+            height: 200px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 1rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .footer-newsletter {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-newsletter input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .footer-newsletter button {
+            background: var(--coral);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .footer-links h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--coral);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-card {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .product-card:nth-child(even) {
+                direction: ltr;
+            }
+
+            .product-card:nth-child(even) .product-info {
+                text-align: center;
+                align-items: center;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* mobile responsive */
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.7rem;
+            }
+
+            .hero-product {
+                width: 85vw;
+                height: 105vw;
+                max-width: 400px;
+                max-height: 500px;
+            }
+
+            .hero-product img {
+                width: 100%;
+                max-width: 100vw;
+                margin-top: -7rem;
+                padding: 1rem;
+                object-fit: contain;
+                filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+            }
+
+            .hero-desc {
+                margin-top: -16rem;
+            }
+
+            .product-info {
+                margin-top: -5rem;
+            }
+
+            .product-image {
+                margin-top: -5rem;
+            }
+
+            .features {
+                justify-content: center;
+            }
+
+            .collection-tabs {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
+            }
+
+            .product-card {
+                padding: 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-newsletter {
+                flex-direction: column;
+            }
+
+            .footer-newsletter button {
+                width: 100%;
+            }
+
+            .cta-products img {
+                width: 100px;
+                height: 140px;
+            }
+        }
+
+        /* Broken image styling */
+        img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        img::before {
+            content: "Image";
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#" class="navbar-logo">Elska</a>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="./">Home</a></li>
+            <li><a href="../about.html">About</a></li>
+            <li><a href="#">Shop</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <!-- <div class="hero-badge">New</div> -->
+        <!-- <h1>Elevate Every Moment<br>With Signature Fragrance</h1> -->
+        <!-- <p class="hero-desc">Discover luxury perfumes crafted to express confidence, elegance, and individuality through
+            every scent.</p> -->
+        <!-- <a href="#products" class="btn-primary">Explore Collection</a> -->
+    </section>
+
+    <!-- GALLERY STRIP -->
+    <section class="gallery-strip">
+        <div class="gallery-track" id="galleryMarquee">
+            <img src="./assets/slide1.png" alt="Gallery">
+            <img src="./assets/slide2.png" alt="Gallery">
+            <img src="./assets/slide3.png" alt="Gallery">
+            <img src="./assets/slide4.png" alt="Gallery">
+            <img src="./assets/slide5.png" alt="Gallery">
+        </div>
+    </section>
+
+    <section>
+
+        <div class="p-12">
+            <h1 class="font-serif-signature text-center text-3xl sm:text-4xl font-bold text-slate-900">Search by
+                Category</h1>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-10 pb-10">
+            <!-- Category Card 1 -->
+            <div
+                class="group relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300">
+                <img src="./assets/slide1.png" alt="Floral Collection"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                    <h3
+                        class="text-white font-serif-signature text-2xl font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                        Floral</h3>
+                </div>
+            </div>
+
+            <!-- Category Card 2 -->
+            <div
+                class="group relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300">
+                <img src="./assets/slide2.png" alt="Fresh Scent"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                    <h3
+                        class="text-white font-serif-signature text-2xl font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                        Fresh</h3>
+                </div>
+            </div>
+
+            <!-- Category Card 3 -->
+            <div
+                class="group relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300">
+                <img src="./assets/slide3.png" alt="Sweet Fruity"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                    <h3
+                        class="text-white font-serif-signature text-2xl font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                        Fruity</h3>
+                </div>
+            </div>
+
+            <!-- Category Card 4 -->
+            <div
+                class="group relative w-full aspect-square rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-all duration-300">
+                <img src="./assets/slide4.png" alt="Woody Musky"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                <div
+                    class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
+                    <h3
+                        class="text-white font-serif-signature text-2xl font-bold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                        Woody</h3>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <div class="mb-12">
+            <h1 class="font-serif-signature text-center text-3xl sm:text-4xl font-bold text-slate-900">Our Fragrance
+                Collection</h1>
+            <p class="text-slate-500 text-center text-sm mt-2">Find the perfect scent crafted to define your
+                personality.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+
+            <aside class="space-y-8 bg-white p-6 rounded-2xl border border-slate-100">
+                <div>
+                    <label for="search-product"
+                        class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-3">Search
+                        Scent</label>
+                    <div class="relative">
+                        <input type="text" id="search-product" placeholder="Search perfume..."
+                            class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-[#FF8577] transition-colors">
+                        <span class="absolute right-3 top-3 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637z" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <span
+                        class="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-4">Categories</span>
+                    <div class="space-y-2">
+                        <button data-filter="all"
+                            class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium bg-[#FFF0EC] text-[#FF8577] transition-colors text-left">
+                            <span>All Collection</span>
+                            <span class="text-xs bg-[#FF8577] text-white px-2 py-0.5 rounded-full font-sans">24</span>
+                        </button>
+                        <button data-filter="floral"
+                            class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-left">
+                            <span>Floral Collection</span>
+                            <span
+                                class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-sans">8</span>
+                        </button>
+                        <button data-filter="fresh"
+                            class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-left">
+                            <span>Fresh Scent</span>
+                            <span
+                                class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-sans">6</span>
+                        </button>
+                        <button data-filter="fruity"
+                            class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors text-left">
+                            <span>Sweet Delicious</span>
+                            <span
+                                class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full font-sans">10</span>
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="lg:col-span-3 space-y-12">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+
+                    <div
+                        class="group relative flex flex-col justify-between bg-white p-4 rounded-2xl border border-slate-50 hover:shadow-sm transition-shadow">
+                        <div>
+                            <div
+                                class="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-[#FFEBE7] to-[#FFF5F3] overflow-hidden flex items-center justify-center p-6 transition-transform duration-300 group-hover:-translate-y-1">
+                                <div
+                                    class="absolute -bottom-6 -left-6 w-28 h-28 rounded-full bg-[#FCD34D] opacity-40 blur-sm pointer-events-none">
+                                </div>
+                                <span
+                                    class="absolute top-3 left-3 bg-[#FF8577] text-white text-[10px] font-bold tracking-wider px-2 py-1 rounded-md z-20">SALE
+                                    15%</span>
+                                <button
+                                    class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full text-slate-400 hover:text-red-500 hover:bg-white shadow-sm z-20 transition-colors"
+                                    aria-label="Add to Wishlist">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+                                </button>
+                                <img src="./assets/shop/dn.webp" style="object-fit: cover;">
+                            </div>
+
+                            <div class="mt-4">
+                                <span
+                                    class="text-[10px] font-semibold text-[#FF8577] tracking-wider uppercase block mb-1">Floral
+                                    • Sweet</span>
+                                <h3 class="font-serif-signature text-base font-bold text-slate-900">Date Night</h3>
+
+                                <div class="flex items-center gap-1.5 mt-1.5 mb-2">
+                                    <div class="flex text-amber-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-xs text-slate-400 font-medium">(48 reviews)</span>
+                                </div>
+
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-semibold text-slate-900">IDR 157k</span>
+                                    <span class="text-xs text-slate-400 line-through">IDR 185k</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button
+                                class="w-full py-2 bg-slate-900 text-white text-xs font-medium rounded-xl hover:bg-[#FF8577] transition-colors duration-200">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="group relative flex flex-col justify-between bg-white p-4 rounded-2xl border border-slate-50 hover:shadow-sm transition-shadow">
+                        <div>
+                            <div
+                                class="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-[#EBF7FF] to-[#F5FBFF] overflow-hidden flex items-center justify-center p-6 transition-transform duration-300 group-hover:-translate-y-1">
+                                <div
+                                    class="absolute -bottom-6 -right-6 w-28 h-28 rounded-full bg-[#7DD3FC] opacity-40 blur-sm pointer-events-none">
+                                </div>
+                                <button
+                                    class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full text-slate-400 hover:text-red-500 hover:bg-white shadow-sm z-20 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+                                </button>
+                                <img src="./assets/shop/bzg.webp" style="object-fit: cover;">
+                            </div>
+
+                            <div class="mt-4">
+                                <span
+                                    class="text-[10px] font-semibold text-[#FF8577] tracking-wider uppercase block mb-1">Fresh
+                                    • Ocean</span>
+                                <h3 class="font-serif-signature text-base font-bold text-slate-900">Breezy Girl</h3>
+                                <div class="flex items-center gap-1.5 mt-1.5 mb-2">
+                                    <div class="flex text-amber-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" class="w-3.5 h-3.5 text-slate-300">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M11.48 3.499c.151-.326.621-.326.772 0l2.035 4.394 4.793.693c.359.052.503.494.243.747l-3.468 3.38.819 4.772c.061.354-.311.625-.629.458L12 15.754l-4.283 2.255c-.318.168-.69-.103-.629-.458l.819-4.772-3.468-3.38c-.26-.252-.117-.694.243-.747l4.793-.693 2.035-4.394z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-xs text-slate-400 font-medium">(32 reviews)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-semibold text-slate-900">IDR 185k</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button
+                                class="w-full py-2 bg-slate-900 text-white text-xs font-medium rounded-xl hover:bg-[#FF8577] transition-colors duration-200">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div
+                        class="group relative flex flex-col justify-between bg-white p-4 rounded-2xl border border-slate-50 hover:shadow-sm transition-shadow">
+                        <div>
+                            <div
+                                class="relative w-full aspect-square rounded-xl bg-gradient-to-tr from-[#FFF0F3] to-[#FFF9FA] overflow-hidden flex items-center justify-center p-6 transition-transform duration-300 group-hover:-translate-y-1">
+                                <div
+                                    class="absolute -top-6 -left-6 w-28 h-28 rounded-full bg-[#F472B6] opacity-30 blur-sm pointer-events-none">
+                                </div>
+                                <span
+                                    class="absolute top-3 left-3 bg-[#FF8577] text-white text-[10px] font-bold tracking-wider px-2 py-1 rounded-md z-20">SALE
+                                    10%</span>
+                                <button
+                                    class="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full text-slate-400 hover:text-red-500 hover:bg-white shadow-sm z-20 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                    </svg>
+                                </button>
+                                <img src="./assets/shop/pc.webp" style="object-fit: cover;">
+                            </div>
+
+                            <div class="mt-4">
+                                <span
+                                    class="text-[10px] font-semibold text-[#FF8577] tracking-wider uppercase block mb-1">Sweet
+                                    • Fruity</span>
+                                <h3 class="font-serif-signature text-base font-bold text-slate-900">Peppy
+                                    Cheerleader
+                                </h3>
+                                <div class="flex items-center gap-1.5 mt-1.5 mb-2">
+                                    <div class="flex text-amber-400">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 alert-1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-3.5 h-3.5">
+                                            <path fill-rule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-xs text-slate-400 font-medium">(56 reviews)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-semibold text-slate-900">IDR 166k</span>
+                                    <span class="text-xs text-slate-400 line-through">IDR 185k</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <button
+                                class="w-full py-2 bg-slate-900 text-white text-xs font-medium rounded-xl hover:bg-[#FF8577] transition-colors duration-200">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="flex items-center justify-center border-t border-slate-100 pt-8 gap-1.5">
+                    <button
+                        class="p-2.5 rounded-xl border border-slate-200 text-slate-400 hover:border-[#FF8577] hover:text-[#FF8577] bg-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+
+                    <button
+                        class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-medium bg-[#FF8577] text-white transition-colors">
+                        1
+                    </button>
+                    <button
+                        class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:border-[#FF8577] hover:text-[#FF8577] transition-colors">
+                        2
+                    </button>
+                    <button
+                        class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-medium bg-white text-slate-600 border border-slate-200 hover:border-[#FF8577] hover:text-[#FF8577] transition-colors">
+                        3
+                    </button>
+
+                    <button
+                        class="p-2.5 rounded-xl border border-slate-200 text-slate-400 hover:border-[#FF8577] hover:text-[#FF8577] bg-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <!-- <h2>Find Your Signature<br>Scent Today</h2> -->
+        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p> -->
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Signature Fragrance</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                    labore
+                    et dolore magna aliqua.</p>
+                <div class="footer-newsletter">
+                    <input type="email" placeholder="Enter your email">
+                    <button>Subscribe</button>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Explore</h4>
+                <a href="#">New Arrivals</a>
+                <a href="#">Best Sellers</a>
+                <a href="#">Collections</a>
+                <a href="#">Gift Sets</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+                <a href="#">Sustainability</a>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQs</a>
+                <a href="#">Shipping</a>
+                <a href="#">Returns</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Signature Fragrance. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#">f</a>
+                <a href="#">t</a>
+                <a href="#">i</a>
+                <a href="#">y</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Infinite Gallery Marquee
+            const track = document.getElementById('galleryMarquee');
+            if (track) {
+                const original = track.innerHTML;
+                // Add enough copies to fill standard screens (e.g., 15 copies)
+                for (let i = 0; i < 15; i++) {
+                    track.innerHTML += originalImage;
+                }
+                // Duplicate the entire content once more to ensure smooth CSS infinite transform: translateX(-50%)
+                track.innerHTML += track.innerHTML;
+            }
+
+            // Collection Filter
+            const filterBtns = document.querySelectorAll('.tab-btn');
+            const products = document.querySelectorAll('.product-card');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    products.forEach(product => {
+                        if (filterValue === 'all') {
+                            product.classList.remove('hidden');
+                        } else {
+                            const categories = product.getAttribute('data-category');
+                            if (categories && categories.includes(filterValue)) {
+                                product.classList.remove('hidden');
+                            } else {
+                                product.classList.add('hidden');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        // Hamburger Menu Logic
+        const hamburger = document.querySelector('.hamburger');
+        const navbarMenu = document.querySelector('.navbar-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navbarMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.navbar-menu li a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navbarMenu.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll effect and back to top button
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            const fabTop = document.getElementById('backToTop');
+
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            if (window.scrollY > 300) {
+                fabTop.classList.add('visible');
+            } else {
+                fabTop.classList.remove('visible');
+            }
+        });
+
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+    <!-- FLOATING BUTTONS -->
+    <div class="floating-actions">
+        <button class="fab fab-top" id="backToTop" aria-label="Back to top">
+            &#8593;
+        </button>
+        <a href="https://wa.me/6281234567890" target="_blank" class="fab fab-wa" aria-label="WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232" />
+            </svg>
+        </a>
+    </div>
+</body>
+
+</html>
