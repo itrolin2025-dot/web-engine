@@ -1,0 +1,53 @@
+.dataTables_length {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    @apply w-full rounded-lg border px-3 py-2 dark:border-navy-450;
+}
+
+/* Global DataTables Styling */
+.dataTables_wrapper {
+    @apply flex flex-col;
+}
+
+.dataTables_length {
+    @apply order-first mb-4;
+}
+
+.dataTables_length select {
+    @apply rounded-lg border-slate-300 dark:bg-navy-700 dark:border-navy-500 text-xs py-1 px-2;
+}
+
+.dataTables_length label {
+    @apply flex items-center space-x-2 text-xs font-medium text-slate-500 dark:text-navy-200;
+}
+
+.dataTables_info {
+    @apply text-xs font-medium text-slate-500 dark:text-navy-300 text-center mt-6 opacity-70 w-full;
+}
+
+.dataTables_paginate {
+    @apply flex items-center justify-center space-x-1 mt-2 w-full !important;
+}
+
+.dataTables_paginate .paginate_button {
+    @apply px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-700 transition-all cursor-pointer hover:bg-slate-50 !important;
+    margin: 0 2px !important;
+}
+
+.dark .dataTables_paginate .paginate_button {
+    @apply border-navy-500 bg-navy-700 text-navy-200 hover:bg-navy-600;
+}
+
+.dataTables_paginate .paginate_button.current {
+    @apply bg-primary border-primary text-white shadow-sm !important;
+}
+
+.dark .dataTables_paginate .paginate_button.current {
+    @apply bg-accent border-accent text-white !important;
+}
+
+.dataTables_paginate .paginate_button.disabled {
+    @apply opacity-40 cursor-not-allowed !important;
+}

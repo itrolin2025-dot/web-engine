@@ -1,0 +1,269 @@
+/* =================== */
+/* DataTables Responsive & Length Select - Template Style */
+/* =================== */
+
+/* default desktop */
+.dt-hide-mobile {
+    display: table-cell;
+}
+
+.mobile-meta,
+.mobile-action {
+    display: none;
+}
+
+.table-column {
+    white-space: nowrap;
+    background-color: #e2e8f0; /* slate-200 */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #1e293b; /* slate-800 */
+}
+
+.action-mobile {
+    text-align: center;
+    align-items: center;
+}
+
+.dark .table-column {
+    background-color: #1e293b; /* slate-800 */
+    color: #e2e8f0; /* slate-200 */
+}
+
+/* Garis bawah untuk setiap row datatable (desktop & mobile) */
+.dataTable tbody tr,
+#datatables tbody tr {
+    border-bottom: 1px solid #e5e7eb; /* abu-abu muda, bisa disesuaikan */
+}
+.dark .dataTable tbody tr,
+.dark #datatables tbody tr {
+    border-bottom: 1px solid #334155;
+}
+
+/* Hilangkan garis bawah pada tr terakhir jika ingin (opsional) */
+.dataTable tbody tr:last-child,
+#datatables tbody tr:last-child {
+    border-bottom: none;
+}
+.dark .dataTable tbody tr:last-child,
+.dark #datatables tbody tr:last-child {
+    border-bottom: none;
+}
+
+@media (min-width: 1024px) {
+    .table-column {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .toggle-expand {
+        display: none !important;
+    }
+}
+
+/* mobile */
+@media (min-width: 768px) {
+    .toggle-expand {
+        display: none !important;
+    }
+}
+
+/* mobile */
+@media (max-width: 768px) {
+    .dt-hide-mobile {
+        display: none !important;
+    }
+
+    /* Dipindah ke atas, supaya desktop juga terkena garis bawah */
+    /* td {
+        border-bottom: 1px solid #eee;
+    } */
+
+    .mobile-meta {
+        display: block;
+        font-size: .85rem;
+        margin-left: 1em;
+    }
+
+    .mobile-action button {
+        width: auto;
+    }
+
+    .table-column {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+}
+
+/* =================== */
+/* DataTables Paginate */
+/* =================== */
+
+.dataTables_paginate {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 0.25rem;
+}
+
+.dataTables_paginate .paginate_button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    line-height: 36px;
+    margin: 0 2px;
+    padding: 0 !important;
+    border-radius: 0.75rem; /* match template's button radius */
+    border: none !important;
+    background: #f1f5f9 !important; /* slate-100 */
+    color: #2f3b52 !important;
+    font-weight: 600;
+    font-size: .9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: none;
+}
+
+.dark .dataTables_paginate .paginate_button {
+    background: #232c3b !important;
+    color: #cbd5f5 !important;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background: #e0e7ef !important;
+    color: #2563eb !important;
+    box-shadow: 0 0 0 2px #2563eb1a;
+}
+
+.dark .dataTables_paginate .paginate_button:hover {
+    background: #3b4a68 !important;
+    color: #fff !important;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 2.5px rgba(37,99,235,0.18);
+}
+
+.dark .dataTables_paginate .paginate_button.current {
+    background: #6d5dfc !important;
+    color: #fff !important;
+    box-shadow: 0 0 0 3.5px rgba(109,93,252,0.20);
+}
+
+.dataTables_paginate .paginate_button.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    background: #e2e8f0 !important;
+    color: #a6adc7 !important;
+}
+
+.dataTables_paginate .paginate_button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2.5px #2563eb29;
+}
+
+/* Arrow icons (previous/next) */
+.dataTables_paginate .paginate_button.previous,
+.dataTables_paginate .paginate_button.next {
+    font-size: 1.15rem;
+    padding: 0 !important;
+}
+
+@media (max-width: 576px) {
+    .dataTables_paginate .paginate_button:not(.previous):not(.next) {
+        display: none !important;
+    }
+}
+
+/* ============================ */
+/* DataTables Length Select UI  */
+/* ============================ */
+
+/* Wrapper for length select */
+.dataTables_length {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.dataTables_length label {
+    font-weight: 500;
+    color: #334155;
+    font-size: .95rem;
+    margin-bottom: 0;
+    margin-right: .25rem;
+    letter-spacing: 0.01em;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.dark .dataTables_length label {
+    color: #e2e8f0;
+}
+
+/* HAPUS custom dropdown, biarkan gunakan dropdown bawaan browser */
+.dataTables_length select {
+    padding: 8px 16px 8px 10px;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    background: #fff !important;
+    color: #1e293b !important;
+    font-size: 1rem;
+    font-weight: 500;
+    /* Hapus properti yang membuat custom arrow */
+    /* appearance, background-image, dsb DIHILANGKAN */
+    transition: border-color 0.18s, box-shadow 0.18s;
+    box-shadow: none;
+}
+
+.dataTables_length select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px #2563eb36;
+}
+
+.dark .dataTables_length select {
+    background: #232c3b !important;
+    color: #e5e7eb !important;
+    border: 1px solid #334155 !important;
+    /* background-image dihapus */
+}
+
+.dataTables_length select:disabled {
+    background-color: #f1f5f9 !important;
+    color: #94a3b8 !important;
+    border-color: #e5e7eb !important;
+    cursor: not-allowed;
+}
+
+/* Hilangkan juga hack buat custom arrow/appearance (supaya bener2 bawaan browser) */
+.dataTables_length select::-ms-expand,
+.dataTables_length select::-webkit-input-placeholder,
+.dataTables_length select:-moz-focusring {
+    /* Tidak perlu styling di sini */
+}
+
+/* ================= */
+/* Info & Elements   */
+/* ================= */
+.dataTables_info {
+    font-size: .93rem;
+    color: #64748b;
+    font-weight: 400;
+    margin-left: .5rem;
+}
+.dark .dataTables_info {
+    color: #e5e7eb;
+}
+
+/* end */

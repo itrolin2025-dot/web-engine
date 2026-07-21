@@ -1,0 +1,16 @@
+/* resources/css/components.css */
+.btn-icon-primary-dt {
+    @apply btn size-9 p-0 font-medium 
+        border border-primary bg-primary/10 text-primary
+        hover:bg-primary/20 hover:shadow-lg hover:shadow-primary/40
+        focus:bg-primary/30 focus:shadow-lg focus:shadow-primary/40
+        active:bg-primary/30;
+}
+
+.btn-icon-danger-dt {
+    @apply btn size-9 p-0 font-medium 
+        border border-error bg-error/10 text-error
+        hover:bg-error/20 hover:shadow-lg hover:shadow-error/40
+        focus:bg-error/30 focus:shadow-lg focus:shadow-error/40
+        active:bg-error/30;
+}

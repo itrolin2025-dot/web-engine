@@ -1,0 +1,248 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+  @keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    /* Tambahkan ukuran padding atas dan bawah: misal 6vw atas bawah */
+    padding-top: 6vw;
+    padding-bottom: 6vw;
+    padding-left: 0;
+    padding-right: 0;
+    /* padding: 6vw 0; */
+    box-sizing: border-box;
+    font-family: 'Visval', Arial, sans-serif;
+    background: linear-gradient(120deg, 
+      #ff355e 0%, 
+      #9224f0 28%, 
+      #4b366c 49%, 
+      #ff6a88 75%, 
+      #ff7666 90%, 
+      #ff355e 100%);
+    background-size: 400% 400%;
+    animation: gradient-move 11s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .glass {
+    text-align: center;
+    color: #fff;
+    background: rgba(255,255,255,0.10);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    padding: 3rem 1.7rem;
+    border: 1.2px solid rgba(255,255,255,0.18);
+    transition: box-shadow 0.22s, transform 0.18s;
+    will-change: transform, box-shadow;
+    position: relative;
+    perspective: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 380px;
+    width: 100%;
+    min-height: 440px;
+  }
+  .logo-maintenance {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    /* background: rgba(255,255,255,0.18); */
+    box-shadow: 0 4px 22px 0 rgba(124,13,184,0.13);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .logo-maintenance img {
+    width: 116px;
+    height: 116px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 1.10rem;
+    text-shadow: 0 6px 32px rgba(0,0,0,0.18);
+    line-height: 1.2;
+    word-break: break-word;
+  }
+  p {
+    font-size:1.13rem; 
+    margin-bottom:2.1rem;
+    margin-top:0;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+  .btn-contact {
+    margin-top: 1.7rem;
+    padding: 0.83rem 1.8rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(90deg, #da2b73, #7e23c6);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 2px 20px 0 rgba(160,18,120,0.16);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    outline: none;
+    text-decoration: none;
+    font-family: inherit;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65em;
+    white-space: nowrap;
+    min-width: 0;
+    width: auto;
+    max-width: 240px;
+  }
+  .btn-contact i {
+    font-size: 1.1em;
+    vertical-align: middle;
+  }
+  .btn-contact:hover,
+  .btn-contact:focus {
+    background: linear-gradient(90deg, #7e23c6, #ff355e);
+    box-shadow: 0 2px 32px 0 rgba(144,0,82,0.24);
+    transform: translateY(-2px) scale(1.04);
+  }
+  /* Improved Responsive Design */
+  @media (max-width: 900px) {
+    .glass {
+      padding: 2.2rem 1rem;
+      width: 90vw;
+      max-width: 360px;
+      min-height: 400px;
+    }
+    .logo-maintenance {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 1.2rem;
+    }
+    .logo-maintenance img {
+      width: 80px;
+      height: 80px;
+    }
+    h1 {
+      font-size: 2.7rem;
+    }
+    .btn-contact {
+      font-size: 0.98rem;
+      padding: 0.8rem 1.3rem;
+      max-width: 180px;
+    }
+  }
+  @media (max-width: 600px) {
+    /* Tambahan: padding kanan kiri agar tidak mepet pada layar kecil */
+    body {
+      padding-left: 6vw;
+      padding-right: 6vw;
+      margin-top: -50px;
+    }
+    .glass {
+      margin: 0;
+      padding: 1.6rem 1.1rem; /* TAMBAH padding kiri/kanan sedikit lebih besar */
+      border-radius: 1rem;
+      width: 98vw;
+      min-width: unset;
+      max-width: 98vw;
+      min-height: 520px;
+    }
+    .logo-maintenance {
+      width: 70px;
+      height: 70px;
+      margin-bottom: 0.9rem;
+    }
+    .logo-maintenance img {
+      width: 140px;
+      height: 140px;
+    }
+    h1 {
+      font-size: 2.24rem;
+      margin-bottom: 0.7rem;
+    }
+    p {
+      font-size: 1.01rem;
+      margin-bottom: 1.1rem;
+    }
+    .btn-contact {
+      font-size: 0.95rem;
+      padding: 0.65rem 1.2rem;
+      width: auto;
+      max-width: 160px;
+    }
+  }
+  @media (max-width: 420px) {
+    body {
+      padding-left: 5vw;
+      padding-right: 5vw;
+    }
+    .glass {
+      min-height: 570px;
+      padding-bottom: 3.4rem;
+      padding-left: 0.8rem;
+      padding-right: 0.8rem;
+    }
+    .logo-maintenance {
+      width: 150px;
+      height: 150px;
+    }
+    .logo-maintenance img {
+      width: 120px;
+      height: 120px;
+    }
+    h1 {
+      font-size: 1.44rem;
+    }
+    .btn-contact{
+      font-size: 0.92rem;
+      padding: 0.55rem 0.9rem;
+      max-width: 110px;
+    }
+  }
+  @media (max-width: 370px) {
+    body {
+      padding-left: 3vw;
+      padding-right: 3vw;
+    }
+    .glass {
+      min-height: 650px;
+      padding-bottom: 4.5rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    h1{
+      font-size: 0.96rem;
+    }
+    .btn-contact{
+      font-size: 0.87rem;
+      padding: 0.53rem 0.6rem;
+      max-width: 100px;
+    }
+  }
