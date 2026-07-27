@@ -67,3 +67,47 @@
         <img src="{{ asset('images/website/elska/slide5.png') }}" alt="Gallery">
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Infinite Gallery Marquee
+        const track = document.getElementById('galleryMarquee');
+        if (track) {
+            const originalImage = track.innerHTML;
+            // Add enough copies to fill standard screens (e.g., 15 copies)
+            for (let i = 0; i < 15; i++) {
+                track.innerHTML += originalImage;
+            }
+            // Duplicate the entire content once more to ensure smooth CSS infinite transform: translateX(-50%)
+            track.innerHTML += track.innerHTML;
+        }
+
+        // Collection Filter
+        const filterBtns = document.querySelectorAll('.tab-btn');
+        const products = document.querySelectorAll('.product-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                products.forEach(product => {
+                    if (filterValue === 'all') {
+                        product.classList.remove('hidden');
+                    } else {
+                        const categories = product.getAttribute('data-category');
+                        if (categories && categories.includes(filterValue)) {
+                            product.classList.remove('hidden');
+                        } else {
+                            product.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>

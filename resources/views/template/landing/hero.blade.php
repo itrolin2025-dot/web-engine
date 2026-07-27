@@ -138,23 +138,68 @@
         }
     }
 </style>
+
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $tag = $content['tag_en'] ?? $content['tag'] ?? '';
+    $tag_color = $content['tag_color'] ?? '#ffffff';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $hero_img = !empty($content['hero_img']) ? 'images/website/' . $domain . '/' . $content['hero_img'] : '';
+@endphp
+
 <section class="hero">
     <div class="hero-slider-bg">
-        <div class="hero-slide-bg" style="background-image: url('{{ asset('images/website/elska/hero-bg.png') }}');">
-        </div>
-        <div class="hero-slide-bg"
-            style="background-image: url('{{ asset('images/website/elska/shop/hero-bg.png') }}');"></div>
+        <div class="hero-slide-bg" style="background-image: url('{{ asset($hero_bg) }}');"></div>
     </div>
     <div class="hero-content">
-        <div class="hero-badge">New</div>
-        <h1>Elevate Every Moment<br>With Signature Fragrance</h1>
+        @if(!empty($tag))
+            <div class="hero-badge" style="color: {{ $tag_color }}; border-color: {{ $tag_color }};">{{ $tag }}</div>
+        @endif
+
+        <h1 style="color: {{ $title_color }};">
+            {!! !empty($title) ? nl2br(e($title)) : 'Elevate Every Moment<br>With Signature Fragrance' !!}
+        </h1>
+
         <div class="hero-product">
-            <img src="{{ asset('images/website/elska/hero.png') }}" alt="Signature Fragrance" style="width: 100%;"
-                text-anchor='middle' font-family='sans-serif'>
+            @if(!empty($hero_img))
+                <img src="{{ asset($hero_img) }}" alt="{{ $title }}" style="width: 100%;" text-anchor='middle'
+                    font-family='sans-serif'>
+            @endif
         </div>
-        <p class="hero-desc">Discover luxury perfumes crafted to express confidence, elegance, and individuality
-            through
-            every scent.</p>
-        <a href="#products" class="btn-primary">Explore Collection</a>
+
+        @if(!empty($subtitle))
+            <p class="hero-desc" style="color: {{ $subtitle_color }};">{{ $subtitle }}</p>
+        @endif
+
+        @if(!empty($button_text))
+            <a href="#products" class="btn-primary"
+                style="background-color: {{ $button_color }}; color: {{ $button_text_color }};">
+                {{ $button_text }}
+            </a>
+        @endif
     </div>
 </section>

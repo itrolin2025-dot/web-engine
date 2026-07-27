@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
@@ -37,6 +41,13 @@
             color: var(--dark);
             line-height: 1.6;
             overflow-x: hidden;
+            /* font-family: 'Plus Jakarta Sans', sans-serif; */
+            background-color: #FCFBFA;
+            color: #2C2A29;
+        }
+
+        .font-serif-brand {
+            font-family: 'Playfair Display', serif;
         }
 
         h1,
@@ -112,161 +123,15 @@
 
 <body>
 
-    @include('template.landing.navbar')
-
-    @include('template.landing.hero')
-
-    @include('template.landing.about')
-
-    @include('template.landing.gallery')
-
-    @include('template.landing.product')
-
-    @include('template.landing.review')
-
-    @include('template.landing.cta')
-
-    @include('template.landing.footer')
+    @foreach($layouts as $layout)
+        @include($layout->template_path . '.' . $layout->section_slug)
+    @endforeach
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Infinite Gallery Marquee
-            const track = document.getElementById('galleryMarquee');
-            if (track) {
-                const originalImage = track.innerHTML;
-                // Add enough copies to fill standard screens (e.g., 15 copies)
-                for (let i = 0; i < 15; i++) {
-                    track.innerHTML += originalImage;
-                }
-                // Duplicate the entire content once more to ensure smooth CSS infinite transform: translateX(-50%)
-                track.innerHTML += track.innerHTML;
-            }
-
-            // Collection Filter
-            const filterBtns = document.querySelectorAll('.tab-btn');
-            const products = document.querySelectorAll('.product-card');
-
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Remove active class from all buttons
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    // Add active class to clicked button
-                    btn.classList.add('active');
-
-                    const filterValue = btn.getAttribute('data-filter');
-
-                    products.forEach(product => {
-                        if (filterValue === 'all') {
-                            product.classList.remove('hidden');
-                        } else {
-                            const categories = product.getAttribute('data-category');
-                            if (categories && categories.includes(filterValue)) {
-                                product.classList.remove('hidden');
-                            } else {
-                                product.classList.add('hidden');
-                            }
-                        }
-                    });
-                });
-            });
-        });
-
-        // Hamburger Menu Logic
-        const hamburger = document.querySelector('.hamburger');
-        const navbarMenu = document.querySelector('.navbar-menu');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navbarMenu.classList.toggle('active');
-        });
-
-        document.querySelectorAll('.navbar-menu li a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navbarMenu.classList.remove('active');
-            });
-        });
-
-        // Navbar scroll effect and back to top button
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            const fabTop = document.getElementById('backToTop');
-
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-
-            if (window.scrollY > 300) {
-                fabTop.classList.add('visible');
-            } else {
-                fabTop.classList.remove('visible');
-            }
-        });
-
         document.getElementById('backToTop').addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-
-        // Carousel Slider Logic
-        const wrapper = document.querySelector('.carousel-wrapper');
-        const slides = document.querySelectorAll('.carousel-slide');
-        const nextBtn = document.querySelector('.carousel-btn.next');
-        const prevBtn = document.querySelector('.carousel-btn.prev');
-        const dots = document.querySelectorAll('.dot');
-        let currentSlide = 0;
-
-        function updateCarousel() {
-            if (wrapper) {
-                wrapper.style.transform = `translateX(-${currentSlide * 100}vw)`;
-                dots.forEach(dot => dot.classList.remove('active'));
-                if (dots[currentSlide]) dots[currentSlide].classList.add('active');
-            }
-        }
-
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide + 1) % slides.length;
-                updateCarousel();
-            });
-        }
-
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                updateCarousel();
-            });
-        }
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide = index;
-                updateCarousel();
-            });
-        });
-
-        // Hero Background Slider Logic
-        const heroBgSlider = document.querySelector('.hero-slider-bg');
-        if (heroBgSlider) {
-            const heroSlides = heroBgSlider.querySelectorAll('.hero-slide-bg');
-            if (heroSlides.length > 1) {
-                let currentBgSlide = 0;
-                setInterval(() => {
-                    currentBgSlide = (currentBgSlide + 1) % heroSlides.length;
-                    heroBgSlider.style.transform = `translateX(-${currentBgSlide * 100}%)`;
-                }, 5000);
-            }
-        }
-
-        // Auto slide
-        if (slides.length > 0) {
-            setInterval(() => {
-                currentSlide = (currentSlide + 1) % slides.length;
-                updateCarousel();
-            }, 5000);
-        }
     </script>
 
     <!-- FLOATING BUTTONS -->

@@ -37,6 +37,7 @@
         display: flex;
         gap: 2.5rem;
         list-style: none;
+        align-items: center;
     }
 
     .navbar-menu li a {
@@ -46,6 +47,7 @@
         font-weight: 500;
         font-size: 1rem;
         transition: color 0.3s ease;
+        display: inline-block;
     }
 
     .navbar.scrolled .navbar-menu li a {
@@ -92,6 +94,53 @@
         background-color: var(--dark) !important;
     }
 
+    /* ===== DROPDOWN STYLING ===== */
+    .dropdown {
+        position: relative;
+    }
+
+    .dropdown-toggle {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 0.5rem);
+        left: 0;
+        background-color: white;
+        min-width: 180px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 0.5rem 0;
+        list-style: none;
+        z-index: 1002;
+    }
+
+    .dropdown.active .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-menu li {
+        width: 100%;
+        margin: 0;
+    }
+
+    .dropdown-menu li a {
+        color: var(--dark) !important;
+        padding: 0.6rem 1.2rem;
+        display: block;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .dropdown-menu li a:hover {
+        background-color: var(--cream);
+        color: var(--coral) !important;
+    }
+
     @media (max-width: 768px) {
         .navbar {
             padding: 0.8rem 5%;
@@ -132,6 +181,25 @@
         .navbar-logo {
             z-index: 1001;
         }
+
+        .dropdown {
+            width: 100%;
+            text-align: center;
+        }
+
+        .dropdown-menu {
+            position: static;
+            box-shadow: none;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .dropdown-menu li a {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+        }
     }
 
     @media (max-width: 576px) {
@@ -145,16 +213,131 @@
     }
 </style>
 
+@php
+    $navContent = isset($layout->content) ? json_decode($layout->content, true) : [];
+    //ambil logo
+    $logoFile = $navContent['logo'] ?? null;
+    $logo = $logoFile ? '/images/website/' . ($website->domain ?? '') . '/' . $logoFile : null;
+
+    //ambil nama brand
+    $brand = $navContent['brand'] ?? ($website->title ?? '');
+    //ambil menu
+    $menus = $navContent['menus'] ?? [];
+    //ambil tombol cta
+    $cta_text = $navContent['cta_text'] ?? 'Contact Us';
+    $cta_url = $navContent['cta_url'] ?? '#';
+    $cta_color = $navContent['cta_color'] ?? '#000000ff';
+@endphp
+
 <nav class="navbar">
-    <a href="#" class="navbar-logo">Elska</a>
+    <a href="#" class="navbar-logo">
+        @if($logo)
+            <img src="{{ asset($logo) }}" alt="{{ $brand }}" class="h-20 w-auto object-contain">
+        @else
+            <span class="text-xl font-bold tracking-tight" style="color: {{ $cta_color }}">{{ $brand }}</span>
+        @endif
+    </a>
     <div class="hamburger">
         <span></span>
         <span></span>
         <span></span>
     </div>
     <ul class="navbar-menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="./about.html">About</a></li>
-        <li><a href="./shop.html">Shop</a></li>
+        @foreach($menus as $menu)
+            @if(!empty($menu['children']))
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle">{{ $menu['label'] }} &#9662;</a>
+                    <ul class="dropdown-menu">
+                        @foreach($menu['children'] as $child)
+                            <li>
+                                <a href="{{ $child['url'] ?? '#' }}">
+                                    {{ $child['label'] }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @else
+                {{-- Menu biasa --}}
+                <li><a href="{{ $menu['url'] ?? '#' }}">{{ $menu['label'] }}</a></li>
+            @endif
+        @endforeach
     </ul>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Hamburger Menu Logic
+        const hamburger = document.querySelector('.hamburger');
+        const navbarMenu = document.querySelector('.navbar-menu');
+
+        if (hamburger && navbarMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navbarMenu.classList.toggle('active');
+            });
+        }
+
+        // Dropdown Toggle Logic on Click
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const parent = this.closest('.dropdown');
+
+                // Close other dropdowns
+                document.querySelectorAll('.dropdown').forEach(item => {
+                    if (item !== parent) {
+                        item.classList.remove('active');
+                    }
+                });
+
+                if (parent) {
+                    parent.classList.toggle('active');
+                }
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown').forEach(item => {
+                    item.classList.remove('active');
+                });
+            }
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.navbar-menu a:not(.dropdown-toggle)').forEach(link => {
+            link.addEventListener('click', () => {
+                if (hamburger && navbarMenu) {
+                    hamburger.classList.remove('active');
+                    navbarMenu.classList.remove('active');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            const fabTop = document.getElementById('backToTop');
+
+            if (navbar) {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+
+            if (fabTop) {
+                if (window.scrollY > 300) {
+                    fabTop.classList.add('visible');
+                } else {
+                    fabTop.classList.remove('visible');
+                }
+            }
+        });
+    });
+</script>
