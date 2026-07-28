@@ -78,12 +78,51 @@
         }
     }
 </style>
+
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $tagline = $content['tagline'] ?? [];
+    if (is_array($tagline)) {
+        $tagline = collect($tagline)->sortBy('sort')->values()->all();
+    }
+    $tagline_color = $content['tagline_color'] ?? '#ffffff';
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+@endphp
+
 <section class="about">
     <div class="about-grid">
         <div class="about-image" style="
                     width: 100%;
                     min-height: 500px;
-                    background-image: url('{{ asset('images/website/elska/about.png') }}');
+                    background-image: url('{{ asset($about_image) }}');
                     background-repeat: no-repeat;
                     background-position: center;
                     background-size: contain;
@@ -92,23 +131,15 @@
                     text-anchor='middle' font-family='sans-serif'> -->
         </div>
         <div class="about-content">
-            <h2>Crafted Beyond Fragrance</h2>
-            <p>Perfume kami hadir untuk menghadirkan pengalaman wewangian yang lebih dari sekadar aroma. Setiap
-                koleksi dirancang dengan perpaduan premium ingredients, artistic formulation, dan karakter yang
-                meninggalkan kesan mendalam.</p>
+            <h2 style="color: {{ $title_color }};">{{ $title }}</h2>
+            <p style="color: {{ $desc_color }};">{{ $desc }}</p>
             <div class="features">
-                <div class="feature-item">
-                    <div class="feature-icon">&#10003;</div>
-                    <span class="feature-text">Long Lasting Formula</span>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">&#10003;</div>
-                    <span class="feature-text">100% extrait de parfum</span>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">&#10003;</div>
-                    <span class="feature-text">crafted by fragrance expert</span>
-                </div>
+                @foreach ($tagline as $tag)
+                    <div class="feature-item">
+                        <div class="feature-icon">&#10003;</div>
+                        <span class="feature-text" style="color: {{ $tag['color'] }};">{{ $tag['label'] }}</span>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

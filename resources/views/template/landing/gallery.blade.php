@@ -58,13 +58,49 @@
         max-height: 90vh;
     }
 </style>
+
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $image = $content['image'] ?? [];
+    if (is_array($image)) {
+        $image = collect($image)->sortBy('sort')->values()->all();
+    }
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+@endphp
+
 <section class="gallery-strip">
     <div class="gallery-track" id="galleryMarquee">
-        <img src="{{ asset('images/website/elska/slide1.png') }}" alt="Gallery">
-        <img src="{{ asset('images/website/elska/slide2.png') }}" alt="Gallery">
-        <img src="{{ asset('images/website/elska/slide3.png') }}" alt="Gallery">
-        <img src="{{ asset('images/website/elska/slide4.png') }}" alt="Gallery">
-        <img src="{{ asset('images/website/elska/slide5.png') }}" alt="Gallery">
+        @foreach ($image as $img)
+            <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}" alt="Gallery">
+        @endforeach
     </div>
 </section>
 

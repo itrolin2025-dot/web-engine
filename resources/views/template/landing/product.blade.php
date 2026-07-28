@@ -203,117 +203,84 @@
         }
     }
 </style>
+
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        // Remove trailing commas before closing brackets/braces (e.g. , ] or , })
+        $cleanJson = preg_replace('/,\s*([\]}])/', '$1', $cleanJson);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title'] ?? $content['title_en'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $categories = $content['categories'] ?? [];
+    $products = $content['products'] ?? [];
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+
+@endphp
+
 <section class="collections" id="products">
-    <h2>A Scent For Every Personality</h2>
+    <h2>{{ $title }}</h2>
     <div class="collection-tabs">
         <button class="tab-btn active" data-filter="all">All Collection</button>
-        <button class="tab-btn" data-filter="floral">Floral Collection</button>
-        <button class="tab-btn" data-filter="fresh">Fresh Collection</button>
-        <button class="tab-btn" data-filter="fruity">Fruity Collection</button>
+        @foreach ($categories as $category)
+            <button class="tab-btn" data-filter="{{ $category['kode'] }}">{{ $category['name'] }}</button>
+        @endforeach
+
     </div>
 </section>
 
 <!-- PRODUCTS -->
 <section class="products">
-    <div class="product-card" data-category="fresh fruity">
-        <div class="product-image" style="
-                    width: 100%;
-                    min-height: 500px;
-                    background-image: url('{{ asset('images/website/elska/prod1.png') }}');
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: contain;">
-        </div>
-        <div class="product-info">
-            <span class="product-tag">Extrait de Parfum</span>
-            <h3>Date Night</h3>
-            <div class="product-notes">
-                Aroma fruity, fresh, dan green notes langsung memberikan kesan segar yang ringan dan menyenangkan.
-                Berlanjut ke aroma inti yaitu floral berpadu dengan fruity dan sentuhan amber yang hangat,
-                menciptakan karakter wangi yang lembut dan sedikit manis. Di fase akhir, woody, fruity, dan ambery
-                notes memberikan drydown yang hangat, smooth, dan nyaman, meninggalkan jejak wangi yang soft dan
-                berkesan.<br><br>
-                <strong>Top Notes:</strong> Fruity, Fresh, Green<br>
-                <strong>Middle Notes:</strong> Floral, Fruity, Ambery<br>
-                <strong>Base Notes:</strong> Woody, Fruity, Ambery
+    @foreach ($products as $product)
+        @php
+            $image = !empty($product['image'])
+                ? asset('images/website/' . $domain . '/' . $product['image'])
+                : asset('images/default/broken.png');
+        @endphp
+        <div class="product-card" data-category="{{ $product['kode'] }}">
+            <div class="product-image"
+                style="width: 100%; min-height: 400px; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9; border-radius: 12px; overflow: hidden;">
+                <img src="{{ $image }}" alt="{{ $product['name'] }}"
+                    style="max-width: 100%; max-height: 450px; object-fit: contain; display: block;"
+                    onerror="this.onerror=null; this.src='{{ asset('images/default/broken.png') }}';">
             </div>
-            <a href="#" class="btn-outline">Buy Now</a>
+            <div class="product-info">
+                <span class="product-tag">{{ $product['categories'] }}</span>
+                <h3>{{ $product['name'] }}</h3>
+                <div class="product-notes">
+                    {{ $product['desc'] }}
+                    <br><br>
+                    <strong>Top Notes:</strong> Fruity, Fresh, Green<br>
+                    <strong>Middle Notes:</strong> Floral, Fruity, Ambery<br>
+                    <strong>Base Notes:</strong> Woody, Fruity, Ambery
+                </div>
+                <a href="#" class="btn-outline">Buy Now</a>
+            </div>
         </div>
-    </div>
 
-    <div class="product-card" data-category="floral">
-        <div class="product-image" style="
-                    width: 100%;
-                    min-height: 500px;
-                    background-image: url('{{ asset('images/website/elska/prod2.png') }}');
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: contain;">
-        </div>
-        <div class="product-info">
-            <span class="product-tag">Extrait de Parfum</span>
-            <h3>Breezy Girl</h3>
-            <div class="product-notes">
-                Perpaduan fruity, green notes, dan sentuhan floral menghadirkan kesan segar yang bersih, seperti
-                habis mandi. Berlanjut ke aroma floral yang dipadukan dengan green dan ambery, menciptakan nuansa
-                lembut, tenang, dan sedikit hangat. Di fase akhir, aromanya berubah menjadi perpaduan musky, amber,
-                dan lactonic yang memberikan drydown yang calm dan comforting, meninggalkan jejak wangi yang halus,
-                bersih, dan terasa dekat di kulit.<br><br>
-                <strong>Top Notes:</strong> Fruity, Green, Floral<br>
-                <strong>Middle Notes:</strong> Floral, Green, Ambery<br>
-                <strong>Base Notes:</strong> Musky, Amber, Lactonic
-            </div>
-            <a href="#" class="btn-outline">Buy Now</a>
-        </div>
-    </div>
-
-    <div class="product-card" data-category="fruity">
-        <div class="product-image" style="
-                    width: 100%;
-                    min-height: 500px;
-                    background-image: url('{{ asset('images/website/elska/prod3.png') }}');
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: contain;">
-        </div>
-        <div class="product-info">
-            <span class="product-tag">Extrait de Parfum</span>
-            <h3>Peppy Cheerleader</h3>
-            <div class="product-notes">
-                Perpaduan manis dan segar dari buah pear, peach dan berries membuka aroma ini dengan kesan yang
-                langsung memikat. Diikuti oleh kelembutan floral khususnya aroma Lily yang berpadu dengan nuansa
-                fruity yang manis dan juice. Ditutup dengan sandalwood yang hangat dan vanilla musk yang creamy
-                menghadirkan kesan elegan, lembut dan menenangkan sepanjang hari.<br><br>
-                <strong>Top Notes:</strong> Pear, Peach, Berries<br>
-                <strong>Middle Notes:</strong> Floral, Lily, Fruity<br>
-                <strong>Base Notes:</strong> Sandalwood, Vanilla, Musk
-            </div>
-            <a href="#" class="btn-outline">Buy Now</a>
-        </div>
-    </div>
-
-    <div class="product-card" data-category="fruity">
-        <div class="product-image" style="
-                    width: 100%;
-                    min-height: 500px;
-                    background-image: url('{{ asset('images/website/elska/prod4.png') }}');
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: contain;">
-        </div>
-        <div class="product-info">
-            <span class="product-tag">Extrait de Parfum</span>
-            <h3>4Ever Young</h3>
-            <div class="product-notes">
-                Perpaduan aroma segar dari fruity, cucumber, dan green notes memberikan kesan ringan dan watery yang
-                menyegarkan. Berlanjut ke sentuhan floral dengan green dan watermelon yang juicy, menciptakan nuansa
-                ceria dan playful. Ditutup dengan aroma musky, sweet, dan fruity menghadirkan wangi yang soft,
-                manis, dan clean, nyaman dipakai sepanjang hari.<br><br>
-                <strong>Top Notes:</strong> Fruity, Cucumber, Green<br>
-                <strong>Middle Notes:</strong> Floral, Green, Watermelon<br>
-                <strong>Base Notes:</strong> Musky, Sweet, Fruity
-            </div>
-            <a href="#" class="btn-outline">Buy Now</a>
-        </div>
-    </div>
+    @endforeach
 </section>

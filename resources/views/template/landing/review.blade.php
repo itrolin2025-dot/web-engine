@@ -77,46 +77,73 @@
 
     }
 </style>
+
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        // Remove trailing commas before closing brackets/braces (e.g. , ] or , })
+        $cleanJson = preg_replace('/,\s*([\]}])/', '$1', $cleanJson);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $reviews = $content['reviews'] ?? [];
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+
+@endphp
+
 <section class="reviews">
     <h2>Customer Reviews</h2>
     <div class="reviews-grid">
-        <div class="review-card">
-            <div class="review-header">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='%23666'%3EA%3C/text%3E%3C/svg%3E"
-                    alt="Avatar" class="review-avatar">
-                <div class="review-meta">
-                    <h4>Charlotte W.</h4>
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        @foreach ($reviews as $review)
+            @php
+                $avatar = !empty($review['avatar'])
+                    ? asset('images/website/' . $domain . '/' . $review['avatar'])
+                    : asset('images/default/broken.png');
+            @endphp
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="{{ $avatar }}" alt="Avatar" class="review-avatar">
+                    <div class="review-meta">
+                        <h4>{{ $review['name'] }}</h4>
+                        <div class="stars">
+                            @php $starCount = (int) ($review['star'] ?? 5); @endphp
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $starCount)
+                                    <span style="color: #FBBF24;">&#9733;</span>
+                                @else
+                                    <span style="color: #D1D5DB;">&#9734;</span>
+                                @endif
+                            @endfor
+                        </div>
+                    </div>
                 </div>
+                <p class="review-text">"{{ $review['text'] }}"</p><br>
+                <!-- <div class="verified">&#10003; Verified Purchase</div> -->
             </div>
-            <p class="review-text">"The fragrance lasts surprisingly long and feels very premium."</p><br>
-            <div class="verified">&#10003; Verified Purchase</div>
-        </div>
-
-        <div class="review-card">
-            <div class="review-header">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='%23666'%3ES%3C/text%3E%3C/svg%3E"
-                    alt="Avatar" class="review-avatar">
-                <div class="review-meta">
-                    <h4>Sarah M.</h4>
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-                </div>
-            </div>
-            <p class="review-text">"The packaging is beautiful and perfect for gifting."</p><br>
-            <div class="verified">&#10003; Verified Purchase</div>
-        </div>
-
-        <div class="review-card">
-            <div class="review-header">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='25' fill='%23ccc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='12' fill='%23666'%3EL%3C/text%3E%3C/svg%3E"
-                    alt="Avatar" class="review-avatar">
-                <div class="review-meta">
-                    <h4>Lily K.</h4>
-                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-                </div>
-            </div>
-            <p class="review-text">"My daily body care routine feels much more luxurious now."</p><br>
-            <div class="verified">&#10003; Verified Purchase</div>
-        </div>
+        @endforeach
     </div>
 </section>

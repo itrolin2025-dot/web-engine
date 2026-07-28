@@ -130,15 +130,47 @@
 
     }
 </style>
+
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        // Remove trailing commas before closing brackets/braces (e.g. , ] or , })
+        $cleanJson = preg_replace('/,\s*([\]}])/', '$1', $cleanJson);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title'] ?? $content['title_en'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle'] ?? $content['subtitle_en'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc'] ?? $content['desc_en'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $button_text = $content['button_text'] ?? $content['button_text_en'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+@endphp
+
 <footer>
     <div class="footer-grid">
         <div class="footer-brand">
-            <h3>Signature Fragrance</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore
-                et dolore magna aliqua.</p>
+            <h3>{{ $title }}</h3>
+            <p>{{ $subtitle }}</p>
             <div class="footer-newsletter">
-                <input type="email" placeholder="Enter your email">
-                <button>Subscribe</button>
+                <input type="email" placeholder="{{ $desc }}">
+                <button>{{ $button_text }}</button>
             </div>
         </div>
         <div class="footer-links">
