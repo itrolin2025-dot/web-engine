@@ -244,13 +244,25 @@
     </div>
     <ul class="navbar-menu">
         @foreach($menus as $menu)
+            @php
+                $menuUrl = $menu['url'] ?? '#';
+                if (!empty($menuUrl) && $menuUrl !== '#' && !str_starts_with($menuUrl, 'http') && !str_starts_with($menuUrl, '/')) {
+                    $menuUrl = '/' . ($website->domain ?? '') . '/' . ltrim($menuUrl, '/');
+                }
+            @endphp
             @if(!empty($menu['children']))
                 <li class="dropdown">
                     <a href="javascript:void(0)" class="dropdown-toggle">{{ $menu['label'] }} &#9662;</a>
                     <ul class="dropdown-menu">
                         @foreach($menu['children'] as $child)
+                            @php
+                                $childUrl = $child['url'] ?? '#';
+                                if (!empty($childUrl) && $childUrl !== '#' && !str_starts_with($childUrl, 'http') && !str_starts_with($childUrl, '/')) {
+                                    $childUrl = '/' . ($website->domain ?? '') . '/' . ltrim($childUrl, '/');
+                                }
+                            @endphp
                             <li>
-                                <a href="{{ $child['url'] ?? '#' }}">
+                                <a href="{{ $childUrl }}">
                                     {{ $child['label'] }}
                                 </a>
                             </li>
@@ -258,8 +270,14 @@
                     </ul>
                 </li>
             @else
+                @php
+                    $routeName = !empty($menu['url']) ? 'pages' : 'template';
+                    $routeParams = ($routeName === 'template')
+                        ? ['any' => $website->domain ?? '']
+                        : ['client' => $website->domain ?? '', 'pages' => $menu['url']];
+                @endphp
                 {{-- Menu biasa --}}
-                <li><a href="{{ $menu['url'] ?? '#' }}">{{ $menu['label'] }}</a></li>
+                <li><a href="{{ route($routeName, $routeParams) }}">{{ $menu['label'] }}</a></li>
             @endif
         @endforeach
     </ul>

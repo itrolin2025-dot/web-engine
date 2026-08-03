@@ -27,6 +27,12 @@
 
         <div class="hidden md:flex space-x-8 items-center">
             @foreach($menus as $menu)
+                @php
+                    $menuUrl = $menu['url'] ?? '#';
+                    if (!empty($menuUrl) && $menuUrl !== '#' && !str_starts_with($menuUrl, 'http') && !str_starts_with($menuUrl, '/')) {
+                        $menuUrl = '/' . ($website->domain ?? '') . '/' . ltrim($menuUrl, '/');
+                    }
+                @endphp
                 @if(!empty($menu['children']))
                     {{-- Menu dengan Dropdown --}}
                     <div class="relative group">
@@ -42,7 +48,13 @@
                             class="absolute left-0 top-full mt-0 w-48 bg-white border border-stone-100 shadow-lg rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-50 overflow-hidden">
                             <div class="py-2">
                                 @foreach($menu['children'] as $child)
-                                    <a href="{{ $child['url'] ?? '#' }}"
+                                    @php
+                                        $childUrl = $child['url'] ?? '#';
+                                        if (!empty($childUrl) && $childUrl !== '#' && !str_starts_with($childUrl, 'http') && !str_starts_with($childUrl, '/')) {
+                                            $childUrl = '/' . ($website->domain ?? '') . '/' . ltrim($childUrl, '/');
+                                        }
+                                    @endphp
+                                    <a href="{{ $childUrl }}"
                                         class="block px-5 py-2.5 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors">
                                         {{ $child['label'] }}
                                     </a>
@@ -52,7 +64,13 @@
                     </div>
                 @else
                     {{-- Menu biasa --}}
-                    <a href="{{ $menu['url'] ?? '#' }}"
+                    @php
+                        $routeName = !empty($menu['url']) ? 'pages' : 'template';
+                        $routeParams = ($routeName === 'template')
+                            ? ['any' => $website->domain ?? '']
+                            : ['client' => $website->domain ?? '', 'pages' => $menu['url']];
+                    @endphp
+                    <a href="{{ route($routeName, $routeParams) }}"
                         class="text-sm font-medium tracking-wide text-stone-600 hover:text-stone-900 transition-colors">
                         {{ $menu['label'] }}
                     </a>

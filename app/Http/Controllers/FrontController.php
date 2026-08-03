@@ -53,6 +53,7 @@ class FrontController extends Controller
                 ->join('template', 'template.id', '=', 'templates_section.template_id')
                 ->where('customers_websites_layout.customers_website_id', $website->id)
                 ->where('customers_websites_layout.status', true)
+                ->where('customers_websites_layout.page_type', 'homepage')
                 ->orderBy('customers_websites_layout.position')
                 ->select(
                     'customers_websites_layout.*',
