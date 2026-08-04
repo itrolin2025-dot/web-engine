@@ -26,14 +26,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-use App\Http\Controllers\Auth\RegisteredUserController;
-Route::middleware('guest')->group(function () {
-    // Use standard registration controller:
-    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
-    Route::post('register', [RegisteredUserController::class, 'store']);
-});
-
-
 Route::middleware('auth')->group(function () {
 
 
@@ -186,4 +178,3 @@ Route::middleware('auth')->group(function () {
 
 });
 
-require __DIR__ . '/auth.php';
