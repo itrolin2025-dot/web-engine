@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\ProductsController;
 use App\Http\Controllers\admin\WebsiteController;
+use App\Http\Controllers\admin\TemplateController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\ModulController;
@@ -30,6 +31,17 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('products', [ProductsController::class, 'index'])->name('products');
+
+    Route::get('template', [TemplateController::class, 'index'])->name('template');
+    Route::get('template/create', [TemplateController::class, 'create'])->name('template.create');
+    Route::post('template', [TemplateController::class, 'store'])->name('template.store');
+    Route::get('template/{id}/edit', [TemplateController::class, 'edit'])->name('template.edit');
+    Route::get('template/{id}/section', [TemplateController::class, 'section'])->name('template.section');
+    Route::post('template/{id}/section', [TemplateController::class, 'sectionStore'])->name('template.section.store');
+    Route::put('template/{id}/section/{sectionId}', [TemplateController::class, 'sectionUpdate'])->name('template.section.update');
+    Route::delete('template/{id}/section/{sectionId}', [TemplateController::class, 'sectionDestroy'])->name('template.section.destroy');
+    Route::put('template/{id}', [TemplateController::class, 'update'])->name('template.update');
+    Route::delete('template/{id}', [TemplateController::class, 'destroy'])->name('template.destroy');
 
     Route::get('website', [WebsiteController::class, 'index'])->name('website');
 

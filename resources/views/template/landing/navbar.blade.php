@@ -273,7 +273,7 @@
                 @php
                     $routeName = !empty($menu['url']) ? 'pages' : 'template';
                     $routeParams = ($routeName === 'template')
-                        ? ['any' => $website->domain ?? '']
+                        ? ['client' => $website->domain ?? '']
                         : ['client' => $website->domain ?? '', 'pages' => $menu['url']];
                 @endphp
                 {{-- Menu biasa --}}

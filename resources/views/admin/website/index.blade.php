@@ -14,121 +14,74 @@
         </ul>
     </div>
     <div class="pt-4"></div>
+    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+        <div class="card">
+            <img src="images/800x600.png" class="h-48 w-full rounded-t-lg object-cover object-center" alt="images">
+            <div class="flex grow flex-col p-4">
+                <div class="flex">
+                    <a href="#" class="text-xs text-info line-clamp-1">Frameworks</a>
+                    <div class="mx-2 my-0.5 w-px bg-slate-200 dark:bg-navy-500"></div>
 
-    <div x-data="{activeTab:'tabHome'}" class="tabs flex flex-col">
-        <div
-            class="is-scrollbar-hidden overflow-x-auto rounded-lg bg-slate-200 text-slate-600 dark:bg-navy-800 dark:text-navy-200">
-            <div class="tabs-list flex px-1.5 py-1">
-                <button @click="activeTab = 'tabHome'"
-                    :class="activeTab === 'tabHome' ? 'bg-white shadow dark:bg-navy-500 dark:text-navy-100' : 'hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                    class="btn shrink-0 space-x-2 px-3 py-1.5 font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                    <span> Home </span>
-                </button>
-                <button @click="activeTab = 'tabProfile'"
-                    :class="activeTab === 'tabProfile' ? 'bg-white shadow dark:bg-navy-500 dark:text-navy-100' : 'hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                    class="btn shrink-0 space-x-2 px-3 py-1.5 font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <span>Profile</span>
-                </button>
-                <button @click="activeTab = 'tabMessages'"
-                    :class="activeTab === 'tabMessages' ? 'bg-white shadow dark:bg-navy-500 dark:text-navy-100' : 'hover:text-slate-800 focus:text-slate-800 dark:hover:text-navy-100 dark:focus:text-navy-100'"
-                    class="btn shrink-0 space-x-2 px-3 py-1.5 font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span>Messages</span>
-                </button>
+                    <span class="text-tiny+ text-slate-400 dark:text-navy-300">a hour ago</span>
+                </div>
+
+                <div class="pt-2 line-clamp-2">
+                    <a href="#"
+                        class="text-base font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">Food:
+                        A Simple Definition</a>
+                </div>
+
+                <p class="grow pt-2">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi
+                    necessitatibus repellat voluptatibus?
+                </p>
+
+                <div class="mt-3 text-right">
+                    <button
+                        class="btn h-8 space-x-1.5 rounded-full bg-slate-150 px-3 text-xs+ font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        <span> 32 </span>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="tab-content pt-4">
-            <div x-show="activeTab === 'tabHome'" x-transition:enter="transition-all duration-500 easy-in-out"
-                x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-                x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]">
-                <div>
-                    <p>
-                        Etiam nec ante eget lacus vulputate egestas non iaculis tellus.
-                        Suspendisse tempus ex in tortor venenatis malesuada. Aenean
-                        consequat dui vitae nibh lobortis condimentum. Duis vel risus est.
-                    </p>
-                    <div class="flex space-x-2 pt-3">
-                        <a href="#"
-                            class="tag rounded-full border border-primary text-primary dark:border-accent-light dark:text-accent-light">
-                            Tag 1
-                        </a>
-                        <a href="#"
-                            class="tag rounded-full border border-primary text-primary dark:border-accent-light dark:text-accent-light">
-                            Tag 2
-                        </a>
-                    </div>
+        <div class="card">
+            <img src="images/800x600.png" class="h-48 w-full rounded-t-lg object-cover object-center" alt="images">
+            <div class="flex grow flex-col p-4">
+                <div class="flex">
+                    <a href="#" class="text-xs text-info line-clamp-1">Frameworks</a>
+                    <div class="mx-2 my-0.5 w-px bg-slate-200 dark:bg-navy-500"></div>
 
-                    <p class="pt-3 text-xs text-slate-400 dark:text-navy-300">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-                        dolore non atque?
-                    </p>
+                    <span class="text-tiny+ text-slate-400 dark:text-navy-300">12 min ago</span>
                 </div>
-            </div>
-            <div x-show="activeTab === 'tabProfile'" x-transition:enter="transition-all duration-500 easy-in-out"
-                x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-                x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]">
-                <div>
-                    <p>
-                        Cras iaculis ipsum quis lectus faucibus, in mattis nulla molestie.
-                        Vestibulum vel tristique libero. Morbi vulputate odio at viverra
-                        sodales. Curabitur accumsan justo eu libero porta ultrices vitae eu
-                        leo.
-                    </p>
-                    <div class="flex space-x-2 pt-3">
-                        <a href="#"
-                            class="tag rounded-full border border-primary text-primary dark:border-accent-light dark:text-accent-light">
-                            Tag 1
-                        </a>
-                        <a href="#"
-                            class="tag rounded-full border border-primary text-primary dark:border-accent-light dark:text-accent-light">
-                            Tag 2
-                        </a>
-                    </div>
 
-                    <p class="pt-3 text-xs text-slate-400 dark:text-navy-300">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-                        dolore non atque?
-                    </p>
+                <div class="pt-2 line-clamp-2">
+                    <a href="#"
+                        class="text-base font-medium text-slate-700 hover:text-primary focus:text-primary dark:text-navy-100 dark:hover:text-accent-light dark:focus:text-accent-light">Tailwind
+                        CSS Card Example</a>
                 </div>
-            </div>
-            <div x-show="activeTab === 'tabMessages'" x-transition:enter="transition-all duration-500 easy-in-out"
-                x-transition:enter-start="opacity-0 [transform:translate3d(1rem,0,0)]"
-                x-transition:enter-end="opacity-100 [transform:translate3d(0,0,0)]">
-                <div>
-                    <p>
-                        Pellentesque pulvinar, sapien eget fermentum sodales, felis lacus
-                        viverra magna, id pulvinar odio metus non enim. Ut id augue
-                        interdum, ultrices felis eu, tincidunt libero.
-                    </p>
-                    <div class="flex space-x-2 pt-3">
-                        <a href="#"
-                            class="tag rounded-full border border-primary text-primary dark:border-accent-light dark:text-accent-light">
-                            Tag 1
-                        </a>
-                        <a href="#"
-                            class="tag rounded-full border border-primary text-primary dark:border-accent-light dark:text-accent-light">
-                            Tag 2
-                        </a>
-                    </div>
 
-                    <p class="pt-3 text-xs text-slate-400 dark:text-navy-300">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-                        dolore non atque?
-                    </p>
+                <p class="grow pt-2">
+                    Lorem ipsum dolor sit amet, consectetur. Lorem ipsum dolor on
+                    the sit.
+                </p>
+
+                <div class="mt-3 text-right">
+                    <button
+                        class="btn h-8 space-x-1.5 rounded-full bg-slate-150 px-3 text-xs+ font-medium text-slate-800 hover:bg-slate-200 focus:bg-slate-200 active:bg-slate-200/80 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                        <span> 65 </span>
+                    </button>
                 </div>
             </div>
         </div>
