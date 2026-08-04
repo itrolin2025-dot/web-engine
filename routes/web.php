@@ -8,7 +8,7 @@ use App\Http\Controllers\PagesController;
 
 Route::get('/', [FrontController::class, 'index'])->name('home');
 
-// Admin routes harus didaftarkan SEBELUM wildcard agar tidak tertangkap /{client}
+// Admin routes HARUS di atas wildcard agar tidak tertangkap /{client}/{pages}
 Route::prefix('admin')->name('admin.')->group(function () {
     require base_path('routes/admin.php');
     require base_path('routes/auth.php');

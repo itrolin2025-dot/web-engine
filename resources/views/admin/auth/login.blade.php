@@ -74,7 +74,7 @@
             </p>
           </div>
         </div>
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('admin.login') }}">
           @csrf
           <div class="mt-10">
             <!-- <label class="relative flex">
@@ -226,7 +226,7 @@
                 <span>Dont have Account?</span>
 
                 <a class="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
-                  href="{{ route('register') }}">Request account</a>
+                  href="{{ route('admin.register') }}">Request account</a>
               </p>
             </div>
             <!-- <div class="mt-4 text-center text-xs-plus">
