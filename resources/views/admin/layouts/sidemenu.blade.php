@@ -27,7 +27,7 @@
                         class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                         <i class="fa-solid fa-user-group"></i>
                     </a>
-                    <a href="{{ route('admin.website') }}" data-tooltip="Website Template" data-placement="right"
+                    <a href="{{ route('admin.template') }}" data-tooltip="Website Template" data-placement="right"
                         class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
                         <i class="fa-solid fa-paint-roller"></i>
                     </a>

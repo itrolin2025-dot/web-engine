@@ -67,6 +67,9 @@
                         <a href="{{ route('admin.template.edit', $template->id) }}" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
                             <i class="fa-solid fa-pen"></i>
                         </a>
+                        <a href="{{ route('admin.template.section', $template->id) }}" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
+                            <i class="fa-solid fa-list"></i>
+                        </a>
                         @endif
                         
                         @if($canDelete)
