@@ -1,3 +1,41 @@
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        // Remove trailing commas before closing brackets/braces (e.g. , ] or , })
+        $cleanJson = preg_replace('/,\s*([\]}])/', '$1', $cleanJson);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $categories = $content['categories'] ?? [];
+    $products = $content['products'] ?? [];
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+
+@endphp
+
 <section id="products-section" class="max-w-7xl mx-auto px-6 py-16">
     <div class="flex justify-between items-end mb-10">
         <h2 class="text-2xl md:text-3xl font-serif-heading font-bold uppercase tracking-wider">PRODUCTS</h2>
@@ -6,73 +44,32 @@
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <!-- Product Item 1 -->
-        <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
-            <div>
-                <div class="bg-yellow-100 aspect-square rounded-lg overflow-hidden mb-3">
-                    <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&auto=format&fit=crop&q=80"
-                        class="w-full h-full object-cover">
-                </div>
-                <span class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">BODY LOTION</span>
-                <h4 class="font-bold text-sm mb-1">BLOOMING GARDEN</h4>
-                <p class="text-xs font-semibold text-stone-600 mb-3">Rp 129.000</p>
-            </div>
-            <button
-                onclick="addToCart(4, 'BLOOMING GARDEN', 129000, 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&auto=format&fit=crop&q=80')"
-                class="w-full border border-black text-black py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Add
-                To Cart</button>
-        </div>
 
-        <!-- Product Item 2 -->
-        <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
-            <div>
-                <div class="bg-purple-100 aspect-square rounded-lg overflow-hidden mb-3">
-                    <img src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=400&auto=format&fit=crop&q=80"
-                        class="w-full h-full object-cover">
-                </div>
-                <span class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">EXTRAIT DE
-                    PARFUM</span>
-                <h4 class="font-bold text-sm mb-1">SUMMER BREEZE</h4>
-                <p class="text-xs font-semibold text-stone-600 mb-3">Rp 179.000</p>
-            </div>
-            <button
-                onclick="addToCart(5, 'SUMMER BREEZE', 179000, 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=400&auto=format&fit=crop&q=80')"
-                class="w-full border border-black text-black py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Add
-                To Cart</button>
-        </div>
+        @foreach ($products as $product)
+            @php
+                $image = !empty($product['image'])
+                    ? asset('images/website/' . $domain . '/' . $product['image'])
+                    : asset('images/default/broken.png');
+                // Extract numeric price (remove non-digit except dots)
+                $numericPrice = preg_replace('/[^0-9]/', '', $product['price'] ?? '0');
+            @endphp
 
-        <!-- Product Item 3 -->
-        <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
-            <div>
-                <div class="bg-pink-100 aspect-square rounded-lg overflow-hidden mb-3">
-                    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&auto=format&fit=crop&q=80"
-                        class="w-full h-full object-cover">
+            <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
+                <div>
+                    <div class="bg-yellow-100 aspect-square rounded-lg overflow-hidden mb-3">
+                        <img src="{{ $image }}"
+                            class="w-full h-full object-cover">
+                    </div>
+                    <span
+                        class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">{{ $product['name'] }}</span>
+                    <h4 class="font-bold text-sm mb-1">{{ $product['name'] }}</h4>
+                    <p class="text-xs font-semibold text-stone-600 mb-3">{{ $product['price'] }}</p>
                 </div>
-                <span class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">BODY MIST</span>
-                <h4 class="font-bold text-sm mb-1">COCO FLORAL</h4>
-                <p class="text-xs font-semibold text-stone-600 mb-3">Rp 119.000</p>
+                <button
+                    onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"
+                    class="w-full border border-black text-black py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Add
+                    To Cart</button>
             </div>
-            <button
-                onclick="addToCart(6, 'COCO FLORAL', 119000, 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&auto=format&fit=crop&q=80')"
-                class="w-full border border-black text-black py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Add
-                To Cart</button>
-        </div>
-
-        <!-- Product Item 4 -->
-        <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
-            <div>
-                <div class="bg-blue-100 aspect-square rounded-lg overflow-hidden mb-3">
-                    <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&auto=format&fit=crop&q=80"
-                        class="w-full h-full object-cover">
-                </div>
-                <span class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">BUNDLE SET</span>
-                <h4 class="font-bold text-sm mb-1">TRIO PACK SET</h4>
-                <p class="text-xs font-semibold text-stone-600 mb-3">Rp 399.000</p>
-            </div>
-            <button
-                onclick="addToCart(7, 'TRIO PACK SET', 399000, 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&auto=format&fit=crop&q=80')"
-                class="w-full bg-black text-white py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-stone-800 transition-colors">Add
-                To Cart</button>
-        </div>
+        @endforeach
     </div>
 </section>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voldog - Navbar & FAQ (Tailwind)</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Color Setup untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        voldog: {
+                            green: '#1c3d32',
+                            lime: '#d8f24c',
+                            gray: '#f2f4f2',
+                            border: '#e2e8e4',
+                            muted: '#5e6d65',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-white text-voldog-green font-sans antialiased">
+
+    <!-- NAVBAR SECTION -->
+    <nav
+        class="sticky top-0 z-50 bg-white border-b border-voldog-border px-6 md:px-12 py-5 flex items-center justify-between">
+
+        <!-- Left Menu -->
+        <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-voldog-green">
+            <a href="#" class="hover:opacity-70 transition">Products</a>
+            <a href="#" class="hover:opacity-70 transition">Butcher Shop</a>
+            <a href="#" class="hover:opacity-70 transition">Communication</a>
+        </div>
+
+        <!-- Center Logo -->
+        <a href="#" class="relative text-3xl font-extrabold tracking-widest text-voldog-green z-10">
+            VOLDOG
+            <!-- Lime Dot di atas Logo -->
+            <span class="absolute -top-1 -right-3 w-7 h-7 bg-voldog-lime rounded-full -z-10"></span>
+        </a>
+
+        <!-- Right Menu / Actions -->
+        <div class="flex items-center gap-5">
+            <div class="flex items-center gap-4 text-lg text-voldog-green">
+                <i class="fa-solid fa-magnifying-glass cursor-pointer hover:scale-110 transition"></i>
+                <i class="fa-regular fa-user cursor-pointer hover:scale-110 transition"></i>
+                <i class="fa-solid fa-cart-shopping cursor-pointer hover:scale-110 transition"></i>
+            </div>
+
+            <button
+                class="hidden sm:block bg-voldog-lime text-voldog-green text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full hover:bg-[#cbeb38] hover:-translate-y-0.5 transition">
+                Shop Online
+            </button>
+
+            <!-- Mobile Hamburger Toggle -->
+            <div
+                class="w-10 h-10 bg-voldog-lime rounded-full flex flex-col items-center justify-center gap-1 cursor-pointer">
+                <span class="w-4 h-0.5 bg-voldog-green rounded-full"></span>
+                <span class="w-4 h-0.5 bg-voldog-green rounded-full"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section
+        class="max-w-6xl mx-auto px-6 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+        <!-- Left Content Column -->
+        <div class="lg:col-span-7 flex flex-col items-start">
+
+            <!-- Top Badge -->
+            <div class="inline-flex items-center gap-2 bg-voldog-gray px-4 py-2 rounded-full mb-6">
+                <span class="w-2 h-2 rounded-full bg-voldog-lime"></span>
+                <span class="text-xs font-bold uppercase tracking-wider text-voldog-green">100% Natural Raw Pet
+                    Food</span>
+            </div>
+
+            <!-- Main Headline -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] text-voldog-green mb-6">
+                Give your best friend the <br class="hidden sm:inline">
+                <span class="relative inline-block">
+                    real nutrition
+                    <!-- Accent Line di bawah teks -->
+                    <span class="absolute -bottom-1 left-0 w-full h-2 bg-voldog-lime rounded-full -z-10"></span>
+                </span>
+                they deserve.
+            </h1>
+
+            <!-- Subtitle Description -->
+            <p class="text-voldog-muted text-base lg:text-lg leading-relaxed mb-8 max-w-lg">
+                Biologically appropriate raw meals tailored for dogs and cats. Freshly prepared, frozen with care, and
+                delivered straight to your doorstep.
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+
+                <!-- Primary CTA (Gaya See All Questions) -->
+                <a href="#"
+                    class="inline-flex items-center justify-between gap-4 bg-voldog-gray hover:bg-[#e5ebe6] p-2 pl-6 rounded-full font-bold text-sm text-voldog-green transition">
+                    Explore products
+                    <span
+                        class="w-10 h-10 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-sm">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </a>
+
+                <!-- Secondary CTA -->
+                <a href="#" class="px-6 py-3.5 text-sm font-bold text-voldog-green hover:opacity-70 transition">
+                    How it works <i class="fa-solid fa-angle-right ml-1 text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Trust Badges / Stats -->
+            <div class="mt-12 pt-8 border-t border-voldog-border grid grid-cols-3 gap-6 w-full max-w-md">
+                <div>
+                    <h4 class="text-2xl font-extrabold text-voldog-green">10K+</h4>
+                    <p class="text-xs text-voldog-muted font-medium mt-1">Happy Pets</p>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-extrabold text-voldog-green">100%</h4>
+                    <p class="text-xs text-voldog-muted font-medium mt-1">Organic Meat</p>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-extrabold text-voldog-green">4.9/5</h4>
+                    <p class="text-xs text-voldog-muted font-medium mt-1">Customer Rating</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Image Column -->
+        <div class="lg:col-span-5 relative flex justify-center items-center">
+
+            <!-- Circle Background Accent -->
+            <div
+                class="absolute w-[80%] aspect-square bg-voldog-lime rounded-full -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-70 blur-xl sm:blur-none">
+            </div>
+
+            <!-- Hero Card Container -->
+            <div
+                class="relative bg-voldog-gray border border-white/50 rounded-3xl p-6 sm:p-8 shadow-xl w-full max-w-md aspect-[4/5] flex flex-col justify-between overflow-hidden">
+
+                <!-- Top Small Tag Inside Card -->
+                <div class="flex justify-between items-center z-10">
+                    <span
+                        class="bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-voldog-green">BARF
+                        Certified</span>
+                    <span
+                        class="w-8 h-8 bg-white rounded-full flex items-center justify-center text-voldog-green shadow-sm">
+                        <i class="fa-solid fa-paw text-xs"></i>
+                    </span>
+                </div>
+
+                <!-- Product Hero Image -->
+                <div class="my-auto flex items-center justify-center relative">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Voldog Raw Food"
+                        class="w-[90%] h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <!-- Floating Info Overlay Badge -->
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg flex items-center gap-4 z-10">
+                    <div
+                        class="w-10 h-10 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green shrink-0">
+                        <i class="fa-solid fa-bolt text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-voldog-green">Freshly Frozen</p>
+                        <p class="text-[11px] text-voldog-muted">Preserving 100% natural nutrients</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Product Section Container -->
+    <section class="max-w-6xl mx-auto my-10">
+
+        <!-- Header: Title & Description -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-10">
+            <div>
+                <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight text-voldog-green">
+                    Made with <span class="font-extrabold">love</span>,<br> frozen with care!
+                </h2>
+
+                <!-- Category Switcher Pill (Dog / Cat) -->
+                <div class="inline-flex bg-[#f2f4f2] p-1.5 rounded-full gap-1 mt-6">
+                    <button
+                        class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm bg-voldog-lime text-voldog-green shadow-sm transition">
+                        <i class="fa-solid fa-dog"></i> DOG
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm text-voldog-muted hover:text-voldog-green transition">
+                        <i class="fa-solid fa-cat"></i> CAT
+                    </button>
+                </div>
+            </div>
+
+            <p class="text-voldog-muted text-sm lg:text-base max-w-xs lg:text-right leading-relaxed">
+                Discover complete BARF recipes for your dog or cat – ready to serve!
+            </p>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Card 1 -->
+            <div class="group flex flex-col">
+                <!-- Container Gambar & Hover Button -->
+                <div
+                    class="relative bg-voldog-gray rounded-3xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Chicken Meal"
+                        class="w-[85%] h-auto object-contain transition-transform duration-300 group-hover:scale-105">
+
+                    <!-- Tombol Add to Cart (Tersembunyi, muncul saat Hover) -->
+                    <a href="#"
+                        class="absolute bottom-5 left-1/2 -translate-x-1/2 translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-white pl-5 pr-1.5 py-1.5 rounded-full text-voldog-green font-bold text-sm shadow-lg flex items-center gap-3 whitespace-nowrap">
+                        Add to cart
+                        <span
+                            class="w-9 h-9 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-xs">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                <!-- Info Produk -->
+                <div class="pt-4 flex justify-between items-start">
+                    <a href="#" class="font-bold text-voldog-green hover:underline max-w-[70%]">Complete Chicken
+                        Meal</a>
+                    <span class="font-bold text-voldog-green">$12.50</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="group flex flex-col">
+                <div
+                    class="relative bg-voldog-gray rounded-3xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Beef Meal"
+                        class="w-[85%] h-auto object-contain transition-transform duration-300 group-hover:scale-105">
+
+                    <a href="#"
+                        class="absolute bottom-5 left-1/2 -translate-x-1/2 translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-white pl-5 pr-1.5 py-1.5 rounded-full text-voldog-green font-bold text-sm shadow-lg flex items-center gap-3 whitespace-nowrap">
+                        Add to cart
+                        <span
+                            class="w-9 h-9 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-xs">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                <div class="pt-4 flex justify-between items-start">
+                    <a href="#" class="font-bold text-voldog-green hover:underline max-w-[70%]">Complete Beef Meal</a>
+                    <span class="font-bold text-voldog-green">$14.00</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="group flex flex-col">
+                <div
+                    class="relative bg-voldog-gray rounded-3xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Chicken Meal Plus"
+                        class="w-[85%] h-auto object-contain transition-transform duration-300 group-hover:scale-105">
+
+                    <a href="#"
+                        class="absolute bottom-5 left-1/2 -translate-x-1/2 translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-white pl-5 pr-1.5 py-1.5 rounded-full text-voldog-green font-bold text-sm shadow-lg flex items-center gap-3 whitespace-nowrap">
+                        Add to cart
+                        <span
+                            class="w-9 h-9 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-xs">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                <div class="pt-4 flex justify-between items-start">
+                    <a href="#" class="font-bold text-voldog-green hover:underline max-w-[70%]">Complete Chicken Meal
+                        Plus</a>
+                    <span class="font-bold text-voldog-green">$13.50</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section
+        class="max-w-6xl mx-auto px-6 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+
+        <!-- Left Column Content -->
+        <div class="lg:col-span-5">
+            <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight text-voldog-green">
+                Do you have Questions?
+            </h2>
+
+            <!-- Underlined Text -->
+            <div class="relative inline-block mb-6 mt-1">
+                <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight text-voldog-green">
+                    We have the answers!
+                </h2>
+                <span class="absolute -bottom-2 left-0 w-full h-1.5 bg-voldog-lime rounded-full"></span>
+            </div>
+
+            <p class="text-voldog-muted text-base leading-relaxed mb-10 max-w-md">
+                Everything you need to know about the BARF diet, our products and how to get started. We're here to make
+                getting started easy.
+            </p>
+
+            <a href="#"
+                class="inline-flex items-center justify-between w-64 bg-voldog-gray hover:bg-[#e5ebe6] p-2 pl-6 rounded-full font-bold text-sm text-voldog-green transition">
+                See all questions
+                <span
+                    class="w-10 h-10 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-sm">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </span>
+            </a>
+        </div>
+
+        <!-- Right Column (Accordion List) -->
+        <div class="lg:col-span-7 flex flex-col w-full">
+
+            <!-- Item 1 -->
+            <div class="faq-item border-b border-voldog-border">
+                <button class="faq-header w-full py-6 flex items-center justify-between text-left focus:outline-none">
+                    <span class="text-lg font-bold text-voldog-green pr-4">What is the BARF diet?</span>
+                    <span
+                        class="faq-icon w-9 h-9 bg-voldog-gray rounded-full flex items-center justify-center shrink-0 transition-all duration-300">
+                        <i class="fa-solid fa-plus text-xs text-voldog-green transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <p class="text-voldog-muted text-sm lg:text-base leading-relaxed pb-6">
+                        BARF stands for Biologically Appropriate Raw Food. It is a natural diet consisting of raw meat,
+                        bones, vegetables, and fruit designed to mimic what dogs naturally eat in the wild.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="faq-item border-b border-voldog-border">
+                <button class="faq-header w-full py-6 flex items-center justify-between text-left focus:outline-none">
+                    <span class="text-lg font-bold text-voldog-green pr-4">Why should I start a BARF diet for my
+                        dog?</span>
+                    <span
+                        class="faq-icon w-9 h-9 bg-voldog-gray rounded-full flex items-center justify-center shrink-0 transition-all duration-300">
+                        <i class="fa-solid fa-plus text-xs text-voldog-green transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <p class="text-voldog-muted text-sm lg:text-base leading-relaxed pb-6">
+                        A BARF diet provides better digestion, healthier skin, a shinier coat, cleaner teeth, more
+                        energy, and smaller, less odorous stools compared to traditional kibble.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="faq-item border-b border-voldog-border">
+                <button class="faq-header w-full py-6 flex items-center justify-between text-left focus:outline-none">
+                    <span class="text-lg font-bold text-voldog-green pr-4">What are the main benefits of the BARF
+                        diet?</span>
+                    <span
+                        class="faq-icon w-9 h-9 bg-voldog-gray rounded-full flex items-center justify-center shrink-0 transition-all duration-300">
+                        <i class="fa-solid fa-plus text-xs text-voldog-green transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <p class="text-voldog-muted text-sm lg:text-base leading-relaxed pb-6">
+                        Key benefits include improved immunity, natural oral hygiene, optimal weight management, and
+                        reduced risk of allergies caused by artificial preservatives.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="faq-item border-b border-voldog-border">
+                <button class="faq-header w-full py-6 flex items-center justify-between text-left focus:outline-none">
+                    <span class="text-lg font-bold text-voldog-green pr-4">Is there a risk of bacteria or
+                        salmonella?</span>
+                    <span
+                        class="faq-icon w-9 h-9 bg-voldog-gray rounded-full flex items-center justify-center shrink-0 transition-all duration-300">
+                        <i class="fa-solid fa-plus text-xs text-voldog-green transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <p class="text-voldog-muted text-sm lg:text-base leading-relaxed pb-6">
+                        Dogs have a shorter, highly acidic digestive tract designed to process raw meat safely. However,
+                        proper hygiene and handling procedures should always be followed when preparing meals.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="faq-item border-b border-voldog-border">
+                <button class="faq-header w-full py-6 flex items-center justify-between text-left focus:outline-none">
+                    <span class="text-lg font-bold text-voldog-green pr-4">How do I store BARF meals correctly?</span>
+                    <span
+                        class="faq-icon w-9 h-9 bg-voldog-gray rounded-full flex items-center justify-center shrink-0 transition-all duration-300">
+                        <i class="fa-solid fa-plus text-xs text-voldog-green transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <p class="text-voldog-muted text-sm lg:text-base leading-relaxed pb-6">
+                        Keep the meals frozen at -18°C. Thaw the portion you need in the refrigerator 24 hours before
+                        feeding. Once thawed, use it within 2–3 days.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Item 6 -->
+            <div class="faq-item border-b border-voldog-border">
+                <button class="faq-header w-full py-6 flex items-center justify-between text-left focus:outline-none">
+                    <span class="text-lg font-bold text-voldog-green pr-4">How much should my dog eat per day?</span>
+                    <span
+                        class="faq-icon w-9 h-9 bg-voldog-gray rounded-full flex items-center justify-center shrink-0 transition-all duration-300">
+                        <i class="fa-solid fa-plus text-xs text-voldog-green transition-transform duration-300"></i>
+                    </span>
+                </button>
+                <div class="faq-body max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                    <p class="text-voldog-muted text-sm lg:text-base leading-relaxed pb-6">
+                        Generally, adult dogs need 2% to 3% of their ideal body weight daily. Puppies and active dogs
+                        may require higher proportions (up to 5%-10%).
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 py-16 lg:py-24">
+
+        <!-- Section Header -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-voldog-gray px-4 py-1.5 rounded-full mb-4">
+                    <span class="w-2 h-2 rounded-full bg-voldog-lime"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-voldog-green">Reviews</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight text-voldog-green">
+                    Loved by pets, <br>
+                    <span class="relative inline-block">
+                        trusted by owners.
+                        <span class="absolute -bottom-1 left-0 w-full h-1.5 bg-voldog-lime rounded-full"></span>
+                    </span>
+                </h2>
+            </div>
+
+            <!-- Rating Summary & Controls -->
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="flex text-voldog-green text-sm gap-1">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="font-extrabold text-sm text-voldog-green">4.9 / 5</span>
+                    <span class="text-xs text-voldog-muted font-medium">(500+ reviews)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Review Card 1 -->
+            <div
+                class="bg-voldog-gray rounded-3xl p-8 flex flex-col justify-between border border-transparent hover:border-voldog-border transition duration-300">
+                <div>
+                    <!-- Stars -->
+                    <div class="flex text-voldog-green text-xs gap-1 mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-voldog-green mb-3">"Shiny coat & endless energy!"</h3>
+                    <p class="text-voldog-muted text-sm leading-relaxed mb-6">
+                        Switching to Voldog BARF diet was the best decision for Bruno. His digestion improved within
+                        days, and his energy levels are amazing!
+                    </p>
+                </div>
+
+                <!-- Author Info -->
+                <div class="flex items-center gap-3 pt-4 border-t border-voldog-border/60">
+                    <div
+                        class="w-10 h-10 rounded-full bg-voldog-lime flex items-center justify-center font-extrabold text-xs text-voldog-green">
+                        JD
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-voldog-green">Jessica & Bruno</h4>
+                        <p class="text-xs text-voldog-muted">Golden Retriever Owner</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Card 2 -->
+            <div
+                class="bg-voldog-gray rounded-3xl p-8 flex flex-col justify-between border border-transparent hover:border-voldog-border transition duration-300">
+                <div>
+                    <div class="flex text-voldog-green text-xs gap-1 mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-voldog-green mb-3">"Even my picky cat loves it"</h3>
+                    <p class="text-voldog-muted text-sm leading-relaxed mb-6">
+                        Luna refused almost every raw brand before. The texture and freshness of Voldog meals won her
+                        over immediately. Highly recommended!
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 pt-4 border-t border-voldog-border/60">
+                    <div
+                        class="w-10 h-10 rounded-full bg-voldog-lime flex items-center justify-center font-extrabold text-xs text-voldog-green">
+                        MK
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-voldog-green">Michael & Luna</h4>
+                        <p class="text-xs text-voldog-muted">British Shorthair Owner</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Card 3 -->
+            <div
+                class="bg-voldog-gray rounded-3xl p-8 flex flex-col justify-between border border-transparent hover:border-voldog-border transition duration-300">
+                <div>
+                    <div class="flex text-voldog-green text-xs gap-1 mb-4">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-voldog-green mb-3">"Super convenient packaging"</h3>
+                    <p class="text-voldog-muted text-sm leading-relaxed mb-6">
+                        Love how easily portioned these sausage rolls are. Thawing takes no effort, and I know I am
+                        feeding 100% clean, organic meat.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 pt-4 border-t border-voldog-border/60">
+                    <div
+                        class="w-10 h-10 rounded-full bg-voldog-lime flex items-center justify-center font-extrabold text-xs text-voldog-green">
+                        SL
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-voldog-green">Sarah & Rocky</h4>
+                        <p class="text-xs text-voldog-muted">French Bulldog Owner</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==================== FOOTER SECTION ==================== -->
+    <footer class="bg-voldog-green text-white pt-16 pb-8 border-t border-voldog-border">
+        <div class="max-w-6xl mx-auto px-6">
+
+            <!-- Newsletter Banner Inside Footer -->
+            <div
+                class="bg-[#244b3e] rounded-3xl p-8 lg:p-12 mb-16 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-md">
+                    <h3 class="text-2xl lg:text-3xl font-extrabold text-white mb-2">Join the Voldog Pack</h3>
+                    <p class="text-voldog-border text-sm">Subscribe to get 10% off your first order plus nutrition tips
+                        from our experts.</p>
+                </div>
+
+                <!-- Input Form -->
+                <form class="flex w-full lg:w-auto bg-white p-1.5 rounded-full max-w-md">
+                    <input type="email" placeholder="Enter your email"
+                        class="px-5 py-2.5 bg-transparent text-voldog-green placeholder-voldog-muted text-sm focus:outline-none w-full">
+                    <button type="submit"
+                        class="bg-voldog-lime text-voldog-green px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-[#cbeb38] transition whitespace-nowrap">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+
+            <!-- Main Footer Content Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+
+                <!-- Brand Info Column -->
+                <div class="lg:col-span-2">
+                    <a href="#" class="relative text-3xl font-extrabold tracking-widest text-white inline-block mb-4">
+                        VOLDOG
+                        <span class="absolute -top-1 -right-3 w-7 h-7 bg-voldog-lime rounded-full -z-10"></span>
+                    </a>
+                    <p class="text-voldog-border text-sm leading-relaxed max-w-sm mb-6">
+                        Providing 100% natural, biologically appropriate raw food for dogs and cats. Made with love,
+                        frozen with care.
+                    </p>
+                    <!-- Social Icons -->
+                    <div class="flex gap-3">
+                        <a href="#"
+                            class="w-9 h-9 rounded-full bg-[#244b3e] flex items-center justify-center text-voldog-lime hover:bg-voldog-lime hover:text-voldog-green transition">
+                            <i class="fa-brands fa-instagram text-sm"></i>
+                        </a>
+                        <a href="#"
+                            class="w-9 h-9 rounded-full bg-[#244b3e] flex items-center justify-center text-voldog-lime hover:bg-voldog-lime hover:text-voldog-green transition">
+                            <i class="fa-brands fa-facebook-f text-sm"></i>
+                        </a>
+                        <a href="#"
+                            class="w-9 h-9 rounded-full bg-[#244b3e] flex items-center justify-center text-voldog-lime hover:bg-voldog-lime hover:text-voldog-green transition">
+                            <i class="fa-brands fa-tiktok text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links 1 -->
+                <div>
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider mb-4">Products</h4>
+                    <ul class="space-y-3 text-sm text-voldog-border">
+                        <li><a href="#" class="hover:text-voldog-lime transition">Dog BARF Meals</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Cat BARF Meals</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Raw Bones & Treats</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Supplements</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links 2 -->
+                <div>
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider mb-4">Company</h4>
+                    <ul class="space-y-3 text-sm text-voldog-border">
+                        <li><a href="#" class="hover:text-voldog-lime transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Butcher Shop</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Communication</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Sustainability</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links 3 -->
+                <div>
+                    <h4 class="font-bold text-white text-sm uppercase tracking-wider mb-4">Support</h4>
+                    <ul class="space-y-3 text-sm text-voldog-border">
+                        <li><a href="#" class="hover:text-voldog-lime transition">FAQ & Help</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Shipping & Delivery</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Contact Us</a></li>
+                        <li><a href="#" class="hover:text-voldog-lime transition">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-voldog-border gap-4">
+                <p>© 2026 VOLDOG Food. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-voldog-lime transition">Terms of Service</a>
+                    <a href="#" class="hover:text-voldog-lime transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-voldog-lime transition">Cookies Settings</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT ACCORDION LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const header = item.querySelector('.faq-header');
+                const body = item.querySelector('.faq-body');
+                const iconContainer = item.querySelector('.faq-icon');
+                const icon = item.querySelector('.fa-plus');
+
+                header.addEventListener('click', () => {
+                    const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+
+                    // Tutup semua item lain
+                    faqItems.forEach(otherItem => {
+                        const otherBody = otherItem.querySelector('.faq-body');
+                        const otherIconContainer = otherItem.querySelector('.faq-icon');
+                        const otherIcon = otherItem.querySelector('.fa-plus');
+
+                        otherBody.style.maxHeight = '0px';
+                        otherIconContainer.classList.remove('bg-voldog-lime');
+                        otherIconContainer.classList.add('bg-voldog-gray');
+                        otherIcon.style.transform = 'rotate(0deg)';
+                    });
+
+                    // Jika item saat ini belum terbuka, jalankan animasi pembuka
+                    if (!isOpen) {
+                        body.style.maxHeight = body.scrollHeight + 'px';
+                        iconContainer.classList.remove('bg-voldog-gray');
+                        iconContainer.classList.add('bg-voldog-lime');
+                        icon.style.transform = 'rotate(45deg)'; // Ubah '+' menjadi 'x'
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

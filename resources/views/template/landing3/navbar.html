@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voldog - Navbar & FAQ (Tailwind)</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Color Setup untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        voldog: {
+                            green: '#1c3d32',
+                            lime: '#d8f24c',
+                            gray: '#f2f4f2',
+                            border: '#e2e8e4',
+                            muted: '#5e6d65',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-white text-voldog-green font-sans antialiased">
+
+    <!-- NAVBAR SECTION -->
+    <nav
+        class="sticky top-0 z-50 bg-white border-b border-voldog-border px-6 md:px-12 py-5 flex items-center justify-between">
+
+        <!-- Left Menu -->
+        <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-voldog-green">
+            <a href="#" class="hover:opacity-70 transition">Products</a>
+            <a href="#" class="hover:opacity-70 transition">Butcher Shop</a>
+            <a href="#" class="hover:opacity-70 transition">Communication</a>
+        </div>
+
+        <!-- Center Logo -->
+        <a href="#" class="relative text-3xl font-extrabold tracking-widest text-voldog-green z-10">
+            VOLDOG
+            <!-- Lime Dot di atas Logo -->
+            <span class="absolute -top-1 -right-3 w-7 h-7 bg-voldog-lime rounded-full -z-10"></span>
+        </a>
+
+        <!-- Right Menu / Actions -->
+        <div class="flex items-center gap-5">
+            <div class="flex items-center gap-4 text-lg text-voldog-green">
+                <i class="fa-solid fa-magnifying-glass cursor-pointer hover:scale-110 transition"></i>
+                <i class="fa-regular fa-user cursor-pointer hover:scale-110 transition"></i>
+                <i class="fa-solid fa-cart-shopping cursor-pointer hover:scale-110 transition"></i>
+            </div>
+
+            <button
+                class="hidden sm:block bg-voldog-lime text-voldog-green text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full hover:bg-[#cbeb38] hover:-translate-y-0.5 transition">
+                Shop Online
+            </button>
+
+            <!-- Mobile Hamburger Toggle -->
+            <div
+                class="w-10 h-10 bg-voldog-lime rounded-full flex flex-col items-center justify-center gap-1 cursor-pointer">
+                <span class="w-4 h-0.5 bg-voldog-green rounded-full"></span>
+                <span class="w-4 h-0.5 bg-voldog-green rounded-full"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Section Container -->
+    <section class="max-w-6xl mx-auto my-10">
+
+        <!-- Header: Title & Description -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-10">
+            <div>
+                <h2 class="text-3xl lg:text-4xl font-extrabold leading-tight text-voldog-green">
+                    Made with <span class="font-extrabold">love</span>,<br> frozen with care!
+                </h2>
+
+                <!-- Category Switcher Pill (Dog / Cat) -->
+                <div class="inline-flex bg-[#f2f4f2] p-1.5 rounded-full gap-1 mt-6">
+                    <button
+                        class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm bg-voldog-lime text-voldog-green shadow-sm transition">
+                        <i class="fa-solid fa-dog"></i> DOG
+                    </button>
+                    <button
+                        class="flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm text-voldog-muted hover:text-voldog-green transition">
+                        <i class="fa-solid fa-cat"></i> CAT
+                    </button>
+                </div>
+            </div>
+
+            <p class="text-voldog-muted text-sm lg:text-base max-w-xs lg:text-right leading-relaxed">
+                Discover complete BARF recipes for your dog or cat – ready to serve!
+            </p>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Card 1 -->
+            <div class="group flex flex-col">
+                <!-- Container Gambar & Hover Button -->
+                <div
+                    class="relative bg-voldog-gray rounded-3xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Chicken Meal"
+                        class="w-[85%] h-auto object-contain transition-transform duration-300 group-hover:scale-105">
+
+                    <!-- Tombol Add to Cart (Tersembunyi, muncul saat Hover) -->
+                    <a href="#"
+                        class="absolute bottom-5 left-1/2 -translate-x-1/2 translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-white pl-5 pr-1.5 py-1.5 rounded-full text-voldog-green font-bold text-sm shadow-lg flex items-center gap-3 whitespace-nowrap">
+                        Add to cart
+                        <span
+                            class="w-9 h-9 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-xs">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                <!-- Info Produk -->
+                <div class="pt-4 flex justify-between items-start">
+                    <a href="#" class="font-bold text-voldog-green hover:underline max-w-[70%]">Complete Chicken
+                        Meal</a>
+                    <span class="font-bold text-voldog-green">$12.50</span>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="group flex flex-col">
+                <div
+                    class="relative bg-voldog-gray rounded-3xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Beef Meal"
+                        class="w-[85%] h-auto object-contain transition-transform duration-300 group-hover:scale-105">
+
+                    <a href="#"
+                        class="absolute bottom-5 left-1/2 -translate-x-1/2 translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-white pl-5 pr-1.5 py-1.5 rounded-full text-voldog-green font-bold text-sm shadow-lg flex items-center gap-3 whitespace-nowrap">
+                        Add to cart
+                        <span
+                            class="w-9 h-9 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-xs">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                <div class="pt-4 flex justify-between items-start">
+                    <a href="#" class="font-bold text-voldog-green hover:underline max-w-[70%]">Complete Beef Meal</a>
+                    <span class="font-bold text-voldog-green">$14.00</span>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="group flex flex-col">
+                <div
+                    class="relative bg-voldog-gray rounded-3xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1589927986062-0fab58389c6b?auto=format&fit=crop&w=600&q=80"
+                        alt="Chicken Meal Plus"
+                        class="w-[85%] h-auto object-contain transition-transform duration-300 group-hover:scale-105">
+
+                    <a href="#"
+                        class="absolute bottom-5 left-1/2 -translate-x-1/2 translate-y-5 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-in-out bg-white pl-5 pr-1.5 py-1.5 rounded-full text-voldog-green font-bold text-sm shadow-lg flex items-center gap-3 whitespace-nowrap">
+                        Add to cart
+                        <span
+                            class="w-9 h-9 bg-voldog-lime rounded-full flex items-center justify-center text-voldog-green text-xs">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+                <div class="pt-4 flex justify-between items-start">
+                    <a href="#" class="font-bold text-voldog-green hover:underline max-w-[70%]">Complete Chicken Meal
+                        Plus</a>
+                    <span class="font-bold text-voldog-green">$13.50</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+    <!-- JAVASCRIPT ACCORDION LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const header = item.querySelector('.faq-header');
+                const body = item.querySelector('.faq-body');
+                const iconContainer = item.querySelector('.faq-icon');
+                const icon = item.querySelector('.fa-plus');
+
+                header.addEventListener('click', () => {
+                    const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+
+                    // Tutup semua item lain
+                    faqItems.forEach(otherItem => {
+                        const otherBody = otherItem.querySelector('.faq-body');
+                        const otherIconContainer = otherItem.querySelector('.faq-icon');
+                        const otherIcon = otherItem.querySelector('.fa-plus');
+
+                        otherBody.style.maxHeight = '0px';
+                        otherIconContainer.classList.remove('bg-voldog-lime');
+                        otherIconContainer.classList.add('bg-voldog-gray');
+                        otherIcon.style.transform = 'rotate(0deg)';
+                    });
+
+                    // Jika item saat ini belum terbuka, jalankan animasi pembuka
+                    if (!isOpen) {
+                        body.style.maxHeight = body.scrollHeight + 'px';
+                        iconContainer.classList.remove('bg-voldog-gray');
+                        iconContainer.classList.add('bg-voldog-lime');
+                        icon.style.transform = 'rotate(45deg)'; // Ubah '+' menjadi 'x'
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

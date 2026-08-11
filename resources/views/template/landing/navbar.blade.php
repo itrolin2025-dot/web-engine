@@ -277,9 +277,34 @@
                         : ['client' => $website->domain ?? '', 'pages' => $menu['url']];
                 @endphp
                 {{-- Menu biasa --}}
-                <li><a href="{{ route($routeName, $routeParams) }}">{{ $menu['label'] }}</a></li>
+                <li><a href="{{ route($routeName, $routeParams) }}">{{ $menu['label'] }}</a>
+            </li>
             @endif
         @endforeach
+        <div class="flex items-center gap-5 text-lg text-white">
+
+            {{-- Search --}}
+            <!-- <button type="button"
+                    class="hover:text-black transition-colors"
+                    aria-label="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button> -->
+
+            {{-- Cart --}}
+            <li>
+                <a type="button"
+                        onclick="toggleCartDrawer()"
+                        class="relative text-white hover:text-black transition-colors"
+                        aria-label="Cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cart-badge"
+                        class="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px]
+                                w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">
+                        0
+                    </span>
+                </a>
+            </li>
+        </div>
     </ul>
 </nav>
 

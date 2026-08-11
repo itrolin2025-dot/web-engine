@@ -1,14 +1,14 @@
-<div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+<div id="cart-drawer" class="fixed inset-0 z-[99999] isolate overflow-hidden pointer-events-none opacity-0 transition-opacity duration-300" style="visibility: hidden;">
     <!-- Backdrop Overlay -->
-    <div onclick="toggleCartDrawer()" class="absolute inset-0 bg-black/50 transition-opacity"></div>
+    <div id="cart-backdrop" onclick="toggleCartDrawer()" class="absolute inset-0 bg-black/0 transition-all duration-300"></div>
 
     <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div class="w-screen max-w-md bg-white shadow-xl flex flex-col justify-between">
+        <div id="cart-panel" class="w-screen max-w-md bg-white shadow-xl flex flex-col justify-between translate-x-full transition-transform duration-300 ease-out">
 
             <!-- Drawer Header -->
             <div class="p-6 border-b border-stone-100 flex items-center justify-between">
                 <h3 class="font-serif-heading font-bold text-lg">Your Shopping Bag</h3>
-                <button onclick="toggleCartDrawer()" class="text-stone-400 hover:text-black">
+                <button onclick="toggleCartDrawer()" class="text-stone-400 hover:text-black transition-colors">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
@@ -27,6 +27,10 @@
                 <button onclick="openWizardModal()"
                     class="w-full bg-black text-white py-3.5 text-xs font-bold uppercase tracking-widest hover:bg-stone-800 transition-colors">
                     Checkout
+                </button>
+                <button onclick="clearCart()"
+                    class="w-full border border-red-500 text-red-500 py-3 text-xs font-bold uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors">
+                    <i class="fa-solid fa-trash-can mr-1.5"></i> Clear Cart
                 </button>
             </div>
 
@@ -65,29 +69,56 @@
     }
 
     // --- CART STATE ---
-    let cart = getCookie('shopping_cart') || [];
+    // Get unique path segment (e.g. "nature" or "elska") to scope the shopping cart cookie
+    const pathSegment = window.location.pathname.split('/').filter(Boolean)[0] || 'default';
+    const cookieName = 'shopping_cart_' + pathSegment;
+    let cart = getCookie(cookieName) || [];
 
     // --- TOGGLE CART DRAWER ---
+    let cartOpen = false;
     function toggleCartDrawer() {
         const drawer = document.getElementById('cart-drawer');
-        drawer.classList.toggle('hidden');
+        const panel = document.getElementById('cart-panel');
+        const backdrop = document.getElementById('cart-backdrop');
+
+        if (!cartOpen) {
+            // Open
+            drawer.style.visibility = 'visible';
+            drawer.classList.remove('pointer-events-none', 'opacity-0');
+            drawer.classList.add('pointer-events-auto', 'opacity-100');
+            panel.classList.remove('translate-x-full');
+            panel.classList.add('translate-x-0');
+            backdrop.classList.remove('bg-black/0');
+            backdrop.classList.add('bg-black/50');
+            cartOpen = true;
+        } else {
+            // Close
+            panel.classList.remove('translate-x-0');
+            panel.classList.add('translate-x-full');
+            backdrop.classList.remove('bg-black/50');
+            backdrop.classList.add('bg-black/0');
+            drawer.classList.remove('pointer-events-auto', 'opacity-100');
+            drawer.classList.add('pointer-events-none', 'opacity-0');
+            setTimeout(() => { drawer.style.visibility = 'hidden'; }, 300);
+            cartOpen = false;
+        }
     }
 
     // --- ADD ITEM TO CART ---
-    function addToCart(id, name, price, image) {
-        const existingIndex = cart.findIndex(item => item.id === id);
+    function addToCart(name, price, image) {
+        const numericPrice = typeof price === 'number' ? price : parseInt(String(price).replace(/[^0-9]/g, '')) || 0;
+        const existingIndex = cart.findIndex(item => item.name === name);
         if (existingIndex > -1) {
             cart[existingIndex].quantity += 1;
         } else {
-            cart.push({ id, name, price, image, quantity: 1 });
+            cart.push({ name, price: numericPrice, image, quantity: 1 });
         }
         saveAndUpdateCart();
-        toggleCartDrawer(); // Buka drawer saat item ditambahkan
     }
 
     // --- UPDATE QUANTITY ---
-    function updateQuantity(id, change) {
-        const index = cart.findIndex(item => item.id === id);
+    function updateQuantity(name, change) {
+        const index = cart.findIndex(item => item.name === name);
         if (index > -1) {
             cart[index].quantity += change;
             if (cart[index].quantity <= 0) {
@@ -98,14 +129,20 @@
     }
 
     // --- REMOVE ITEM ---
-    function removeItem(id) {
-        cart = cart.filter(item => item.id !== id);
+    function removeItem(name) {
+        cart = cart.filter(item => item.name !== name);
+        saveAndUpdateCart();
+    }
+
+    // --- CLEAR ENTIRE CART ---
+    function clearCart() {
+        cart = [];
         saveAndUpdateCart();
     }
 
     // --- SAVE TO COOKIES & UPDATE UI ---
     function saveAndUpdateCart() {
-        setCookie('shopping_cart', cart, 7); // Simpan cookie selama 7 hari
+        setCookie(cookieName, cart, 7);
         renderCartUI();
     }
 
@@ -117,7 +154,6 @@
 
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-        // Badge counter update
         if (totalItems > 0) {
             badge.innerText = totalItems;
             badge.classList.remove('hidden');
@@ -125,7 +161,6 @@
             badge.classList.add('hidden');
         }
 
-        // Render Cart Items
         if (cart.length === 0) {
             container.innerHTML = `<div class="text-center text-stone-400 py-12 text-xs uppercase tracking-widest">Keranjang belanja Anda kosong.</div>`;
             subtotalEl.innerText = 'Rp 0';
@@ -136,22 +171,25 @@
         let subtotal = 0;
 
         cart.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            const itemPrice = typeof item.price === 'number' ? item.price : parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0;
+            const itemTotal = itemPrice * item.quantity;
             subtotal += itemTotal;
+
+            const escapedName = item.name.replace(/'/g, "\\'");
 
             html += `
                     <div class="flex gap-4 items-center border-b border-stone-100 pb-4">
                         <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg bg-stone-100">
                         <div class="flex-1">
                             <h4 class="font-bold text-xs">${item.name}</h4>
-                            <p class="text-xs text-stone-500">Rp ${item.price.toLocaleString('id-ID')}</p>
+                            <p class="text-xs text-stone-500">Rp ${itemPrice.toLocaleString('id-ID')}</p>
                             <div class="flex items-center gap-3 mt-2">
                                 <div class="flex items-center border border-stone-200 rounded px-2 py-0.5 text-xs">
-                                    <button onclick="updateQuantity(${item.id}, -1)" class="px-1 text-stone-500 hover:text-black">-</button>
+                                    <button onclick="updateQuantity('${escapedName}', -1)" class="px-1 text-stone-500 hover:text-black">-</button>
                                     <span class="px-2 font-semibold">${item.quantity}</span>
-                                    <button onclick="updateQuantity(${item.id}, 1)" class="px-1 text-stone-500 hover:text-black">+</button>
+                                    <button onclick="updateQuantity('${escapedName}', 1)" class="px-1 text-stone-500 hover:text-black">+</button>
                                 </div>
-                                <button onclick="removeItem(${item.id})" class="text-[10px] text-red-500 underline">Hapus</button>
+                                <button onclick="removeItem('${escapedName}')" class="text-[10px] text-red-500 underline">Hapus</button>
                             </div>
                         </div>
                     </div>

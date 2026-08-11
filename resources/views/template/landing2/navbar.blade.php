@@ -78,7 +78,19 @@
             @endforeach
         </div>
 
-        <div>
+        <div class="flex items-center gap-5">
+            <a type="button"
+                    onclick="toggleCartDrawer()"
+                    class="relative"
+                    style="border-color: {{ $cta_color }}; color: {{ $cta_color }};"
+                    aria-label="Cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cart-badge"
+                    class="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px]
+                            w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">
+                    0
+                </span>
+            </a>
             <a href="{{ $cta_url }}"
                 class="inline-block border px-5 py-1.5 rounded-full text-sm font-medium tracking-wide transition-colors"
                 style="border-color: {{ $cta_color }}; color: {{ $cta_color }};">
