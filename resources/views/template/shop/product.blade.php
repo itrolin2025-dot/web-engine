@@ -63,7 +63,7 @@
                     <span
                         class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">{{ $product['name'] }}</span>
                     <h4 class="font-bold text-sm mb-1">{{ $product['name'] }}</h4>
-                    <p class="text-xs font-semibold text-stone-600 mb-3">{{ $product['price'] }}</p>
+                    <p class="text-xs font-semibold text-stone-600 mb-3">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
                 </div>
                 <button
                     onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"

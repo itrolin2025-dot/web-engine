@@ -48,14 +48,15 @@
                         ? asset('images/website/' . $domain . '/' . $category['image'])
                         : asset('images/default/broken.png');
                 @endphp
-                <a href="#"
+                <button href="#"
+                    data-filter="{{ $category['kode'] }}"
                     class="category-item flex flex-col items-center gap-3 hover:text-stone-900 transition-colors group flex-shrink-0">
                     <div
                         class="category-img rounded-full overflow-hidden bg-stone-100 group-hover:ring-2 group-hover:ring-stone-400 transition-all">
                         <img src="{{ $image }}" alt="Skincare" class="w-full h-full object-cover">
                     </div>
                     <span>{{ $category['name'] }}</span>
-                </a>
+                </button>
             @endforeach
 
 
@@ -137,8 +138,12 @@
                 $image = !empty($product['image'])
                     ? asset('images/website/' . $domain . '/' . $product['image'])
                     : asset('images/default/broken.png');
+                
+                $numericPrice = preg_replace('/[^0-9]/', '', $product['price'] ?? '0');
+
             @endphp
             <div
+                data-category="{{ $product['kode'] }}"
                 class="group flex flex-col justify-between bg-white rounded-2xl shadow-sm border border-stone-100 h-full relative hover:shadow-md transition-shadow overflow-hidden">
                 <div>
                     <div class="aspect-[1/1] w-full bg-stone-100 overflow-hidden relative">
@@ -151,8 +156,9 @@
                     </div>
                 </div>
                 <div class="p-4 sm:p-5 flex items-end justify-between">
-                    <p class="text-base font-bold text-stone-900">{{ $product['price'] }}</p>
+                    <p class="text-base font-bold text-stone-900">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
                     <button
+                        onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"
                         class="w-10 h-10 rounded-full bg-stone-900 text-white flex items-center justify-center hover:bg-stone-700 transition-colors shadow-md"
                         aria-label="Add to cart">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"

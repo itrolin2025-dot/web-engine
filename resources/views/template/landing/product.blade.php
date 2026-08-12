@@ -260,6 +260,8 @@
             $image = !empty($product['image'])
                 ? asset('images/website/' . $domain . '/' . $product['image'])
                 : asset('images/default/broken.png');
+    
+            $numericPrice = preg_replace('/[^0-9]/', '', $product['price'] ?? '0');
         @endphp
         <div class="product-card" data-category="{{ $product['kode'] }}">
             <div class="product-image"
@@ -276,9 +278,13 @@
                     <br><br>
                     <strong>Top Notes:</strong> Fruity, Fresh, Green<br>
                     <strong>Middle Notes:</strong> Floral, Fruity, Ambery<br>
-                    <strong>Base Notes:</strong> Woody, Fruity, Ambery
+                    <strong>Base Notes:</strong> Woody, Fruity, Ambery<br>
+                    <strong>Price:</strong> Rp {{ number_format($product['price'], 0, ',', '.') }}
                 </div>
-                <a href="#" class="btn-outline">Buy Now</a>
+                <a
+                    onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"
+                    class="btn-outline">
+                    Buy Now</a>
             </div>
         </div>
 

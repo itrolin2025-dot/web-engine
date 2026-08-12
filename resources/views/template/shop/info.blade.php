@@ -9,20 +9,16 @@
     } else {
         $content = [];
     }
-    $infoText = $content['text'] ?? $content['info'] ?? 'Free Shipping for orders over $50';
+    $infoText = $content['text'] ?? $content['info'] ?? 'No information display';
+    $speedText = $content['text_speed'] ?? 10;
 @endphp
 
 <div class="bg-black text-white text-[11px] py-2 overflow-hidden whitespace-nowrap relative select-none">
     <div class="inline-flex animate-marquee tracking-widest uppercase opacity-90">
-        @foreach(range(1, 10) as $i)
+        @foreach(range(1, $speedText) as $i)
             <span class="mx-6">{{ $infoText }}</span>
         @endforeach
     </div>
-    <!-- <div class="inline-flex animate-marquee tracking-widest uppercase opacity-90" aria-hidden="true">
-        @foreach(range(1, 1) as $i)
-            <span class="mx-6">{{ $infoText }}</span>
-        @endforeach
-    </div> -->
 </div>
 
 <style>
