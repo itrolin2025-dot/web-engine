@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Fashion Layout</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-white font-sans antialiased text-white m-0 p-0 overflow-x-hidden">
+
+    <!-- ======================================================= -->
+    <!-- 1. NAVBAR STICKY                                        -->
+    <!-- ======================================================= -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 lg:px-12 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+            <!-- Navigation Links -->
+            <div class="flex items-center space-x-6 text-sm font-medium text-gray-800">
+                <a href="#" class="hover:text-black transition">Home</a>
+                <a href="#" class="hover:text-black transition">Shop</a>
+                <a href="#" class="hover:text-black transition">News</a>
+                <a href="#" class="hover:text-black transition">Contact</a>
+            </div>
+
+            <!-- Center Logo -->
+            <div class="flex flex-col items-center">
+                <a href="#" class="flex flex-col items-center group">
+                    <!-- Circular Emblem Icon -->
+                    <svg class="w-8 h-8 text-black group-hover:scale-105 transition" viewBox="0 0 100 100"
+                        fill="currentColor">
+                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="6" fill="none" />
+                        <path d="M25 50 H75 M50 25 V75 M35 35 L65 65 M35 65 L65 35" stroke="currentColor"
+                            stroke-width="6" />
+                    </svg>
+                    <span class="text-[9px] font-black tracking-widest uppercase mt-0.5">EMPIRE</span>
+                </a>
+            </div>
+
+            <!-- Right Utilities (Search & Cart) -->
+            <div class="flex items-center space-x-6 text-sm font-medium text-gray-800">
+                <button class="hover:text-black transition">Search</button>
+                <a href="#" class="flex items-center space-x-1.5 hover:text-black transition">
+                    <svg class="w-5 h-5 stroke-current" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="text-xs font-semibold">0</span>
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- ======================================================= -->
+    <!-- 2. SECTION: SHOP EMPIRE HEADER                         -->
+    <!-- ======================================================= -->
+    <section class="bg-white py-12 px-6 lg:px-12 text-black">
+        <div class="max-w-7xl mx-auto space-y-4">
+            <h1 class="text-5xl sm:text-6xl font-black uppercase tracking-tight italic">
+                Shop EMPIRE
+            </h1>
+            <p class="text-gray-600 text-sm sm:text-base max-w-xl font-normal leading-relaxed">
+                Official merch from the artists you love—new drops, exclusive vinyl, and pieces you won't find anywhere
+                else.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- ======================================================= -->
+    <!-- 3. SECTION: HERO BANNER / IMAGE                         -->
+    <!-- ======================================================= -->
+    <section class="relative w-full overflow-hidden bg-gray-900">
+        <div class="relative max-w-7xl mx-auto aspect-[21/9] min-h-[350px] w-full">
+            <!-- Main Artwork Image -->
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1800&q=80"
+                alt="Rio Da Yung OG Merch Banner" class="w-full h-full object-cover object-center" />
+
+            <!-- Overlay Text & Overlay Content -->
+            <div class="absolute inset-0 bg-black/20 flex flex-col items-center justify-start pt-8 text-center px-4">
+                <h2 class="text-white text-xl sm:text-3xl font-black uppercase tracking-wider drop-shadow-md">
+                    RIO DA YUNG OG MERCH
+                </h2>
+                <span class="text-white text-base sm:text-xl font-bold uppercase tracking-widest mt-1 drop-shadow-md">
+                    AVAILABLE NOW
+                </span>
+            </div>
+
+            <!-- Carousel Right Arrow Button -->
+            <button
+                class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition backdrop-blur-xs"
+                aria-label="Next Slide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- SECTION: PRODUCT CATALOG WITH STICKY SIDEBAR             -->
+    <!-- ======================================================= -->
+    <section class="bg-white py-10 px-6 lg:px-12 text-black">
+        <div class="max-w-7xl mx-auto space-y-8">
+
+            <!-- 1. CATEGORIES TITLE & PILLS -->
+            <div class="space-y-4">
+                <h2 class="text-3xl font-bold tracking-tight">Categories</h2>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <button
+                        class="px-5 py-2 rounded-full border border-gray-300 text-xs font-medium text-gray-700 hover:border-black transition">Clothing</button>
+                    <button
+                        class="px-5 py-2 rounded-full border border-gray-300 text-xs font-medium text-gray-700 hover:border-black transition">Music</button>
+                    <button
+                        class="px-5 py-2 rounded-full border border-gray-300 text-xs font-medium text-gray-700 hover:border-black transition">Accessories</button>
+                    <button
+                        class="px-5 py-2 rounded-full border border-gray-300 text-xs font-medium text-gray-700 hover:border-black transition">Collab</button>
+                    <button
+                        class="px-5 py-2 rounded-full border border-gray-300 text-xs font-medium text-gray-700 hover:border-black transition">Home
+                        and Lifestyle</button>
+                </div>
+            </div>
+
+            <!-- 2. SORT & RESULTS BAR -->
+            <div class="flex items-center justify-end space-x-4 pt-2 text-xs text-gray-600">
+                <div class="flex items-center space-x-1 cursor-pointer">
+                    <span>Sort by </span>
+                    <span class="font-semibold text-black">Relevance</span>
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <span class="text-gray-400">1723 product(s)</span>
+            </div>
+
+            <!-- 3. MAIN CATALOG CONTENT (STICKY SIDEBAR + PRODUCT GRID) -->
+            <div class="flex flex-col lg:flex-row gap-8 items-start relative">
+
+                <!-- LEFT SIDEBAR FILTER (STICKY) -->
+                <aside
+                    class="w-full lg:w-1/5 sticky top-24 self-start space-y-6 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 scrollbar-none">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <span class="font-bold text-sm">Filters</span>
+                        <span
+                            class="w-5 h-5 rounded-full border border-gray-400 text-[10px] font-semibold flex items-center justify-center">0</span>
+                    </div>
+
+                    <!-- Artist Filter -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <button class="w-full flex items-center justify-between text-xs font-semibold py-1">
+                            <span>Artist</span>
+                            <span class="text-base font-light">+</span>
+                        </button>
+                    </div>
+
+                    <!-- Genre Filter -->
+                    <div class="border-b border-gray-100 pb-4">
+                        <button class="w-full flex items-center justify-between text-xs font-semibold py-1">
+                            <span>Genre</span>
+                            <span class="text-base font-light">+</span>
+                        </button>
+                    </div>
+
+                    <!-- Pre-Order Checkbox -->
+                    <div class="space-y-3 border-b border-gray-100 pb-4">
+                        <span class="text-xs font-semibold block">Pre-Order</span>
+                        <label
+                            class="flex items-center space-x-2 bg-gray-50 p-2.5 rounded-md cursor-pointer hover:bg-gray-100 transition">
+                            <input type="checkbox" class="w-4 h-4 rounded-xs border-gray-300 text-black focus:ring-0">
+                            <span class="text-xs text-gray-700">Pre-Order Only</span>
+                        </label>
+                    </div>
+
+                    <!-- Sale Checkbox -->
+                    <div class="space-y-3 border-b border-gray-100 pb-4">
+                        <span class="text-xs font-semibold block">Sale</span>
+                        <label
+                            class="flex items-center space-x-2 bg-gray-50 p-2.5 rounded-md cursor-pointer hover:bg-gray-100 transition">
+                            <input type="checkbox" class="w-4 h-4 rounded-xs border-gray-300 text-black focus:ring-0">
+                            <span class="text-xs text-gray-700">On Sale Only</span>
+                        </label>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="pb-4">
+                        <button class="w-full flex items-center justify-between text-xs font-semibold py-1">
+                            <span>Price</span>
+                            <span class="text-base font-light">+</span>
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- RIGHT PRODUCT GRID (2 BARIS / 8 PRODUCTS) -->
+                <main class="w-full lg:w-4/5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-5 gap-y-8">
+
+                        <!-- BARIS 1 - CARD 1 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <span
+                                    class="absolute top-3 left-3 bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider z-10">T-SHIRT</span>
+                                <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=500&q=80"
+                                    alt="Baby Money Blue T-Shirt"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">Baby Money - I'M A BOSS
+                                    T-Shirt (Blue)</h3>
+                                <p class="text-xs text-gray-500">$40.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 1 - CARD 2 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <span
+                                    class="absolute top-3 left-3 bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider z-10">T-SHIRT</span>
+                                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=500&q=80"
+                                    alt="Baby Money Red T-Shirt"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">Baby Money - I'M A BOSS
+                                    T-Shirt (Red)</h3>
+                                <p class="text-xs text-gray-500">$40.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 1 - CARD 3 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <span
+                                    class="absolute top-3 left-3 bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider z-10">T-SHIRT</span>
+                                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=500&q=80"
+                                    alt="Baby Money Black T-Shirt"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">Baby Money - I'M A BOSS
+                                    T-Shirt (Black)</h3>
+                                <p class="text-xs text-gray-500">$40.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 1 - CARD 4 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <div class="absolute top-3 left-3 flex items-center space-x-1.5 z-10">
+                                    <span
+                                        class="bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">VINYL</span>
+                                    <span
+                                        class="bg-gray-200 text-gray-700 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">PRE-ORDER</span>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=500&q=80"
+                                    alt="Young Dolph Vinyl"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-2">Young Dolph - King of Memphis
+                                    (10 Yr Anniversary Vinyl)</h3>
+                                <p class="text-xs text-gray-500">$24.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 2 - CARD 5 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <div class="absolute top-3 left-3 flex items-center space-x-1.5 z-10">
+                                    <span
+                                        class="bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">VINYL</span>
+                                    <span
+                                        class="bg-gray-200 text-gray-700 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">PRE-ORDER</span>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=500&q=80"
+                                    alt="Vinyl Album 2"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">Key Glock - Glockoma 2 Vinyl
+                                </h3>
+                                <p class="text-[#b57a6c] font-semibold text-xs">$30.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 2 - CARD 6 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <div class="absolute top-3 left-3 flex items-center space-x-1.5 z-10">
+                                    <span
+                                        class="bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">CASSETTE</span>
+                                    <span
+                                        class="bg-gray-200 text-gray-700 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">PRE-ORDER</span>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=500&q=80"
+                                    alt="Cassette"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">Rio Da Yung OG - City On My
+                                    Back Cassette</h3>
+                                <p class="text-xs text-gray-500">$15.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 2 - CARD 7 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <div class="absolute top-3 left-3 flex items-center space-x-1.5 z-10">
+                                    <span
+                                        class="bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">CD</span>
+                                    <span
+                                        class="bg-gray-200 text-gray-700 text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">PRE-ORDER</span>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=500&q=80"
+                                    alt="CD Album"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">Young Dolph - Paper Route
+                                    Frank CD</h3>
+                                <p class="text-xs text-gray-500">$12.00</p>
+                            </div>
+                        </div>
+
+                        <!-- BARIS 2 - CARD 8 -->
+                        <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div
+                                class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                <span
+                                    class="absolute top-3 left-3 bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider z-10">T-SHIRT</span>
+                                <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=500&q=80"
+                                    alt="Graphic Tee"
+                                    class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                <!-- Hover Add to Cart Button -->
+                                <button
+                                    class="absolute bottom-3 left-3 right-3 bg-black text-white py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition duration-300 shadow-md">
+                                    Add To Cart
+                                </button>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h3 class="text-xs font-medium text-gray-800 line-clamp-1">EMPIRE Official Vintage
+                                    Graphic Tee</h3>
+                                <p class="text-xs text-gray-500">$35.00</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+
+        <!-- 1. TOP BRANDING BANNER (DARK BACKGROUND WITH ROTATED GRID) -->
+        <div
+            class="relative bg-[#161616] text-white min-h-[360px] sm:min-h-[420px] flex items-center px-8 sm:px-16 overflow-hidden">
+
+            <!-- Tilted Grid Background Pattern -->
+            <div
+                class="absolute inset-y-0 right-0 w-full md:w-3/4 overflow-hidden pointer-events-none flex justify-end items-center opacity-40">
+                <div
+                    class="transform -rotate-20 translate-x-12 translate-y-4 grid grid-cols-3 gap-6 w-[700px] sm:w-[900px]">
+
+                    <!-- Row 1 -->
+                    <div
+                        class="bg-[#262626] rounded-3xl p-6 h-56 sm:h-64 border border-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=400&q=80"
+                            alt="Product" class="max-h-full object-contain filter grayscale contrast-125">
+                    </div>
+                    <div
+                        class="bg-[#262626] rounded-3xl p-6 h-56 sm:h-64 border border-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=400&q=80"
+                            alt="Product" class="max-h-full object-contain filter grayscale contrast-125">
+                    </div>
+                    <div
+                        class="bg-[#262626] rounded-3xl p-6 h-56 sm:h-64 border border-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=400&q=80"
+                            alt="Product" class="max-h-full object-contain filter grayscale contrast-125">
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div
+                        class="bg-[#262626] rounded-3xl p-6 h-56 sm:h-64 border border-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=400&q=80"
+                            alt="Product" class="max-h-full object-contain filter grayscale contrast-125">
+                    </div>
+                    <div
+                        class="bg-[#262626] rounded-3xl p-6 h-56 sm:h-64 border border-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?auto=format&fit=crop&w=400&q=80"
+                            alt="Product" class="max-h-full object-contain filter grayscale contrast-125">
+                    </div>
+                    <div
+                        class="bg-[#262626] rounded-3xl p-6 h-56 sm:h-64 border border-white/5 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=400&q=80"
+                            alt="Product" class="max-h-full object-contain filter grayscale contrast-125">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Dark Gradient Fade (agar teks kiri tetap sangat mudah dibaca) -->
+            <div
+                class="absolute inset-0 bg-gradient-to-r from-[#161616] via-[#161616]/90 to-transparent z-10 w-full md:w-3/5 pointer-events-none">
+            </div>
+
+            <!-- Content Left -->
+            <div class="relative z-20 space-y-2 max-w-xl">
+                <span class="text-[#b37d5c] text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase">
+                    LIBRATONE
+                </span>
+                <h2 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-none">
+                    #FreeTheSound
+                </h2>
+            </div>
+
+        </div>
+
+        <!-- 2. BOTTOM FEATURES LIST (3 COLUMNS WITH DIVIDERS) -->
+        <div class="bg-white px-6 sm:px-12 py-10">
+            <div
+                class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-gray-200">
+
+                <!-- Column 1: Global Operations -->
+                <div class="flex items-start space-x-4 md:px-8 first:pl-0">
+                    <div class="text-gray-900 text-xl pt-0.5 flex-shrink-0">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div class="space-y-1.5">
+                        <h3 class="font-semibold text-gray-900 text-sm sm:text-base">
+                            Global Operations
+                        </h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Spanning the European, Asian, and North American markets, with over 2,000 sales outlets
+                            across 19 countries worldwide.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Column 2: Exceptional Design Capabilities -->
+                <div class="flex items-start space-x-4 pt-6 md:pt-0 md:px-8">
+                    <div class="text-gray-900 text-xl pt-0.5 flex-shrink-0">
+                        <i class="fa-regular fa-lightbulb"></i>
+                    </div>
+                    <div class="space-y-1.5">
+                        <h3 class="font-semibold text-gray-900 text-sm sm:text-base">
+                            Exceptional Design Capabilities
+                        </h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            We consistently use a friendly, bold, and authentic Nordic design language. Our product's
+                            shape is elegant and simple, yet highly functional.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Column 3: Eco-Friendly Approach -->
+                <div class="flex items-start space-x-4 pt-6 md:pt-0 md:px-8 last:pr-0">
+                    <div class="text-gray-900 text-xl pt-0.5 flex-shrink-0">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div class="space-y-1.5">
+                        <h3 class="font-semibold text-gray-900 text-sm sm:text-base">
+                            Eco-Friendly Approach
+                        </h3>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            In our product and packaging design, we are committed to environmental sustainability and
+                            fostering a harmonious relationship between technology and nature.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 1. FOOTER SECTION (3 COLUMNS + RUNNING TEXT + SOCIAL)  -->
+    <!-- ======================================================= -->
+    <footer class="bg-black text-white pt-8 pb-6 border-t border-gray-900">
+
+        <!-- Top Announcement Running Text (Ticker Bar) -->
+        <div class="overflow-hidden whitespace-nowrap border-b border-gray-800 pb-6 mb-12">
+            <div
+                class="inline-flex items-center space-x-8 text-xl sm:text-2xl font-black uppercase tracking-wider animate-marquee">
+                <span>DEFINING INDEPENDENCE</span>
+                <svg class="w-5 h-5 text-gray-500 inline-block" viewBox="0 0 100 100" fill="currentColor">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" />
+                    <path d="M25 50 H75 M50 25 V75" stroke="currentColor" stroke-width="8" />
+                </svg>
+                <span>DEFINING INDEPENDENCE</span>
+                <svg class="w-5 h-5 text-gray-500 inline-block" viewBox="0 0 100 100" fill="currentColor">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" />
+                    <path d="M25 50 H75 M50 25 V75" stroke="currentColor" stroke-width="8" />
+                </svg>
+                <span>DEFINING INDEPENDENCE</span>
+                <svg class="w-5 h-5 text-gray-500 inline-block" viewBox="0 0 100 100" fill="currentColor">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" fill="none" />
+                    <path d="M25 50 H75 M50 25 V75" stroke="currentColor" stroke-width="8" />
+                </svg>
+                <span>DEFINING INDEPENDENCE</span>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 pb-16">
+
+            <!-- KOLOM 1: BRAND & SOCIALS -->
+            <div class="space-y-6">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-10 h-10 text-white" viewBox="0 0 100 100" fill="currentColor">
+                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="6" fill="none" />
+                        <path d="M25 50 H75 M50 25 V75 M35 35 L65 65 M35 65 L65 35" stroke="currentColor"
+                            stroke-width="6" />
+                    </svg>
+                    <span class="text-xs font-black tracking-widest uppercase">EMPIRE</span>
+                </div>
+
+                <p class="text-xs text-gray-400 font-medium">
+                    100% Independent • Label • Distributor • Publisher
+                </p>
+
+                <!-- Social Media Icons -->
+                <div class="flex items-center space-x-4 text-gray-300">
+                    <a href="#" class="hover:text-white transition" aria-label="Instagram">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition" aria-label="X">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition" aria-label="Facebook">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition" aria-label="SoundCloud">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M1.175 12.225c-.05 0-.087.038-.1.088l-.538 3.237.538 3.175c.013.05.05.088.1.088s.087-.038.1-.088l.587-3.175-.587-3.237c-.013-.05-.05-.088-.1-.088zm1.325-1.575c-.063 0-.113.05-.125.113l-.538 4.8.538 4.725c.012.063.062.113.125.113s.113-.05.125-.113l.588-4.725-.588-4.8c-.012-.063-.062-.113-.125-.113zm1.338-.838c-.075 0-.138.063-.138.138l-.512 5.638.512 5.512c0 .075.063.138.138.138s.138-.063.138-.138l.587-5.512-.587-5.638c0-.075-.063-.138-.138-.138zm1.325-.525c-.088 0-.163.075-.163.163l-.475 6.162.475 6.013c0 .088.075.163.163.163s.163-.075.163-.163l.587-6.013-.587-6.162c0-.088-.075-.163-.163-.163zm1.337-.387c-.1 0-.188.087-.188.187l-.438 6.55.438 6.362c0 .1.088.188.188.188s.188-.088.188-.188l.575-6.362-.575-6.55c0-.1-.088-.187-.188-.187zm1.338-.288c-.113 0-.213.1-.213.213l-.4 6.837.4 6.575c0 .113.1.213.213.213s.213-.1.213-.213l.587-6.575-.587-6.837c0-.113-.1-.213-.213-.213zm1.337-.187c-.138 0-.238.113-.238.238l-.362 7.025.362 6.775c0 .138.1.238.238.238s.238-.1.238-.238l.575-6.775-.575-7.025c0-.125-.1-.238-.238-.238zm1.338-.038c-.15 0-.263.125-.263.275l-.338 7.062.338 6.925c0 .15.113.275.263.275s.263-.125.263-.275l.575-6.925-.575-7.062c0-.15-.113-.275-.263-.275zm1.337.038c-.163 0-.3.138-.3.3l-.3 7.025.3 7.075c0 .163.137.3.3.3s.3-.137.3-.3l.575-7.075-.575-7.025c0-.162-.137-.3-.3-.3zm15.15 4.65c-.888 0-1.713.275-2.4.75-.413-2.912-2.912-5.15-5.937-5.15-1.075 0-2.075.287-2.95.787-.213-.175-.438-.337-.687-.487-.2-.125-.413-.225-.638-.325-.213-.1-.437-.175-.662-.237l-.088-.025c-.212-.063-.437-.1-.662-.138-.138-.025-.288-.037-.438-.05-.287-.025-.575-.025-.862.013-.075 0-.138.012-.213.012-.275.025-.55.075-.825.138-.1.025-.2.05-.3.075-.237.075-.475.162-.7.262-.05.025-.1.05-.15.075-.25.125-.487.263-.712.425-.013.013-.025.013-.038.025-.187.137-.362.287-.537.45l-.038.037c-.162.15-.312.313-.45.488-.025.025-.037.05-.062.075-.125.163-.25.338-.363.513l-.037.062c-.1.175-.188.35-.275.538l-.025.05c-.075.187-.15.375-.213.575 0 .025-.012.037-.012.062-.063.2-.113.4-.15.6-.013.038-.013.075-.025.113-.038.2-.063.4-.075.612v.113c-.013.137-.013.275-.013.412 0 .075 0 .15.012.225v.025c.013.238.038.475.088.713v12.25c0 .188.15.338.338.338h16.837c2.613 0 4.738-2.125 4.738-4.738s-2.125-4.738-4.738-4.738z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-white transition" aria-label="TikTok">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-.97 1.36-2.42 2.37-4.03 2.82-1.63.45-3.38.34-4.93-.31-1.55-.64-2.88-1.81-3.66-3.29-.79-1.48-1.02-3.23-.66-4.88.36-1.65 1.35-3.1 2.76-4.04 1.41-.94 3.14-1.34 4.82-1.13.01 1.45.01 2.9 0 4.35-.85-.14-1.74.02-2.48.47-.74.45-1.28 1.19-1.48 2.03-.2.84-.02 1.73.48 2.43.5.7 1.29 1.15 2.16 1.23.87.08 1.74-.2 2.41-.77.67-.57 1.05-1.41 1.07-2.3.03-3.87.02-7.74.02-11.61z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- KOLOM 2: COMPANY -->
+            <div class="space-y-4">
+                <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest">COMPANY</h3>
+                <ul class="space-y-3 text-xs text-gray-300">
+                    <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- KOLOM 3: SHOP (DISPATCH / CATEGORIES) -->
+            <div class="space-y-4">
+                <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-widest">SHOP</h3>
+                <ul class="space-y-2.5 text-xs text-gray-300">
+                    <li><a href="#" class="hover:text-white transition">All Products</a></li>
+                    <li><a href="#" class="hover:text-white transition">Music</a></li>
+                    <li><a href="#" class="hover:text-white transition">Clothing</a></li>
+                    <li><a href="#" class="hover:text-white transition">Accessories</a></li>
+                    <li><a href="#" class="hover:text-white transition">Collab</a></li>
+                    <li><a href="#" class="hover:text-white transition">Home and Lifestyle</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Bottom Copyright -->
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 border-t border-gray-900 pt-6 text-xs text-gray-500">
+            <p>© 2026 EMPIRE DISTRIBUTION</p>
+        </div>
+    </footer>
+
+
+    <!-- ======================================================= -->
+    <!-- 2. FLOATING DRAWER / CART SIDEBAR OVERLAY               -->
+    <!-- ======================================================= -->
+
+    <!-- Backdrop Overlay -->
+    <div id="cartOverlay"
+        class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 opacity-0 pointer-events-none transition-opacity duration-300"
+        onclick="toggleCart(false)"></div>
+
+    <!-- Floating Sidebar Panel (Sesuai Gambar) -->
+    <aside id="cartDrawer"
+        class="fixed top-3 right-3 bottom-3 w-[340px] sm:w-[380px] bg-white text-black rounded-2xl shadow-2xl z-50 transform translate-x-[105%] transition-transform duration-300 flex flex-col overflow-hidden">
+        <!-- Drawer Header -->
+        <div class="flex items-center justify-between p-5 border-b border-gray-100">
+            <h2 class="text-sm font-bold text-gray-900">Your cart is empty</h2>
+            <button onclick="toggleCart(false)" class="p-1 text-gray-500 hover:text-black transition"
+                aria-label="Close Cart">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Scrollable Popular Items Section -->
+        <div class="flex-1 overflow-y-auto p-5 space-y-4 scrollbar-none">
+
+            <div class="flex items-center justify-between pb-1">
+                <span class="text-xs font-medium text-gray-500">Popular items</span>
+                <a href="#" class="text-xs font-semibold text-gray-900 hover:underline flex items-center">
+                    Go to Shop <span class="ml-1">›</span>
+                </a>
+            </div>
+
+            <!-- Popular Item 1 -->
+            <div class="flex items-start space-x-3 group cursor-pointer">
+                <div class="w-16 h-16 bg-[#f4f4f4] rounded-xl flex-shrink-0 flex items-center justify-center p-2">
+                    <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=200&q=80"
+                        alt="Gold Crown Vinyl" class="max-h-full object-contain" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-xs font-medium text-gray-800 leading-snug line-clamp-2 group-hover:text-black">
+                        Young Dolph - King of Memphis (10 Yr Anniversary - Gold Crown Vinyl: D2C Exclusive)
+                    </h4>
+                </div>
+            </div>
+
+            <!-- Popular Item 2 -->
+            <div class="flex items-start space-x-3 group cursor-pointer">
+                <div class="w-16 h-16 bg-[#f4f4f4] rounded-xl flex-shrink-0 flex items-center justify-center p-2">
+                    <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=200&q=80"
+                        alt="Royalty Blue Vinyl" class="max-h-full object-contain" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-xs font-medium text-gray-800 leading-snug line-clamp-2 group-hover:text-black">
+                        Young Dolph - King of Memphis (10 Yr Anniversary - Royalty Blue & Gold Vinyl)
+                    </h4>
+                </div>
+            </div>
+
+            <!-- Popular Item 3 -->
+            <div class="flex items-start space-x-3 group cursor-pointer">
+                <div class="w-16 h-16 bg-[#f4f4f4] rounded-xl flex-shrink-0 flex items-center justify-center p-2">
+                    <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=200&q=80"
+                        alt="Drakeo Vinyl" class="max-h-full object-contain" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-xs font-medium text-gray-800 leading-snug line-clamp-2 group-hover:text-black">
+                        Drakeo the Ruler - Thank You For Using GTL (5 Year Anniversary Vinyl)
+                    </h4>
+                </div>
+            </div>
+
+            <!-- Popular Item 4 -->
+            <div class="flex items-start space-x-3 group cursor-pointer">
+                <div class="w-16 h-16 bg-[#f4f4f4] rounded-xl flex-shrink-0 flex items-center justify-center p-2">
+                    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=200&q=80"
+                        alt="VANN DA T-Shirt" class="max-h-full object-contain" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-xs font-medium text-gray-800 leading-snug line-clamp-2 group-hover:text-black">
+                        VANN DA - TREYVISAI I: 'THE SEARCH FOR LIGHT' T-Shirt
+                    </h4>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Drawer Footer Payment Badges -->
+        <div class="p-4 border-t border-gray-100 flex items-center justify-center space-x-2 bg-white">
+            <span class="px-2 py-1 bg-gray-100 rounded text-[9px] font-bold text-blue-900 italic">VISA</span>
+            <div class="px-2 py-1 bg-gray-100 rounded flex items-center space-x-0.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block opacity-90"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block -ml-1.5"></span>
+            </div>
+            <span class="px-2 py-1 bg-gray-100 rounded text-[8px] font-bold text-orange-600 uppercase">DISCOVER</span>
+            <span class="px-2 py-1 bg-gray-100 rounded text-[8px] font-bold text-blue-600 uppercase">AMEX</span>
+        </div>
+    </aside>
+
+
+    <!-- ======================================================= -->
+    <!-- 3. JAVASCRIPT UNTUK FUNGSI OPEN/CLOSE CART FLOATING     -->
+    <!-- ======================================================= -->
+    <script>
+        function toggleCart(isOpen) {
+            const overlay = document.getElementById('cartOverlay');
+            const drawer = document.getElementById('cartDrawer');
+
+            if (isOpen) {
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100', 'pointer-events-auto');
+                drawer.classList.remove('translate-x-[105%]');
+                drawer.classList.add('translate-x-0');
+            } else {
+                overlay.classList.remove('opacity-100', 'pointer-events-auto');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                drawer.classList.remove('translate-x-0');
+                drawer.classList.add('translate-x-[105%]');
+            }
+        }
+
+        // Hubungkan semua tombol 'Add To Cart' ke fungsi dummy toggleCart(true)
+        document.addEventListener('DOMContentLoaded', () => {
+            const addToCartButtons = document.querySelectorAll('button');
+            addToCartButtons.forEach(btn => {
+                if (btn.textContent.trim().toLowerCase().includes('add to cart')) {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        toggleCart(true);
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>

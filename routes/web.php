@@ -15,5 +15,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Wildcard routes (harus di bawah admin prefix)
+Route::get('/select-layout', [FrontController::class, 'selectLayout'])->name('select-layout');
 Route::get('/{client}/{pages}', [PagesController::class, 'index'])->name('pages');
 Route::get('/{client}', [FrontController::class, 'template'])->name('template');

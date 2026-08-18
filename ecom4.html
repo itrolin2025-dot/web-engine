@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Fashion Layout with Gaps</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-white font-sans antialiased text-white m-0 p-0 overflow-x-hidden">
+
+    <!-- SECTION 1: 4 FOTO PORTRAIT (WITH GAP) -->
+    <section class="w-full px-4 sm:px-6 lg:px-8 pt-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
+
+            <!-- Item 1 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=80"
+                    alt="Gran Sasso"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Gran Sasso</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80"
+                    alt="Caruso"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Caruso</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1618886614638-80e3c103d31a?auto=format&fit=crop&w=800&q=80"
+                    alt="Eton"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Eton</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80"
+                    alt="Jacob Cohën"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Jacob Cohën</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- GAP BETWEEN SECTIONS WITH TITLE -->
+    <div class="w-full bg-white py-10 px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-900">
+            AVDELNINGAR
+        </h2>
+    </div>
+
+    <!-- SECTION 2: 3 FOTO PORTRAIT (WITH GAP) -->
+    <section class="w-full px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 w-full">
+
+            <!-- Item 1 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=80"
+                    alt="Formal Wear"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Kostymer</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?auto=format&fit=crop&w=900&q=80"
+                    alt="Casual Shirts"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Skjortor</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="relative aspect-[3/4] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80"
+                    alt="Outerwear"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-lg font-medium tracking-wide text-white">Ytterplagg</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- GAP BETWEEN SECTIONS WITH TITLE -->
+    <div class="w-full bg-white py-10 px-4 sm:px-6 lg:px-8">
+        <h2 class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-900">
+            KAMPANJER
+        </h2>
+    </div>
+
+    <!-- SECTION 3: 2 FOTO LANDSCAPE (WITH GAP) -->
+    <section class="w-full px-4 sm:px-6 lg:px-8 pb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full">
+
+            <!-- Item 1 -->
+            <div class="relative aspect-[16/9] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80"
+                    alt="Autumn Collection"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-xl font-medium tracking-wide text-white">Höstkollektionen</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="relative aspect-[16/9] w-full overflow-hidden rounded-sm group cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1200&q=80"
+                    alt="Tailored Suits"
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80">
+                </div>
+                <div class="absolute bottom-6 left-6 z-10 text-left space-y-1">
+                    <h3 class="text-xl font-medium tracking-wide text-white">Skräddarsytt</h3>
+                    <a href="#"
+                        class="inline-flex items-center text-[11px] font-semibold tracking-widest uppercase text-white/90 hover:text-white transition">
+                        SHOPPA NU <span class="ml-1">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</body>
+
+</html>

@@ -9,24 +9,11 @@ class FrontController extends Controller
 {
     public function index()
     {
-        return view('welcome');
-    }
+        $websites = DB::table('customers_website')
+            ->where('is_active', 1)
+            ->get();
 
-    public function elska()
-    {
-        $website = DB::table('customers_website')
-            ->where('domain', 'elska')
-            ->first();
-
-        $title = $website->title ?? 'Signature Fragrance';
-
-        return view('client.elska.landing.index', compact('title'));
-    }
-
-    public function elskaShop()
-    {
-        $file = resource_path('views/client/elska/ecommerce/index.html');
-        return response()->file($file);
+        return view('welcome', compact('websites'));
     }
 
     public function template($client = null)
@@ -65,5 +52,31 @@ class FrontController extends Controller
         }
 
         return view('template.index', compact('title', 'website', 'layouts'));
+    }
+
+    public function selectLayout($client = null)
+    {
+        $website = DB::table('customers_website')
+            ->join('customers', 'customers.id', '=', 'customers_website.customer_id')
+            ->where('customers_website.domain', $client)
+            ->select(
+                'customers_website.*',
+                'customers.name as customer_name',
+                'customers.email as customer_email'
+            )
+            ->first();
+
+        $title = $website->title ?? 'Signature Fragrance';
+
+        $sections = DB::table('templates_section')
+            ->join('template', 'template.id', '=', 'templates_section.template_id')
+            ->where('templates_section.status', true)
+            ->orderBy('templates_section.position')
+            ->select('templates_section.id as id', 'templates_section.name as name', 'templates_section.slug as slug', 'templates_section.preview as preview', 'template.name as template_name')
+            ->get();
+
+        $tabs = $sections->unique('slug')->values();
+
+        return view('template.layout', compact('title', 'website', 'sections', 'tabs'));
     }
 }

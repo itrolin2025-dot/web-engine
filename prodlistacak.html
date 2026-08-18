@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Factory - Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter / Montserrat for editorial typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Class khusus untuk teks vertikal di Sidebar */
+        .vertical-text {
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-white text-gray-900 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- STICKY TOP NAVBAR -->
+    <header
+        class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-6 lg:px-12 py-5 transition-all">
+        <div class="max-w-[1700px] mx-auto flex items-center justify-between">
+
+            <!-- Logo Circle PF -->
+            <a href="#"
+                class="w-12 h-12 rounded-full border border-black flex items-center justify-center font-medium text-lg tracking-tight hover:scale-105 transition">
+                PF
+            </a>
+
+            <!-- Categories Navigation Links -->
+            <nav
+                class="hidden lg:flex items-center space-x-6 text-[11px] font-medium uppercase tracking-[0.18em] text-gray-700">
+                <a href="#" class="font-bold text-black border-b border-black pb-0.5">VIEW ALL</a>
+                <a href="#" class="hover:text-black transition">STILLS</a>
+                <a href="#" class="hover:text-black transition">FILM</a>
+                <a href="#" class="hover:text-black transition">CAMPAIGN</a>
+                <a href="#" class="hover:text-black transition">EDITORIAL</a>
+                <a href="#" class="hover:text-black transition">CELEBRITY</a>
+                <a href="#" class="hover:text-black transition">SPORTS</a>
+                <a href="#" class="hover:text-black transition">FOOD & BEV</a>
+                <a href="#" class="hover:text-black transition">KIDS</a>
+                <a href="#" class="hover:text-black transition">SERVICE PRODUCTION</a>
+            </nav>
+
+            <!-- Search Icon Button -->
+            <div class="flex items-center space-x-4">
+                <button
+                    class="w-9 h-9 rounded-full border border-gray-300 flex items-center justify-center text-xs text-gray-600 hover:border-black hover:text-black transition"
+                    aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER WITH STICKY SIDEBAR -->
+    <div class="flex flex-1 max-w-[1700px] w-full mx-auto relative">
+
+        <!-- STICKY LEFT SIDEBAR -->
+        <aside
+            class="sticky top-[89px] h-[calc(100vh-89px)] w-16 md:w-20 flex-shrink-0 border-r border-gray-100 flex flex-col justify-end items-center pb-12 z-40 bg-white">
+            <nav
+                class="flex flex-col space-y-10 items-center text-[10px] font-medium tracking-[0.25em] text-gray-400 uppercase">
+                <a href="#" class="vertical-text hover:text-black transition">PORTFOLIO</a>
+                <a href="#" class="vertical-text hover:text-black transition">SERVICES</a>
+                <a href="#" class="vertical-text hover:text-black transition">CONTACT US</a>
+                <a href="#" class="vertical-text hover:text-black transition flex items-center gap-1">
+                    <span>PF GROUP</span>
+                    <i class="fa-solid fa-chevron-left text-[8px] transform -rotate-90"></i>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- PORTFOLIO CONTENT (STAGGERED / MASONRY GRID LAYOUT) -->
+        <main class="flex-1 px-6 md:px-12 lg:px-16 py-12">
+
+            <!-- Multi-column Layout untuk efek acak namun rapi -->
+            <div class="columns-1 md:columns-3 gap-10 lg:gap-14 space-y-16">
+
+                <!-- ITEM 1 (Primark - Kolom 1) -->
+                <div class="break-inside-avoid flex flex-col items-center group cursor-pointer pt-6">
+                    <div class="w-full bg-gray-100 overflow-hidden mb-5">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80"
+                            alt="Primark Coleen"
+                            class="w-full h-auto object-cover group-hover:scale-102 transition duration-500 ease-out" />
+                    </div>
+                    <div class="text-center space-y-1 font-mono text-[11px] uppercase tracking-[0.18em]">
+                        <h3 class="font-bold text-black">PRIMARK</h3>
+                        <p class="text-gray-500 text-[10px]">BY COLEEN</p>
+                        <p class="text-gray-400 text-[9px]">MANCHESTER</p>
+                    </div>
+                </div>
+
+                <!-- ITEM 2 (The Glass Magazine - Kolom 2, Diturunkan dengan Margin) -->
+                <div class="break-inside-avoid flex flex-col items-center group cursor-pointer mt-12 md:mt-24">
+                    <div class="w-full bg-gray-100 overflow-hidden mb-5">
+                        <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80"
+                            alt="The Glass Magazine"
+                            class="w-full h-auto object-cover group-hover:scale-102 transition duration-500 ease-out" />
+                    </div>
+                    <div class="text-center space-y-1 font-mono text-[11px] uppercase tracking-[0.18em]">
+                        <h3 class="font-bold text-black">THE GLASS MAGAZINE</h3>
+                        <p class="text-gray-500 text-[10px]">SUMMER</p>
+                        <p class="text-gray-400 text-[9px]">LONDON</p>
+                    </div>
+                </div>
+
+                <!-- ITEM 3 (Tank Magazine - Kolom 3) -->
+                <div class="break-inside-avoid flex flex-col items-center group cursor-pointer">
+                    <div class="w-full bg-gray-100 overflow-hidden mb-5">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
+                            alt="Tank Magazine"
+                            class="w-full h-auto object-cover group-hover:scale-102 transition duration-500 ease-out" />
+                    </div>
+                    <div class="text-center space-y-1 font-mono text-[11px] uppercase tracking-[0.18em]">
+                        <h3 class="font-bold text-black">TANK MAGAZINE</h3>
+                        <p class="text-gray-500 text-[10px]">V&A STOREHOUSE</p>
+                        <p class="text-gray-400 text-[9px]">LONDON</p>
+                    </div>
+                </div>
+
+                <!-- ITEM 4 (Kategori Tambahan untuk Menunjukkan Scroll) -->
+                <div class="break-inside-avoid flex flex-col items-center group cursor-pointer mt-8">
+                    <div class="w-full bg-gray-100 overflow-hidden mb-5">
+                        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80"
+                            alt="Vogue Editorial"
+                            class="w-full h-auto object-cover group-hover:scale-102 transition duration-500 ease-out" />
+                    </div>
+                    <div class="text-center space-y-1 font-mono text-[11px] uppercase tracking-[0.18em]">
+                        <h3 class="font-bold text-black">VOGUE ITALIA</h3>
+                        <p class="text-gray-500 text-[10px]">AUTUMN EDITION</p>
+                        <p class="text-gray-400 text-[9px]">MILAN</p>
+                    </div>
+                </div>
+
+                <!-- ITEM 5 -->
+                <div class="break-inside-avoid flex flex-col items-center group cursor-pointer">
+                    <div class="w-full bg-gray-100 overflow-hidden mb-5">
+                        <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80"
+                            alt="Highsnobiety Campaign"
+                            class="w-full h-auto object-cover group-hover:scale-102 transition duration-500 ease-out" />
+                    </div>
+                    <div class="text-center space-y-1 font-mono text-[11px] uppercase tracking-[0.18em]">
+                        <h3 class="font-bold text-black">HIGHSNOBIETY</h3>
+                        <p class="text-gray-500 text-[10px]">CAMPAIGN</p>
+                        <p class="text-gray-400 text-[9px]">BERLIN</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

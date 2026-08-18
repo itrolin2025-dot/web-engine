@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Product Showcase Section</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-[#f7f4f0] font-sans antialiased text-gray-900 py-12 px-4 sm:px-8">
+
+    <div class="max-w-6xl mx-auto space-y-12">
+
+        <!-- ======================================================= -->
+        <!-- VARIANT 1: ASPECT 1:1 (SQUARE IMAGE CONTAINER)           -->
+        <!-- ======================================================= -->
+        <div class="space-y-2">
+            <span class="text-xs font-semibold uppercase tracking-widest text-gray-500">Variasi 1: Gambar Rasio 1:1
+                (Square)</span>
+
+            <div
+                class="w-full bg-white flex flex-col md:flex-row items-stretch shadow-sm overflow-hidden min-h-[320px]">
+
+                <!-- Left Image Box (Square Container 1:1) -->
+                <div
+                    class="relative w-full md:w-1/2 bg-[#bcbbb9] aspect-square md:aspect-auto flex items-center justify-center p-8 overflow-hidden">
+                    <!-- Background Wave Lines Graphic -->
+                    <svg class="absolute inset-0 w-full h-full text-white/30 pointer-events-none" viewBox="0 0 500 500"
+                        fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path
+                            d="M-50,100 C150,200 300,50 550,250 M-50,130 C150,230 300,80 550,280 M-50,160 C150,260 300,110 550,310 M-50,190 C150,290 300,140 550,340" />
+                        <path d="M-50,300 C150,400 300,250 550,450 M-50,330 C150,430 300,280 550,480" />
+                    </svg>
+
+                    <!-- Product Mockup Image (Aspect 1:1) -->
+                    <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=800&q=80"
+                        alt="Panama Gesha Coffee Bag"
+                        class="relative z-10 max-h-[85%] aspect-square object-contain drop-shadow-2xl" />
+                </div>
+
+                <!-- Right Content Box -->
+                <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center relative bg-white">
+                    <!-- Subtle Country Outline Watermark -->
+                    <svg class="absolute inset-0 m-auto w-2/3 h-2/3 text-gray-100 opacity-60 pointer-events-none -z-0"
+                        viewBox="0 0 100 100" fill="currentColor">
+                        <path d="M20,40 Q40,20 60,40 T90,60 Q70,80 50,70 T10,50 Z" />
+                    </svg>
+
+                    <div class="relative z-10 space-y-6">
+                        <!-- Header & Price -->
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 leading-snug">
+                                    PANAMA, NINETY PLUS GESHA
+                                </h2>
+                                <p class="text-xs font-semibold tracking-wider text-gray-400 uppercase mt-1">
+                                    THERMOLIC™
+                                </p>
+                            </div>
+                            <div class="text-right flex-shrink-0">
+                                <span class="block text-[10px] text-gray-400 uppercase tracking-wider">From</span>
+                                <span class="text-sm font-semibold text-gray-900">28.00 €</span>
+                            </div>
+                        </div>
+
+                        <!-- Flavor Notes -->
+                        <p class="text-xs sm:text-sm text-gray-500 font-normal">
+                            chocolate-covered apricots, tangerine, peach
+                        </p>
+
+                        <!-- Action Button -->
+                        <div class="pt-4 flex justify-end">
+                            <button
+                                class="px-6 py-1.5 border border-[#897398] text-[#897398] text-xs font-medium tracking-wider hover:bg-[#897398] hover:text-white transition duration-200">
+                                SHOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- VARIANT 2: ASPECT PORTRAIT 3:4                           -->
+        <!-- ======================================================= -->
+        <div class="space-y-2">
+            <span class="text-xs font-semibold uppercase tracking-widest text-gray-500">Variasi 2: Gambar Rasio Portrait
+                (3:4)</span>
+
+            <div
+                class="w-full bg-white flex flex-col md:flex-row items-stretch shadow-sm overflow-hidden min-h-[320px]">
+
+                <!-- Left Image Box (Portrait Container 3:4) -->
+                <div
+                    class="relative w-full md:w-1/2 bg-[#bcbbb9] aspect-square md:aspect-auto flex items-center justify-center p-8 overflow-hidden">
+                    <!-- Background Wave Lines Graphic -->
+                    <svg class="absolute inset-0 w-full h-full text-white/30 pointer-events-none" viewBox="0 0 500 500"
+                        fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path
+                            d="M-50,100 C150,200 300,50 550,250 M-50,130 C150,230 300,80 550,280 M-50,160 C150,260 300,110 550,310 M-50,190 C150,290 300,140 550,340" />
+                        <path d="M-50,300 C150,400 300,250 550,450 M-50,330 C150,430 300,280 550,480" />
+                    </svg>
+
+                    <!-- Product Mockup Image (Portrait Aspect 3:4) -->
+                    <img src="https://images.unsplash.com/photo-1589396575653-c09c794ff6a6?auto=format&fit=crop&w=800&q=80"
+                        alt="Ethiopia Yirgacheffe Bag"
+                        class="relative z-10 max-h-[90%] aspect-[3/4] object-contain drop-shadow-2xl" />
+                </div>
+
+                <!-- Right Content Box -->
+                <div class="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center relative bg-white">
+                    <!-- Subtle Country Outline Watermark -->
+                    <svg class="absolute inset-0 m-auto w-2/3 h-2/3 text-gray-100 opacity-60 pointer-events-none -z-0"
+                        viewBox="0 0 100 100" fill="currentColor">
+                        <path d="M20,40 Q40,20 60,40 T90,60 Q70,80 50,70 T10,50 Z" />
+                    </svg>
+
+                    <div class="relative z-10 space-y-6">
+                        <!-- Header & Price -->
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 leading-snug">
+                                    ETHIOPIA, YIRGACHEFFE LOT 04
+                                </h2>
+                                <p class="text-xs font-semibold tracking-wider text-gray-400 uppercase mt-1">
+                                    ANAEROBIC NATURAL
+                                </p>
+                            </div>
+                            <div class="text-right flex-shrink-0">
+                                <span class="block text-[10px] text-gray-400 uppercase tracking-wider">From</span>
+                                <span class="text-sm font-semibold text-gray-900">24.50 €</span>
+                            </div>
+                        </div>
+
+                        <!-- Flavor Notes -->
+                        <p class="text-xs sm:text-sm text-gray-500 font-normal">
+                            jasmine floral, bergamot, sweet blueberry
+                        </p>
+
+                        <!-- Action Button -->
+                        <div class="pt-4 flex justify-end">
+                            <button
+                                class="px-6 py-1.5 border border-[#897398] text-[#897398] text-xs font-medium tracking-wider hover:bg-[#897398] hover:text-white transition duration-200">
+                                SHOW
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
