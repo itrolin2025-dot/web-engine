@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\CategoryProduct;
+use App\Models\ProductReview;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,6 +108,16 @@ class ProductsController extends Controller
             'description'          => 'nullable|string',
             'images'               => 'nullable|array',
             'images.*'             => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+
+            // Reviews validation
+            'reviews'                     => 'nullable|array',
+            'reviews.*.rating'            => 'required|integer|min:1|max:5',
+            'reviews.*.name'              => 'required|string|max:255',
+            'reviews.*.profile_photo'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'reviews.*.comment'           => 'nullable|string',
+            'reviews.*.status'            => 'nullable|boolean',
+            'reviews.*.photos'            => 'nullable|array',
+            'reviews.*.photos.*'          => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -132,6 +143,41 @@ class ProductsController extends Controller
                 'description'          => $request->description,
                 'images'               => $imagePaths,
             ]);
+
+            // Save reviews if provided
+            if ($request->has('reviews') && is_array($request->reviews)) {
+                if (!Storage::disk('public')->exists('product_reviews')) {
+                    Storage::disk('public')->makeDirectory('product_reviews');
+                }
+
+                foreach ($request->reviews as $index => $reviewData) {
+                    $profilePhotoPath = null;
+                    if ($request->hasFile("reviews.{$index}.profile_photo")) {
+                        $pfile = $request->file("reviews.{$index}.profile_photo");
+                        $pfilename = time() . '_profile_' . uniqid() . '.' . $pfile->getClientOriginalExtension();
+                        $profilePhotoPath = $pfile->storeAs('product_reviews', $pfilename, 'public');
+                    }
+
+                    $reviewPhotos = [];
+                    if ($request->hasFile("reviews.{$index}.photos")) {
+                        foreach ($request->file("reviews.{$index}.photos") as $rfile) {
+                            $rfilename = time() . '_review_' . uniqid() . '.' . $rfile->getClientOriginalExtension();
+                            $rpath = $rfile->storeAs('product_reviews', $rfilename, 'public');
+                            $reviewPhotos[] = $rpath;
+                        }
+                    }
+
+                    ProductReview::create([
+                        'products_id'   => $product->id,
+                        'rating'        => $reviewData['rating'] ?? 5,
+                        'name'          => $reviewData['name'],
+                        'profile_photo' => $profilePhotoPath,
+                        'comment'       => $reviewData['comment'] ?? null,
+                        'status'        => isset($reviewData['status']) ? (bool)$reviewData['status'] : true,
+                        'photos'        => $reviewPhotos,
+                    ]);
+                }
+            }
 
             DB::commit();
 
@@ -162,6 +208,7 @@ class ProductsController extends Controller
         }
 
         $categories = CategoryProduct::orderBy('name', 'asc')->get();
+        $product->load('reviews');
 
         return view($this->path . '.edit', [
             'product'    => $product,
@@ -184,6 +231,27 @@ class ProductsController extends Controller
             'images'               => 'nullable|array',
             'images.*'             => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'deleted_images'       => 'nullable|array',
+
+            // Existing & new reviews validation
+            'existing_reviews'                    => 'nullable|array',
+            'existing_reviews.*.rating'           => 'required|integer|min:1|max:5',
+            'existing_reviews.*.name'             => 'required|string|max:255',
+            'existing_reviews.*.profile_photo'    => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'existing_reviews.*.comment'          => 'nullable|string',
+            'existing_reviews.*.status'           => 'nullable|boolean',
+            'existing_reviews.*.photos'           => 'nullable|array',
+            'existing_reviews.*.photos.*'         => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'existing_reviews.*.deleted_photos'   => 'nullable|array',
+            'deleted_reviews'                     => 'nullable|array',
+
+            'new_reviews'                         => 'nullable|array',
+            'new_reviews.*.rating'                => 'required|integer|min:1|max:5',
+            'new_reviews.*.name'                  => 'required|string|max:255',
+            'new_reviews.*.profile_photo'         => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'new_reviews.*.comment'               => 'nullable|string',
+            'new_reviews.*.status'                => 'nullable|boolean',
+            'new_reviews.*.photos'                => 'nullable|array',
+            'new_reviews.*.photos.*'              => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -224,6 +292,109 @@ class ProductsController extends Controller
                 'description'          => $request->description,
                 'images'               => $existingImages,
             ]);
+
+            if (!Storage::disk('public')->exists('product_reviews')) {
+                Storage::disk('public')->makeDirectory('product_reviews');
+            }
+
+            // 1. Delete marked reviews
+            if ($request->has('deleted_reviews') && is_array($request->deleted_reviews)) {
+                foreach ($request->deleted_reviews as $delReviewId) {
+                    $r = ProductReview::where('products_id', $product->id)->find($delReviewId);
+                    if ($r) {
+                        if ($r->profile_photo && Storage::disk('public')->exists($r->profile_photo)) {
+                            Storage::disk('public')->delete($r->profile_photo);
+                        }
+                        if (!empty($r->photos) && is_array($r->photos)) {
+                            foreach ($r->photos as $ph) {
+                                if (Storage::disk('public')->exists($ph)) {
+                                    Storage::disk('public')->delete($ph);
+                                }
+                            }
+                        }
+                        $r->delete();
+                    }
+                }
+            }
+
+            // 2. Update existing reviews
+            if ($request->has('existing_reviews') && is_array($request->existing_reviews)) {
+                foreach ($request->existing_reviews as $reviewId => $revData) {
+                    $reviewModel = ProductReview::where('products_id', $product->id)->find($reviewId);
+                    if ($reviewModel) {
+                        $profilePhotoPath = $reviewModel->profile_photo;
+                        if ($request->hasFile("existing_reviews.{$reviewId}.profile_photo")) {
+                            if ($profilePhotoPath && Storage::disk('public')->exists($profilePhotoPath)) {
+                                Storage::disk('public')->delete($profilePhotoPath);
+                            }
+                            $pfile = $request->file("existing_reviews.{$reviewId}.profile_photo");
+                            $pfilename = time() . '_profile_' . uniqid() . '.' . $pfile->getClientOriginalExtension();
+                            $profilePhotoPath = $pfile->storeAs('product_reviews', $pfilename, 'public');
+                        }
+
+                        $currentPhotos = $reviewModel->photos ?? [];
+                        if (isset($revData['deleted_photos']) && is_array($revData['deleted_photos'])) {
+                            foreach ($revData['deleted_photos'] as $delPh) {
+                                if (($idx = array_search($delPh, $currentPhotos)) !== false) {
+                                    if (Storage::disk('public')->exists($delPh)) {
+                                        Storage::disk('public')->delete($delPh);
+                                    }
+                                    unset($currentPhotos[$idx]);
+                                }
+                            }
+                            $currentPhotos = array_values($currentPhotos);
+                        }
+
+                        if ($request->hasFile("existing_reviews.{$reviewId}.photos")) {
+                            foreach ($request->file("existing_reviews.{$reviewId}.photos") as $rfile) {
+                                $rfilename = time() . '_review_' . uniqid() . '.' . $rfile->getClientOriginalExtension();
+                                $rpath = $rfile->storeAs('product_reviews', $rfilename, 'public');
+                                $currentPhotos[] = $rpath;
+                            }
+                        }
+
+                        $reviewModel->update([
+                            'rating'        => $revData['rating'] ?? $reviewModel->rating,
+                            'name'          => $revData['name'] ?? $reviewModel->name,
+                            'profile_photo' => $profilePhotoPath,
+                            'comment'       => $revData['comment'] ?? $reviewModel->comment,
+                            'status'        => isset($revData['status']) ? (bool)$revData['status'] : false,
+                            'photos'        => $currentPhotos,
+                        ]);
+                    }
+                }
+            }
+
+            // 3. Add new reviews
+            if ($request->has('new_reviews') && is_array($request->new_reviews)) {
+                foreach ($request->new_reviews as $index => $reviewData) {
+                    $profilePhotoPath = null;
+                    if ($request->hasFile("new_reviews.{$index}.profile_photo")) {
+                        $pfile = $request->file("new_reviews.{$index}.profile_photo");
+                        $pfilename = time() . '_profile_' . uniqid() . '.' . $pfile->getClientOriginalExtension();
+                        $profilePhotoPath = $pfile->storeAs('product_reviews', $pfilename, 'public');
+                    }
+
+                    $reviewPhotos = [];
+                    if ($request->hasFile("new_reviews.{$index}.photos")) {
+                        foreach ($request->file("new_reviews.{$index}.photos") as $rfile) {
+                            $rfilename = time() . '_review_' . uniqid() . '.' . $rfile->getClientOriginalExtension();
+                            $rpath = $rfile->storeAs('product_reviews', $rfilename, 'public');
+                            $reviewPhotos[] = $rpath;
+                        }
+                    }
+
+                    ProductReview::create([
+                        'products_id'   => $product->id,
+                        'rating'        => $reviewData['rating'] ?? 5,
+                        'name'          => $reviewData['name'],
+                        'profile_photo' => $profilePhotoPath,
+                        'comment'       => $reviewData['comment'] ?? null,
+                        'status'        => isset($reviewData['status']) ? (bool)$reviewData['status'] : true,
+                        'photos'        => $reviewPhotos,
+                    ]);
+                }
+            }
 
             DB::commit();
 

@@ -189,7 +189,7 @@ class TemplateController extends Controller
             'preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'new_content.key' => 'nullable|string|max:255',
             'new_content.value' => 'nullable|string',
-            'new_content.type' => 'nullable|string|in:image,text,repeater,color',
+            'new_content.type' => 'nullable|string|in:image,text,repeater,color,data',
             'new_content_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
@@ -259,7 +259,7 @@ class TemplateController extends Controller
             'contents' => 'nullable|array',
             'new_content.key' => 'nullable|string|max:255',
             'new_content.value' => 'nullable|string',
-            'new_content.type' => 'nullable|string|in:image,text,repeater,color',
+            'new_content.type' => 'nullable|string|in:image,text,repeater,color,data',
             'new_content_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'contents_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);

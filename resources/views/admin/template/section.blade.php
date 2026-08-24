@@ -176,6 +176,7 @@
                                         <option value="text" selected>text</option>
                                         <option value="repeater">repeater</option>
                                         <option value="color">color</option>
+                                        <option value="data">Data</option>
                                     </select>
                                 </div>
                                 <div class="sm:col-span-5" x-data="{ type: 'text' }">
@@ -362,6 +363,7 @@
                                                                     <option value="text" {{ $content->type == 'text' ? 'selected' : '' }}>text</option>
                                                                     <option value="repeater" {{ $content->type == 'repeater' ? 'selected' : '' }}>repeater</option>
                                                                     <option value="color" {{ $content->type == 'color' ? 'selected' : '' }}>color</option>
+                                                                    <option value="data" {{ $content->type == 'data' ? 'selected' : '' }}>Data</option>
                                                                 </select>
                                                             </div>
 
@@ -411,6 +413,7 @@
                                                         <option value="text" selected>text</option>
                                                         <option value="repeater">repeater</option>
                                                         <option value="color">color</option>
+                                                        <option value="data">data</option>
                                                     </select>
                                                 </div>
                                                 <div class="sm:col-span-5">

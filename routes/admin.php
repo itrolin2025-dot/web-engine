@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::put('customers-website/{id}', [CustomersWebController::class, 'update'])->name('customers-website.update');
     Route::delete('customers-website/{id}', [CustomersWebController::class, 'destroy'])->name('customers-website.destroy');
     Route::get('customers-website/{id}/page', [CustomersWebController::class, 'page'])->name('customers-website.page');
+    Route::get('customers-website/section-contents/{sectionId}', [CustomersWebController::class, 'getSectionContents'])->name('customers-website.section-contents');
     Route::get('customers-website/{id}/layout/{page_type}', [CustomersWebController::class, 'layout'])->name('customers-website.layout');
     Route::post('customers-website/{id}/layout/{page_type}', [CustomersWebController::class, 'layoutStore'])->name('customers-website.layout.store');
     Route::put('customers-website/{id}/layout/{page_type}/{layoutId}', [CustomersWebController::class, 'layoutUpdate'])->name('customers-website.layout.update');

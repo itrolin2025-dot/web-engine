@@ -114,7 +114,7 @@
     $button_color = $content['button_color'] ?? '#ffffff';
 
     // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
-    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+    $about_image = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : 'images/default/broken.png';
 @endphp
 
 <section class="about">

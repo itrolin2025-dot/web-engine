@@ -96,7 +96,8 @@
                         :class="showForm ? 'rotate-180' : ''"></i>
                 </button>
 
-                <div x-show="showForm"
+                <div x-data="{ selectedSectionId: '' }"
+                    x-show="showForm"
                     x-transition:enter="transition ease-out duration-200"
                     x-transition:enter-start="opacity-0 -translate-y-2"
                     x-transition:enter-end="opacity-100 translate-y-0"
@@ -105,29 +106,17 @@
                     x-transition:leave-end="opacity-0 -translate-y-2"
                     class="border-t border-slate-150 dark:border-navy-600 px-4 pb-5 pt-4 sm:px-5">
 
-                    <form id="add-layout-form" action="{{ route('admin.customers-website.layout.store', [$website->id, $page_type]) }}" method="POST" class="space-y-4">
+                    <form id="add-layout-form" action="{{ route('admin.customers-website.layout.store', [$website->id, $page_type]) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
 
-                        <!-- <div class="grid grid-cols-1 gap-4 sm:grid-cols-2"> -->
-                            <!-- <label class="block">
-                                <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Section <span class="text-error">*</span></span>
-                                <select name="templates_section_id" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
-                                    <option value="">Select Section</option>
-                                    @foreach($sections as $sec)
-                                        <option value="{{ $sec->id }}">{{ $sec->name }} ({{ $sec->slug }})</option>
-                                    @endforeach
-                                </select>
-                                @error('templates_section_id') <span class="text-xs text-error">{{ $message }}</span> @enderror
-                            </label> -->
-                            
-
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-1">
                             <label class="block">
                                 <span class="text-sm font-medium text-slate-700 dark:text-navy-100">
                                     Section <span class="text-error">*</span>
                                 </span>
 
                                 <!-- Select Dropdown -->
-                                <select name="templates_section_id" id="sectionSelect" onchange="updateSectionPreview(this)" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
+                                <select name="templates_section_id" id="sectionSelect" x-model="selectedSectionId" onchange="updateSectionPreview(this)" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
                                     <option value="">Select Section</option>
                                     @foreach($sections as $sec)
                                         <option value="{{ $sec->id }}" data-image="{{ $sec->preview ? asset($sec->preview) : '' }}">
@@ -145,27 +134,8 @@
                                     </div>
                                 </div>
                             </label>
-
-                            <!-- Script Sederhana untuk Mengubah Gambar Preview -->
-                            <script>
-                            function updateSectionPreview(selectElement) {
-                                const selectedOption = selectElement.options[selectElement.selectedIndex];
-                                const imageUrl = selectedOption.getAttribute('data-image');
-                                
-                                const previewContainer = document.getElementById('previewContainer');
-                                const previewImage = document.getElementById('sectionPreviewImage');
-
-                                if (selectElement.value && imageUrl) {
-                                    previewImage.src = imageUrl;
-                                    previewContainer.classList.remove('hidden');
-                                } else {
-                                    previewContainer.classList.add('hidden');
-                                }
-                            }
-                            </script>
+                        </div>
                     
-                        <!-- </div> -->
-
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div class="flex items-end pb-1">
                                 <label class="inline-flex items-center space-x-2 cursor-pointer">
@@ -177,10 +147,18 @@
                         </div>
 
                         <label class="block">
-                            <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Content</span>
-                            <textarea name="content" rows="3" placeholder="Layout content..."
+                            <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
+                            <textarea name="content" id="contentAdd" rows="3" placeholder="Layout content..."
                                 class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"></textarea>
                         </label>
+
+                        <!-- Dynamic Section Content Fields loaded via AJAX -->
+                        <div id="dynamicFieldsContainerAdd" class="hidden space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-navy-500 dark:bg-navy-800">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-navy-600 flex items-center">
+                                <i class="fa-solid fa-sliders mr-1.5 text-primary dark:text-accent-light"></i> Section Dynamic Content Fields
+                            </h4>
+                            <div id="dynamicFieldsListAdd" class="space-y-3"></div>
+                        </div>
 
                         <label class="block">
                             <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Position</span>
@@ -261,7 +239,8 @@
                                 class="bg-slate-50 dark:bg-navy-600 border-t border-slate-150 dark:border-navy-500 px-4 pb-4 pt-4 sm:px-5">
 
                                 <form action="{{ route('admin.customers-website.layout.update', [$website->id, $page_type, $layout->id]) }}"
-                                    method="POST" class="layout-update-form space-y-4" data-layout-id="{{ $layout->id }}">
+                                    method="POST" enctype="multipart/form-data" class="layout-update-form space-y-4" data-layout-id="{{ $layout->id }}"
+                                    x-data="{ selectedSectionId: '{{ $layout->templates_section_id }}' }">
                                     @csrf
                                     @method('PUT')
 
@@ -269,6 +248,7 @@
                                         <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section <span class="text-error">*</span></span>
                                         <select name="templates_section_id"
                                             id="sectionSelectUpdate-{{ $layout->id }}"
+                                            x-model="selectedSectionId"
                                             onchange="updateSectionPreviewEdit(this, {{ $layout->id }})"
                                             class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent" required>
                                             <option value="">Select Section</option>
@@ -313,10 +293,18 @@
                                     </div>
 
                                     <label class="block">
-                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content</span>
-                                        <textarea name="content" rows="30" placeholder="Layout content..."
+                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
+                                        <textarea name="content" id="contentUpdate-{{ $layout->id }}" rows="6" placeholder="Layout content..."
                                             class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">{{ old('content', $layout->content) }}</textarea>
                                     </label>
+
+                                    <!-- Dynamic Section Content Fields loaded via AJAX -->
+                                    <div id="dynamicFieldsContainerUpdate-{{ $layout->id }}" class="hidden space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-navy-500 dark:bg-navy-800">
+                                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-navy-600 flex items-center">
+                                            <i class="fa-solid fa-sliders mr-1.5 text-primary dark:text-accent-light"></i> Section Dynamic Content Fields
+                                        </h4>
+                                        <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-3"></div>
+                                    </div>
 
                                     <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-navy-500">
                                         <button type="submit"
@@ -351,29 +339,218 @@
     </div>
 
     <script>
+        const websiteDomain = '{{ $website->domain ?? "" }}';
+
+        // Function to render dynamic input fields based on templates_sections_content
+        window.loadSectionContents = function (sectionId, containerEl, listEl, contentTextarea, existingJsonStr) {
+            if (!sectionId) {
+                if (containerEl) containerEl.classList.add('hidden');
+                if (listEl) listEl.innerHTML = '';
+                return;
+            }
+
+            let existingData = {};
+            if (existingJsonStr) {
+                try {
+                    existingData = JSON.parse(existingJsonStr);
+                } catch (e) {
+                    existingData = {};
+                }
+            }
+
+            fetch('{{ route("admin.customers-website.section-contents", ["sectionId" => "__SECTION_ID__"]) }}'.replace('__SECTION_ID__', sectionId))
+                .then(res => res.json())
+                .then(data => {
+                    listEl.innerHTML = '';
+                    if (data.success && data.contents && data.contents.length > 0) {
+                        if (containerEl) containerEl.classList.remove('hidden');
+
+                        data.contents.forEach(item => {
+                            const fieldWrapper = document.createElement('div');
+                            fieldWrapper.className = 'block';
+
+                            const label = document.createElement('label');
+                            label.className = 'block space-y-1';
+
+                            const keySpan = document.createElement('span');
+                            keySpan.className = 'text-xs font-semibold capitalize text-slate-700 dark:text-navy-100';
+                            keySpan.innerHTML = `${item.key.replace(/_/g, ' ')} <span class="text-xs text-slate-400 font-normal">(${item.type || 'text'})</span>`;
+
+                            label.appendChild(keySpan);
+
+                            const val = existingData[item.key] !== undefined ? existingData[item.key] : (item.value || '');
+                            const inputName = `dynamic_content[${item.key}]`;
+                            const fileInputName = `dynamic_files[${item.key}]`;
+
+                            const typeLower = (item.type || '').toLowerCase();
+
+                            if (typeLower === 'image' || typeLower === 'file') {
+                                const fileInput = document.createElement('input');
+                                fileInput.type = 'file';
+                                fileInput.name = fileInputName;
+                                fileInput.className = 'form-input w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+
+                                const prevDiv = document.createElement('div');
+                                prevDiv.className = 'mt-1 flex items-center space-x-2';
+                                const img = document.createElement('img');
+                                let imgSrc = val;
+                                if (val && typeof val === 'string' && val.length > 0) {
+                                    if (!val.startsWith('http') && !val.startsWith('/')) {
+                                        if (websiteDomain && websiteDomain !== '') {
+                                            imgSrc = `{{ asset('images/website') }}/${websiteDomain}/${val}`;
+                                        } else {
+                                            imgSrc = `{{ asset('storage') }}/${val}`;
+                                        }
+                                    }
+                                    img.src = imgSrc;
+                                    img.className = 'h-10 w-10 object-cover rounded border border-slate-200';
+                                    const hiddenCurrent = document.createElement('input');
+                                    hiddenCurrent.type = 'hidden';
+                                    hiddenCurrent.name = inputName;
+                                    hiddenCurrent.value = val;
+
+                                    prevDiv.appendChild(img);
+                                    prevDiv.appendChild(hiddenCurrent);
+                                } else {
+                                    img.className = 'h-10 w-10 object-cover rounded border border-slate-200 hidden';
+                                    prevDiv.appendChild(img);
+                                }
+
+                                fileInput.addEventListener('change', function(e) {
+                                    const selectedFile = e.target.files[0];
+                                    if (selectedFile) {
+                                        const reader = new FileReader();
+                                        reader.onload = function(evt) {
+                                            img.src = evt.target.result;
+                                            img.classList.remove('hidden');
+                                        };
+                                        reader.readAsDataURL(selectedFile);
+                                    }
+                                });
+
+                                label.appendChild(fileInput);
+                                label.appendChild(prevDiv);
+                            } else if (typeLower === 'long_text' || typeLower === 'textarea' || typeLower === 'description') {
+                                const textarea = document.createElement('textarea');
+                                textarea.name = inputName;
+                                textarea.rows = 3;
+                                textarea.value = typeof val === 'object' ? JSON.stringify(val, null, 2) : val;
+                                textarea.className = 'form-textarea w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+                                label.appendChild(textarea);
+                            } else if (typeLower === 'repeater' || typeof val === 'object') {
+                                const textarea = document.createElement('textarea');
+                                textarea.name = inputName;
+                                textarea.rows = 5;
+                                textarea.value = typeof val === 'object' ? JSON.stringify(val, null, 2) : val;
+                                textarea.className = 'form-textarea w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-mono hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+                                label.appendChild(textarea);
+                            } else {
+                                const input = document.createElement('input');
+                                input.type = 'text';
+                                input.name = inputName;
+                                input.value = val;
+                                input.className = 'form-input w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+                                label.appendChild(input);
+                            }
+
+                            fieldWrapper.appendChild(label);
+                            listEl.appendChild(fieldWrapper);
+                        });
+
+                        // Helper function to update contentTextarea in real-time
+                        const updateTextareaFromDynamic = () => {
+                            const obj = {};
+                            listEl.querySelectorAll('input[type="text"], input[type="hidden"], textarea').forEach(el => {
+                                const match = el.name.match(/dynamic_content\[(.*?)\]/);
+                                if (match && match[1]) {
+                                    let rawVal = el.value;
+                                    let parsedVal = rawVal;
+                                    if (typeof rawVal === 'string' && (rawVal.trim().startsWith('[') || rawVal.trim().startsWith('{'))) {
+                                        try {
+                                            parsedVal = JSON.parse(rawVal);
+                                        } catch (e) {
+                                            parsedVal = rawVal;
+                                        }
+                                    }
+                                    obj[match[1]] = parsedVal;
+                                }
+                            });
+                            if (Object.keys(obj).length > 0) {
+                                contentTextarea.value = JSON.stringify(obj, null, 2);
+                            }
+                        };
+
+                        listEl.querySelectorAll('input[type="text"], textarea').forEach(el => {
+                            el.addEventListener('input', updateTextareaFromDynamic);
+                        });
+
+                        // Initial sync if textarea was empty
+                        if (!existingJsonStr || existingJsonStr.trim() === '') {
+                            updateTextareaFromDynamic();
+                        }
+                    } else {
+                        listEl.innerHTML = '<p class="text-xs text-slate-400 font-normal italic">Tidak ada template content tambahan untuk section ini.</p>';
+                    }
+                })
+                .catch(err => console.error('Error fetching section contents:', err));
+        };
+
+        // Global updateSectionPreview for Create (defined before DOMContentLoaded for inline onchange attribute)
+        function updateSectionPreview(selectElement) {
+            if (!selectElement) return;
+            const selectedOption = selectElement.options ? selectElement.options[selectElement.selectedIndex] : null;
+            const imageUrl = selectedOption ? selectedOption.getAttribute('data-image') : '';
+
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImage = document.getElementById('sectionPreviewImage');
+
+            if (selectElement.value && imageUrl) {
+                if (previewImage) previewImage.src = imageUrl;
+                if (previewContainer) previewContainer.classList.remove('hidden');
+            } else {
+                if (previewContainer) previewContainer.classList.add('hidden');
+            }
+
+            // Load dynamic fields
+            const containerEl = document.getElementById('dynamicFieldsContainerAdd');
+            const listEl = document.getElementById('dynamicFieldsListAdd');
+            const contentTextarea = document.getElementById('contentAdd');
+            if (containerEl && listEl && contentTextarea && typeof window.loadSectionContents === 'function') {
+                window.loadSectionContents(selectElement.value, containerEl, listEl, contentTextarea, contentTextarea.value);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const csrfToken = '{{ csrf_token() }}';
 
-            function showToast(message, type = 'success') {
-                const existing = document.getElementById('ajax-toast-notification');
-                if (existing) existing.remove();
+        window.showToast = function(message, type = 'success') {
+            const existing = document.getElementById('ajax-toast-notification');
+            if (existing) existing.remove();
 
-                const toast = document.createElement('div');
-                toast.id = 'ajax-toast-notification';
-                toast.className = `alert flex items-center space-x-2 rounded-lg border p-4 shadow-xl fixed top-5 right-5 z-50 transition-all duration-300 transform translate-y-0 ${
-                    type === 'success' ? 'border-success bg-white text-success dark:bg-navy-700' : 'border-error bg-white text-error dark:bg-navy-700'
-                }`;
-                toast.innerHTML = `
-                    <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation'} text-lg"></i>
-                    <p class="font-medium text-sm">${message}</p>
-                `;
-                document.body.appendChild(toast);
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transform = 'translateY(-10px)';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
+            const toast = document.createElement('div');
+            toast.id = 'ajax-toast-notification';
+            toast.style.zIndex = '99999';
+            toast.className = `flex items-center space-x-3 rounded-xl border px-4 py-3 shadow-2xl fixed top-6 right-6 transition-all duration-300 transform translate-y-0 ${
+                type === 'success' 
+                    ? 'border-emerald-500/30 bg-emerald-50 text-emerald-800 dark:bg-navy-700 dark:text-emerald-300 dark:border-emerald-500/40' 
+                    : 'border-rose-500/30 bg-rose-50 text-rose-800 dark:bg-navy-700 dark:text-rose-300 dark:border-rose-500/40'
+            }`;
+            toast.innerHTML = `
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg ${type === 'success' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}">
+                    <i class="fa-solid ${type === 'success' ? 'fa-check' : 'fa-xmark'} text-sm"></i>
+                </div>
+                <div>
+                    <h5 class="text-xs font-bold uppercase tracking-wider ${type === 'success' ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'}">${type === 'success' ? 'Berhasil' : 'Gagal'}</h5>
+                    <p class="text-xs font-medium">${message}</p>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-15px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        };
 
             async function handleFormSubmit(form, onSuccess) {
                 const submitBtn = form.querySelector('button[type="submit"]');
@@ -384,6 +561,12 @@
                 }
 
                 try {
+                    const formData = new FormData(form);
+                    const methodInput = form.querySelector('input[name="_method"]');
+                    if (methodInput && methodInput.value) {
+                        formData.set('_method', methodInput.value);
+                    }
+
                     const response = await fetch(form.action, {
                         method: 'POST',
                         headers: {
@@ -391,7 +574,7 @@
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json'
                         },
-                        body: new FormData(form)
+                        body: formData
                     });
 
                     const data = await response.json();
@@ -399,11 +582,12 @@
                         showToast(data.message || 'Operation completed successfully.', 'success');
                         if (onSuccess) onSuccess(data);
                     } else {
+                        console.error('Save failed response:', data);
                         showToast(data.message || 'Error occurred. Please check input.', 'error');
                     }
                 } catch (err) {
-                    console.error(err);
-                    showToast('Network error or server failed to respond.', 'error');
+                    console.error('Submit error:', err);
+                    showToast('Network error or server failed to respond: ' + err.message, 'error');
                 } finally {
                     if (submitBtn) {
                         submitBtn.disabled = false;
@@ -412,24 +596,87 @@
                 }
             }
 
-            // Add Layout Form
-            const addForm = document.getElementById('add-layout-form');
-            if (addForm) {
-                addForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    handleFormSubmit(this, function () {
-                        setTimeout(() => window.location.reload(), 500);
-                    });
+            const sectionSelectAdd = document.getElementById('sectionSelect');
+            if (sectionSelectAdd) {
+                sectionSelectAdd.addEventListener('change', function () {
+                    updateSectionPreview(this);
                 });
             }
 
-            // Update Layout Forms
-            document.querySelectorAll('.layout-update-form').forEach(form => {
-                form.addEventListener('submit', function (e) {
+            // Global updateSectionPreviewEdit for Edit
+            window.updateSectionPreviewEdit = function (selectElement, layoutId) {
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                const imageUrl = selectedOption ? selectedOption.getAttribute('data-image') : '';
+
+                const previewContainer = document.getElementById(`previewContainerUpdate-${layoutId}`);
+                const previewImage = document.getElementById(`sectionPreviewImageUpdate-${layoutId}`);
+
+                if (selectElement.value && imageUrl) {
+                    previewImage.src = imageUrl;
+                    previewContainer.classList.remove('hidden');
+                } else {
+                    previewContainer.classList.add('hidden');
+                }
+
+                // Load dynamic fields for edit (use embedded server data for reliable content matching)
+                const containerEl = document.getElementById(`dynamicFieldsContainerUpdate-${layoutId}`);
+                const listEl = document.getElementById(`dynamicFieldsListUpdate-${layoutId}`);
+                const contentTextarea = document.getElementById(`contentUpdate-${layoutId}`);
+                const existingJson = JSON.stringify((window.__layoutContentData && window.__layoutContentData[layoutId]) || {});
+                window.loadSectionContents(selectElement.value, containerEl, listEl, contentTextarea, existingJson);
+            };
+
+            // Layout content data embedded from server (reliable, no DOM parsing issues)
+            window.__layoutContentData = {
+                @foreach($layouts as $layout)
+                    '{{ $layout->id }}': @json(json_decode($layout->content, true) ?: new \stdClass),
+                @endforeach
+            };
+
+            // Auto initialize Edit forms on page load
+            document.querySelectorAll('[id^="sectionSelectUpdate-"]').forEach(selectEl => {
+                const layoutId = selectEl.id.replace('sectionSelectUpdate-', '');
+                const containerEl = document.getElementById(`dynamicFieldsContainerUpdate-${layoutId}`);
+                const listEl = document.getElementById(`dynamicFieldsListUpdate-${layoutId}`);
+                const contentTextarea = document.getElementById(`contentUpdate-${layoutId}`);
+                if (selectEl.value && containerEl && listEl && contentTextarea) {
+                    const existingJson = JSON.stringify(window.__layoutContentData[layoutId] || {});
+                    window.loadSectionContents(selectEl.value, containerEl, listEl, contentTextarea, existingJson);
+                }
+            });
+
+            // Global submit delegation to ensure no form submit is missed
+            document.addEventListener('submit', function (e) {
+                const targetForm = e.target;
+                if (!targetForm) return;
+
+                if (targetForm.id === 'add-layout-form') {
                     e.preventDefault();
-                    const layoutId = this.dataset.layoutId;
-                    handleFormSubmit(this, function (data) {
+                    handleFormSubmit(targetForm, function () {
+                        setTimeout(() => window.location.reload(), 500);
+                    });
+                } else if (targetForm.classList.contains('layout-update-form')) {
+                    e.preventDefault();
+                    const layoutId = targetForm.dataset.layoutId;
+                    handleFormSubmit(targetForm, function (data) {
                         if (data.layout) {
+                            if (data.layout.content) {
+                                try {
+                                    window.__layoutContentData[layoutId] = JSON.parse(data.layout.content);
+                                } catch (err) {}
+                                const textareaEl = document.getElementById(`contentUpdate-${layoutId}`);
+                                if (textareaEl) {
+                                    textareaEl.value = data.layout.content;
+                                }
+                            }
+                            const selectEl = document.getElementById(`sectionSelectUpdate-${layoutId}`);
+                            const containerEl = document.getElementById(`dynamicFieldsContainerUpdate-${layoutId}`);
+                            const listEl = document.getElementById(`dynamicFieldsListUpdate-${layoutId}`);
+                            const contentTextarea = document.getElementById(`contentUpdate-${layoutId}`);
+                            if (selectEl && selectEl.value && containerEl && listEl && contentTextarea) {
+                                const updatedJson = JSON.stringify(window.__layoutContentData[layoutId] || {});
+                                window.loadSectionContents(selectEl.value, containerEl, listEl, contentTextarea, updatedJson);
+                            }
                             const statusEl = document.getElementById(`layout-status-${layoutId}`);
                             if (statusEl) {
                                 statusEl.textContent = data.layout.status ? 'Active' : 'Inactive';
@@ -439,16 +686,11 @@
                             }
                         }
                     });
-                });
-            });
-
-            // Delete Layout Forms
-            document.querySelectorAll('.layout-delete-form').forEach(form => {
-                form.addEventListener('submit', function (e) {
+                } else if (targetForm.classList.contains('layout-delete-form')) {
                     e.preventDefault();
                     if (!confirm('Are you sure you want to delete this layout item?')) return;
-                    const layoutId = this.dataset.layoutId;
-                    handleFormSubmit(this, function () {
+                    const layoutId = targetForm.dataset.layoutId;
+                    handleFormSubmit(targetForm, function () {
                         const row = document.getElementById(`layout-row-${layoutId}`);
                         if (row) {
                             row.style.transition = 'all 0.3s ease';
@@ -457,7 +699,7 @@
                             setTimeout(() => row.remove(), 300);
                         }
                     });
-                });
+                }
             });
         });
     </script>

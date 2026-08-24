@@ -214,42 +214,18 @@ class CustomersWebController extends Controller
 
         $dynamicData = [];
         if ($request->has('dynamic_content') && is_array($request->dynamic_content)) {
-            foreach ($request->dynamic_content as $k => $v) {
-                if (is_string($v) && (str_starts_with(trim($v), '[') || str_starts_with(trim($v), '{'))) {
-                    $decodedVal = json_decode($v, true);
-                    $dynamicData[$k] = (json_last_error() === JSON_ERROR_NONE) ? $decodedVal : $v;
-                } else {
-                    $dynamicData[$k] = $v;
-                }
-            }
+            $dynamicData = $request->dynamic_content;
         }
 
         if ($request->hasFile('dynamic_files')) {
-            $website = CustomersWebsite::find($id);
-            $domainFolder = $website ? $website->domain : null;
-
-            if (!empty($domainFolder)) {
-                $targetDir = public_path('images/website/' . $domainFolder);
-                if (!file_exists($targetDir)) {
-                    mkdir($targetDir, 0755, true);
-                }
-                foreach ($request->file('dynamic_files') as $key => $file) {
-                    if ($file->isValid()) {
-                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                        $file->move($targetDir, $filename);
-                        $dynamicData[$key] = $filename;
-                    }
-                }
-            } else {
-                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
-                }
-                foreach ($request->file('dynamic_files') as $key => $file) {
-                    if ($file->isValid()) {
-                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                        $path = $file->storeAs('layout_content', $filename, 'public');
-                        $dynamicData[$key] = $path;
-                    }
+            if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
+            }
+            foreach ($request->file('dynamic_files') as $key => $file) {
+                if ($file->isValid()) {
+                    $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('layout_content', $filename, 'public');
+                    $dynamicData[$key] = $path;
                 }
             }
         }
@@ -310,60 +286,18 @@ class CustomersWebController extends Controller
 
         $dynamicData = [];
         if ($request->has('dynamic_content') && is_array($request->dynamic_content)) {
-            foreach ($request->dynamic_content as $k => $v) {
-                if (is_string($v) && (str_starts_with(trim($v), '['))) {
-                    $decodedVal = json_decode($v, true);
-                    $dynamicData[$k] = (json_last_error() === JSON_ERROR_NONE) ? $decodedVal : $v;
-                } else if (is_string($v) && (str_starts_with(trim($v), '{'))) {
-                    $decodedVal = json_decode($v, true);
-                    $dynamicData[$k] = (json_last_error() === JSON_ERROR_NONE) ? $decodedVal : $v;
-                } else {
-                    $dynamicData[$k] = $v;
-                }
-            }
+            $dynamicData = $request->dynamic_content;
         }
 
         if ($request->hasFile('dynamic_files')) {
-            $website = CustomersWebsite::find($id);
-            $domainFolder = $website ? $website->domain : null;
-
-            if (!empty($domainFolder)) {
-                $targetDir = public_path('images/website/' . $domainFolder);
-                if (!file_exists($targetDir)) {
-                    mkdir($targetDir, 0755, true);
-                }
-                foreach ($request->file('dynamic_files') as $key => $file) {
-                    if ($file->isValid()) {
-                        // Delete old file if existing for this key
-                        if (!empty($existingData[$key]) && is_string($existingData[$key])) {
-                            $oldFilePath = $targetDir . '/' . basename($existingData[$key]);
-                            if (file_exists($oldFilePath) && is_file($oldFilePath)) {
-                                @unlink($oldFilePath);
-                            }
-                        }
-
-                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                        $file->move($targetDir, $filename);
-                        $dynamicData[$key] = $filename;
-                    }
-                }
-            } else {
-                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
-                }
-                foreach ($request->file('dynamic_files') as $key => $file) {
-                    if ($file->isValid()) {
-                        // Delete old file if existing
-                        if (!empty($existingData[$key]) && is_string($existingData[$key])) {
-                            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($existingData[$key])) {
-                                \Illuminate\Support\Facades\Storage::disk('public')->delete($existingData[$key]);
-                            }
-                        }
-
-                        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                        $path = $file->storeAs('layout_content', $filename, 'public');
-                        $dynamicData[$key] = $path;
-                    }
+            if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
+                \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
+            }
+            foreach ($request->file('dynamic_files') as $key => $file) {
+                if ($file->isValid()) {
+                    $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $path = $file->storeAs('layout_content', $filename, 'public');
+                    $dynamicData[$key] = $path;
                 }
             }
         }
@@ -377,9 +311,11 @@ class CustomersWebController extends Controller
             }
         }
 
-        // Combine inputs: dynamicData (form inputs) takes precedence over contentInputData (textarea), which takes precedence over existing DB data
-        $merged = array_merge($existingData, $contentInputData, $dynamicData);
-        if (!empty($merged)) {
+        if (!empty($dynamicData)) {
+            $merged = array_merge($existingData, $contentInputData, $dynamicData);
+            $finalContent = json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        } else if (!empty($contentInputData)) {
+            $merged = array_merge($existingData, $contentInputData);
             $finalContent = json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         }
 
@@ -406,29 +342,6 @@ class CustomersWebController extends Controller
     public function layoutDestroy(Request $request, $id, $page_type, $layoutId)
     {
         $layout = CustomersWebsiteLayout::where('customers_website_id', $id)->findOrFail($layoutId);
-        
-        if (!empty($layout->content)) {
-            $contentData = json_decode($layout->content, true);
-            if (is_array($contentData)) {
-                $website = CustomersWebsite::find($id);
-                $domainFolder = $website ? $website->domain : null;
-
-                foreach ($contentData as $val) {
-                    if (is_string($val) && !empty($val)) {
-                        if (!empty($domainFolder)) {
-                            $filePath = public_path('images/website/' . $domainFolder . '/' . basename($val));
-                            if (file_exists($filePath) && is_file($filePath)) {
-                                @unlink($filePath);
-                            }
-                        }
-                        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($val)) {
-                            \Illuminate\Support\Facades\Storage::disk('public')->delete($val);
-                        }
-                    }
-                }
-            }
-        }
-
         $layout->delete();
 
         if ($request->expectsJson() || $request->ajax()) {

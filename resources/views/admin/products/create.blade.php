@@ -97,6 +97,25 @@
                         </div>
                     </div>
 
+                    {{-- Row 4: Product Reviews Section (Repeater) --}}
+                    <div class="border-t border-slate-200 dark:border-navy-500 pt-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100 flex items-center gap-2">
+                                    <i class="fa-solid fa-star text-amber-400"></i> Product Reviews (Optional)
+                                </h3>
+                                <p class="text-xs text-slate-400">Tambahkan ulasan / review produk untuk ditampilkan pada website.</p>
+                            </div>
+                            <button type="button" onclick="addReviewItem()" class="btn bg-primary text-white hover:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus text-xs font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-xs"></i> Add Review
+                            </button>
+                        </div>
+
+                        <div id="reviews-repeater-container" class="space-y-4">
+                            <p id="no-reviews-text" class="text-xs text-slate-400 italic">Belum ada review ditambahkan. Klik "Add Review" untuk menambahkan.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -132,6 +151,132 @@
                 });
             } else {
                 previewContainer.classList.add('hidden');
+            }
+        }
+        let reviewCount = 0;
+
+        function addReviewItem() {
+            const container = document.getElementById('reviews-repeater-container');
+            const noReviewsText = document.getElementById('no-reviews-text');
+            if (noReviewsText) noReviewsText.classList.add('hidden');
+
+            const index = reviewCount++;
+            const itemDiv = document.createElement('div');
+            itemDiv.id = `review-item-${index}`;
+            itemDiv.className = 'p-4 border border-slate-200 dark:border-navy-500 rounded-xl bg-slate-50/50 dark:bg-navy-800 space-y-3 relative';
+
+            itemDiv.innerHTML = `
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-navy-600 pb-2">
+                    <span class="text-xs font-bold text-slate-700 dark:text-navy-100 uppercase tracking-wider">Review #${index + 1}</span>
+                    <button type="button" onclick="removeReviewItem(${index})" class="text-xs text-red-500 hover:text-red-700 font-medium flex items-center gap-1">
+                        <i class="fa-solid fa-trash"></i> Remove
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                    {{-- Rating --}}
+                    <div class="sm:col-span-3">
+                        <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Rating (1-5 Star) <span class="text-red-500">*</span></label>
+                        <select name="reviews[${index}][rating]" required class="form-select w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700">
+                            <option value="5" selected>⭐⭐⭐⭐⭐ (5 Star)</option>
+                            <option value="4">⭐⭐⭐⭐ (4 Star)</option>
+                            <option value="3">⭐⭐⭐ (3 Star)</option>
+                            <option value="2">⭐⭐ (2 Star)</option>
+                            <option value="1">⭐ (1 Star)</option>
+                        </select>
+                    </div>
+
+                    {{-- Reviewer Name --}}
+                    <div class="sm:col-span-4">
+                        <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Reviewer Name <span class="text-red-500">*</span></label>
+                        <input type="text" name="reviews[${index}][name]" required placeholder="Name (e.g. Sarah J.)" class="form-input w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700" />
+                    </div>
+
+                    {{-- Status --}}
+                    <div class="sm:col-span-3 flex items-end pb-1">
+                        <label class="inline-flex items-center space-x-2 cursor-pointer">
+                            <input type="hidden" name="reviews[${index}][status]" value="0" />
+                            <input type="checkbox" name="reviews[${index}][status]" value="1" checked class="form-checkbox is-outline h-4 w-4 rounded border-slate-300 text-primary dark:border-navy-450 dark:checked:bg-accent" />
+                            <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Status (Active)</span>
+                        </label>
+                    </div>
+
+                    {{-- Profile Photo --}}
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Profile Photo</label>
+                        <input type="file" name="reviews[${index}][profile_photo]" accept="image/*" class="form-input w-full rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700" onchange="previewProfilePhoto(event, ${index})" />
+                        <div id="review-profile-preview-${index}" class="hidden mt-1 flex items-center space-x-2">
+                            <img src="" class="h-8 w-8 object-cover rounded-full border border-slate-200" />
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Comment --}}
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Comment / Review Text</label>
+                    <textarea name="reviews[${index}][comment]" rows="2" placeholder="Tuliskan ulasan / review..." class="form-textarea w-full rounded-lg border border-slate-300 bg-white p-2 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700"></textarea>
+                </div>
+
+                {{-- Multiple Review Photos --}}
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Review Photos (Multiple)</label>
+                    <input type="file" name="reviews[${index}][photos][]" accept="image/*" multiple class="form-input w-full rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700" onchange="previewReviewPhotos(event, ${index})" />
+                    <div id="review-photos-preview-${index}" class="hidden mt-2 flex flex-wrap gap-2"></div>
+                </div>
+            `;
+
+            container.appendChild(itemDiv);
+        }
+
+        function removeReviewItem(index) {
+            const itemDiv = document.getElementById(`review-item-${index}`);
+            if (itemDiv) itemDiv.remove();
+
+            const container = document.getElementById('reviews-repeater-container');
+            if (container.children.length === 0 || (container.children.length === 1 && container.children[0].id === 'no-reviews-text')) {
+                const noReviewsText = document.getElementById('no-reviews-text');
+                if (noReviewsText) noReviewsText.classList.remove('hidden');
+            }
+        }
+
+        function previewProfilePhoto(event, index) {
+            const input = event.target;
+            const container = document.getElementById(`review-profile-preview-${index}`);
+            if (!container) return;
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = container.querySelector('img');
+                    img.src = e.target.result;
+                    container.classList.remove('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function previewReviewPhotos(event, index) {
+            const input = event.target;
+            const container = document.getElementById(`review-photos-preview-${index}`);
+            if (!container) return;
+
+            container.innerHTML = '';
+            if (input.files && input.files.length > 0) {
+                container.classList.remove('hidden');
+                Array.from(input.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'h-16 w-16 object-cover rounded-lg border border-slate-200 shadow-sm';
+                        container.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                container.classList.add('hidden');
             }
         }
     </script>
