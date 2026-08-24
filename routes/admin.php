@@ -15,6 +15,8 @@ use App\Http\Controllers\admin\CustomersController;
 use App\Http\Controllers\admin\CustomersWebController;
 use App\Http\Controllers\admin\LeadsTrackerController;
 
+use App\Http\Controllers\admin\CategoryProductController;
+
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -29,8 +31,29 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-
-    Route::get('products', [ProductsController::class, 'index'])->name('products');
+    // Category Product
+    Route::get('/category-product', [CategoryProductController::class, 'index'])->name('category-product');
+    Route::get('/category-product/index', [CategoryProductController::class, 'index'])->name('category-product.index');
+    Route::get('/category-product/get-data', [CategoryProductController::class, 'getData'])->name('category-product.getData');
+    Route::get('/category-product/get-dataRecycle', [CategoryProductController::class, 'getDataRecycle'])->name('category-product.getDataRecycle');
+    Route::get('/category-product/create', [CategoryProductController::class, 'create'])->name('category-product.create');
+    Route::get('/category-product/recycle', [CategoryProductController::class, 'recycle'])->name('category-product.recycle');
+    Route::post('/category-product/restore/{id}', [CategoryProductController::class, 'restore'])->name('category-product.restore');
+    Route::post('/category-product', [CategoryProductController::class, 'store'])->name('category-product.store');
+    Route::get('/category-product/{category_product}/edit', [CategoryProductController::class, 'edit'])->name('category-product.edit');
+    Route::put('/category-product/{category_product}', [CategoryProductController::class, 'update'])->name('category-product.update');
+    // Products
+    Route::get('/products', [ProductsController::class, 'index'])->name('products');
+    Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
+    Route::get('/products/get-data', [ProductsController::class, 'getData'])->name('products.getData');
+    Route::get('/products/get-dataRecycle', [ProductsController::class, 'getDataRecycle'])->name('products.getDataRecycle');
+    Route::get('/products/create', [ProductsController::class, 'create'])->name('products.create');
+    Route::get('/products/recycle', [ProductsController::class, 'recycle'])->name('products.recycle');
+    Route::post('/products/restore/{id}', [ProductsController::class, 'restore'])->name('products.restore');
+    Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [ProductsController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     Route::get('template', [TemplateController::class, 'index'])->name('template');
     Route::get('template/create', [TemplateController::class, 'create'])->name('template.create');

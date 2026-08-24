@@ -1,9 +1,8 @@
 <x-app-layout>
     @include('components.forms.tittle')
 
-    <form action="{{ route('admin.' . $modul . '.update', $product) }}" method="POST" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.' . $modul . '.store') }}" enctype="multipart/form-data">
         @csrf
-        @method('PUT')
         <div class="card p-4 sm:p-5">
             <div class="col-span-12 flex-1 flex flex-col" style="min-width:0;">
                 <div class="card flex flex-col space-y-6 h-full p-6">
@@ -16,7 +15,7 @@
                             <select name="category_products_id" required class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
                                 <option value="">-- Select Category --</option>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('category_products_id', $product->category_products_id) == $cat->id ? 'selected' : '' }}>
+                                    <option value="{{ $cat->id }}" {{ old('category_products_id') == $cat->id ? 'selected' : '' }}>
                                         {{ $cat->name }} {{ $cat->code ? '('.$cat->code.')' : '' }}
                                     </option>
                                 @endforeach
@@ -26,10 +25,10 @@
                             @enderror
                         </label>
 
-                        {{-- Code --}}
+                        {{-- Auto Code --}}
                         <label class="block space-y-1.5">
                             <span>Code <span class="text-red-500">*</span></span>
-                            <x-input name="code" value="{{ old('code', $product->code) }}" placeholder="Enter Product Code" autocomplete="off" required readonly class="bg-slate-100 dark:bg-navy-600 font-semibold text-slate-700 dark:text-navy-100" />
+                            <x-input name="code" placeholder="Auto Generated Code" autocomplete="off" required value="{{ old('code', $autoCode) }}" readonly class="bg-slate-100 dark:bg-navy-600 font-semibold text-slate-700 dark:text-navy-100" />
                             @error('code')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
@@ -38,7 +37,7 @@
                         {{-- Product Name --}}
                         <label class="block space-y-1.5">
                             <span>Product Name <span class="text-red-500">*</span></span>
-                            <x-input name="name" value="{{ old('name', $product->name) }}" placeholder="Enter Product Name" autocomplete="off" required />
+                            <x-input name="name" placeholder="Enter Product Name" autocomplete="off" required value="{{ old('name') }}" />
                             @error('name')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
@@ -47,14 +46,14 @@
                         {{-- Price --}}
                         <label class="block space-y-1.5">
                             <span>Price (Rp) <span class="text-red-500">*</span></span>
-                            <x-input type="number" step="0.01" min="0" name="price" value="{{ old('price', $product->price) }}" placeholder="Enter Price" autocomplete="off" required />
+                            <x-input type="number" step="0.01" min="0" name="price" placeholder="Enter Price (e.g. 150000)" autocomplete="off" required value="{{ old('price') }}" />
                             @error('price')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </label>
                     </div>
 
-                    {{-- Row 2: Description --}}
+                    {{-- Row 2: Description (Nullable) --}}
                     <div class="grid grid-cols-1 gap-4">
                         <label class="block space-y-1.5">
                             <span>Description (Optional)</span>
@@ -63,34 +62,17 @@
                                 rows="4"
                                 placeholder="Enter Product Description"
                                 class="form-textarea w-full rounded-lg border border-slate-300 bg-transparent p-2.5 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                            >{{ old('description', $product->description) }}</textarea>
+                            >{{ old('description') }}</textarea>
                             @error('description')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </label>
                     </div>
 
-                    {{-- Row 3: Current Images & Add New Images --}}
+                    {{-- Row 3: Multiple Images Upload (Nullable) --}}
                     <div class="grid grid-cols-1 gap-4">
-                        @if(!empty($product->images) && is_array($product->images) && count($product->images) > 0)
-                            <div>
-                                <span class="text-xs font-medium text-slate-600 dark:text-navy-100 block mb-2">Existing Images:</span>
-                                <div class="flex flex-wrap gap-4">
-                                    @foreach($product->images as $img)
-                                        <div class="relative group border border-slate-200 rounded-lg p-1 bg-slate-50 dark:bg-navy-700 shadow-sm" id="img-container-{{ loop->index }}">
-                                            <img src="{{ asset('storage/' . $img) }}" alt="Product Image" class="h-24 w-24 object-cover rounded-md" />
-                                            <label class="mt-1 flex items-center justify-center space-x-1 cursor-pointer text-xs text-red-500 hover:text-red-700">
-                                                <input type="checkbox" name="deleted_images[]" value="{{ $img }}" class="form-checkbox text-red-500 rounded" />
-                                                <span>Delete</span>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-
-                        <label class="block space-y-1.5 mt-2">
-                            <span>Upload Additional Images (Multiple - Optional)</span>
+                        <label class="block space-y-1.5">
+                            <span>Images (Multiple - Optional)</span>
                             <input
                                 type="file"
                                 name="images[]"
@@ -100,14 +82,17 @@
                                 class="form-input w-full rounded-lg border border-slate-300 bg-transparent p-2 hover:border-slate-400 focus:border-primary dark:border-navy-450"
                                 onchange="previewMultipleImages(event)"
                             />
-                            <p class="text-xs text-slate-400 mt-1">Select new images to append. Allowed formats: JPG, JPEG, PNG, GIF, WEBP, SVG (Max: 2MB per file)</p>
+                            <p class="text-xs text-slate-400 mt-1">Select one or more images. Allowed formats: JPG, JPEG, PNG, GIF, WEBP, SVG (Max: 2MB per file)</p>
                             @error('images')
+                                <span class="text-xs text-red-500">{{ $message }}</span>
+                            @enderror
+                            @error('images.*')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </label>
 
                         <div id="images-preview-container" class="hidden mt-2">
-                            <span class="text-xs font-medium text-slate-600 dark:text-navy-100 block mb-2">New Images Preview:</span>
+                            <span class="text-xs font-medium text-slate-600 dark:text-navy-100 block mb-2">Images Preview:</span>
                             <div id="images-preview-grid" class="flex flex-wrap gap-3"></div>
                         </div>
                     </div>
@@ -116,7 +101,7 @@
             </div>
         </div>
 
-        @include('components.forms.update')
+        @include('components.forms.save')
     </form>
 
     @push('scripts')
