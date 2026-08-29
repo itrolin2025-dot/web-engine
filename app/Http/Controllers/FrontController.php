@@ -65,12 +65,31 @@ class FrontController extends Controller
                 ->where('customers_id', $website->customer_id)
                 ->whereNull('deleted_at')
                 ->get();
+
+            $article_categories = DB::table('article_categories')
+                ->where('customers_id', $website->customer_id)
+                ->whereNull('deleted_at')
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('articles')
+                        ->whereColumn('articles.article_categories_id', 'article_categories.id')
+                        ->whereNull('articles.deleted_at');
+                })
+                ->get();
+
+            $articles = DB::table('articles')
+                ->where('customers_id', $website->customer_id)
+                ->whereNull('deleted_at')
+                ->get();
+
         } else {
             $categories = collect();
             $products = collect();
+            $article_categories = collect();
+            $articles = collect();
         }
 
-        return view('template.index', compact('title', 'website', 'layouts', 'categories', 'products'));
+        return view('template.index', compact('title', 'website', 'layouts', 'categories', 'products', 'article_categories', 'articles'));
     }
 
     public function selectLayout($client = null)

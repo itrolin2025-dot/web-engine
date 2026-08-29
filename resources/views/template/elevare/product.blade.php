@@ -1,4 +1,3 @@
-
 @php
     $rawContent = $layout->content ?? '';
 
@@ -157,6 +156,7 @@
                         </div>
                         <!-- Add to Cart Button -->
                         <button
+                            onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $image }}')"
                             class="w-full py-2.5 border border-gray-400 rounded-full text-[11px] font-semibold text-gray-700 tracking-wider hover:bg-gray-900 hover:text-white hover:border-gray-900 transition duration-200 uppercase">
                             ADD TO CART
                         </button>
