@@ -10,18 +10,18 @@
                     
                     {{-- Row 1: Customer, Category, Code, Name, Price --}}
                     <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
-                        {{-- Customer Select --}}
+                        {{-- Website Select --}}
                         <label class="block space-y-1.5">
-                            <span>Customer <span class="text-red-500">*</span></span>
-                            <select name="customers_id" id="customer-select" required onchange="loadCategoriesByCustomer(this.value)" class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
-                                <option value="">-- Select Customer --</option>
-                                @foreach($customers as $cust)
-                                    <option value="{{ $cust->id }}" {{ old('customers_id', $product->customers_id) == $cust->id ? 'selected' : '' }}>
-                                        {{ $cust->name }} {{ $cust->code ? '('.$cust->code.')' : '' }}
+                            <span>Website <span class="text-red-500">*</span></span>
+                            <select name="customers_website_id" id="customer-select" required onchange="loadCategoriesByCustomer(this.value)" class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
+                                <option value="">-- Select Website --</option>
+                                @foreach($customers_websites as $cust)
+                                    <option value="{{ $cust->id }}" {{ old('customers_website_id', $product->customers_website_id) == $cust->id ? 'selected' : '' }}>
+                                        {{ $cust->title }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('customers_id')
+                            @error('customers_website_id')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </label>

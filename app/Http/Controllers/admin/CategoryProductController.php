@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CategoryProduct;
-use App\Models\Customer;
+use App\Models\CustomersWebsite;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -84,11 +84,11 @@ class CategoryProductController extends Controller
             }
         }
 
-        $customers = Customer::orderBy('name', 'asc')->get();
+        $customers_websites = CustomersWebsite::orderBy('title', 'asc')->get();
         $autoCode = $this->generateUniqueCode();
 
         return view($this->path . '.create', [
-            'customers'     => $customers,
+            'customers_websites'     => $customers_websites,
             'autoCode'      => $autoCode,
             'modul'         => $this->modul,
             'modul_path'    => $this->path,
@@ -100,7 +100,7 @@ class CategoryProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customers_website_id' => 'required|exists:customers_website,id',
             'code'        => 'required|string|max:100|unique:category_products,code',
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -122,7 +122,7 @@ class CategoryProductController extends Controller
             }
 
             $categoryProduct = CategoryProduct::create([
-                'customers_id' => $request->customer_id,
+                'customers_website_id' => $request->customers_website_id,
                 'code'         => $request->code,
                 'name'         => $request->name,
                 'description'  => $request->description,
@@ -135,7 +135,7 @@ class CategoryProductController extends Controller
                 $this->modul,
                 'create',
                 $categoryProduct->id,
-                ['name' => $categoryProduct->name, 'code' => $categoryProduct->code, 'customers_id' => $categoryProduct->customers_id],
+                ['name' => $categoryProduct->name, 'code' => $categoryProduct->code, 'customers_website_id' => $categoryProduct->customers_website_id],
                 auth()->id()
             );
 
@@ -157,11 +157,11 @@ class CategoryProductController extends Controller
             }
         }
 
-        $customers = Customer::orderBy('name', 'asc')->get();
+        $customers_websites = CustomersWebsite::orderBy('title', 'asc')->get();
 
         return view($this->path . '.edit', [
             'category_product' => $category_product,
-            'customers'        => $customers,
+            'customers_websites'        => $customers_websites,
             'modul'            => $this->modul,
             'modul_path'       => $this->path,
             'modul_name'       => $this->modul_name,
@@ -172,7 +172,7 @@ class CategoryProductController extends Controller
     public function update(Request $request, CategoryProduct $category_product)
     {
         $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customers_website_id' => 'required|exists:customers_website,id',
             'code'        => 'required|string|max:100|unique:category_products,code,' . $category_product->id,
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -197,7 +197,7 @@ class CategoryProductController extends Controller
             }
 
             $category_product->update([
-                'customers_id' => $request->customer_id,
+                'customers_website_id' => $request->customers_website_id,
                 'code'         => $request->code,
                 'name'         => $request->name,
                 'description'  => $request->description,
@@ -210,7 +210,7 @@ class CategoryProductController extends Controller
                 $this->modul,
                 'update',
                 $category_product->id,
-                ['name' => $category_product->name, 'code' => $category_product->code, 'customers_id' => $category_product->customers_id],
+                ['name' => $category_product->name, 'code' => $category_product->code, 'customers_website_id' => $category_product->customers_website_id],
                 auth()->id()
             );
 
@@ -245,10 +245,10 @@ class CategoryProductController extends Controller
     {
         $role_id = $this->getRoleId();
         $query = DB::table('category_products')
-            ->leftJoin('customers', 'customers.id', '=', 'category_products.customers_id')
+            ->leftJoin('customers_website', 'customers_website.id', '=', 'category_products.customers_website_id')
             ->select([
                 'category_products.*',
-                'customers.name as customer_name'
+                'customers_website.title as customer_name'
             ])
             ->whereNull('category_products.deleted_at');
 
@@ -256,7 +256,7 @@ class CategoryProductController extends Controller
             $query->where(function ($q) use ($request) {
                 $q->where('category_products.name', 'like', "%{$request->filter_name}%")
                   ->orWhere('category_products.code', 'like', "%{$request->filter_name}%")
-                  ->orWhere('customers.name', 'like', "%{$request->filter_name}%");
+                  ->orWhere('customers_website.title', 'like', "%{$request->filter_name}%");
             });
         }
 
@@ -337,10 +337,10 @@ class CategoryProductController extends Controller
     public function getDataRecycle(Request $request)
     {
         $query = DB::table('category_products')
-            ->leftJoin('customers', 'customers.id', '=', 'category_products.customers_id')
+            ->leftJoin('customers_website', 'customers_website.id', '=', 'category_products.customers_website_id')
             ->select([
                 'category_products.*',
-                'customers.name as customer_name'
+                'customers_website.title as customer_name'
             ])
             ->whereNotNull('category_products.deleted_at');
 
@@ -348,7 +348,7 @@ class CategoryProductController extends Controller
             $query->where(function ($q) use ($request) {
                 $q->where('category_products.name', 'like', "%{$request->filter_name}%")
                   ->orWhere('category_products.code', 'like', "%{$request->filter_name}%")
-                  ->orWhere('customers.name', 'like', "%{$request->filter_name}%");
+                  ->orWhere('customers_website.title', 'like', "%{$request->filter_name}%");
             });
         }
 

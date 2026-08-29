@@ -10,18 +10,18 @@
                     
                     {{-- Customer & Name --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {{-- Customer Select --}}
+                        {{-- Website Select --}}
                         <label class="block space-y-1.5">
-                            <span>Customer <span class="text-red-500">*</span></span>
-                            <select name="customer_id" required class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
-                                <option value="">-- Select Customer --</option>
-                                @foreach($customers as $cust)
-                                    <option value="{{ $cust->id }}" {{ old('customer_id', $article_category->customers_id) == $cust->id ? 'selected' : '' }}>
-                                        {{ $cust->name }} {{ $cust->code ? '('.$cust->code.')' : '' }}
+                            <span>Website <span class="text-red-500">*</span></span>
+                            <select name="customers_website_id" required class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
+                                <option value="">-- Select Website --</option>
+                                @foreach($customers_websites as $cust)
+                                    <option value="{{ $cust->id }}" {{ old('customers_website_id', $article_category->customers_website_id) == $cust->id ? 'selected' : '' }}>
+                                        {{ $cust->title }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('customer_id')
+                            @error('customers_website_id')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             @enderror
                         </label>

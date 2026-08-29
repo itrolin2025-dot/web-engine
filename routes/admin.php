@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/articles/recycle', [ArticlesController::class, 'recycle'])->name('articles.recycle');
     Route::post('/articles/restore/{id}', [ArticlesController::class, 'restore'])->name('articles.restore');
     Route::post('/articles', [ArticlesController::class, 'store'])->name('articles.store');
-    Route::get('/articles/get-categories/{customer_id?}', [ArticlesController::class, 'getCategoriesByCustomer'])->name('articles.getCategories');
+    Route::get('/articles/get-categories/{customers_website_id?}', [ArticlesController::class, 'getCategoriesByCustomer'])->name('articles.getCategories');
     Route::get('/articles/{article}/edit', [ArticlesController::class, 'edit'])->name('articles.edit');
     Route::put('/articles/{article}', [ArticlesController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [ArticlesController::class, 'destroy'])->name('articles.destroy');

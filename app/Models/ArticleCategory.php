@@ -13,7 +13,7 @@ class ArticleCategory extends Model
     protected $table = 'article_categories';
 
     protected $fillable = [
-        'customers_id',
+        'customers_website_id',
         'name',
         'description',
     ];

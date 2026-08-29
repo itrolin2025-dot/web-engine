@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ArticleCategory;
-use App\Models\Customer;
+use App\Models\CustomersWebsite;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,10 +71,10 @@ class ArticleCategoryController extends Controller
             }
         }
 
-        $customers = Customer::orderBy('name', 'asc')->get();
+        $customers_websites = CustomersWebsite::orderBy('title', 'asc')->get();
 
         return view($this->path . '.create', [
-            'customers'     => $customers,
+            'customers_websites'     => $customers_websites,
             'modul'         => $this->modul,
             'modul_path'    => $this->path,
             'modul_name'    => $this->modul_name,
@@ -85,7 +85,7 @@ class ArticleCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customers_website_id' => 'required|exists:customers_website,id',
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
@@ -93,7 +93,7 @@ class ArticleCategoryController extends Controller
         DB::beginTransaction();
         try {
             $articleCategory = ArticleCategory::create([
-                'customers_id' => $request->customer_id,
+                'customers_website_id' => $request->customers_website_id,
                 'name'         => $request->name,
                 'description'  => $request->description,
             ]);
@@ -104,7 +104,7 @@ class ArticleCategoryController extends Controller
                 $this->modul,
                 'create',
                 $articleCategory->id,
-                ['name' => $articleCategory->name, 'customers_id' => $articleCategory->customers_id],
+                ['name' => $articleCategory->name, 'customers_website_id' => $articleCategory->customers_website_id],
                 auth()->id()
             );
 
@@ -126,11 +126,11 @@ class ArticleCategoryController extends Controller
             }
         }
 
-        $customers = Customer::orderBy('name', 'asc')->get();
+        $customers_websites = CustomersWebsite::orderBy('title', 'asc')->get();
 
         return view($this->path . '.edit', [
             'article_category' => $article_category,
-            'customers'        => $customers,
+            'customers_websites'        => $customers_websites,
             'modul'            => $this->modul,
             'modul_path'       => $this->path,
             'modul_name'       => $this->modul_name,
@@ -141,7 +141,7 @@ class ArticleCategoryController extends Controller
     public function update(Request $request, ArticleCategory $article_category)
     {
         $request->validate([
-            'customer_id' => 'required|exists:customers,id',
+            'customers_website_id' => 'required|exists:customers_website,id',
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
@@ -149,7 +149,7 @@ class ArticleCategoryController extends Controller
         DB::beginTransaction();
         try {
             $article_category->update([
-                'customers_id' => $request->customer_id,
+                'customers_website_id' => $request->customers_website_id,
                 'name'         => $request->name,
                 'description'  => $request->description,
             ]);
@@ -160,7 +160,7 @@ class ArticleCategoryController extends Controller
                 $this->modul,
                 'update',
                 $article_category->id,
-                ['name' => $article_category->name, 'customers_id' => $article_category->customers_id],
+                ['name' => $article_category->name, 'customers_website_id' => $article_category->customers_website_id],
                 auth()->id()
             );
 
@@ -195,17 +195,17 @@ class ArticleCategoryController extends Controller
     {
         $role_id = $this->getRoleId();
         $query = DB::table('article_categories')
-            ->leftJoin('customers', 'customers.id', '=', 'article_categories.customers_id')
+            ->leftJoin('customers_website', 'customers_website.id', '=', 'article_categories.customers_website_id')
             ->select([
                 'article_categories.*',
-                'customers.name as customer_name'
+                'customers_website.title as customer_name'
             ])
             ->whereNull('article_categories.deleted_at');
 
         if ($request->filled('filter_name')) {
             $query->where(function ($q) use ($request) {
                 $q->where('article_categories.name', 'like', "%{$request->filter_name}%")
-                  ->orWhere('customers.name', 'like', "%{$request->filter_name}%");
+                  ->orWhere('customers_website.title', 'like', "%{$request->filter_name}%");
             });
         }
 
@@ -272,17 +272,17 @@ class ArticleCategoryController extends Controller
     public function getDataRecycle(Request $request)
     {
         $query = DB::table('article_categories')
-            ->leftJoin('customers', 'customers.id', '=', 'article_categories.customers_id')
+            ->leftJoin('customers_website', 'customers_website.id', '=', 'article_categories.customers_website_id')
             ->select([
                 'article_categories.*',
-                'customers.name as customer_name'
+                'customers_website.title as customer_name'
             ])
             ->whereNotNull('article_categories.deleted_at');
 
         if ($request->filled('filter_name')) {
             $query->where(function ($q) use ($request) {
                 $q->where('article_categories.name', 'like', "%{$request->filter_name}%")
-                  ->orWhere('customers.name', 'like', "%{$request->filter_name}%");
+                  ->orWhere('customers_website.title', 'like', "%{$request->filter_name}%");
             });
         }
 
