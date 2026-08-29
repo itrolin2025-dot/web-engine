@@ -170,9 +170,29 @@ class TemplateController extends Controller
         $template = Template::findOrFail($id);
         $sections = TemplatesSection::with('contents')->where('template_id', $id)->orderBy('position', 'asc')->get();
 
+        $contentPresets = [
+            ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
+            ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
+            ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
+            ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
+            ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
+            ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
+            ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
+            ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
+            ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
+            ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#ffffff'],
+            ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
+            ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
+        ];
+
         return view('admin.template.section', [
             'template' => $template,
             'sections' => $sections,
+            'contentPresets' => $contentPresets,
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
@@ -187,10 +207,11 @@ class TemplateController extends Controller
             'slug' => 'nullable|string|max:255',
             'position' => 'nullable|integer',
             'preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'new_content.key' => 'nullable|string|max:255',
-            'new_content.value' => 'nullable|string',
-            'new_content.type' => 'nullable|string|max:50',
-            'new_content_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'section_contents' => 'nullable|array',
+            'section_contents.*.enabled' => 'nullable',
+            'section_contents.*.key' => 'nullable|string|max:255',
+            'section_contents.*.type' => 'nullable|string|max:50',
+            'section_contents.*.value' => 'nullable|string',
         ]);
 
         $previewPath = null;
@@ -214,26 +235,18 @@ class TemplateController extends Controller
             'preview' => $previewPath,
         ]);
 
-        if ($request->has('new_content') && !empty($request->new_content['key'])) {
-            $value = $request->new_content['value'] ?? null;
-            
-            if ($request->new_content['type'] === 'image' && $request->hasFile('new_content_image')) {
-                $dir = public_path('uploads/templates');
-                if (!file_exists($dir)) {
-                    mkdir($dir, 0755, true);
+        // Save checked content presets
+        if ($request->has('section_contents') && is_array($request->section_contents)) {
+            foreach ($request->section_contents as $key => $item) {
+                if (isset($item['enabled']) && $item['enabled'] == 1 && !empty($item['key'])) {
+                    TemplatesSectionContent::create([
+                        'templates_sections_id' => $section->id,
+                        'key' => $item['key'],
+                        'type' => $item['type'] ?? 'text',
+                        'value' => $item['value'] ?? null,
+                    ]);
                 }
-                $file = $request->file('new_content_image');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->move($dir, $filename);
-                $value = 'uploads/templates/' . $filename;
             }
-
-            TemplatesSectionContent::create([
-                'templates_sections_id' => $section->id,
-                'key' => $request->new_content['key'],
-                'value' => $value,
-                'type' => $request->new_content['type'] ?? 'text',
-            ]);
         }
 
         $section->load('contents');
@@ -256,12 +269,11 @@ class TemplateController extends Controller
             'slug' => 'nullable|string|max:255',
             'position' => 'nullable|integer',
             'preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'contents' => 'nullable|array',
-            'new_content.key' => 'nullable|string|max:255',
-            'new_content.value' => 'nullable|string',
-            'new_content.type' => 'nullable|string|max:50',
-            'new_content_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-            'contents_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'section_contents' => 'nullable|array',
+            'section_contents.*.enabled' => 'nullable',
+            'section_contents.*.key' => 'nullable|string|max:255',
+            'section_contents.*.type' => 'nullable|string|max:50',
+            'section_contents.*.value' => 'nullable|string',
         ]);
 
         $section = TemplatesSection::findOrFail($sectionId);
@@ -292,67 +304,67 @@ class TemplateController extends Controller
             'preview' => $previewPath,
         ]);
 
-        // Update existing content items
-        if ($request->has('contents') && is_array($request->contents)) {
-            foreach ($request->contents as $contentId => $item) {
-                $contentModel = TemplatesSectionContent::where('templates_sections_id', $section->id)
-                    ->where('id', $contentId)
+        // Handle section_contents checklist (insert/restore if checked, soft-delete if unchecked)
+        if ($request->has('section_contents') && is_array($request->section_contents)) {
+            $contentPresets = [
+                ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
+                ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
+                ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
+                ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
+                ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
+                ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
+                ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
+                ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
+                ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
+                ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
+                ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
+                ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
+                ['key' => 'button_url', 'type' => 'text', 'default_value' => '#'],
+                ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
+                ['key' => 'button_border_color', 'type' => 'color', 'default_value' => '#ffffff'],
+                ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#000000'],
+                ['key' => 'repeater', 'type' => 'repeater', 'default_value' => '[]'],
+                ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
+                ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
+            ];
+            $predefinedKeys = array_column($contentPresets, 'key');
+
+            foreach ($predefinedKeys as $key) {
+                $item = $request->section_contents[$key] ?? null;
+                $isEnabled = $item && isset($item['enabled']) && $item['enabled'] == 1;
+
+                // Find existing record (including soft-deleted)
+                $existing = TemplatesSectionContent::withTrashed()
+                    ->where('templates_sections_id', $section->id)
+                    ->where('key', $key)
                     ->first();
-                if ($contentModel) {
-                    $value = $item['value'] ?? null;
 
-                    // Check if an image is uploaded for this existing content
-                    if ($item['type'] === 'image' && $request->hasFile("contents_images.{$contentId}")) {
-                        $dir = public_path('uploads/templates');
-                        if (!file_exists($dir)) {
-                            mkdir($dir, 0755, true);
+                if ($isEnabled) {
+                    if ($existing) {
+                        // Restore if soft-deleted, then update value
+                        if ($existing->trashed()) {
+                            $existing->restore();
                         }
-                        
-                        // Delete old image if exists
-                        if ($contentModel->value && file_exists(public_path($contentModel->value))) {
-                            @unlink(public_path($contentModel->value));
-                        }
-
-                        $file = $request->file("contents_images.{$contentId}");
-                        $filename = time() . '_' . $file->getClientOriginalName();
-                        $file->move($dir, $filename);
-                        $value = 'uploads/templates/' . $filename;
-                    } elseif ($item['type'] === 'image' && empty($value)) {
-                        // Preserve old value if type is image and no new upload / empty value passed
-                        $value = $contentModel->value;
+                        $existing->update([
+                            'type' => $item['type'] ?? $existing->type,
+                            'value' => $item['value'] ?? $existing->value,
+                        ]);
+                    } else {
+                        // Create new record
+                        TemplatesSectionContent::create([
+                            'templates_sections_id' => $section->id,
+                            'key' => $key,
+                            'type' => $item['type'] ?? 'text',
+                            'value' => $item['value'] ?? null,
+                        ]);
                     }
-
-                    $contentModel->update([
-                        'key' => $item['key'] ?? $contentModel->key,
-                        'type' => $item['type'] ?? $contentModel->type,
-                        'value' => $value,
-                    ]);
+                } else {
+                    // Not checked → soft delete if exists and not already deleted
+                    if ($existing && !$existing->trashed()) {
+                        $existing->delete();
+                    }
                 }
             }
-        }
-
-        // Add new content item if provided
-        $newContentCreated = null;
-        if ($request->has('new_content') && !empty($request->new_content['key'])) {
-            $value = $request->new_content['value'] ?? null;
-
-            if ($request->new_content['type'] === 'image' && $request->hasFile('new_content_image')) {
-                $dir = public_path('uploads/templates');
-                if (!file_exists($dir)) {
-                    mkdir($dir, 0755, true);
-                }
-                $file = $request->file('new_content_image');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->move($dir, $filename);
-                $value = 'uploads/templates/' . $filename;
-            }
-
-            $newContentCreated = TemplatesSectionContent::create([
-                'templates_sections_id' => $section->id,
-                'key' => $request->new_content['key'],
-                'type' => $request->new_content['type'] ?? 'text',
-                'value' => $value,
-            ]);
         }
 
         $section->load('contents');
@@ -362,7 +374,6 @@ class TemplateController extends Controller
                 'success' => true,
                 'message' => 'Section has been updated successfully.',
                 'section' => $section,
-                'new_content' => $newContentCreated,
             ]);
         }
 

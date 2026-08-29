@@ -161,40 +161,47 @@
                             <h4 class="text-xs font-semibold text-slate-700 dark:text-navy-100 uppercase tracking-wide mb-2">
                                 Initial Content Item (Optional)
                             </h4>
-                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-12 items-center rounded-lg border border-slate-200 dark:border-navy-500 bg-slate-50 dark:bg-navy-700 p-3">
-                                <div class="sm:col-span-4">
-                                    <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Key</label>
-                                    <input name="new_content[key]" placeholder="e.g. title"
-                                        class="form-input w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-800 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                        type="text">
-                                </div>
-                                <div class="sm:col-span-3">
-                                    <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Type</label>
-                                    <select name="new_content[type]"
-                                        class="form-select w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-800 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
-                                        <option value="image">Image</option>
-                                        <option value="text" selected>Text</option>
-                                        <option value="long_text">Long Text</option>
-                                        <option value="repeater">Repeater</option>
-                                        <option value="color">Color</option>
-                                        <option value="data">Data</option>
-                                        <option value="action">Action</option>
-                                    </select>
-                                </div>
-                                <div class="sm:col-span-5" x-data="{ type: 'text' }">
-                                    <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Value</label>
-                                    <div x-show="type !== 'image'">
-                                        <input name="new_content[value]" placeholder="Value content..."
-                                            class="form-input w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-800 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            type="text">
+
+                            <div class="space-y-2 mt-3">
+                                @foreach($contentPresets as $preset)
+                                    <div class="rounded-lg border border-slate-200 dark:border-navy-500 bg-white dark:bg-navy-700 p-3 transition-colors">
+                                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-12 items-center">
+
+                                            {{-- Checkbox --}}
+                                            <div class="sm:col-span-1 flex items-center justify-center">
+                                                <label class="inline-flex items-center cursor-pointer">
+                                                    <input name="section_contents[{{ $preset['key'] }}][enabled]" type="checkbox" value="1"
+                                                        class="form-checkbox is-basic h-5 w-5 rounded border-slate-300 text-primary focus:border-primary dark:border-navy-450 dark:checked:bg-accent dark:checked:border-accent">
+                                                </label>
+                                            </div>
+
+                                            {{-- Key (readonly) --}}
+                                            <div class="sm:col-span-4">
+                                                <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Key</label>
+                                                <input name="section_contents[{{ $preset['key'] }}][key]" value="{{ $preset['key'] }}"
+                                                    class="form-input w-full rounded-lg border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-xs dark:border-navy-450 dark:bg-navy-800 text-slate-500 dark:text-navy-300"
+                                                    type="text" readonly>
+                                            </div>
+
+                                            {{-- Type (readonly) --}}
+                                            <div class="sm:col-span-2">
+                                                <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Type</label>
+                                                <input name="section_contents[{{ $preset['key'] }}][type]" value="{{ $preset['type'] }}"
+                                                    class="form-input w-full rounded-lg border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-xs dark:border-navy-450 dark:bg-navy-800 text-slate-500 dark:text-navy-300"
+                                                    type="text" readonly>
+                                            </div>
+
+                                            {{-- Value --}}
+                                            <div class="sm:col-span-5">
+                                                <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Value</label>
+                                                <input name="section_contents[{{ $preset['key'] }}][value]" value="{{ $preset['default_value'] }}"
+                                                    class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                                    type="text" placeholder="Enter value...">
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <div class="hidden" x-show="type === 'image'">
-                                        <input name="new_content_image"
-                                            class="form-input w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-800 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            type="file" accept="image/*">
-                                    </div>
-                                    <span class="hidden" x-init="$watch('$el.closest(\'form\').querySelector(\'[name=\'new_content[type]\']\').value', value => type = value)"></span>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
 
@@ -327,108 +334,71 @@
 
                                     <br>
 
-                                    {{-- Section Contents List & Add New Item --}}
+                                    {{-- Section Contents List --}}
                                     <div class="mt-4 border-t border-slate-200 dark:border-navy-500 pt-4 space-y-3">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center space-x-2">
                                                 <i class="fa-solid fa-list-check text-xs text-slate-500 dark:text-navy-300"></i>
                                                 <h4 class="text-xs font-semibold text-slate-700 dark:text-navy-100 uppercase tracking-wide">
-                                                    Section Contents (from templates_sections_content)
+                                                    Section Contents
                                                 </h4>
                                             </div>
-                                            <span class="badge rounded-full bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light px-2 py-0.5 text-xs font-medium">
-                                                {{ $section->contents->count() }} items
-                                            </span>
                                         </div>
 
-                                        {{-- Existing Contents --}}
-                                        @if($section->contents->count() > 0)
-                                            <div class="space-y-3">
-                                                @foreach($section->contents as $content)
-                                                    <div id="content-item-row-{{ $content->id }}" class="rounded-lg border border-slate-200 dark:border-navy-500 bg-white dark:bg-navy-700 p-3">
-                                                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-12 items-center">
-                                                            
-                                                            {{-- Key --}}
-                                                            <div class="sm:col-span-4">
-                                                                <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Key</label>
-                                                                <input name="contents[{{ $content->id }}][key]" value="{{ old('contents.'.$content->id.'.key', $content->key) }}"
-                                                                    class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                                                    type="text" required>
-                                                            </div>
+                                        @php
+                                            // Get all contents including soft-deleted for this section
+                                            $allContents = \App\Models\TemplatesSectionContent::withTrashed()
+                                                ->where('templates_sections_id', $section->id)
+                                                ->get()
+                                                ->keyBy('key');
+                                        @endphp
 
-                                                            {{-- Type --}}
-                                                            <div class="sm:col-span-3">
-                                                                <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Type</label>
-                                                                <select name="contents[{{ $content->id }}][type]"
-                                                                    class="form-select w-full rounded-lg border border-slate-300 bg-transparent px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
-                                                                    <option value="image" {{ $content->type == 'image' ? 'selected' : '' }}>Image</option>
-                                                                    <option value="text" {{ $content->type == 'text' ? 'selected' : '' }}>Text</option>
-                                                                    <option value="long_text" {{ $content->type == 'long_text' ? 'selected' : '' }}>Long Text</option>
-                                                                    <option value="repeater" {{ $content->type == 'repeater' ? 'selected' : '' }}>Repeater</option>
-                                                                    <option value="color" {{ $content->type == 'color' ? 'selected' : '' }}>Color</option>
-                                                                    <option value="data" {{ $content->type == 'data' ? 'selected' : '' }}>Data</option>
-                                                                    <option value="action" {{ $content->type == 'action' ? 'selected' : '' }}>Action</option>
-                                                                </select>
-                                                            </div>
+                                        <div class="space-y-2">
+                                            @foreach($contentPresets as $dIndex => $dummyItem)
+                                                @php
+                                                    $existing = $allContents->get($dummyItem['key']);
+                                                    $isActive = $existing && is_null($existing->deleted_at);
+                                                    $currentValue = $existing ? $existing->value : $dummyItem['default_value'];
+                                                    $currentType = $existing ? $existing->type : $dummyItem['type'];
+                                                @endphp
+                                                <div class="rounded-lg border {{ $isActive ? 'border-primary/30 bg-primary/5 dark:border-accent/30 dark:bg-accent/5' : 'border-slate-200 dark:border-navy-500 bg-white dark:bg-navy-700' }} p-3 transition-colors">
+                                                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-12 items-center">
 
-                                                            {{-- Value --}}
-                                                            <div class="sm:col-span-4">
-                                                                <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Value</label>
-                                                                <input name="contents[{{ $content->id }}][value]" value="{{ old('contents.'.$content->id.'.value', $content->value) }}"
-                                                                    class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                                                    type="text">
-                                                            </div>
-
-                                                            {{-- Delete button --}}
-                                                            <div class="sm:col-span-1 flex justify-end pt-4">
-                                                                <button type="button" onclick="document.getElementById('delete-content-{{ $content->id }}').requestSubmit()"
-                                                                    class="btn h-7 w-7 rounded-lg p-0 text-error hover:bg-error/10"
-                                                                    title="Delete Content Item">
-                                                                    <i class="fa-solid fa-trash text-xs"></i>
-                                                                </button>
-                                                            </div>
-
+                                                        {{-- Checkbox --}}
+                                                        <div class="sm:col-span-1 flex items-center justify-center">
+                                                            <label class="inline-flex items-center cursor-pointer">
+                                                                <input name="section_contents[{{ $dummyItem['key'] }}][enabled]" type="checkbox" value="1" {{ $isActive ? 'checked' : '' }}
+                                                                    class="form-checkbox is-basic h-5 w-5 rounded border-slate-300 text-primary focus:border-primary dark:border-navy-450 dark:checked:bg-accent dark:checked:border-accent">
+                                                            </label>
                                                         </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <div class="rounded-lg border border-dashed border-slate-300 dark:border-navy-450 p-3 text-center text-xs text-slate-400 dark:text-navy-300">
-                                                No content items in this section yet. Use the field below to add one.
-                                            </div>
-                                        @endif
 
-                                        {{-- Add New Content Row --}}
-                                        <div class="rounded-lg border border-dashed border-primary/40 bg-primary/5 dark:border-accent/40 dark:bg-accent/5 p-3">
-                                            <p class="text-xs font-semibold text-slate-700 dark:text-navy-100 mb-2 flex items-center space-x-1">
-                                                <i class="fa-solid fa-plus text-primary dark:text-accent-light"></i>
-                                                <span>Add New Content Item</span>
-                                            </p>
-                                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-12 items-center">
-                                                <div class="sm:col-span-4">
-                                                    <input name="new_content[key]" placeholder="Key name (e.g. banner_title)"
-                                                        class="form-input w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                                        type="text">
+                                                        {{-- Key (readonly) --}}
+                                                        <div class="sm:col-span-4">
+                                                            <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Key</label>
+                                                            <input name="section_contents[{{ $dummyItem['key'] }}][key]" value="{{ $dummyItem['key'] }}"
+                                                                class="form-input w-full rounded-lg border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-xs dark:border-navy-450 dark:bg-navy-800 text-slate-500 dark:text-navy-300"
+                                                                type="text" readonly>
+                                                        </div>
+
+                                                        {{-- Type (readonly) --}}
+                                                        <div class="sm:col-span-2">
+                                                            <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Type</label>
+                                                            <input name="section_contents[{{ $dummyItem['key'] }}][type]" value="{{ $currentType }}"
+                                                                class="form-input w-full rounded-lg border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-xs dark:border-navy-450 dark:bg-navy-800 text-slate-500 dark:text-navy-300"
+                                                                type="text" readonly>
+                                                        </div>
+
+                                                        {{-- Value --}}
+                                                        <div class="sm:col-span-5">
+                                                            <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Value</label>
+                                                            <input name="section_contents[{{ $dummyItem['key'] }}][value]" value="{{ $currentValue }}"
+                                                                class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                                                                type="text" placeholder="Enter value...">
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                                <div class="sm:col-span-3">
-                                                    <select name="new_content[type]"
-                                                        class="form-select w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
-                                                        <option value="image">Image</option>
-                                                        <option value="text" selected>Text</option>
-                                                        <option value="long_text">Long Text</option>
-                                                        <option value="repeater">Repeater</option>
-                                                        <option value="color">Color</option>
-                                                        <option value="data">Data</option>
-                                                        <option value="action">Action</option>
-                                                    </select>
-                                                </div>
-                                                <div class="sm:col-span-5">
-                                                    <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Value</label>
-                                                    <input name="new_content[value]" placeholder="Content value..."
-                                                        class="form-input w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                                        type="text">
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
 
@@ -440,15 +410,7 @@
                                     </div>
                                 </form>
 
-                                {{-- Hidden Delete Forms for Content Items --}}
-                                @foreach($section->contents as $content)
-                                    <form id="delete-content-{{ $content->id }}"
-                                        action="{{ route('admin.template.section.content.destroy', [$template->id, $content->id]) }}"
-                                        method="POST" class="content-delete-form hidden" data-content-id="{{ $content->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                @endforeach
+
 
                                 <div class="flex justify-end -mt-8">
                                     <form action="{{ route('admin.template.section.destroy', [$template->id, $section->id]) }}"
