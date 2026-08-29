@@ -14,7 +14,7 @@ class CustomerModuleSeeder extends Seeder
         $customerModul = Modul::updateOrCreate(
             ['kode' => 'customers'],
             [
-                'parent_id' => 0,
+                'parent_id' => null,
                 'sort_order' => 9, // Adjust sort as needed
                 'name'      => 'Customers',
                 'icon'      => 'fa-solid fa-users',

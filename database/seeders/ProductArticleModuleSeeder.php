@@ -43,7 +43,7 @@ class ProductArticleModuleSeeder extends Seeder
             $modul = Modul::updateOrCreate(
                 ['kode' => $m['kode']],
                 [
-                    'parent_id'  => 0,
+                    'parent_id'  => null,
                     'sort_order' => $m['sort_order'],
                     'name'       => $m['name'],
                     'icon'       => $m['icon'],
