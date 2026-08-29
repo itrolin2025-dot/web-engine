@@ -49,9 +49,28 @@ class FrontController extends Controller
                     'template.path as template_path'
                 )
                 ->get();
+
+            $categories = DB::table('category_products')
+                ->where('customers_id', $website->customer_id)
+                ->whereNull('deleted_at')
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('products')
+                        ->whereColumn('products.category_products_id', 'category_products.id')
+                        ->whereNull('products.deleted_at');
+                })
+                ->get();
+
+            $products = DB::table('products')
+                ->where('customers_id', $website->customer_id)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $categories = collect();
+            $products = collect();
         }
 
-        return view('template.index', compact('title', 'website', 'layouts'));
+        return view('template.index', compact('title', 'website', 'layouts', 'categories', 'products'));
     }
 
     public function selectLayout($client = null)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\CategoryProduct;
+use App\Models\Customer;
 use App\Models\ProductReview;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
@@ -85,10 +86,12 @@ class ProductsController extends Controller
             }
         }
 
-        $categories = CategoryProduct::orderBy('name', 'asc')->get();
+        $customers = Customer::orderBy('name', 'asc')->get();
+        $categories = collect();
         $autoCode = $this->generateUniqueCode();
 
         return view($this->path . '.create', [
+            'customers'  => $customers,
             'categories' => $categories,
             'autoCode'   => $autoCode,
             'modul'      => $this->modul,
@@ -98,9 +101,23 @@ class ProductsController extends Controller
         ]);
     }
 
+    public function getCategoriesByCustomer($customer_id = null)
+    {
+        if (!$customer_id) {
+            return response()->json([]);
+        }
+
+        $categories = CategoryProduct::where('customers_id', $customer_id)
+            ->orderBy('name', 'asc')
+            ->get(['id', 'name', 'code']);
+
+        return response()->json($categories);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
+            'customers_id'         => 'required|exists:customers,id',
             'category_products_id' => 'required|exists:category_products,id',
             'code'                 => 'required|string|max:100|unique:products,code',
             'name'                 => 'required|string|max:255',
@@ -136,6 +153,7 @@ class ProductsController extends Controller
             }
 
             $product = Product::create([
+                'customers_id'         => $request->customers_id,
                 'category_products_id' => $request->category_products_id,
                 'code'                 => $request->code,
                 'name'                 => $request->name,
@@ -207,11 +225,16 @@ class ProductsController extends Controller
             }
         }
 
-        $categories = CategoryProduct::orderBy('name', 'asc')->get();
+        $customers = Customer::orderBy('name', 'asc')->get();
+        $selectedCustomerId = old('customers_id', $product->customers_id);
+        $categories = $selectedCustomerId 
+            ? CategoryProduct::where('customers_id', $selectedCustomerId)->orderBy('name', 'asc')->get()
+            : CategoryProduct::orderBy('name', 'asc')->get();
         $product->load('reviews');
 
         return view($this->path . '.edit', [
             'product'    => $product,
+            'customers'  => $customers,
             'categories' => $categories,
             'modul'      => $this->modul,
             'modul_path' => $this->path,
@@ -223,6 +246,7 @@ class ProductsController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
+            'customers_id'         => 'required|exists:customers,id',
             'category_products_id' => 'required|exists:category_products,id',
             'code'                 => 'required|string|max:100|unique:products,code,' . $product->id,
             'name'                 => 'required|string|max:255',
@@ -285,6 +309,7 @@ class ProductsController extends Controller
             }
 
             $product->update([
+                'customers_id'         => $request->customers_id,
                 'category_products_id' => $request->category_products_id,
                 'code'                 => $request->code,
                 'name'                 => $request->name,

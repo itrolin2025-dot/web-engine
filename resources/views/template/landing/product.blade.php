@@ -230,8 +230,8 @@
     $desc = $content['desc_en'] ?? $content['desc'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
-    $categories = $content['categories'] ?? [];
-    $products = $content['products'] ?? [];
+    $categories = $categories ?? collect();
+    $products = $products ?? collect();
 
     $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
@@ -246,47 +246,106 @@
     <h2>{{ $title }}</h2>
     <div class="collection-tabs">
         <button class="tab-btn active" data-filter="all">All Collection</button>
-        @foreach ($categories as $category)
-            <button class="tab-btn" data-filter="{{ $category['kode'] }}">{{ $category['name'] }}</button>
-        @endforeach
-
+        @if(isset($categories) && count($categories) > 0)
+            @foreach ($categories as $category)
+                <button class="tab-btn" data-filter="{{ is_array($category) ? ($category['id'] ?? $category['kode'] ?? '') : $category->id }}">{{ is_array($category) ? $category['name'] : $category->name }}</button>
+            @endforeach
+        @endif
     </div>
 </section>
 
 <!-- PRODUCTS -->
 <section class="products">
-    @foreach ($products as $product)
-        @php
-            $image = !empty($product['image'])
-                ? asset('images/website/' . $domain . '/' . $product['image'])
-                : asset('images/default/broken.png');
-    
-            $numericPrice = preg_replace('/[^0-9]/', '', $product['price'] ?? '0');
-        @endphp
-        <div class="product-card" data-category="{{ $product['kode'] }}">
-            <div class="product-image"
-                style="width: 100%; min-height: 400px; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9; border-radius: 12px; overflow: hidden;">
-                <img src="{{ $image }}" alt="{{ $product['name'] }}"
-                    style="max-width: 100%; max-height: 450px; object-fit: contain; display: block;"
-                    onerror="this.onerror=null; this.src='{{ asset('images/default/broken.png') }}';">
-            </div>
-            <div class="product-info">
-                <span class="product-tag">{{ $product['categories'] }}</span>
-                <h3>{{ $product['name'] }}</h3>
-                <div class="product-notes">
-                    {{ $product['desc'] }}
-                    <br><br>
-                    <strong>Top Notes:</strong> Fruity, Fresh, Green<br>
-                    <strong>Middle Notes:</strong> Floral, Fruity, Ambery<br>
-                    <strong>Base Notes:</strong> Woody, Fruity, Ambery<br>
-                    <strong>Price:</strong> Rp {{ number_format($product['price'], 0, ',', '.') }}
-                </div>
-                <a
-                    onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"
-                    class="btn-outline">
-                    Buy Now</a>
-            </div>
-        </div>
+    @if(isset($products) && count($products) > 0)
+        @foreach ($products as $product)
+            @php
+                $pId = is_array($product) ? ($product['id'] ?? '') : $product->id;
+                $pName = is_array($product) ? ($product['name'] ?? '') : $product->name;
+                $pPrice = is_array($product) ? ($product['price'] ?? 0) : $product->price;
+                $pDesc = is_array($product) ? ($product['description'] ?? $product['desc'] ?? '') : $product->description;
+                $pCatId = is_array($product) ? ($product['category_products_id'] ?? $product['kode'] ?? '') : $product->category_products_id;
+                
+                // Get category name
+                $pCatName = '';
+                if (isset($categories)) {
+                    foreach ($categories as $cat) {
+                        $cId = is_array($cat) ? ($cat['id'] ?? $cat['kode'] ?? '') : $cat->id;
+                        if ($cId == $pCatId) {
+                            $pCatName = is_array($cat) ? $cat['name'] : $cat->name;
+                            break;
+                        }
+                    }
+                }
 
-    @endforeach
+                // Handle image logic
+                $rawImages = is_array($product) ? ($product['images'] ?? $product['image'] ?? null) : $product->images;
+                if (is_string($rawImages)) {
+                    $decoded = json_decode($rawImages, true);
+                    $firstImg = is_array($decoded) && count($decoded) > 0 ? $decoded[0] : $rawImages;
+                } elseif (is_array($rawImages) && count($rawImages) > 0) {
+                    $firstImg = $rawImages[0];
+                } else {
+                    $firstImg = null;
+                }
+
+                if ($firstImg) {
+                    $image = str_contains($firstImg, '/') || str_contains($firstImg, '\\')
+                        ? asset('storage/' . $firstImg)
+                        : asset('images/website/' . $domain . '/' . $firstImg);
+                } else {
+                    $image = asset('images/default/broken.png');
+                }
+
+                $numericPrice = (float) $pPrice;
+            @endphp
+            <div class="product-card" data-category="{{ $pCatId }}">
+                <div class="product-image"
+                    style="width: 100%; min-height: 400px; display: flex; align-items: center; justify-content: center; background-color: #f9f9f9; border-radius: 12px; overflow: hidden;">
+                    <img src="{{ $image }}" alt="{{ $pName }}"
+                        style="max-width: 100%; max-height: 450px; object-fit: contain; display: block;"
+                        onerror="this.onerror=null; this.src='{{ asset('images/default/broken.png') }}';">
+                </div>
+                <div class="product-info">
+                    @if($pCatName)
+                        <span class="product-tag">{{ $pCatName }}</span>
+                    @endif
+                    <h3>{{ $pName }}</h3>
+                    <div class="product-notes">
+                        {{ $pDesc }}
+                        <br><br>
+                        <strong>Price:</strong> Rp {{ number_format($numericPrice, 0, ',', '.') }}
+                    </div>
+                    <a
+                        onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $image }}')"
+                        class="btn-outline" style="cursor: pointer;">
+                        Buy Now</a>
+                </div>
+            </div>
+        @endforeach
+    @endif
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabBtns = document.querySelectorAll('#products .tab-btn');
+        const productCards = document.querySelectorAll('.products .product-card');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                productCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    if (filterValue === 'all' || cardCategory === filterValue) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
+</script>

@@ -7,18 +7,29 @@
             <div class="col-span-12 flex-1 flex flex-col" style="min-width:0;">
                 <div class="card flex flex-col space-y-6 h-full p-6">
                     
-                    {{-- Row 1: Category, Code, Name, Price --}}
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    {{-- Row 1: Customer, Category, Code, Name, Price --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                        {{-- Customer Select --}}
+                        <label class="block space-y-1.5">
+                            <span>Customer <span class="text-red-500">*</span></span>
+                            <select name="customers_id" id="customer-select" required onchange="loadCategoriesByCustomer(this.value)" class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
+                                <option value="">-- Select Customer --</option>
+                                @foreach($customers as $cust)
+                                    <option value="{{ $cust->id }}" {{ old('customers_id') == $cust->id ? 'selected' : '' }}>
+                                        {{ $cust->name }} {{ $cust->code ? '('.$cust->code.')' : '' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('customers_id')
+                                <span class="text-xs text-red-500">{{ $message }}</span>
+                            @enderror
+                        </label>
+
                         {{-- Category Select --}}
                         <label class="block space-y-1.5">
                             <span>Category Product <span class="text-red-500">*</span></span>
-                            <select name="category_products_id" required class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
-                                <option value="">-- Select Category --</option>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('category_products_id') == $cat->id ? 'selected' : '' }}>
-                                        {{ $cat->name }} {{ $cat->code ? '('.$cat->code.')' : '' }}
-                                    </option>
-                                @endforeach
+                            <select name="category_products_id" id="category-select" required class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
+                                <option value="">-- Select Customer First --</option>
                             </select>
                             @error('category_products_id')
                                 <span class="text-xs text-red-500">{{ $message }}</span>
@@ -279,6 +290,47 @@
                 container.classList.add('hidden');
             }
         }
+
+        function loadCategoriesByCustomer(customerId, selectedCategoryId = null) {
+            const categorySelect = document.getElementById('category-select');
+            categorySelect.innerHTML = '<option value="">Loading...</option>';
+
+            if (!customerId) {
+                categorySelect.innerHTML = '<option value="">-- Select Customer First --</option>';
+                return;
+            }
+
+            fetch("{{ url('admin/products/get-categories') }}/" + customerId)
+                .then(response => response.json())
+                .then(data => {
+                    categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
+                    if (data.length === 0) {
+                        categorySelect.innerHTML = '<option value="">-- No Categories Found for this Customer --</option>';
+                    } else {
+                        data.forEach(cat => {
+                            const selected = (selectedCategoryId && selectedCategoryId == cat.id) ? 'selected' : '';
+                            const option = document.createElement('option');
+                            option.value = cat.id;
+                            option.textContent = cat.name + (cat.code ? ' (' + cat.code + ')' : '');
+                            if (selected) option.selected = true;
+                            categorySelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching categories:', error);
+                    categorySelect.innerHTML = '<option value="">-- Error Loading Categories --</option>';
+                });
+        }
+
+        // Auto trigger on page load if customer is preselected (e.g. old input)
+        document.addEventListener('DOMContentLoaded', function() {
+            const customerSelect = document.getElementById('customer-select');
+            const oldCategoryId = "{{ old('category_products_id') }}";
+            if (customerSelect && customerSelect.value) {
+                loadCategoriesByCustomer(customerSelect.value, oldCategoryId);
+            }
+        });
     </script>
     @endpush
 </x-app-layout>

@@ -430,6 +430,58 @@
 
                                 label.appendChild(fileInput);
                                 label.appendChild(prevDiv);
+                            } else if (typeLower === 'action') {
+                                const select = document.createElement('select');
+                                select.name = inputName;
+                                select.className = 'form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+
+                                const options = [
+                                    { value: 'url', label: 'url' },
+                                    { value: 'add_to_cart', label: 'add to cart' },
+                                    { value: 'submit', label: 'submit' },
+                                    { value: 'do_nothing', label: 'do nothing' }
+                                ];
+
+                                options.forEach(opt => {
+                                    const option = document.createElement('option');
+                                    option.value = opt.value;
+                                    option.textContent = opt.label;
+                                    if (val && (val.toString().toLowerCase() === opt.value || val.toString().toLowerCase() === opt.label)) {
+                                        option.selected = true;
+                                    }
+                                    select.appendChild(option);
+                                });
+
+                                label.appendChild(select);
+                            } else if (typeLower === 'color') {
+                                const colorContainer = document.createElement('div');
+                                colorContainer.className = 'flex items-center space-x-2';
+
+                                const colorInput = document.createElement('input');
+                                colorInput.type = 'color';
+                                colorInput.value = val && val.startsWith('#') ? val : '#000000';
+                                colorInput.className = 'h-8 w-10 cursor-pointer rounded border border-slate-300 bg-transparent p-0.5 dark:border-navy-450';
+
+                                const textInput = document.createElement('input');
+                                textInput.type = 'text';
+                                textInput.name = inputName;
+                                textInput.value = val || '#000000';
+                                textInput.className = 'form-input w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-mono hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+
+                                colorInput.addEventListener('input', function() {
+                                    textInput.value = colorInput.value;
+                                    textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                });
+
+                                textInput.addEventListener('input', function() {
+                                    if (textInput.value.startsWith('#') && (textInput.value.length === 4 || textInput.value.length === 7)) {
+                                        colorInput.value = textInput.value;
+                                    }
+                                });
+
+                                colorContainer.appendChild(colorInput);
+                                colorContainer.appendChild(textInput);
+                                label.appendChild(colorContainer);
                             } else if (typeLower === 'long_text' || typeLower === 'textarea' || typeLower === 'description') {
                                 const textarea = document.createElement('textarea');
                                 textarea.name = inputName;
@@ -460,7 +512,7 @@
                         // Helper function to update contentTextarea in real-time
                         const updateTextareaFromDynamic = () => {
                             const obj = {};
-                            listEl.querySelectorAll('input[type="text"], input[type="hidden"], textarea').forEach(el => {
+                            listEl.querySelectorAll('input[type="text"], input[type="hidden"], input[type="color"], textarea, select').forEach(el => {
                                 const match = el.name.match(/dynamic_content\[(.*?)\]/);
                                 if (match && match[1]) {
                                     let rawVal = el.value;
@@ -480,8 +532,9 @@
                             }
                         };
 
-                        listEl.querySelectorAll('input[type="text"], textarea').forEach(el => {
+                        listEl.querySelectorAll('input[type="text"], input[type="color"], textarea, select').forEach(el => {
                             el.addEventListener('input', updateTextareaFromDynamic);
+                            el.addEventListener('change', updateTextareaFromDynamic);
                         });
 
                         // Initial sync if textarea was empty

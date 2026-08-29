@@ -3,35 +3,22 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CategoryProduct;
+use App\Models\ArticleCategory;
 use App\Models\Customer;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
-class CategoryProductController extends Controller
+class ArticleCategoryController extends Controller
 {
-    protected $modul        = "category-product";
-    protected $path         = "admin.category-product";
-    protected $modul_name   = "Category Product";
+    protected $modul        = "article-category";
+    protected $path         = "admin.article-category";
+    protected $modul_name   = "Article Category";
 
     protected function getRoleId()
     {
         return auth()->user() ? (auth()->user()->role_id ?? auth()->user()->product_id) : 0;
-    }
-
-    /**
-     * Generate unique random code for Category Product
-     */
-    private function generateUniqueCode()
-    {
-        do {
-            $code = 'CAT-' . rand(10000, 99999);
-        } while (CategoryProduct::withTrashed()->where('code', $code)->exists());
-
-        return $code;
     }
 
     public function index()
@@ -85,11 +72,9 @@ class CategoryProductController extends Controller
         }
 
         $customers = Customer::orderBy('name', 'asc')->get();
-        $autoCode = $this->generateUniqueCode();
 
         return view($this->path . '.create', [
             'customers'     => $customers,
-            'autoCode'      => $autoCode,
             'modul'         => $this->modul,
             'modul_path'    => $this->path,
             'modul_name'    => $this->modul_name,
@@ -101,32 +86,16 @@ class CategoryProductController extends Controller
     {
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'code'        => 'required|string|max:100|unique:category_products,code',
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         DB::beginTransaction();
         try {
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                // Ensure target directory exists on disk 'public'
-                if (!Storage::disk('public')->exists('category_products')) {
-                    Storage::disk('public')->makeDirectory('category_products');
-                }
-
-                $file = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $imagePath = $file->storeAs('category_products', $filename, 'public');
-            }
-
-            $categoryProduct = CategoryProduct::create([
+            $articleCategory = ArticleCategory::create([
                 'customers_id' => $request->customer_id,
-                'code'         => $request->code,
                 'name'         => $request->name,
                 'description'  => $request->description,
-                'image'        => $imagePath,
             ]);
 
             DB::commit();
@@ -134,19 +103,19 @@ class CategoryProductController extends Controller
             ActivityLogger::log(
                 $this->modul,
                 'create',
-                $categoryProduct->id,
-                ['name' => $categoryProduct->name, 'code' => $categoryProduct->code, 'customers_id' => $categoryProduct->customers_id],
+                $articleCategory->id,
+                ['name' => $articleCategory->name, 'customers_id' => $articleCategory->customers_id],
                 auth()->id()
             );
 
-            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Category Product created successfully.');
+            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Article Category created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('admin.' . $this->modul . '.index')->with('error', 'Failed to create data: ' . $e->getMessage());
         }
     }
 
-    public function edit(CategoryProduct $category_product)
+    public function edit(ArticleCategory $article_category)
     {
         $role_id = $this->getRoleId();
         if (canAccess($this->modul, $role_id, 'edit') == false) {
@@ -160,7 +129,7 @@ class CategoryProductController extends Controller
         $customers = Customer::orderBy('name', 'asc')->get();
 
         return view($this->path . '.edit', [
-            'category_product' => $category_product,
+            'article_category' => $article_category,
             'customers'        => $customers,
             'modul'            => $this->modul,
             'modul_path'       => $this->path,
@@ -169,39 +138,20 @@ class CategoryProductController extends Controller
         ]);
     }
 
-    public function update(Request $request, CategoryProduct $category_product)
+    public function update(Request $request, ArticleCategory $article_category)
     {
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'code'        => 'required|string|max:100|unique:category_products,code,' . $category_product->id,
             'name'        => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         DB::beginTransaction();
         try {
-            $imagePath = $category_product->image;
-            if ($request->hasFile('image')) {
-                // Ensure target directory exists
-                if (!Storage::disk('public')->exists('category_products')) {
-                    Storage::disk('public')->makeDirectory('category_products');
-                }
-
-                if ($imagePath && Storage::disk('public')->exists($imagePath)) {
-                    Storage::disk('public')->delete($imagePath);
-                }
-                $file = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $imagePath = $file->storeAs('category_products', $filename, 'public');
-            }
-
-            $category_product->update([
+            $article_category->update([
                 'customers_id' => $request->customer_id,
-                'code'         => $request->code,
                 'name'         => $request->name,
                 'description'  => $request->description,
-                'image'        => $imagePath,
             ]);
 
             DB::commit();
@@ -209,12 +159,12 @@ class CategoryProductController extends Controller
             ActivityLogger::log(
                 $this->modul,
                 'update',
-                $category_product->id,
-                ['name' => $category_product->name, 'code' => $category_product->code, 'customers_id' => $category_product->customers_id],
+                $article_category->id,
+                ['name' => $article_category->name, 'customers_id' => $article_category->customers_id],
                 auth()->id()
             );
 
-            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Category Product updated successfully.');
+            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Article Category updated successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('admin.' . $this->modul . '.index')->with('error', 'Failed to update data: ' . $e->getMessage());
@@ -223,17 +173,17 @@ class CategoryProductController extends Controller
 
     public function destroy($id)
     {
-        $categoryProduct = CategoryProduct::findOrFail($id);
+        $articleCategory = ArticleCategory::findOrFail($id);
 
         ActivityLogger::log(
             $this->modul,
             'delete',
-            $categoryProduct->id,
-            ['name' => $categoryProduct->name, 'code' => $categoryProduct->code],
+            $articleCategory->id,
+            ['name' => $articleCategory->name],
             auth()->id()
         );
 
-        $categoryProduct->delete();
+        $articleCategory->delete();
 
         return response()->json([
             'success' => true,
@@ -244,18 +194,17 @@ class CategoryProductController extends Controller
     public function getData(Request $request)
     {
         $role_id = $this->getRoleId();
-        $query = DB::table('category_products')
-            ->leftJoin('customers', 'customers.id', '=', 'category_products.customers_id')
+        $query = DB::table('article_categories')
+            ->leftJoin('customers', 'customers.id', '=', 'article_categories.customers_id')
             ->select([
-                'category_products.*',
+                'article_categories.*',
                 'customers.name as customer_name'
             ])
-            ->whereNull('category_products.deleted_at');
+            ->whereNull('article_categories.deleted_at');
 
         if ($request->filled('filter_name')) {
             $query->where(function ($q) use ($request) {
-                $q->where('category_products.name', 'like', "%{$request->filter_name}%")
-                  ->orWhere('category_products.code', 'like', "%{$request->filter_name}%")
+                $q->where('article_categories.name', 'like', "%{$request->filter_name}%")
                   ->orWhere('customers.name', 'like', "%{$request->filter_name}%");
             });
         }
@@ -266,29 +215,15 @@ class CategoryProductController extends Controller
             ->addColumn('customer_view', function ($row) {
                 return e($row->customer_name ?? '-');
             })
-            ->addColumn('image_view', function ($row) {
-                if (!empty($row->image)) {
-                    $url = asset('storage/' . $row->image);
-                    return '<img src="' . $url . '" alt="' . e($row->name) . '" class="h-12 w-12 object-cover rounded-lg shadow-sm border border-slate-200" />';
-                }
-                return '<div class="h-12 w-12 rounded-lg bg-slate-100 dark:bg-navy-600 flex items-center justify-center text-xs text-slate-400 font-medium">No Image</div>';
-            })
             ->addColumn('mobile_view', function ($row) {
-                $img = !empty($row->image)
-                    ? '<img src="' . asset('storage/' . $row->image) . '" alt="' . e($row->name) . '" class="h-10 w-10 object-cover rounded-lg mr-3 shadow-sm border border-slate-200" />'
-                    : '<div class="h-10 w-10 rounded-lg bg-slate-100 flex items-center justify-center text-xs text-slate-400 mr-3">No Img</div>';
-
                 $custName = e($row->customer_name ?? '-');
 
                 return '
                 <div class="mobile-expandable">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            ' . $img . '
-                            <div>
-                                <div class="fw-bold text-slate-700 dark:text-navy-100">' . e($row->name) . '</div>
-                                <span class="text-xs text-slate-400">' . e($row->code) . ' | Customer: ' . $custName . '</span>
-                            </div>
+                        <div>
+                            <div class="fw-bold text-slate-700 dark:text-navy-100">' . e($row->name) . '</div>
+                            <span class="text-xs text-slate-400">Customer: ' . $custName . '</span>
                         </div>
                         <a class="toggle-expand btn btn-xs btn-secondary">
                             <i class="fa fa-chevron-down"></i>
@@ -330,24 +265,23 @@ class CategoryProductController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['image_view', 'action', 'mobile_view'])
+            ->rawColumns(['action', 'mobile_view'])
             ->make(true);
     }
 
     public function getDataRecycle(Request $request)
     {
-        $query = DB::table('category_products')
-            ->leftJoin('customers', 'customers.id', '=', 'category_products.customers_id')
+        $query = DB::table('article_categories')
+            ->leftJoin('customers', 'customers.id', '=', 'article_categories.customers_id')
             ->select([
-                'category_products.*',
+                'article_categories.*',
                 'customers.name as customer_name'
             ])
-            ->whereNotNull('category_products.deleted_at');
+            ->whereNotNull('article_categories.deleted_at');
 
         if ($request->filled('filter_name')) {
             $query->where(function ($q) use ($request) {
-                $q->where('category_products.name', 'like', "%{$request->filter_name}%")
-                  ->orWhere('category_products.code', 'like', "%{$request->filter_name}%")
+                $q->where('article_categories.name', 'like', "%{$request->filter_name}%")
                   ->orWhere('customers.name', 'like', "%{$request->filter_name}%");
             });
         }
@@ -358,18 +292,11 @@ class CategoryProductController extends Controller
             ->addColumn('customer_view', function ($row) {
                 return e($row->customer_name ?? '-');
             })
-            ->addColumn('image_view', function ($row) {
-                if ($row->image && Storage::disk('public')->exists($row->image)) {
-                    $url = asset('storage/' . $row->image);
-                    return '<img src="' . $url . '" alt="' . e($row->name) . '" class="h-12 w-12 object-cover rounded-lg shadow-sm border border-slate-200" />';
-                }
-                return '<div class="h-12 w-12 rounded-lg bg-slate-100 dark:bg-navy-600 flex items-center justify-center text-xs text-slate-400 font-medium">No Image</div>';
-            })
             ->addColumn('mobile_view', function ($row) {
                 return '
                 <div class="mobile-expandable">
                     <div class="flex items-center justify-between">
-                        <div class="fw-bold">' . e($row->name) . ' (' . e($row->code) . ')</div>
+                        <div class="fw-bold">' . e($row->name) . '</div>
                         <a class="toggle-expand btn btn-xs btn-secondary">
                             <i class="fa fa-chevron-down"></i>
                         </a>
@@ -393,20 +320,20 @@ class CategoryProductController extends Controller
                     'name' => $row->name,
                 ])->render();
             })
-            ->rawColumns(['image_view', 'action', 'mobile_view'])
+            ->rawColumns(['action', 'mobile_view'])
             ->make(true);
     }
 
     public function restore($id)
     {
-        $data = CategoryProduct::onlyTrashed()->findOrFail($id);
+        $data = ArticleCategory::onlyTrashed()->findOrFail($id);
         $data->restore();
 
         ActivityLogger::log(
             $this->modul,
             'restore',
             $data->id,
-            ['name' => $data->name, 'code' => $data->code],
+            ['name' => $data->name],
             auth()->id()
         );
 

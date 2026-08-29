@@ -16,6 +16,8 @@ use App\Http\Controllers\admin\CustomersWebController;
 use App\Http\Controllers\admin\LeadsTrackerController;
 
 use App\Http\Controllers\admin\CategoryProductController;
+use App\Http\Controllers\admin\ArticleCategoryController;
+use App\Http\Controllers\admin\ArticlesController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,33 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
+
+    // Articles
+    Route::get('/articles', [ArticlesController::class, 'index'])->name('articles');
+    Route::get('/articles/index', [ArticlesController::class, 'index'])->name('articles.index');
+    Route::get('/articles/get-data', [ArticlesController::class, 'getData'])->name('articles.getData');
+    Route::get('/articles/get-dataRecycle', [ArticlesController::class, 'getDataRecycle'])->name('articles.getDataRecycle');
+    Route::get('/articles/create', [ArticlesController::class, 'create'])->name('articles.create');
+    Route::get('/articles/recycle', [ArticlesController::class, 'recycle'])->name('articles.recycle');
+    Route::post('/articles/restore/{id}', [ArticlesController::class, 'restore'])->name('articles.restore');
+    Route::post('/articles', [ArticlesController::class, 'store'])->name('articles.store');
+    Route::get('/articles/get-categories/{customer_id?}', [ArticlesController::class, 'getCategoriesByCustomer'])->name('articles.getCategories');
+    Route::get('/articles/{article}/edit', [ArticlesController::class, 'edit'])->name('articles.edit');
+    Route::put('/articles/{article}', [ArticlesController::class, 'update'])->name('articles.update');
+    Route::delete('/articles/{article}', [ArticlesController::class, 'destroy'])->name('articles.destroy');
+
+    // Article Category
+    Route::get('/article-category', [ArticleCategoryController::class, 'index'])->name('article-category');
+    Route::get('/article-category/index', [ArticleCategoryController::class, 'index'])->name('article-category.index');
+    Route::get('/article-category/get-data', [ArticleCategoryController::class, 'getData'])->name('article-category.getData');
+    Route::get('/article-category/get-dataRecycle', [ArticleCategoryController::class, 'getDataRecycle'])->name('article-category.getDataRecycle');
+    Route::get('/article-category/create', [ArticleCategoryController::class, 'create'])->name('article-category.create');
+    Route::get('/article-category/recycle', [ArticleCategoryController::class, 'recycle'])->name('article-category.recycle');
+    Route::post('/article-category/restore/{id}', [ArticleCategoryController::class, 'restore'])->name('article-category.restore');
+    Route::post('/article-category', [ArticleCategoryController::class, 'store'])->name('article-category.store');
+    Route::get('/article-category/{article_category}/edit', [ArticleCategoryController::class, 'edit'])->name('article-category.edit');
+    Route::put('/article-category/{article_category}', [ArticleCategoryController::class, 'update'])->name('article-category.update');
+    Route::delete('/article-category/{article_category}', [ArticleCategoryController::class, 'destroy'])->name('article-category.destroy');
 
     // Category Product
     Route::get('/category-product', [CategoryProductController::class, 'index'])->name('category-product');
@@ -52,6 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/recycle', [ProductsController::class, 'recycle'])->name('products.recycle');
     Route::post('/products/restore/{id}', [ProductsController::class, 'restore'])->name('products.restore');
     Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+    Route::get('/products/get-categories/{customer_id?}', [ProductsController::class, 'getCategoriesByCustomer'])->name('products.getCategories');
     Route::get('/products/{product}/edit', [ProductsController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');

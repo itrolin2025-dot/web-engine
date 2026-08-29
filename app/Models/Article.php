@@ -6,25 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Article extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'products';
+    protected $table = 'articles';
 
     protected $fillable = [
         'customers_id',
-        'category_products_id',
-        'code',
-        'name',
+        'article_categories_id',
+        'title',
+        'subtitle',
         'description',
+        'author',
+        'published_date',
         'images',
-        'price',
     ];
 
     protected $casts = [
-        'images' => 'array',
-        'price'  => 'decimal:2',
+        'images'         => 'array',
+        'published_date' => 'date',
     ];
 
     protected $dates = ['deleted_at'];
@@ -34,13 +35,8 @@ class Product extends Model
         return $this->belongsTo(Customer::class, 'customers_id');
     }
 
-    public function categoryProduct()
+    public function articleCategory()
     {
-        return $this->belongsTo(CategoryProduct::class, 'category_products_id');
-    }
-
-    public function reviews()
-    {
-        return $this->hasMany(ProductReview::class, 'products_id');
+        return $this->belongsTo(ArticleCategory::class, 'article_categories_id');
     }
 }

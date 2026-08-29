@@ -172,11 +172,13 @@
                                     <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Type</label>
                                     <select name="new_content[type]"
                                         class="form-select w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-800 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
-                                        <option value="image">image</option>
-                                        <option value="text" selected>text</option>
-                                        <option value="repeater">repeater</option>
-                                        <option value="color">color</option>
+                                        <option value="image">Image</option>
+                                        <option value="text" selected>Text</option>
+                                        <option value="long_text">Long Text</option>
+                                        <option value="repeater">Repeater</option>
+                                        <option value="color">Color</option>
                                         <option value="data">Data</option>
+                                        <option value="action">Action</option>
                                     </select>
                                 </div>
                                 <div class="sm:col-span-5" x-data="{ type: 'text' }">
@@ -359,11 +361,13 @@
                                                                 <label class="block text-xs font-medium text-slate-600 dark:text-navy-200 mb-1">Type</label>
                                                                 <select name="contents[{{ $content->id }}][type]"
                                                                     class="form-select w-full rounded-lg border border-slate-300 bg-transparent px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
-                                                                    <option value="image" {{ $content->type == 'image' ? 'selected' : '' }}>image</option>
-                                                                    <option value="text" {{ $content->type == 'text' ? 'selected' : '' }}>text</option>
-                                                                    <option value="repeater" {{ $content->type == 'repeater' ? 'selected' : '' }}>repeater</option>
-                                                                    <option value="color" {{ $content->type == 'color' ? 'selected' : '' }}>color</option>
+                                                                    <option value="image" {{ $content->type == 'image' ? 'selected' : '' }}>Image</option>
+                                                                    <option value="text" {{ $content->type == 'text' ? 'selected' : '' }}>Text</option>
+                                                                    <option value="long_text" {{ $content->type == 'long_text' ? 'selected' : '' }}>Long Text</option>
+                                                                    <option value="repeater" {{ $content->type == 'repeater' ? 'selected' : '' }}>Repeater</option>
+                                                                    <option value="color" {{ $content->type == 'color' ? 'selected' : '' }}>Color</option>
                                                                     <option value="data" {{ $content->type == 'data' ? 'selected' : '' }}>Data</option>
+                                                                    <option value="action" {{ $content->type == 'action' ? 'selected' : '' }}>Action</option>
                                                                 </select>
                                                             </div>
 
@@ -409,11 +413,13 @@
                                                 <div class="sm:col-span-3">
                                                     <select name="new_content[type]"
                                                         class="form-select w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-2.5 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
-                                                        <option value="image">image</option>
-                                                        <option value="text" selected>text</option>
-                                                        <option value="repeater">repeater</option>
-                                                        <option value="color">color</option>
-                                                        <option value="data">data</option>
+                                                        <option value="image">Image</option>
+                                                        <option value="text" selected>Text</option>
+                                                        <option value="long_text">Long Text</option>
+                                                        <option value="repeater">Repeater</option>
+                                                        <option value="color">Color</option>
+                                                        <option value="data">Data</option>
+                                                        <option value="action">Action</option>
                                                     </select>
                                                 </div>
                                                 <div class="sm:col-span-5">

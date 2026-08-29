@@ -27,22 +27,44 @@ class PagesController extends Controller
 
         $title = $website->title ?? 'Signature Fragrance';
 
-        // Ambil section layout berdasarkan page_type ($pages = 'shop', 'about', dll)
-        $layouts = DB::table('customers_websites_layout')
-            ->join('templates_section', 'templates_section.id', '=', 'customers_websites_layout.templates_section_id')
-            ->join('template', 'template.id', '=', 'templates_section.template_id')
-            ->where('customers_websites_layout.customers_website_id', $website->id)
-            ->where('customers_websites_layout.status', true)
-            ->where('customers_websites_layout.page_type', $pages)
-            ->orderBy('customers_websites_layout.position')
-            ->select(
-                'customers_websites_layout.*',
-                'templates_section.name as section_name',
-                'templates_section.slug as section_slug',
-                'template.path as template_path'
-            )
-            ->get();
+        $layouts = collect();
+        if ($website) {
+            // Ambil section layout berdasarkan page_type ($pages = 'shop', 'about', dll)
+            $layouts = DB::table('customers_websites_layout')
+                ->join('templates_section', 'templates_section.id', '=', 'customers_websites_layout.templates_section_id')
+                ->join('template', 'template.id', '=', 'templates_section.template_id')
+                ->where('customers_websites_layout.customers_website_id', $website->id)
+                ->where('customers_websites_layout.status', true)
+                ->where('customers_websites_layout.page_type', $pages)
+                ->orderBy('customers_websites_layout.position')
+                ->select(
+                    'customers_websites_layout.*',
+                    'templates_section.name as section_name',
+                    'templates_section.slug as section_slug',
+                    'template.path as template_path'
+                )
+                ->get();
 
-        return view('template.index', compact('title', 'website', 'layouts', 'pages'));
+            $categories = DB::table('category_products')
+                    ->where('customers_id', $website->customer_id)
+                    ->whereNull('deleted_at')
+                    ->whereExists(function ($query) {
+                        $query->select(DB::raw(1))
+                            ->from('products')
+                            ->whereColumn('products.category_products_id', 'category_products.id')
+                            ->whereNull('products.deleted_at');
+                    })
+                    ->get();
+
+            $products = DB::table('products')
+                ->where('customers_id', $website->customer_id)
+                ->whereNull('deleted_at')
+                ->get(); 
+        } else {
+            $categories = collect();
+            $products = collect();
+        }  
+
+        return view('template.index', compact('title', 'website', 'layouts', 'pages', 'categories', 'products'));
     }
 }
