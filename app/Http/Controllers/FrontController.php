@@ -51,7 +51,7 @@ class FrontController extends Controller
                 ->get();
 
             $categories = DB::table('category_products')
-                ->where('customers_id', $website->customer_id)
+                ->where('customers_website_id', $website->id)
                 ->whereNull('deleted_at')
                 ->whereExists(function ($query) {
                     $query->select(DB::raw(1))
@@ -62,12 +62,12 @@ class FrontController extends Controller
                 ->get();
 
             $products = DB::table('products')
-                ->where('customers_id', $website->customer_id)
+                ->where('customers_website_id', $website->id)
                 ->whereNull('deleted_at')
                 ->get();
 
             $article_categories = DB::table('article_categories')
-                ->where('customers_id', $website->customer_id)
+                ->where('customers_website_id', $website->id)
                 ->whereNull('deleted_at')
                 ->whereExists(function ($query) {
                     $query->select(DB::raw(1))
@@ -78,7 +78,7 @@ class FrontController extends Controller
                 ->get();
 
             $articles = DB::table('articles')
-                ->where('customers_id', $website->customer_id)
+                ->where('customers_website_id', $website->id)
                 ->whereNull('deleted_at')
                 ->get();
 
