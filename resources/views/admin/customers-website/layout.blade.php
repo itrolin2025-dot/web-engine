@@ -577,6 +577,11 @@
                                     fileInput.addEventListener('change', (e) => {
                                         const file = e.target.files[0];
                                         if (file) {
+                                            if (file.size > 2 * 1024 * 1024) {
+                                                window.showToast('Ukuran gambar maksimal 2MB. File yang dipilih: ' + (file.size / 1024 / 1024).toFixed(2) + 'MB', 'error');
+                                                fileInput.value = '';
+                                                return;
+                                            }
                                             const reader = new FileReader();
                                             reader.onload = (evt) => {
                                                 const base64Data = evt.target.result;
@@ -717,10 +722,14 @@
                             }
                         };
 
-                        listEl.querySelectorAll('input[type="text"], input[type="color"], textarea, select').forEach(el => {
+                        listEl.querySelectorAll('input[type="text"], input[type="hidden"], input[type="color"], textarea, select').forEach(el => {
                             el.addEventListener('input', updateTextareaFromDynamic);
                             el.addEventListener('change', updateTextareaFromDynamic);
                         });
+
+                        // Store reference for pre-submit sync
+                        if (!window.__dynamicUpdateFns) window.__dynamicUpdateFns = [];
+                        window.__dynamicUpdateFns.push(updateTextareaFromDynamic);
 
                         // Initial sync if textarea was empty
                         if (!existingJsonStr || existingJsonStr.trim() === '') {
@@ -887,6 +896,11 @@
             document.addEventListener('submit', function (e) {
                 const targetForm = e.target;
                 if (!targetForm) return;
+
+                // Pre-submit sync: ensure all dynamic textareas are up-to-date
+                if (window.__dynamicUpdateFns) {
+                    window.__dynamicUpdateFns.forEach(fn => fn());
+                }
 
                 if (targetForm.id === 'add-layout-form') {
                     e.preventDefault();

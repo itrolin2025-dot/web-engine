@@ -203,6 +203,92 @@ class CustomersWebController extends Controller
         ]);
     }
 
+    /**
+     * Recursively scan data for base64 image data URIs, save them as files,
+     * and replace the base64 strings with file paths.
+     */
+    private function processBase64Images(&$data, $websiteId)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => &$value) {
+                $this->processBase64Images($value, $websiteId);
+            }
+            unset($value);
+        } elseif (is_string($data) && preg_match('/^data:image\/(\w+);base64,/', $data, $matches)) {
+            $website = CustomersWebsite::find($websiteId);
+            $domainFolder = $website ? $website->domain : null;
+            $ext = strtolower($matches[1]);
+            if ($ext === 'jpeg') $ext = 'jpg';
+            $filename = time() . '_' . uniqid() . '.' . $ext;
+
+            $rawData = preg_replace('/^data:image\/\w+;base64,/', '', $data);
+            $decoded = base64_decode($rawData);
+            if ($decoded === false) return;
+
+            if (!empty($domainFolder)) {
+                $targetDir = public_path('images/website/' . $domainFolder);
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0755, true);
+                }
+                file_put_contents($targetDir . '/' . $filename, $decoded);
+                $data = $filename;
+            } else {
+                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
+                }
+                \Illuminate\Support\Facades\Storage::disk('public')->put('layout_content/' . $filename, $decoded);
+                $data = 'layout_content/' . $filename;
+            }
+        }
+    }
+
+    /**
+     * Recursively collect all image file paths from content data.
+     * Handles nested repeater arrays and flat key-value pairs.
+     */
+    private function collectImageFiles($data, &$files)
+    {
+        if (is_array($data)) {
+            foreach ($data as $value) {
+                $this->collectImageFiles($value, $files);
+            }
+        } elseif (is_string($data) && !empty($data)) {
+            // Skip base64 data URIs and non-file values
+            if (str_starts_with($data, 'data:') || str_starts_with($data, 'http') || str_starts_with($data, '#')) {
+                return;
+            }
+            $files[] = $data;
+        }
+    }
+
+    /**
+     * Delete image files from disk given an array of file paths.
+     */
+    private function deleteImageFiles($files, $websiteId)
+    {
+        $website = CustomersWebsite::find($websiteId);
+        $domainFolder = $website ? $website->domain : null;
+
+        foreach ($files as $filePath) {
+            // Delete from domain folder
+            if (!empty($domainFolder)) {
+                $fullPath = public_path('images/website/' . $domainFolder . '/' . basename($filePath));
+                if (file_exists($fullPath) && is_file($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
+            // Delete from storage layout_content
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($filePath);
+            }
+            // Also try direct path (for files stored in layout_content)
+            $directPath = public_path('storage/' . $filePath);
+            if (file_exists($directPath) && is_file($directPath)) {
+                @unlink($directPath);
+            }
+        }
+    }
+
     public function layoutStore(Request $request, $id, $page_type)
     {
         $request->validate([
@@ -265,6 +351,7 @@ class CustomersWebController extends Controller
 
         if (!empty($dynamicData) || !empty($contentInputData)) {
             $merged = array_merge($contentInputData, $dynamicData);
+            $this->processBase64Images($merged, $id);
             $finalContent = json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         }
 
@@ -380,6 +467,18 @@ class CustomersWebController extends Controller
         // Combine inputs: dynamicData (form inputs) takes precedence over contentInputData (textarea), which takes precedence over existing DB data
         $merged = array_merge($existingData, $contentInputData, $dynamicData);
         if (!empty($merged)) {
+            $this->processBase64Images($merged, $id);
+
+            // Cleanup: delete old image files no longer present in the new content
+            $oldFiles = [];
+            $newFiles = [];
+            $this->collectImageFiles($existingData, $oldFiles);
+            $this->collectImageFiles($merged, $newFiles);
+            $removedFiles = array_diff($oldFiles, $newFiles);
+            if (!empty($removedFiles)) {
+                $this->deleteImageFiles(array_values($removedFiles), $id);
+            }
+
             $finalContent = json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         }
 
@@ -410,22 +509,9 @@ class CustomersWebController extends Controller
         if (!empty($layout->content)) {
             $contentData = json_decode($layout->content, true);
             if (is_array($contentData)) {
-                $website = CustomersWebsite::find($id);
-                $domainFolder = $website ? $website->domain : null;
-
-                foreach ($contentData as $val) {
-                    if (is_string($val) && !empty($val)) {
-                        if (!empty($domainFolder)) {
-                            $filePath = public_path('images/website/' . $domainFolder . '/' . basename($val));
-                            if (file_exists($filePath) && is_file($filePath)) {
-                                @unlink($filePath);
-                            }
-                        }
-                        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($val)) {
-                            \Illuminate\Support\Facades\Storage::disk('public')->delete($val);
-                        }
-                    }
-                }
+                $imageFiles = [];
+                $this->collectImageFiles($contentData, $imageFiles);
+                $this->deleteImageFiles($imageFiles, $id);
             }
         }
 
