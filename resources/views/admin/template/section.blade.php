@@ -91,7 +91,7 @@
         <div class="lg:col-span-2 space-y-4">
 
             {{-- Add New Section Card --}}
-            <div class="card" x-data="{ showForm: false }">
+            <div class="card" x-data="{ showForm: true }">
                 <button type="button" @click="showForm = !showForm"
                     class="flex w-full items-center justify-between px-4 py-3 sm:px-5 text-left">
                     <div class="flex items-center space-x-2">
@@ -236,7 +236,7 @@
                 @else
                     <div>
                         @foreach($sections as $index => $section)
-                        <div id="section-row-{{ $section->id }}" class="{{ $loop->first ? '' : 'border-t border-slate-150 dark:border-navy-500' }}" x-data="{ open: {{ $index === 0 ? 'true' : 'false' }} }">
+                        <div id="section-row-{{ $section->id }}" class="{{ $loop->first ? '' : 'border-t border-slate-150 dark:border-navy-500' }}" x-data="{ open: false }">
 
                             {{-- Accordion Header --}}
                             <button type="button"
