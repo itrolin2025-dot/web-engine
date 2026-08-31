@@ -18,46 +18,53 @@
             <!-- Main Sections Links -->
             <div class="is-scrollbar-hidden flex grow flex-col space-y-4 overflow-y-auto pt-6">
                 <div class="flex flex-col items-center justify-center grow space-y-2">
-                    <!-- Dashboards -->
+                    {{-- Dashboards (always shown) --}}
+                    @php
+                        $isDashboard = request()->routeIs('admin.dashboard');
+                    @endphp
                     <a href="{{ route('admin.dashboard') }}" data-tooltip="Dashboards" data-placement="right"
-                        class="tooltip-main-sidebar flex size-11 items-center justify-center rounded-lg bg-primary/10 text-primary outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:bg-navy-600 dark:text-accent-light dark:hover:bg-navy-450 dark:focus:bg-navy-450 dark:active:bg-navy-450/90">
+                        class="tooltip-main-sidebar flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 {{ $isDashboard ? 'bg-primary/10 text-primary dark:bg-navy-600 dark:text-accent-light' : 'hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25' }}">
                         <i class="fa-solid fa-house"></i>
                     </a>
-                    <a href="{{ route('admin.customers.index') }}" data-tooltip="Customers" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-user-group"></i>
-                    </a>
-                    <a href="{{ route('admin.template') }}" data-tooltip="Website Template" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-paint-roller"></i>
-                    </a>
-                    <a href="{{ route('admin.customers-website') }}" data-tooltip="Customers Website" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-globe"></i>
-                    </a>
-                    <a href="{{ route('admin.products') }}" data-tooltip="Transaction" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-receipt"></i>
-                    </a>
-                    <a href="{{ route('admin.products') }}" data-tooltip="Report" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-chart-pie"></i>
-                    </a>
+
+                    {{-- Dynamic modules from DB where shortcut='side' --}}
+                    @php
+                        $sideModules = \App\Models\Modul::where('shortcut', 'side')
+                            ->whereNull('parent_id')
+                            ->where('kode', '!=', 'dashboard')
+                            ->orderBy('sort_order')
+                            ->get();
+                    @endphp
+
+                    @forelse($sideModules as $modul)
+                        @php
+                            $isActive = request()->routeIs('admin.' . $modul->kode . '*');
+                        @endphp
+                        <a href="{{ route('admin.' . $modul->kode . '.index') }}" data-tooltip="{{ $modul->name }}" data-placement="right"
+                            class="tooltip-main-sidebar flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 {{ $isActive ? 'bg-primary/10 text-primary dark:bg-navy-600 dark:text-accent-light' : 'hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25' }}">
+                            <i class="{{ $modul->icon }}"></i>
+                        </a>
+                    @empty
+                        {{-- No modules with shortcut='side' --}}
+                    @endforelse
 
                     <div class="w-8 border-t border-slate-200 dark:border-navy-600"></div>
 
-                    <a href="{{ route('admin.users.index') }}" data-tooltip="Users" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-users"></i>
-                    </a>
-                    <a href="{{ route('admin.roles.index') }}" data-tooltip="Roles" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-user-shield"></i>
-                    </a>
-                    <a href="{{ route('admin.modul.index') }}" data-tooltip="Modul" data-placement="right"
-                        class="flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25">
-                        <i class="fa-solid fa-puzzle-piece"></i>
-                    </a>
+                    {{-- Admin modules (always shown at bottom) --}}
+                    @php
+                        $adminModules = \App\Models\Modul::whereIn('kode', ['users', 'roles', 'modul'])
+                            ->orderBy('sort_order')
+                            ->get();
+                    @endphp
+                    @foreach($adminModules as $modul)
+                        @php
+                            $isActive = request()->routeIs('admin.' . $modul->kode . '*');
+                        @endphp
+                        <a href="{{ route('admin.' . $modul->kode . '.index') }}" data-tooltip="{{ $modul->name }}" data-placement="right"
+                            class="tooltip-main-sidebar flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 {{ $isActive ? 'bg-primary/10 text-primary dark:bg-navy-600 dark:text-accent-light' : 'hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25' }}">
+                            <i class="{{ $modul->icon }}"></i>
+                        </a>
+                    @endforeach
                 </div>
             </div>
 

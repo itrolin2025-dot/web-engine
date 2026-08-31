@@ -13,6 +13,7 @@ class Permissions extends Model
         'module',
         'name',
         'slug',
+        'label',
     ];
 
     public function roles()

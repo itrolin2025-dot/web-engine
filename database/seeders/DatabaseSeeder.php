@@ -24,9 +24,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             IconSeeder::class,
+            PermissionSeeder::class,
             IndoRegionSeeder::class,
-            CustomerModuleSeeder::class,
-            ProductArticleModuleSeeder::class,
+            // CustomerModuleSeeder::class,    // sudah digantikan PermissionSeeder
+            // ProductArticleModuleSeeder::class, // sudah digantikan PermissionSeeder
         ]);
     }
 }

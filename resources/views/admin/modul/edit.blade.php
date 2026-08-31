@@ -2,7 +2,7 @@
     
     @include('components.forms.tittle')
     
-    <form action="{{ route($modul . '.update', $modul_data) }}" method="POST">
+    <form action="{{ route('admin.modul.update', $modul_data) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -64,6 +64,7 @@
                             <span>Shortcut</span>
                             <select name="shortcut" class="form-select  mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
                                 <option value="none" @if($modul_data->shortcut === 'none' || $modul_data->shortcut === null || $modul_data->shortcut === '') selected @endif>None</option>
+                                <option value="side" @if($modul_data->shortcut === 'side') selected @endif>Side Menu</option>
                                 <option value="left" @if($modul_data->shortcut === 'left') selected @endif>Left Menu</option>
                                 <option value="right" @if($modul_data->shortcut === 'right') selected @endif>Right Menu</option>
                                 <option value="dashboard" @if($modul_data->shortcut === 'dashboard') selected @endif>Dashboard</option>
@@ -102,7 +103,7 @@
         </div>
 
         <div class="flex justify-center gap-2 pt-6">
-            <a href="{{ route('modul.index') }}" class="btn border">Cancel</a>
+            <a href="{{ route('admin.modul.index') }}" class="btn border">Cancel</a>
             <button class="btn bg-primary text-white">Update</button>
         </div>
 

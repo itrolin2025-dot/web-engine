@@ -228,13 +228,13 @@ class ModulController extends Controller
 
             DB::commit();
 
-            return redirect()->route($this->modul.'.index')->with('success', 'Data has been updated successfully.');
+            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Data has been updated successfully.');
 
         } catch (\Exception $e) {
 
             DB::rollBack();
             // Optionally, log the error
-            return redirect()->route($this->modul.'.index')->with('error', 'Failed updated '.$this->modul.': '.$e->getMessage());
+            return redirect()->route('admin.' . $this->modul . '.index')->with('error', 'Failed updated '.$this->modul.': '.$e->getMessage());
         
         }
     }

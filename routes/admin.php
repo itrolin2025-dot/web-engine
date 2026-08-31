@@ -32,9 +32,10 @@ Route::get('/dashboard', function () {
 
 
 Route::middleware('auth')->group(function () {
-
+    
     // Articles
     Route::get('/articles', [ArticlesController::class, 'index'])->name('articles');
+    Route::get('/articles/index', [ArticlesController::class, 'index'])->name('articles.index');
     Route::get('/articles/index', [ArticlesController::class, 'index'])->name('articles.index');
     Route::get('/articles/get-data', [ArticlesController::class, 'getData'])->name('articles.getData');
     Route::get('/articles/get-dataRecycle', [ArticlesController::class, 'getDataRecycle'])->name('articles.getDataRecycle');
@@ -87,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     Route::get('template', [TemplateController::class, 'index'])->name('template');
+    Route::get('template/index', [TemplateController::class, 'index'])->name('template.index');
     Route::get('template/create', [TemplateController::class, 'create'])->name('template.create');
     Route::post('template', [TemplateController::class, 'store'])->name('template.store');
     Route::get('template/{id}/edit', [TemplateController::class, 'edit'])->name('template.edit');
@@ -101,6 +103,7 @@ Route::middleware('auth')->group(function () {
     Route::get('website', [WebsiteController::class, 'index'])->name('website');
 
     Route::get('customers-website', [CustomersWebController::class, 'index'])->name('customers-website');
+    Route::get('customers-website/index', [CustomersWebController::class, 'index'])->name('customers-website.index');
     Route::get('customers-website/create', [CustomersWebController::class, 'create'])->name('customers-website.create');
     Route::post('customers-website', [CustomersWebController::class, 'store'])->name('customers-website.store');
     Route::get('customers-website/{id}/edit', [CustomersWebController::class, 'edit'])->name('customers-website.edit');
@@ -119,7 +122,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Customers
-    Route::get('/customers', [CustomersController::class, 'index'])->name('customers.index');
+    Route::get('/customers', [CustomersController::class, 'index'])->name('customers');
+    Route::get('/customers/index', [CustomersController::class, 'index'])->name('customers.index');
     Route::get('/customers/get-data', [CustomersController::class, 'getData'])->name('customers.getData');
     Route::get('/customers/get-dataRecycle', [CustomersController::class, 'getDataRecycle'])->name('customers.getDataRecycle');
     Route::get('/customers/create', [CustomersController::class, 'create'])->name('customers.create');

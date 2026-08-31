@@ -65,6 +65,7 @@
                             <span>Shortcut</span>
                             <select name="shortcut" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
                                 <option value="none">None</option>
+                                <option value="side">Side Menu</option>
                                 <option value="left">Left Menu</option>
                                 <option value="right">Right Menu</option>
                                 <option value="dashboard">Dashboard</option>
