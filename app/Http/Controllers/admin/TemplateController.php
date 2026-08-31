@@ -170,24 +170,9 @@ class TemplateController extends Controller
         $template = Template::findOrFail($id);
         $sections = TemplatesSection::with('contents')->where('template_id', $id)->orderBy('position', 'asc')->get();
 
-        $contentPresets = [
-            ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
-            ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
-            ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
-            ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
-            ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
-            ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
-            ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
-            ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
-            ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
-            ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
-            ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
-            ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
-            ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
-            ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#ffffff'],
-            ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
-            ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
-        ];
+        $contentPresets = $this->getContentPresets();
+        $predefinedKeys = array_column($contentPresets, 'key');
+
 
         return view('admin.template.section', [
             'template' => $template,
@@ -306,27 +291,8 @@ class TemplateController extends Controller
 
         // Handle section_contents checklist (insert/restore if checked, soft-delete if unchecked)
         if ($request->has('section_contents') && is_array($request->section_contents)) {
-            $contentPresets = [
-                ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
-                ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
-                ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
-                ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
-                ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
-                ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
-                ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
-                ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
-                ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
-                ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
-                ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
-                ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
-                ['key' => 'button_url', 'type' => 'text', 'default_value' => '#'],
-                ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
-                ['key' => 'button_border_color', 'type' => 'color', 'default_value' => '#ffffff'],
-                ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#000000'],
-                ['key' => 'repeater', 'type' => 'repeater', 'default_value' => '[]'],
-                ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
-                ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
-            ];
+            
+            $contentPresets = $this->getContentPresets();
             $predefinedKeys = array_column($contentPresets, 'key');
 
             foreach ($predefinedKeys as $key) {
@@ -412,4 +378,29 @@ class TemplateController extends Controller
 
         return redirect()->route('admin.template.section', $id)->with('success', 'Section content item deleted successfully.');
     }
+
+    private function getContentPresets()
+{
+    return [
+        ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
+        ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
+        ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
+        ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
+        ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
+        ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
+        ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
+        ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
+        ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
+        ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
+        ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
+        ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
+        ['key' => 'button_url', 'type' => 'text', 'default_value' => '#'],
+        ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
+        ['key' => 'button_border_color', 'type' => 'color', 'default_value' => '#ffffff'],
+        ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#000000'],
+        ['key' => 'tagline', 'type' => 'repeater', 'default_value' => '[{ "label": "Tag 1", "color":"#575757", "sort":"1" }, { "label": "Tag 2", "color":"#575757", "sort":"12" }]'],
+        ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
+        ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
+    ];
+}
 }

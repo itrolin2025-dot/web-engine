@@ -89,7 +89,28 @@ class FrontController extends Controller
             $articles = collect();
         }
 
-        return view('template.index', compact('title', 'website', 'layouts', 'categories', 'products', 'article_categories', 'articles'));
+        $categoryChildren = [];
+        foreach ($categories as $cat) {
+            $categoryChildren[] = [
+                'label' => $cat->name,
+                'url' => 'categories/' . $cat->code
+            ];
+        }
+
+        $navbarPresets = [
+            'brand' => 'My Dummy Brand',
+            'cta_text' => 'Get Started',
+            'cta_url' => '#',
+            'cta_color' => '#000000',
+            'menus' => [
+                ['label' => 'Home', 'url' => ''],
+                ['label' => 'About', 'url' => 'about'],
+                ['label' => 'Shop', 'url' => 'shop'],
+                ['label' => 'Categories', 'url' => 'categories', 'children' => $categoryChildren],
+                ['label' => 'Contact', 'url' => 'contact'],
+            ]
+        ];
+        return view('template.index', compact('title', 'website', 'layouts', 'categories', 'products', 'article_categories', 'articles', 'navbarPresets'));
     }
 
     public function selectLayout($client = null)

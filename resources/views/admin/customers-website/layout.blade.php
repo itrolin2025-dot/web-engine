@@ -490,12 +490,197 @@
                                 textarea.className = 'form-textarea w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
                                 label.appendChild(textarea);
                             } else if (typeLower === 'repeater' || typeof val === 'object') {
-                                const textarea = document.createElement('textarea');
-                                textarea.name = inputName;
-                                textarea.rows = 5;
-                                textarea.value = typeof val === 'object' ? JSON.stringify(val, null, 2) : val;
-                                textarea.className = 'form-textarea w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-mono hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
-                                label.appendChild(textarea);
+                                // 1. Inisialisasi Data Repeater
+                                let repeaterItems = [];
+                                if (Array.isArray(val)) {
+                                    repeaterItems = val;
+                                } else if (typeof val === 'string') {
+                                    try {
+                                        const parsed = JSON.parse(val);
+                                        repeaterItems = Array.isArray(parsed) ? parsed : [];
+                                    } catch (e) {
+                                        repeaterItems = [];
+                                    }
+                                }
+
+                                // 2. Hidden Input Utama untuk Simpan JSON Array Final
+                                const hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = inputName;
+                                hiddenInput.value = JSON.stringify(repeaterItems);
+                                label.appendChild(hiddenInput);
+
+                                // 3. Container Utama Repeater
+                                const repeaterWrapper = document.createElement('div');
+                                repeaterWrapper.className = 'space-y-2 rounded-lg border border-slate-200 bg-slate-100/60 p-2.5 dark:border-navy-500 dark:bg-navy-900/40';
+
+                                const itemsContainer = document.createElement('div');
+                                itemsContainer.className = 'space-y-2';
+                                repeaterWrapper.appendChild(itemsContainer);
+
+                                // Helper: Sync Data ke Hidden Input & Dynamic JSON Textarea
+                                const syncRepeaterValue = () => {
+                                    const currentData = [];
+                                    itemsContainer.querySelectorAll('.repeater-item-row').forEach(row => {
+                                        const lbl = row.querySelector('.repeater-label-input').value;
+                                        const clr = row.querySelector('.repeater-color-text-input').value;
+                                        const srt = row.querySelector('.repeater-sort-input').value;
+                                        const imgVal = row.querySelector('.repeater-image-value').value;
+
+                                        currentData.push({
+                                            label: lbl,
+                                            color: clr,
+                                            sort: srt,
+                                            image: imgVal
+                                        });
+                                    });
+
+                                    hiddenInput.value = JSON.stringify(currentData);
+                                    hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                    hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+                                };
+
+                                // Helper: Render Row Item
+                                const renderRepeaterRow = (itemData = { label: '', color: '#575757', sort: '1', image: '' }) => {
+                                    const row = document.createElement('div');
+                                    row.className = 'repeater-item-row flex flex-col space-y-2 rounded-md border border-slate-200 bg-white p-2.5 shadow-sm dark:border-navy-500 dark:bg-navy-700 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0';
+
+                                    // Hidden input menyimpan string path/base64 gambar per item
+                                    const imageValInput = document.createElement('input');
+                                    imageValInput.type = 'hidden';
+                                    imageValInput.className = 'repeater-image-value';
+                                    imageValInput.value = itemData.image || '';
+
+                                    // 1. Upload & Preview Image Element
+                                    const imgContainer = document.createElement('div');
+                                    imgContainer.className = 'flex items-center space-x-2 shrink-0';
+
+                                    const imgPreview = document.createElement('img');
+                                    let initialImgSrc = itemData.image || '';
+                                    if (initialImgSrc && !initialImgSrc.startsWith('http') && !initialImgSrc.startsWith('data:') && !initialImgSrc.startsWith('/')) {
+                                        initialImgSrc = websiteDomain ? `{{ asset('images/website') }}/${websiteDomain}/${initialImgSrc}` : `{{ asset('storage') }}/${initialImgSrc}`;
+                                    }
+                                    imgPreview.src = initialImgSrc;
+                                    imgPreview.className = `h-9 w-9 object-cover rounded border border-slate-200 dark:border-navy-450 ${itemData.image ? '' : 'hidden'}`;
+
+                                    const fileInput = document.createElement('input');
+                                    fileInput.type = 'file';
+                                    fileInput.accept = 'image/*';
+                                    fileInput.className = 'hidden';
+
+                                    const uploadBtn = document.createElement('button');
+                                    uploadBtn.type = 'button';
+                                    uploadBtn.className = 'btn h-8 rounded bg-slate-150 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-100 dark:hover:bg-navy-450 shrink-0';
+                                    uploadBtn.innerHTML = '<i class="fa-solid fa-image mr-1"></i> Pic';
+                                    uploadBtn.addEventListener('click', () => fileInput.click());
+
+                                    fileInput.addEventListener('change', (e) => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onload = (evt) => {
+                                                const base64Data = evt.target.result;
+                                                imgPreview.src = base64Data;
+                                                imgPreview.classList.remove('hidden');
+                                                imageValInput.value = base64Data;
+                                                syncRepeaterValue();
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    });
+
+                                    imgContainer.appendChild(imgPreview);
+                                    imgContainer.appendChild(uploadBtn);
+                                    imgContainer.appendChild(fileInput);
+                                    imgContainer.appendChild(imageValInput);
+
+                                    // 2. Input Label
+                                    const labelInput = document.createElement('input');
+                                    labelInput.type = 'text';
+                                    labelInput.placeholder = 'Tag / Label';
+                                    labelInput.value = itemData.label || '';
+                                    labelInput.className = 'repeater-label-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+
+                                    // 3. Color Picker Wrapper
+                                    const colorPickerDiv = document.createElement('div');
+                                    colorPickerDiv.className = 'flex items-center space-x-1 shrink-0';
+
+                                    const colorPicker = document.createElement('input');
+                                    colorPicker.type = 'color';
+                                    colorPicker.value = (itemData.color && itemData.color.startsWith('#')) ? itemData.color : '#575757';
+                                    colorPicker.className = 'h-7 w-8 cursor-pointer rounded border border-slate-300 bg-transparent p-0.5 dark:border-navy-450';
+
+                                    const colorTextInput = document.createElement('input');
+                                    colorTextInput.type = 'text';
+                                    colorTextInput.placeholder = '#000000';
+                                    colorTextInput.value = itemData.color || '#575757';
+                                    colorTextInput.className = 'repeater-color-text-input form-input w-20 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450';
+
+                                    colorPicker.addEventListener('input', () => {
+                                        colorTextInput.value = colorPicker.value;
+                                        syncRepeaterValue();
+                                    });
+                                    colorTextInput.addEventListener('input', () => {
+                                        if (colorTextInput.value.startsWith('#') && (colorTextInput.value.length === 4 || colorTextInput.value.length === 7)) {
+                                            colorPicker.value = colorTextInput.value;
+                                        }
+                                        syncRepeaterValue();
+                                    });
+
+                                    colorPickerDiv.appendChild(colorPicker);
+                                    colorPickerDiv.appendChild(colorTextInput);
+
+                                    // 4. Input Sort
+                                    const sortInput = document.createElement('input');
+                                    sortInput.type = 'number';
+                                    sortInput.placeholder = 'Sort';
+                                    sortInput.value = itemData.sort !== undefined ? itemData.sort : (itemsContainer.children.length + 1).toString();
+                                    sortInput.className = 'repeater-sort-input form-input w-16 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+
+                                    labelInput.addEventListener('input', syncRepeaterValue);
+                                    sortInput.addEventListener('input', syncRepeaterValue);
+
+                                    // 5. Tombol Hapus Baris
+                                    const removeBtn = document.createElement('button');
+                                    removeBtn.type = 'button';
+                                    removeBtn.className = 'btn h-7 w-7 rounded-md p-0 text-error hover:bg-error/10 shrink-0 self-end sm:self-center';
+                                    removeBtn.innerHTML = '<i class="fa-solid fa-trash-can text-xs"></i>';
+                                    removeBtn.addEventListener('click', () => {
+                                        row.remove();
+                                        syncRepeaterValue();
+                                    });
+
+                                    // Masukkan elemen ke row
+                                    row.appendChild(imgContainer);
+                                    row.appendChild(labelInput);
+                                    row.appendChild(colorPickerDiv);
+                                    row.appendChild(sortInput);
+                                    row.appendChild(removeBtn);
+
+                                    itemsContainer.appendChild(row);
+                                };
+
+                                // Render data awal
+                                if (repeaterItems.length > 0) {
+                                    repeaterItems.forEach(item => renderRepeaterRow(item));
+                                } else {
+                                    renderRepeaterRow();
+                                }
+
+                                // Tombol Add Item
+                                const addMoreBtn = document.createElement('button');
+                                addMoreBtn.type = 'button';
+                                addMoreBtn.className = 'btn mt-2 h-7 rounded-lg bg-primary/10 px-3 text-xs font-medium text-primary hover:bg-primary/20 dark:bg-accent/10 dark:text-accent-light dark:hover:bg-accent/20';
+                                addMoreBtn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Add Item';
+                                addMoreBtn.addEventListener('click', () => {
+                                    renderRepeaterRow();
+                                    syncRepeaterValue();
+                                });
+
+                                repeaterWrapper.appendChild(addMoreBtn);
+                                label.appendChild(repeaterWrapper);
+
+                                syncRepeaterValue();
                             } else {
                                 const input = document.createElement('input');
                                 input.type = 'text';

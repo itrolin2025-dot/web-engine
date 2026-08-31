@@ -215,12 +215,18 @@
 
 @php
     $navContent = isset($layout->content) ? json_decode($layout->content, true) : [];
+    
+    // Jika ada data dummy navbarPresets dari controller, gabungkan
+    if(isset($navbarPresets)) {
+        $navContent = array_merge($navbarPresets, $navContent);
+    }
+
     //ambil logo
-    $logoFile = $navContent['logo'] ?? null;
+    $logoFile = $navContent['image'] ?? null;
     $logo = $logoFile ? '/images/website/' . ($website->domain ?? '') . '/' . $logoFile : null;
 
     //ambil nama brand
-    $brand = $navContent['brand'] ?? ($website->title ?? '');
+    $brand = $navContent['brand'] ?? ($website->title ?? 'My Brand');
     //ambil menu
     $menus = $navContent['menus'] ?? [];
     //ambil tombol cta
