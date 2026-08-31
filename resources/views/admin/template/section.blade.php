@@ -234,9 +234,9 @@
                         <p class="text-xs mt-1 opacity-70">Click "Add New Section" above to create one.</p>
                     </div>
                 @else
-                    <div class="divide-y divide-slate-150 dark:divide-navy-600">
+                    <div>
                         @foreach($sections as $index => $section)
-                        <div id="section-row-{{ $section->id }}" x-data="{ open: {{ $index === 0 ? 'true' : 'false' }} }">
+                        <div id="section-row-{{ $section->id }}" class="{{ $loop->first ? '' : 'border-t border-slate-150 dark:border-navy-500' }}" x-data="{ open: {{ $index === 0 ? 'true' : 'false' }} }">
 
                             {{-- Accordion Header --}}
                             <button type="button"
