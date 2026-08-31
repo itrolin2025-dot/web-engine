@@ -119,9 +119,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Customers
-    Route::get('/customers', [CustomersController::class, 'index'])->name('customers');
+    Route::get('/customers', [CustomersController::class, 'index'])->name('customers.index');
     Route::get('/customers/get-data', [CustomersController::class, 'getData'])->name('customers.getData');
-    Route::get('/customers/get-dataRecycle', [CustomersController::class, 'getDataRecy cle'])->name('customers.getDataRecycle');
+    Route::get('/customers/get-dataRecycle', [CustomersController::class, 'getDataRecycle'])->name('customers.getDataRecycle');
     Route::get('/customers/create', [CustomersController::class, 'create'])->name('customers.create');
     Route::get('/customers/recycle', [CustomersController::class, 'recycle'])->name('customers.recycle');
     Route::post('/customers/restore/{id}', [CustomersController::class, 'restore'])->name('customers.restore');

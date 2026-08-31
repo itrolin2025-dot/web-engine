@@ -65,7 +65,7 @@
                     },
                 ],
                 ajax: {
-                    url: "{{ route($modul . '.getData') }}",
+                    url: "{{ route('admin.' . $modul . '.getData') }}",
                     type: 'GET',
                     data: function (d) {
                         d.filter_code   = $('.filter-kode').val();

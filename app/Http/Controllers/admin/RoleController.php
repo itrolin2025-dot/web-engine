@@ -37,7 +37,7 @@ class RoleController extends Controller
 
         $roles = Role::latest()->paginate(10);
 
-        return view('roles.index', compact('roles'), [
+        return view('admin.' . $this->modul . '.index', compact('roles'), [
             'canAdd'        => canAccess($this->modul, $this->role_id, 'add'),
             'canEdit'       => canAccess($this->modul, $this->role_id, 'edit'),
             'canDelete'     => canAccess($this->modul, $this->role_id, 'delete'),
@@ -87,7 +87,7 @@ class RoleController extends Controller
 
         $moduls  = Modul::with('modulAkses')->get();
 
-        return view($this->modul.'.create', compact('moduls'),
+        return view('admin.'.$this->modul.'.create', compact('moduls'),
             [
                 'modul'         => $this->modul,
                 'modul_path'    => $this->path,
@@ -133,12 +133,12 @@ class RoleController extends Controller
                 auth()->id()
             );
 
-            return redirect()->route($this->modul.'.index')->with('success', 'Data has been created successfully.');
+            return redirect()->route('admin.'.$this->modul.'.index')->with('success', 'Data has been created successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->route($this->modul.'.index')->with('error', 'Failed to create data. Please try again. : '.$e->getMessage());
+            return redirect()->route('admin.'.$this->modul.'.index')->with('error', 'Failed to create data. Please try again. : '.$e->getMessage());
         }
     }
 
@@ -161,7 +161,7 @@ class RoleController extends Controller
 
         $moduls = Modul::with('modulAkses')->get();
 
-        return view($this->modul.'.edit', [
+        return view('admin.'. $this->modul.'.edit', [
             'role'        => $role,
             'permissions' => $permissions,
             'moduls'      => $moduls,

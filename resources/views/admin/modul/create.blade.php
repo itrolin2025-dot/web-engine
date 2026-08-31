@@ -2,7 +2,7 @@
     
     @include('components.forms.tittle')
 
-    <form action="{{ route($modul . '.store') }}" method="POST">
+    <form action="{{ route('admin.' . $modul . '.store') }}" method="POST">
         @csrf
 
         <!-- Agar kolom kiri dan kanan sama tinggi, gunakan flex pada parent dan h-full pada child -->
@@ -95,7 +95,7 @@
         </div>
 
         <div class="flex justify-center gap-2 pt-6">
-            <a href="{{ route('modul.index') }}" class="btn border">Cancel</a>
+            <a href="{{ route('admin.modul.index') }}" class="btn border">Cancel</a>
             <button class="btn bg-primary text-white">Save</button>
         </div>
 

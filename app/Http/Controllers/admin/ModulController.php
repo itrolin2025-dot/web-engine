@@ -34,7 +34,7 @@ class ModulController extends Controller
 
         $parents = Modul::whereNull('parent_id')->get();
 
-        return view($this->modul.'.index', [
+        return view('admin.'.$this->modul.'.index', [
             'parents'       => $parents,
             'canAdd'        => canAccess($this->modul, $this->role_id, 'add'),
             'canEdit'       => canAccess($this->modul, $this->role_id, 'edit'),
@@ -61,7 +61,7 @@ class ModulController extends Controller
 
         $parents = Modul::whereNull('parent_id')->get();
 
-        return view($this->modul.'.recycle', 
+        return view('admin.'.$this->modul.'.recycle', 
             [
                 'parents'       => $parents,
                 'modul'         => $this->modul,
@@ -86,7 +86,7 @@ class ModulController extends Controller
         $permissions    = Permissions::all();
         $icons          = Icon::all();
 
-        return view($this->modul.'.create', [
+        return view('admin.'.$this->modul.'.create', [
             'parents'       => $parents,
             'icons'         => $icons,
             'permissions'   => $permissions,
@@ -139,15 +139,14 @@ class ModulController extends Controller
 
             DB::commit();
 
-            return redirect()->route($this->modul.'.index')->with('success', 'Data has been created successfully.');
+            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Data has been created successfully.');
         
         } catch (\Exception $e) {
             DB::rollBack();
 
             // optionally log error here
 
-            return redirect()->route($this->modul.'.index')->with('error', 'Failed to create data. Please try again.
-             : '.$e->getMessage());
+            return redirect()->route('admin.' . $this->modul . '.index')->with('error', 'Failed to create data. Please try again. : '.$e->getMessage());
         }
     }
 
@@ -168,7 +167,7 @@ class ModulController extends Controller
         $permissions    = Permissions::all();
         $icons          = Icon::all();
         
-        return view($this->modul.'.edit', [
+        return view('admin.'.$this->modul.'.edit', [
             'modul_data'    => $modul_data,
             'parents'       => $parents, 
             'icons'         => $icons, 

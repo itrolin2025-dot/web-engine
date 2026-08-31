@@ -11,7 +11,7 @@
         </li>
         <li class="flex items-center space-x-2">
             <a class="text-primary transition-colors hover:text-primary-focus dark:text-accent-light dark:hover:text-accent"
-                href="{{ route('admin.' . $modul) }}">{{ $modul_name }}</a>
+                href="{{ route('admin.' . $modul . '.index') }}">{{ $modul_name }}</a>
             <i class="fa-solid fa-angle-right"></i>
         </li>
         <li>{{ $modul_type }}</li>

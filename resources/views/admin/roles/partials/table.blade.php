@@ -64,7 +64,7 @@
                     },
                 ],
                 ajax: {
-                    url: "{{ route($modul . '.getData') }}",
+                    url: "{{ route('admin.' . $modul . '.getData') }}",
                     type: 'GET',
                     data: function (d) {
                         d.filter_name = $('.filter-name').val();
@@ -95,7 +95,7 @@
 
                 // AJAX to delete
                 $.ajax({
-                    url: '{{ route($modul . ".destroy", ":id") }}'.replace(':id', deleteId),
+                    url: '{{ route('admin.' . $modul . ".destroy", ":id") }}'.replace(':id', deleteId),
                     type: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

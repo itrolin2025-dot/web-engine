@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            IconSeeder::class,
             IndoRegionSeeder::class,
             CustomerModuleSeeder::class,
             ProductArticleModuleSeeder::class,

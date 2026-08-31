@@ -85,7 +85,7 @@
         <div class="lg:col-span-2 space-y-4">
 
             {{-- Add New Layout Card --}}
-            <div class="card" x-data="{ showForm: false }">
+            <div class="card" x-data="{ showForm: true }">
                 <button type="button" @click="showForm = !showForm"
                     class="flex w-full items-center justify-between px-4 py-3 sm:px-5 text-left">
                     <div class="flex items-center space-x-2">
@@ -196,9 +196,9 @@
                         <p class="text-xs mt-1 opacity-70">Click "Add New Layout Item" above to create one.</p>
                     </div>
                 @else
-                    <div class="divide-y divide-slate-150 dark:divide-navy-600">
+                    <div>
                         @foreach($layouts as $index => $layout)
-                        <div id="layout-row-{{ $layout->id }}" x-data="{ open: {{ $index === 0 ? 'true' : 'false' }} }">
+                        <div id="layout-row-{{ $layout->id }}" class="{{ $loop->first ? '' : 'border-t border-slate-150 dark:border-navy-500' }}" x-data="{ open: false }">
 
                             {{-- Accordion Header --}}
                             <button type="button"
@@ -236,7 +236,7 @@
                                 x-transition:leave="transition ease-in duration-150"
                                 x-transition:leave-start="opacity-100 translate-y-0"
                                 x-transition:leave-end="opacity-0 -translate-y-1"
-                                class="bg-slate-50 dark:bg-navy-600 border-t border-slate-150 dark:border-navy-500 px-4 pb-4 pt-4 sm:px-5">
+                                class="bg-slate-50 dark:bg-navy-700 border-t border-slate-150 dark:border-navy-600 px-4 pb-4 pt-4 sm:px-5">
 
                                 <form action="{{ route('admin.customers-website.layout.update', [$website->id, $page_type, $layout->id]) }}"
                                     method="POST" enctype="multipart/form-data" class="layout-update-form space-y-4" data-layout-id="{{ $layout->id }}"
@@ -250,7 +250,7 @@
                                             id="sectionSelectUpdate-{{ $layout->id }}"
                                             x-model="selectedSectionId"
                                             onchange="updateSectionPreviewEdit(this, {{ $layout->id }})"
-                                            class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent" required>
+                                            class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
                                             <option value="">Select Section</option>
                                             @foreach($sections as $sec)
                                                 <option value="{{ $sec->id }}"
@@ -280,7 +280,7 @@
                                         <label class="block">
                                             <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Position</span>
                                             <input name="position" value="{{ old('position', $layout->position) }}"
-                                                class="form-input mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
+                                                class="form-input mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                                 type="number" min="0">
                                         </label>
                                         <div class="flex items-end pb-1">
@@ -295,7 +295,7 @@
                                     <label class="block">
                                         <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
                                         <textarea name="content" id="contentUpdate-{{ $layout->id }}" rows="6" placeholder="Layout content..."
-                                            class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">{{ old('content', $layout->content) }}</textarea>
+                                            class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">{{ old('content', $layout->content) }}</textarea>
                                     </label>
 
                                     <!-- Dynamic Section Content Fields loaded via AJAX -->
@@ -306,7 +306,7 @@
                                         <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-3"></div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-navy-500">
+                                    <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-navy-600">
                                         <button type="submit"
                                             class="btn h-8 rounded-full bg-primary px-4 text-xs font-medium text-white hover:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
                                             <i class="fa-solid fa-check mr-1.5"></i> Save Changes
@@ -543,7 +543,7 @@
                                 // Helper: Render Row Item
                                 const renderRepeaterRow = (itemData = { label: '', color: '#575757', sort: '1', image: '' }) => {
                                     const row = document.createElement('div');
-                                    row.className = 'repeater-item-row flex flex-col space-y-2 rounded-md border border-slate-200 bg-white p-2.5 shadow-sm dark:border-navy-500 dark:bg-navy-700 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0';
+                                    row.className = 'repeater-item-row flex flex-col space-y-2 rounded-md border border-slate-200 bg-white dark:bg-navy-700 p-2.5 shadow-sm dark:border-navy-500 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0';
 
                                     // Hidden input menyimpan string path/base64 gambar per item
                                     const imageValInput = document.createElement('input');

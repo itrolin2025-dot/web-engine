@@ -154,7 +154,7 @@ class CustomersController extends Controller
                 auth()->id()
             );
 
-            return redirect()->route('admin.' . $this->modul)->with('success', 'Data has been created successfully.');
+            return redirect()->route('admin.' . $this->modul . '.index')->with('success', 'Data has been created successfully.');
 
         } catch (\Exception $e) {
             return redirect()

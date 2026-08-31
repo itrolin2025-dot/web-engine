@@ -5,7 +5,7 @@
     
     @include('components.other') <!-- delete soon -->
     
-    @include($modul_path . '.partials.table')
+    @include('admin.' . $modul_path . '.partials.table')
     
 </x-app-layout>
 

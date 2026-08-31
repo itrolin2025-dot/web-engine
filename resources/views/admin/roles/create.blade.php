@@ -2,7 +2,7 @@
 
     @include('components.forms.tittle')
 
-    <form action="{{ route($modul . '.store') }}" method="POST">
+    <form action="{{ route('admin.' . $modul . '.store') }}" method="POST">
         @csrf
 
         <div class="grid grid-cols-12 gap-6">
