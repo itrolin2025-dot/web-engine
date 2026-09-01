@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html lang="id">
 
+@php
+    $navContent = $navbarPresets ?? [];
+    $logoFile = $navContent['image'] ?? null;
+    $logo = $logoFile ? '/images/website/' . ($website->domain ?? '') . '/' . $logoFile : null;
+@endphp
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
+    @if($logo)
+        <link rel="icon" type="image/png" href="{{ asset($logo) }}">
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -128,12 +137,6 @@
     @endforeach
 
 
-    <script>
-        document.getElementById('backToTop').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
-
     <!-- FLOATING BUTTONS -->
     <div class="floating-actions">
         <button class="fab fab-top" id="backToTop" aria-label="Back to top">
@@ -146,6 +149,17 @@
             </svg>
         </a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                backToTop.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

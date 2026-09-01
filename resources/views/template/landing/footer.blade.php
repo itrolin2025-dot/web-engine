@@ -385,6 +385,11 @@
     $title = $content['title'] ?? $content['title_en'] ?? '';
     $title_color = $content['title_color'] ?? '#ffffff';
 
+    $repeater = $content['repeater'] ?? $content['tagline'];
+    if (is_array($repeater)) {
+        $repeater = collect($repeater)->sortBy('sort')->values()->all();
+    }
+
     $subtitle = $content['subtitle'] ?? $content['subtitle_en'] ?? '';
     $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
 
@@ -421,12 +426,10 @@
             <div class="footer-links">
             </div>
             <div class="footer-links">
-                <h4>Company</h4>
-                <a href="#">About Us</a>
-                <a href="#">Careers</a>
-                <a href="#">Press</a>
-                <a href="#">Sustainability</a>
-                <a href="#">Affiliates</a>
+                <h4>Suggestion</h4>
+                @foreach($repeater as $item)
+                    <a href="#">{{ $item['label'] }}</a>
+                @endforeach
             </div>
             <div class="footer-links">
                 <h4>{{ $footerPresets['title'] ?? 'Menu' }}</h4>
