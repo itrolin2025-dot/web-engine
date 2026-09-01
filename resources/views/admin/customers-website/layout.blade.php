@@ -104,7 +104,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
-                    class="border-t border-slate-150 dark:border-navy-600 px-4 pb-5 pt-4 sm:px-5">
+                    class="border-t border-slate-150 dark:border-gray-800 px-4 pb-5 pt-4 sm:px-5">
 
                     <form id="add-layout-form" action="{{ route('admin.customers-website.layout.store', [$website->id, $page_type]) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
@@ -154,7 +154,7 @@
 
                         <!-- Dynamic Section Content Fields loaded via AJAX -->
                         <div id="dynamicFieldsContainerAdd" class="hidden space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-navy-500 dark:bg-navy-800">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-navy-600 flex items-center">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-gray-800 flex items-center">
                                 <i class="fa-solid fa-sliders mr-1.5 text-primary dark:text-accent-light"></i> Section Dynamic Content Fields
                             </h4>
                             <div id="dynamicFieldsListAdd" class="space-y-3"></div>
@@ -179,7 +179,7 @@
 
             {{-- Layouts Accordion List --}}
             <div class="card overflow-hidden">
-                <div class="flex items-center justify-between px-4 py-3 sm:px-5 border-b border-slate-150 dark:border-navy-600">
+                <div class="flex items-center justify-between px-4 py-3 sm:px-5 border-b border-slate-150 dark:border-gray-800">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-table-cells-large text-sm text-slate-400 dark:text-navy-300"></i>
                         <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Layout Items</h3>
@@ -236,7 +236,7 @@
                                 x-transition:leave="transition ease-in duration-150"
                                 x-transition:leave-start="opacity-100 translate-y-0"
                                 x-transition:leave-end="opacity-0 -translate-y-1"
-                                class="bg-slate-50 dark:bg-navy-700 border-t border-slate-150 dark:border-navy-600 px-4 pb-4 pt-4 sm:px-5">
+                                class="bg-slate-50 dark:bg-navy-700 border-t border-slate-150 dark:border-gray-800 px-4 pb-4 pt-4 sm:px-5">
 
                                 <form action="{{ route('admin.customers-website.layout.update', [$website->id, $page_type, $layout->id]) }}"
                                     method="POST" enctype="multipart/form-data" class="layout-update-form space-y-4" data-layout-id="{{ $layout->id }}"
@@ -300,13 +300,13 @@
 
                                     <!-- Dynamic Section Content Fields loaded via AJAX -->
                                     <div id="dynamicFieldsContainerUpdate-{{ $layout->id }}" class="hidden space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-navy-500 dark:bg-navy-800">
-                                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-navy-600 flex items-center">
+                                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-gray-800 flex items-center">
                                             <i class="fa-solid fa-sliders mr-1.5 text-primary dark:text-accent-light"></i> Section Dynamic Content Fields
                                         </h4>
                                         <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-3"></div>
                                     </div>
 
-                                    <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-navy-600">
+                                    <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-gray-800">
                                         <button type="submit"
                                             class="btn h-8 rounded-full bg-primary px-4 text-xs font-medium text-white hover:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
                                             <i class="fa-solid fa-check mr-1.5"></i> Save Changes

@@ -56,7 +56,7 @@
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl text-white"></i>
                     </div>
                 </a>
-                <div class="flex flex-col border-t border-slate-150 px-4 py-3 dark:border-navy-600">
+                <div class="flex flex-col border-t border-slate-150 px-4 py-3 dark:border-gray-800">
                     <div class="flex items-center justify-between gap-2">
                         <h3 class="text-sm font-semibold text-slate-700 dark:text-navy-100 truncate">{{ $template->name }}</h3>
                         <span class="badge shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold {{ $template->status ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }}">

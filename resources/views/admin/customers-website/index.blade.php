@@ -47,7 +47,7 @@
             <div class="table-responsive px-4 py-4 sm:px-5">
                 <table class="w-full text-left">
                     <thead>
-                        <tr class="border-b border-slate-150 text-xs font-semibold uppercase text-slate-500 dark:border-navy-600 dark:text-navy-300">
+                        <tr class="border-b border-slate-150 text-xs font-semibold uppercase text-slate-500 dark:border-gray-800 dark:text-navy-300">
                             <th class="px-3 py-3">#</th>
                             <th class="px-3 py-3">Title</th>
                             <th class="px-3 py-3">Customer</th>
@@ -57,7 +57,7 @@
                             <th class="px-3 py-3 text-right">Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-150 dark:divide-navy-600">
+                    <tbody class="divide-y divide-slate-150 dark:divide-gray-800">
                         @forelse($websites as $index => $website)
                             <tr class="hover:bg-slate-50 dark:hover:bg-navy-600 transition-colors">
                                 <td class="px-3 py-3 text-xs font-medium">{{ $index + 1 }}</td>

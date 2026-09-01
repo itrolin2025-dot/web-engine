@@ -177,7 +177,7 @@
             itemDiv.className = 'p-4 border border-slate-200 dark:border-navy-500 rounded-xl bg-slate-50/50 dark:bg-navy-800 space-y-3 relative';
 
             itemDiv.innerHTML = `
-                <div class="flex items-center justify-between border-b border-slate-200 dark:border-navy-600 pb-2">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-gray-800 pb-2">
                     <span class="text-xs font-bold text-slate-700 dark:text-navy-100 uppercase tracking-wider">Review #${index + 1}</span>
                     <button type="button" onclick="removeReviewItem(${index})" class="text-xs text-red-500 hover:text-red-700 font-medium flex items-center gap-1">
                         <i class="fa-solid fa-trash"></i> Remove

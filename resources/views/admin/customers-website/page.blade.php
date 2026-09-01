@@ -62,7 +62,7 @@
 
                 @foreach($pages as $page)
                     <a href="{{ route('admin.customers-website.layout', [$website->id, $page['key']]) }}" 
-                       class="group relative flex flex-col justify-between rounded-xl border border-slate-200/80 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg hover:shadow-primary/5 dark:border-navy-600 dark:bg-navy-700 dark:hover:border-accent dark:hover:shadow-accent/5">
+                       class="group relative flex flex-col justify-between rounded-xl border border-slate-200/80 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg hover:shadow-primary/5 dark:border-gray-800 dark:bg-navy-700 dark:hover:border-accent dark:hover:shadow-accent/5">
                         
                         <!-- Thumbnail/Icon Wrapper -->
                         <div class="relative aspect-square w-full rounded-lg bg-slate-100 dark:bg-navy-600 flex items-center justify-center overflow-hidden mb-3 group-hover:bg-primary/5 dark:group-hover:bg-accent/10 transition-colors">
@@ -132,7 +132,7 @@
 
                 @foreach($specialPages as $page)
                     <a href="{{ route('admin.customers-website.layout', [$website->id, $page['key']]) }}" 
-                       class="group relative flex flex-col justify-between rounded-xl border border-amber-200/60 bg-amber-50/20 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500 hover:shadow-lg hover:shadow-amber-500/5 dark:border-navy-600 dark:bg-navy-700/50 dark:hover:border-amber-400">
+                       class="group relative flex flex-col justify-between rounded-xl border border-amber-200/60 bg-amber-50/20 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500 hover:shadow-lg hover:shadow-amber-500/5 dark:border-gray-800 dark:bg-navy-700/50 dark:hover:border-amber-400">
                         
                         <!-- Thumbnail/Icon Wrapper -->
                         <div class="relative aspect-square w-full rounded-lg bg-slate-100 dark:bg-navy-600 flex items-center justify-center overflow-hidden mb-3 group-hover:bg-primary/5 dark:group-hover:bg-accent/10 transition-colors">

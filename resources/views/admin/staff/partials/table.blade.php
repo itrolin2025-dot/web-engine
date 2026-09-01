@@ -99,7 +99,7 @@
                             <div class="card p-5 dark:bg-navy-700 border border-slate-200 dark:border-navy-500 hover:shadow-lg transition-all duration-300">
                                 <div class="flex flex-col items-center">
                                     <div class="avatar size-24 relative">
-                                        <img class="mask is-squircle border-4 border-white dark:border-navy-600 shadow-md object-cover w-full h-full" 
+                                        <img class="mask is-squircle border-4 border-white dark:border-gray-800 shadow-md object-cover w-full h-full" 
                                              src="${photoUrl}" 
                                              alt="${row.name}">
                                         <span class="absolute right-0 bottom-0 size-5 rounded-full border-2 border-white bg-success dark:border-navy-700"></span>
@@ -112,7 +112,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-4 w-full space-y-2 border-t border-slate-100 dark:border-navy-600 pt-4 text-[11px]">
+                                    <div class="mt-4 w-full space-y-2 border-t border-slate-100 dark:border-gray-800 pt-4 text-[11px]">
                                         <div class="flex items-center justify-between">
                                             <span class="text-slate-400 font-medium">Department</span>
                                             <span class="font-bold text-slate-700 dark:text-navy-200">${row.departemen || '-'}</span>
@@ -123,7 +123,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-5 flex w-full justify-center space-x-2 pt-2 border-t border-slate-50 dark:border-navy-600/50">
+                                    <div class="mt-5 flex w-full justify-center space-x-2 pt-2 border-t border-slate-50 dark:border-gray-800/50">
                                         ${row.action}
                                     </div>
                                 </div>

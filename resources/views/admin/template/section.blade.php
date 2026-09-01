@@ -109,7 +109,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
-                    class="border-t border-slate-150 dark:border-navy-600 px-4 pb-5 pt-4 sm:px-5">
+                    class="border-t border-slate-150 dark:border-gray-800 px-4 pb-5 pt-4 sm:px-5">
 
                     <form id="add-section-form" action="{{ route('admin.template.section.store', $template->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                         @csrf
@@ -217,7 +217,7 @@
 
             {{-- Sections Accordion List --}}
             <div class="card overflow-hidden">
-                <div class="flex items-center justify-between px-4 py-3 sm:px-5 border-b border-slate-150 dark:border-navy-600">
+                <div class="flex items-center justify-between px-4 py-3 sm:px-5 border-b border-slate-150 dark:border-gray-800">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-layer-group text-sm text-slate-400 dark:text-navy-300"></i>
                         <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Sections List</h3>

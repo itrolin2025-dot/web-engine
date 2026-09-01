@@ -890,7 +890,7 @@
               </div>
 
               <div
-                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-navy-600"
+                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-gray-800"
               >
                 <div class="flex items-center space-x-3">
                   <img
@@ -969,7 +969,7 @@
               </div>
 
               <div
-                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-navy-600"
+                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-gray-800"
               >
                 <div class="flex items-center space-x-3">
                   <img
@@ -1048,7 +1048,7 @@
               </div>
 
               <div
-                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-navy-600"
+                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-gray-800"
               >
                 <div class="flex items-center space-x-3">
                   <img
@@ -1127,7 +1127,7 @@
               </div>
 
               <div
-                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-navy-600"
+                class="mt-4 rounded-lg border border-slate-150 p-3 dark:border-gray-800"
               >
                 <div class="flex items-center space-x-3">
                   <img

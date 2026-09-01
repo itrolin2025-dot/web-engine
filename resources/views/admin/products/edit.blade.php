@@ -146,7 +146,7 @@
                             <div class="space-y-4 mb-4" id="existing-reviews-container">
                                 @foreach($product->reviews as $review)
                                     <div class="p-4 border border-slate-200 dark:border-navy-500 rounded-xl bg-slate-50/50 dark:bg-navy-800 space-y-3 relative" id="existing-review-item-{{ $review->id }}">
-                                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-navy-600 pb-2">
+                                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-gray-800 pb-2">
                                             <span class="text-xs font-bold text-slate-700 dark:text-navy-100 uppercase tracking-wider">Existing Review #{{ $loop->iteration }}</span>
                                             <label class="inline-flex items-center space-x-1 cursor-pointer text-xs text-red-500 hover:text-red-700 font-medium">
                                                 <input type="checkbox" name="deleted_reviews[]" value="{{ $review->id }}" onchange="toggleDeleteReview({{ $review->id }}, this.checked)" class="form-checkbox text-red-500 rounded" />
@@ -276,7 +276,7 @@
             itemDiv.className = 'p-4 border border-slate-200 dark:border-navy-500 rounded-xl bg-slate-50/50 dark:bg-navy-800 space-y-3 relative';
 
             itemDiv.innerHTML = `
-                <div class="flex items-center justify-between border-b border-slate-200 dark:border-navy-600 pb-2">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-gray-800 pb-2">
                     <span class="text-xs font-bold text-slate-700 dark:text-navy-100 uppercase tracking-wider">New Review #${index + 1}</span>
                     <button type="button" onclick="removeNewReviewItem(${index})" class="text-xs text-red-500 hover:text-red-700 font-medium flex items-center gap-1">
                         <i class="fa-solid fa-trash"></i> Remove

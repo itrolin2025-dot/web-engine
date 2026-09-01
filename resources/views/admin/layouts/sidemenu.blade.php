@@ -48,7 +48,7 @@
                         {{-- No modules with shortcut='side' --}}
                     @endforelse
 
-                    <div class="w-8 border-t border-slate-200 dark:border-navy-600"></div>
+                    <div class="w-8 border-t border-slate-200 dark:border-gray-800"></div>
 
                     {{-- Admin modules (always shown at bottom) --}}
                     @php
@@ -82,7 +82,7 @@
                     </button>
                     <div id="profile-box" class="popper-root fixed">
                         <div
-                            class="popper-box w-64 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-navy-600 dark:bg-navy-700">
+                            class="popper-box w-64 rounded-lg border border-slate-150 bg-white shadow-soft dark:border-gray-800 dark:bg-navy-700">
                             <div
                                 class="flex items-center space-x-4 rounded-t-lg bg-slate-100 py-5 px-4 dark:bg-navy-800">
                                 <div class="avatar size-14">
