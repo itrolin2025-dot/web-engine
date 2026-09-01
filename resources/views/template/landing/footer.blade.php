@@ -396,13 +396,17 @@
     $desc = $content['desc'] ?? $content['desc_en'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
+
+    $background_image = $content['background_image'] ?? '#ffffff';
+    $background_color = $content['background_color'] ?? '#ffffff';
+
     $button_text = $content['button_text'] ?? $content['button_text_en'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
     $button_color = $content['button_color'] ?? '#ffffff';
 
 @endphp
 
-<footer>
+<footer style="background-color: {{ $background_color ?? '#1a1a2e' }};{{ $background_image && $background_image !== '#000000' ? 'background-image: url(' . asset('images/website/' . $domain . '/' . $background_image) . '); background-size: cover; background-position: center; background-attachment: fixed;' : '' }}">
     <div class="footer-wrapper">
         <div class="footer-grid">
             <div class="footer-brand">
@@ -412,7 +416,7 @@
                 <p>{{ $subtitle }}</p>
                 <div class="footer-newsletter">
                     <input type="email" placeholder="{{ $desc }}">
-                    <button>{{ $button_text }}</button>
+                    <button style="background: {{ $button_color }}; color: {{ $button_text_color }};">{{ $button_text }}</button>
                 </div>
                 <div class="footer-social-row">
                     <div class="social-links">
