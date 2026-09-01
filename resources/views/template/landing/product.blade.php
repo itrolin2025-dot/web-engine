@@ -234,8 +234,9 @@
     $products = $products ?? collect();
 
     $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
-    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
-    $button_color = $content['button_color'] ?? '#ffffff';
+    $button_text_color = $content['button_text_color'] ?? '#ffffff';
+    $button_color = $content['button_color'] ?? '#000000';
+    $button_border_color = $content['button_border_color'] ?? '#000000';
 
     // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
     $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
@@ -296,6 +297,10 @@
                     $image = asset('images/default/broken.png');
                 }
 
+                $button_text = $content['button_text'] ?? '';
+                $button_text_color = $content['button_text_color'] ?? '#000000';
+                $button_color = $content['button_color'] ?? '#ffffff';
+
                 $numericPrice = (float) $pPrice;
             @endphp
             <div class="product-card" data-category="{{ $pCatId }}">
@@ -317,8 +322,8 @@
                     </div>
                     <a
                         onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $image }}')"
-                        class="btn-outline" style="cursor: pointer;">
-                        Buy Now</a>
+                        class="btn-outline" style="cursor: pointer; color: {{ $button_text_color }}; background-color: {{ $button_color }}; border-color: {{ $button_border_color }};">
+                        {{ $button_text }}</a>
                 </div>
             </div>
         @endforeach

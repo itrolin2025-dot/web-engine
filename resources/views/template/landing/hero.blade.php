@@ -167,8 +167,8 @@
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
     $button_color = $content['button_color'] ?? '#ffffff';
 
-    $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
-    $hero_img = !empty($content['hero_img']) ? 'images/website/' . $domain . '/' . $content['hero_img'] : '';
+    $hero_bg = !empty($content['background']) ? 'images/website/' . $domain . '/' . $content['background'] : 'images/default/broken.png';
+    $hero_img = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 @endphp
 
 <section class="hero">

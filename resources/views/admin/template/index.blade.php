@@ -43,41 +43,41 @@
             </div>
         @endif
 
-        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
             @foreach($templates as $template)
-            <div class="card flex flex-col">
-                <img src="{{ $template->preview ? asset($template->preview) : 'https://via.placeholder.com/800x600?text=No+Image' }}" class="h-48 w-full rounded-t-lg object-cover object-center" alt="preview">
-                <div class="flex grow flex-col p-4">
-                    <div class="flex items-center justify-between">
-                        <span class="badge rounded-full {{ $template->status ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }} px-2.5 py-1 text-xs font-semibold">
+            <div class="card flex flex-col overflow-hidden">
+                <div class="relative h-56 w-full bg-slate-100 dark:bg-navy-800">
+                    <img loading="lazy"
+                         src="{{ $template->preview ? asset($template->preview) : asset('images/default/broken.png') }}"
+                         onerror="this.onerror=null;this.src='{{ asset('images/default/broken.png') }}';this.className='absolute inset-0 m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40'"
+                         class="absolute inset-0 h-full w-full object-cover object-center{{ $template->preview ? '' : ' m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40' }}"
+                         alt="preview">
+                </div>
+                <div class="flex flex-col border-t border-slate-150 px-4 py-3 dark:border-navy-600">
+                    <div class="flex items-center justify-between gap-2">
+                        <h3 class="text-sm font-semibold text-slate-700 dark:text-navy-100 truncate">{{ $template->name }}</h3>
+                        <span class="badge shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold {{ $template->status ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }}">
                             {{ $template->status ? 'Active' : 'Inactive' }}
                         </span>
                     </div>
-
-                    <div class="pt-2">
-                        <h3 class="text-base font-medium text-slate-700 dark:text-navy-100">{{ $template->name }}</h3>
-                    </div>
-
-                    <p class="grow pt-1 text-xs text-slate-500 dark:text-navy-300">
-                        Path: <span class="font-mono text-slate-700 dark:text-navy-100">{{ $template->path ?: '-' }}</span>
+                    <p class="mt-1 truncate text-[11px] text-slate-400 dark:text-navy-300">
+                        <i class="fa-solid fa-folder-open mr-1"></i>{{ $template->path ?: '-' }}
                     </p>
-
-                    <div class="mt-4 flex justify-end space-x-2">
+                    <div class="mt-2 flex items-center justify-end space-x-1.5">
                         @if($canEdit)
-                        <a href="{{ route('admin.template.edit', $template->id) }}" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
-                            <i class="fa-solid fa-pen"></i>
+                        <a href="{{ route('admin.template.edit', $template->id) }}" class="btn h-7 w-7 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
+                            <i class="fa-solid fa-pen text-[11px]"></i>
                         </a>
-                        <a href="{{ route('admin.template.section', $template->id) }}" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
-                            <i class="fa-solid fa-list"></i>
+                        <a href="{{ route('admin.template.section', $template->id) }}" class="btn h-7 w-7 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
+                            <i class="fa-solid fa-list text-[11px]"></i>
                         </a>
                         @endif
-                        
                         @if($canDelete)
                         <form action="{{ route('admin.template.destroy', $template->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this template?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn h-8 w-8 rounded-full bg-error/10 p-0 font-medium text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
-                                <i class="fa-solid fa-trash"></i>
+                            <button type="submit" class="btn h-7 w-7 rounded-full bg-error/10 p-0 font-medium text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25">
+                                <i class="fa-solid fa-trash text-[11px]"></i>
                             </button>
                         </form>
                         @endif

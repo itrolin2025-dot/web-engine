@@ -70,11 +70,51 @@
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 992px) {
-
         .reviews-grid {
             grid-template-columns: 1fr;
         }
-
+        .reviews-center .review-card {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+    
+    /* Centered Layout */
+    .reviews-center {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+    .reviews-center .review-card {
+        width: calc(50% - 1rem);
+        max-width: 400px;
+    }
+    
+    /* Slider Layout */
+    .reviews-slider-wrapper {
+        width: 100%;
+        overflow: hidden;
+    }
+    .reviews-slider {
+        display: flex;
+        gap: 2rem;
+        width: max-content;
+        animation: scrollReviews 20s linear infinite;
+    }
+    .reviews-slider:hover {
+        animation-play-state: paused;
+    }
+    .reviews-slider .review-card {
+        width: 350px;
+        flex-shrink: 0;
+    }
+    
+    @keyframes scrollReviews {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-50% - 1rem)); }
     }
 </style>
 
@@ -104,7 +144,10 @@
     $desc = $content['desc_en'] ?? $content['desc'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
-    $reviews = $content['reviews'] ?? [];
+    $repeater = $content['repeater'] ?? $content['tagline'];
+    if (is_array($repeater)) {
+        $repeater = collect($repeater)->sortBy('sort')->values()->all();
+    }
 
     $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
@@ -113,37 +156,52 @@
     // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
     $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
 
+    // Count reviews for layout logic
+    $count = count($repeater);
+    if ($count >= 4) {
+        // Duplicate array for infinite scroll
+        $displayRepeater = array_merge($repeater, $repeater);
+        $wrapperClass = 'reviews-slider';
+    } elseif ($count <= 2) {
+        $displayRepeater = $repeater;
+        $wrapperClass = 'reviews-center';
+    } else {
+        $displayRepeater = $repeater;
+        $wrapperClass = 'reviews-grid';
+    }
 @endphp
 
 <section class="reviews">
     <h2>Customer Reviews</h2>
-    <div class="reviews-grid">
-        @foreach ($reviews as $review)
-            @php
-                $avatar = !empty($review['avatar'])
-                    ? asset('images/website/' . $domain . '/' . $review['avatar'])
-                    : asset('images/default/broken.png');
-            @endphp
-            <div class="review-card">
-                <div class="review-header">
-                    <img src="{{ $avatar }}" alt="Avatar" class="review-avatar">
-                    <div class="review-meta">
-                        <h4>{{ $review['name'] }}</h4>
-                        <div class="stars">
-                            @php $starCount = (int) ($review['star'] ?? 5); @endphp
-                            @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= $starCount)
-                                    <span style="color: #FBBF24;">&#9733;</span>
-                                @else
-                                    <span style="color: #D1D5DB;">&#9734;</span>
-                                @endif
-                            @endfor
+    <div class="{{ $count >= 4 ? 'reviews-slider-wrapper' : '' }}">
+        <div class="{{ $wrapperClass }}">
+            @foreach ($displayRepeater as $review)
+                @php
+                    $avatar = !empty($review['image'])
+                        ? asset('images/website/' . $domain . '/' . $review['image'])
+                        : asset('images/default/broken.png');
+                @endphp
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="{{ $avatar }}" alt="Avatar" class="review-avatar">
+                        <div class="review-meta">
+                            <h4></h4>
+                            <div class="stars">
+                                @php $starCount = (int) ($review['star'] ?? 5); @endphp
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $starCount)
+                                        <span style="color: #FBBF24;">&#9733;</span>
+                                    @else
+                                        <span style="color: #D1D5DB;">&#9734;</span>
+                                    @endif
+                                @endfor
+                            </div>
                         </div>
                     </div>
+                    <p class="review-text">"{{ $review['label'] }}"</p><br>
+                    <!-- <div class="verified">&#10003; Verified Purchase</div> -->
                 </div>
-                <p class="review-text">"{{ $review['text'] }}"</p><br>
-                <!-- <div class="verified">&#10003; Verified Purchase</div> -->
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 </section>

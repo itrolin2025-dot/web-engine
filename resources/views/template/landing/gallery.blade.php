@@ -83,10 +83,11 @@
     $desc = $content['desc_en'] ?? $content['desc'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
-    $image = $content['image'] ?? [];
-    if (is_array($image)) {
-        $image = collect($image)->sortBy('sort')->values()->all();
+    $repeater = $content['repeater'] ?? $content['tagline'];
+    if (is_array($repeater)) {
+        $repeater = collect($repeater)->sortBy('sort')->values()->all();
     }
+    $tagline_color = $content['tagline_color'] ?? '#ffffff';
 
     $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
@@ -98,7 +99,7 @@
 
 <section class="gallery-strip">
     <div class="gallery-track" id="galleryMarquee">
-        @foreach ($image as $img)
+        @foreach ($repeater as $img)
             <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}" alt="Gallery">
         @endforeach
     </div>

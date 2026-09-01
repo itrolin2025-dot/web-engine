@@ -24,6 +24,10 @@
         justify-content: center;
     }
 
+    .about-image.rounded-image {
+        border-radius: 50%;
+    }
+
     .about-image img {
         width: 80%;
         height: 80%;
@@ -44,14 +48,17 @@
 
     .features {
         display: flex;
-        gap: 2rem;
+        gap: 1.5rem;
         flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .feature-item {
         display: flex;
         align-items: center;
         gap: 0.75rem;
+        flex: 0 0 auto;
     }
 
     .feature-icon {
@@ -77,6 +84,18 @@
             gap: 2rem;
         }
     }
+
+    @media (max-width: 576px) {
+        .about-content p {
+            text-align: center;
+        }
+
+        .features {
+            flex-direction: column;
+            gap: 1rem;
+            padding-left: 1rem;
+        }
+    }
 </style>
 
 @php
@@ -100,8 +119,8 @@
     $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
     $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
 
-    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
-    $desc_color = $content['desc_color'] ?? '#ffffff';
+    $desc = $content['description'] ?? '';
+    $desc_color = $content['description_color'] ?? '#000000';
 
     $tagline = $content['tagline'] ?? [];
     if (is_array($tagline)) {

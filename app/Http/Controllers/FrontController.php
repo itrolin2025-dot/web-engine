@@ -30,7 +30,8 @@ class FrontController extends Controller
             )
             ->first();
 
-        $title = $website->title ?? 'Signature Fragrance';
+        $title = $website->title ?? 'Your Brand Page';
+        $customerName = $website->customer_name ?? 'Your Brand';
 
         // Get layout sections for this website, ordered by position
         $layouts = collect();
@@ -98,7 +99,7 @@ class FrontController extends Controller
         }
 
         $navbarPresets = [
-            'brand' => 'My Dummy Brand',
+            'brand' => 'Your Brand',
             'cta_text' => 'Get Started',
             'cta_url' => '#',
             'cta_color' => '#000000',
@@ -110,7 +111,19 @@ class FrontController extends Controller
                 ['label' => 'Contact', 'url' => 'contact'],
             ]
         ];
-        return view('template.index', compact('title', 'website', 'layouts', 'categories', 'products', 'article_categories', 'articles', 'navbarPresets'));
+
+        $footerPresets = [
+            'title' => 'Menus',
+            'footer_menu' => [
+                ['label' => 'Home', 'url' => '', 'type' => 'child'],
+                ['label' => 'About', 'url' => 'about', 'type' => 'child'],
+                ['label' => 'Shop', 'url' => 'shop', 'type' => 'child'],
+                ['label' => 'Contact', 'url' => 'contact', 'type' => 'child'],
+            ],
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        return view('template.index', compact('title', 'website', 'customerName', 'layouts', 'categories', 'products', 'article_categories', 'articles', 'navbarPresets', 'footerPresets'));
     }
 
     public function selectLayout($client = null)

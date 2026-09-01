@@ -398,7 +398,7 @@ class TemplateController extends Controller
         ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
         ['key' => 'button_border_color', 'type' => 'color', 'default_value' => '#ffffff'],
         ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#000000'],
-        ['key' => 'tagline', 'type' => 'repeater', 'default_value' => '[{ "label": "Tag 1", "color":"#575757", "sort":"1" }, { "label": "Tag 2", "color":"#575757", "sort":"12" }]'],
+        ['key' => 'repeater', 'type' => 'repeater', 'default_value' => '[{ "label": "Tag 1", "color":"#575757", "sort":"1" }, { "label": "Tag 2", "color":"#575757", "sort":"12" }]'],
         ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
         ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
     ];

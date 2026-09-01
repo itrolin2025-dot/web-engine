@@ -182,6 +182,10 @@
             z-index: 1001;
         }
 
+        .navbar-logo img {
+            height: 40px;
+        }
+
         .dropdown {
             width: 100%;
             text-align: center;
@@ -204,7 +208,11 @@
 
     @media (max-width: 576px) {
         .navbar-logo {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+        }
+
+        .navbar-logo img {
+            height: 32px;
         }
 
         .navbar-menu {

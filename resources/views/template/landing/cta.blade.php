@@ -73,57 +73,38 @@
 
     $domain = $website->domain ?? '';
 
-    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title = $content['title'] ?? '';
     $title_color = $content['title_color'] ?? '#ffffff';
 
-    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle = $content['subtitle'] ?? '';
     $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
 
-    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
-    $desc_color = $content['desc_color'] ?? '#ffffff';
+    $description = $content['description'] ?? '';
+    $description_color = $content['description_color'] ?? '#ffffff';
 
-    $banners = $content['banners'] ?? [];
-
-    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $background = !empty($content['background']) ? 'images/website/' . $domain . '/' . $content['background'] : 'images/default/broken.png';
+    $button_text = $content['button_text'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
     $button_color = $content['button_color'] ?? '#ffffff';
 
-    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
-    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
-
 @endphp
 
-@foreach ($banners as $banner)
-    @php
-        $background = !empty($banner['background'])
-            ? asset('images/website/' . $domain . '/' . $banner['background'])
-            : asset('images/default/broken.png');
-        $btnText = $banner['button_text_en'] ?? $banner['button_text'] ?? $button_text ?? '';
-        $btnColor = $banner['button_color'] ?? $button_color ?? '#ffffff';
-        $btnTextColor = $banner['button_text_color'] ?? $button_text_color ?? '#FF9B7A';
-        $bannerTitle = $banner['title_en'] ?? $banner['title'] ?? '';
-        $bannerSub = $banner['subtitle_en'] ?? $banner['subtitle'] ?? $banner['desc_en'] ?? $banner['desc'] ?? '';
-    @endphp
-    <section class="cta" style="background-image: url('{{ $background }}');">
-        @if(!empty($bannerTitle))
-            <h2 class="line-clamp-2 max-w-[600px] leading-tight" style="color: {{ $banner['title_color'] ?? $title_color }};">
-                {!! nl2br(e($bannerTitle)) !!}
-            </h2>
-        @endif
+<section class="cta" style="background-image: url('{{ asset($background) }}');">
+    
+    <h2 class="line-clamp-2 max-w-[600px] leading-tight" style="color: {{ $title_color }};">
+        {!! nl2br(e($title)) !!}
+    </h2>
 
-        @if(!empty($bannerSub))
-            <p style="color: {{ $banner['subtitle_color'] ?? $subtitle_color }};">
-                {{ $bannerSub }}
-            </p>
-        @endif
+    <h3 class="line-clamp-2 max-w-[600px] leading-tight" style="color: {{ $description_color }};">
+        {!! nl2br(e($description)) !!}
+</h3>
 
-        @if(!empty($btnText))
-            <div style="margin-top: 2.5rem;">
-                <a href="{{ $banner['button_url'] ?? '#' }}" class="btn-primary"
-                    style="background-color: {{ $btnColor }}; color: {{ $btnTextColor }};">
-                    {{ $btnText }}
-                </a>
-            </div>
-        @endif
-    </section>
-@endforeach
+    @if(!empty($button_text))
+        <div style="margin-top: 2.5rem;">
+            <a href="{{ $content['button_url'] ?? '#' }}" class="btn-primary"
+                style="background-color: {{ $button_color }}; color: {{ $button_text_color }};">
+                {{ $button_text }}
+            </a>
+        </div>
+    @endif
+</section>
