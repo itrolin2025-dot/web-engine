@@ -46,13 +46,16 @@
         <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
             @foreach($templates as $template)
             <div class="card flex flex-col overflow-hidden">
-                <div class="relative h-56 w-full bg-slate-100 dark:bg-navy-800">
+                <a href="{{ $template->preview ? asset($template->preview) : asset('images/default/broken.png') }}" class="template-preview relative block h-56 w-full overflow-hidden bg-slate-100 dark:bg-navy-800" onmouseenter="this.querySelector('.preview-overlay').style.opacity='1';this.querySelector('.preview-overlay').style.backgroundColor='rgba(0,0,0,0.4)';this.querySelector('.preview-img').style.transform='scale(1.05)'" onmouseleave="this.querySelector('.preview-overlay').style.opacity='0';this.querySelector('.preview-overlay').style.backgroundColor='rgba(0,0,0,0)';this.querySelector('.preview-img').style.transform='scale(1)'">
                     <img loading="lazy"
                          src="{{ $template->preview ? asset($template->preview) : asset('images/default/broken.png') }}"
                          onerror="this.onerror=null;this.src='{{ asset('images/default/broken.png') }}';this.className='absolute inset-0 m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40'"
-                         class="absolute inset-0 h-full w-full object-cover object-center{{ $template->preview ? '' : ' m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40' }}"
+                         class="preview-img absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300{{ $template->preview ? '' : ' m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40' }} pointer-events-none"
                          alt="preview">
-                </div>
+                    <div class="preview-overlay absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-300" style="opacity:0;background-color:transparent;">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl text-white"></i>
+                    </div>
+                </a>
                 <div class="flex flex-col border-t border-slate-150 px-4 py-3 dark:border-navy-600">
                     <div class="flex items-center justify-between gap-2">
                         <h3 class="text-sm font-semibold text-slate-700 dark:text-navy-100 truncate">{{ $template->name }}</h3>
@@ -87,4 +90,22 @@
             @endforeach
         </div>
     </div>
+    </div>
+
+    <!-- GLightbox CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            GLightbox({
+                selector: '.template-preview',
+                touchNavigation: true,
+                loop: false,
+                zoomable: true,
+                openEffect: 'zoom',
+                closeEffect: 'zoom'
+            });
+        });
+    </script>
 </x-app-layout>
