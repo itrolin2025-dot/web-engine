@@ -15,7 +15,7 @@
 
     $domain = $website->domain ?? '';
 
-    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title = $content['title'] ?? $content['title_en'] ?? '';
     $title_color = $content['title_color'] ?? '#ffffff';
 
     $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
@@ -24,12 +24,13 @@
     $desc = $content['desc_en'] ?? $content['desc'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
-    $categories = $content['categories'] ?? [];
-    $products = $content['products'] ?? [];
+    $categories = $categories ?? collect();
+    $products = collect($products ?? [])->take(4);
 
     $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
-    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
-    $button_color = $content['button_color'] ?? '#ffffff';
+    $button_text_color = $content['button_text_color'] ?? '#ffffff';
+    $button_color = $content['button_color'] ?? '#000000';
+    $button_border_color = $content['button_border_color'] ?? '#000000';
 
     // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
     $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
@@ -42,22 +43,25 @@
             class="flex flex-nowrap items-center text-sm font-medium text-stone-500 uppercase tracking-widest cursor-grab"
             style="overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
 
-            @foreach ($categories as $category)
-                @php
-                    $image = !empty($category['image'])
-                        ? asset('images/website/' . $domain . '/' . $category['image'])
-                        : asset('images/default/broken.png');
-                @endphp
-                <button href="#"
-                    data-filter="{{ $category['kode'] }}"
-                    class="category-item flex flex-col items-center gap-3 hover:text-stone-900 transition-colors group flex-shrink-0">
-                    <div
-                        class="category-img rounded-full overflow-hidden bg-stone-100 group-hover:ring-2 group-hover:ring-stone-400 transition-all">
-                        <img src="{{ $image }}" alt="Skincare" class="w-full h-full object-cover">
-                    </div>
+            @if(isset($categories) && count($categories) > 0)
+                @foreach ($categories as $category)
+                    @php
+                        $category = (array) $category;
+                        $image = !empty($category['image'])
+                            ? asset('storage/' . $category['image'])
+                            : asset('images/default/broken.png');
+                    @endphp
+                    <button href="#"
+                        data-filter="{{ is_array($category) ? ($category['id'] ?? $category['kode'] ?? '') : $category->id }}"
+                        class="category-item flex flex-col items-center gap-3 hover:text-stone-900 transition-colors group flex-shrink-0">
+                        <div
+                            class="category-img rounded-full overflow-hidden bg-stone-100 group-hover:ring-2 group-hover:ring-stone-400 transition-all">
+                            <img src="{{ $image }}" alt="Skincare" class="w-full h-full object-cover">
+                        </div>
                     <span>{{ $category['name'] }}</span>
                 </button>
-            @endforeach
+                @endforeach
+            @endif
 
 
         </div>
@@ -135,15 +139,51 @@
         <!-- Card 1 -->
         @foreach ($products as $product)
             @php
-                $image = !empty($product['image'])
-                    ? asset('images/website/' . $domain . '/' . $product['image'])
-                    : asset('images/default/broken.png');
+                $pId = is_array($product) ? ($product['id'] ?? '') : $product->id;
+                $pName = is_array($product) ? ($product['name'] ?? '') : $product->name;
+                $pPrice = is_array($product) ? ($product['price'] ?? 0) : $product->price;
+                $pDesc = is_array($product) ? ($product['description'] ?? $product['desc'] ?? '') : $product->description;
+                $pCatId = is_array($product) ? ($product['category_products_id'] ?? $product['kode'] ?? '') : $product->category_products_id;
                 
-                $numericPrice = preg_replace('/[^0-9]/', '', $product['price'] ?? '0');
+                // Get category name
+                $pCatName = '';
+                if (isset($categories)) {
+                    foreach ($categories as $cat) {
+                        $cId = is_array($cat) ? ($cat['id'] ?? $cat['kode'] ?? '') : $cat->id;
+                        if ($cId == $pCatId) {
+                            $pCatName = is_array($cat) ? $cat['name'] : $cat->name;
+                            break;
+                        }
+                    }
+                }
 
+                // Handle image logic
+                $rawImages = is_array($product) ? ($product['images'] ?? $product['image'] ?? null) : $product->images;
+                if (is_string($rawImages)) {
+                    $decoded = json_decode($rawImages, true);
+                    $firstImg = is_array($decoded) && count($decoded) > 0 ? $decoded[0] : $rawImages;
+                } elseif (is_array($rawImages) && count($rawImages) > 0) {
+                    $firstImg = $rawImages[0];
+                } else {
+                    $firstImg = null;
+                }
+
+                if ($firstImg) {
+                    $image = str_contains($firstImg, '/') || str_contains($firstImg, '\\')
+                        ? asset('storage/' . $firstImg)
+                        : asset('images/website/' . $domain . '/' . $firstImg);
+                } else {
+                    $image = asset('images/default/broken.png');
+                }
+
+                $button_text = $content['button_text'] ?? '';
+                $button_text_color = $content['button_text_color'] ?? '#000000';
+                $button_color = $content['button_color'] ?? '#ffffff';
+
+                $numericPrice = (float) $pPrice;
             @endphp
             <div
-                data-category="{{ $product['kode'] }}"
+                data-category="{{ $pCatId }}"
                 class="group flex flex-col justify-between bg-white rounded-2xl shadow-sm border border-stone-100 h-full relative hover:shadow-md transition-shadow overflow-hidden">
                 <div>
                     <div class="aspect-[1/1] w-full bg-stone-100 overflow-hidden relative">
@@ -151,14 +191,14 @@
                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     </div>
                     <div class="px-4 sm:px-5 pt-5">
-                        <h3 class="text-lg font-semibold text-stone-800">{{ $product['name'] }}</h3>
-                        <p class="text-sm text-stone-500 mt-1 mb-2 line-clamp-2">{{ $product['desc'] }}</p>
+                        <h3 class="text-lg font-semibold text-stone-800">{{ $pName }}</h3>
+                        <p class="text-sm text-stone-500 mt-1 mb-2 line-clamp-2">{{ $pDesc }}</p>
                     </div>
                 </div>
                 <div class="p-4 sm:p-5 flex items-end justify-between">
-                    <p class="text-base font-bold text-stone-900">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
+                    <p class="text-base font-bold text-stone-900">Rp {{ number_format($pPrice, 0, ',', '.') }}</p>
                     <button
-                        onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"
+                        onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $image }}')"
                         class="w-10 h-10 rounded-full bg-stone-900 text-white flex items-center justify-center hover:bg-stone-700 transition-colors shadow-md"
                         aria-label="Add to cart">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -171,3 +211,30 @@
         @endforeach
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryBtns = document.querySelectorAll('.category-item');
+        const productCards = document.querySelectorAll('[data-category]');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                productCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    
+                    // If filterValue is empty or matches the card's category, show it. 
+                    // (Assuming 'all' if you add an 'All' button later)
+                    if (filterValue === 'all' || !filterValue || cardCategory === filterValue) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+</script>

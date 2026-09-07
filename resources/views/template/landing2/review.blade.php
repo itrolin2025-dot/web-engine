@@ -24,15 +24,25 @@
     $desc = $content['desc_en'] ?? $content['desc'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
-    $reviews = $content['reviews'] ?? [];
+    $productIds = collect($products ?? [])->pluck('id')->toArray();
+    if (!empty($productIds)) {
+        $productReviews = \App\Models\ProductReview::with('product')
+            ->whereIn('products_id', $productIds)
+            ->where('status', 1)
+            ->get()->take(10);
+    } else {
+        $productReviews = \App\Models\ProductReview::with('product')->where('status', 1)->get();
+    }
 
-    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
-    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
-    $button_color = $content['button_color'] ?? '#ffffff';
-
-    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
-    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
-
+    $count = $productReviews->count();
+    
+    $displayReviews = clone $productReviews;
+    if ($count > 0 && $count < 4) {
+        $displayReviews = collect();
+        while ($displayReviews->count() < 4) {
+            $displayReviews = $displayReviews->concat($productReviews);
+        }
+    }
 @endphp
 
 <section class="py-20 overflow-hidden bg-stone-50">
@@ -83,25 +93,29 @@
     <div class="testimonial-marquee w-full">
         <!-- Track 1 -->
         <div class="testimonial-track px-4">
-            <!-- Card 1 -->
-            @foreach ($reviews as $review)
+            @foreach ($displayReviews as $review)
                 @php
-                    $avatar = !empty($review['avatar'])
-                        ? asset('images/website/' . $domain . '/' . $review['avatar'])
+                    $avatar = !empty($review->profile_photo)
+                        ? asset('storage/' . $review->profile_photo)
                         : asset('images/default/broken.png');
                 @endphp
                 <div
                     class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm w-[340px] h-[240px] md:w-[480px] flex-shrink-0 flex flex-col justify-between">
                     <div class="flex items-start gap-4 mb-5">
-                        <img src="{{ $avatar }}" alt="{{ $review['name'] }}"
+                        <img src="{{ $avatar }}" alt="{{ $review->name }}"
                             class="w-14 h-14 rounded-full object-cover shrink-0">
-                        <p class="text-stone-700 italic font-serif-brand text-base md:text-lg leading-snug">
-                            {{ '"' . $review['text'] . '"' }}
-                        </p>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#61984B] block mb-1">
+                                {{ $review->product->name ?? 'Product' }}
+                            </span>
+                            <p class="text-stone-700 italic font-serif-brand text-base md:text-lg leading-snug line-clamp-2">
+                                {{ '"' . $review->comment . '"' }}
+                            </p>
+                        </div>
                     </div>
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex gap-1">
-                            @php $starCount = (int) ($review['star'] ?? 5); @endphp
+                            @php $starCount = (int) ($review->rating ?? 5); @endphp
                             @for ($i = 1; $i <= 5; $i++)
                                 <svg class="star-icon {{ $i <= $starCount ? 'text-yellow-400' : 'text-stone-300' }}"
                                     viewBox="0 0 20 20">
@@ -110,7 +124,7 @@
                                 </svg>
                             @endfor
                         </div>
-                        <span class="text-xs font-bold text-stone-800 tracking-wider">{{ $review['name'] }}</span>
+                        <span class="text-xs font-bold text-stone-800 tracking-wider">{{ $review->name }}</span>
                     </div>
                 </div>
             @endforeach
@@ -118,25 +132,29 @@
 
         <!-- Track 2 (Clone for infinite loop) -->
         <div class="testimonial-track px-4" aria-hidden="true">
-            <!-- Card 1 -->
-            @foreach ($reviews as $review)
+            @foreach ($displayReviews as $review)
                 @php
-                    $avatar = !empty($review['avatar'])
-                        ? asset('images/website/' . $domain . '/' . $review['avatar'])
+                    $avatar = !empty($review->profile_photo)
+                        ? asset('storage/' . $review->profile_photo)
                         : asset('images/default/broken.png');
                 @endphp
                 <div
                     class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm w-[340px] h-[240px] md:w-[480px] flex-shrink-0 flex flex-col justify-between">
                     <div class="flex items-start gap-4 mb-5">
-                        <img src="{{ $avatar }}" alt="{{ $review['name'] }}"
+                        <img src="{{ $avatar }}" alt="{{ $review->name }}"
                             class="w-14 h-14 rounded-full object-cover shrink-0">
-                        <p class="text-stone-700 italic font-serif-brand text-base md:text-lg leading-snug">
-                            {{ '"' . $review['text'] . '"' }}
-                        </p>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-[#61984B] block mb-1">
+                                {{ $review->product->name ?? 'Product' }}
+                            </span>
+                            <p class="text-stone-700 italic font-serif-brand text-base md:text-lg leading-snug line-clamp-2">
+                                {{ '"' . $review->comment . '"' }}
+                            </p>
+                        </div>
                     </div>
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex gap-1">
-                            @php $starCount = (int) ($review['star'] ?? 5); @endphp
+                            @php $starCount = (int) ($review->rating ?? 5); @endphp
                             @for ($i = 1; $i <= 5; $i++)
                                 <svg class="star-icon {{ $i <= $starCount ? 'text-yellow-400' : 'text-stone-300' }}"
                                     viewBox="0 0 20 20">
@@ -145,7 +163,7 @@
                                 </svg>
                             @endfor
                         </div>
-                        <span class="text-xs font-bold text-stone-800 tracking-wider">{{ $review['name'] }}</span>
+                        <span class="text-xs font-bold text-stone-800 tracking-wider">{{ $review->name }}</span>
                     </div>
                 </div>
             @endforeach

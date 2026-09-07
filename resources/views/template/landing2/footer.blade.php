@@ -27,10 +27,11 @@
     $button_text = $content['button_text'] ?? $content['button_text_en'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
     $button_color = $content['button_color'] ?? '#ffffff';
+    $background_color = $content['background_color'] ?? '#1A1A1A';
 
 @endphp
 
-<footer class="bg-[#1A1A1A] text-white pt-16 pb-12 px-6 md:px-12 lg:px-20">
+<footer class="bg-[#1A1A1A] text-white pt-16 pb-12 px-6 md:px-12 lg:px-20" style="background:{{ $background_color }}">
     <div class="max-w-7xl mx-auto space-y-12">
 
         <!-- Top Section: Title, Subtitle & Newsletter Form -->
@@ -57,7 +58,7 @@
                     <input type="email" 
                         placeholder="{{ !empty($desc) ? $desc : 'Enter your email' }}" 
                         required
-                        class="flex-1 bg-stone-900 border border-stone-700 text-white placeholder-stone-400 px-5 py-3.5 rounded-full text-sm outline-none focus:border-stone-500 transition-colors">
+                        class="flex-1 border border-stone-700 text-white placeholder-stone-400 px-5 py-3.5 rounded-full text-sm outline-none focus:border-stone-500 transition-colors">
                     
                     <button type="submit" 
                         class="px-8 py-3.5 rounded-full text-sm font-semibold transition-all shrink-0 shadow-md bg-white text-stone-900 hover:bg-stone-100 border border-stone-200 cursor-pointer">
@@ -71,12 +72,17 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-4">
             
             <div class="space-y-4">
-                <h4 class="text-sm font-bold uppercase tracking-wider text-stone-300">Navigation</h4>
+                <h4 class="text-sm font-bold uppercase tracking-wider" style="color:{{ $subtitle_color }}">{{ $footerPresets['title'] ?? 'Menu' }}</h4>
                 <ul class="space-y-2.5 text-sm text-stone-400">
-                    <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
-                    <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#products" class="hover:text-white transition-colors">Products</a></li>
-                    <li><a href="#collections" class="hover:text-white transition-colors">Collections</a></li>
+                @foreach($footerPresets['footer_menu'] ?? [] as $menu)
+                    @php
+                        $menuUrl = $menu['url'] ?? '#';
+                        if (!empty($menuUrl) && $menuUrl !== '#' && !str_starts_with($menuUrl, 'http') && !str_starts_with($menuUrl, '/')) {
+                            $menuUrl = '/' . ($website->domain ?? '') . '/' . ltrim($menuUrl, '/');
+                        }
+                    @endphp
+                    <li><a href="#collections" class="hover:text-white transition-colors" style="color:{{ $subtitle_color }}; font-weight:800;">{{ $menu['label'] }}</a></li>
+                @endforeach
                 </ul>
             </div>
 

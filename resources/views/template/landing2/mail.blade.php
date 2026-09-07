@@ -25,21 +25,22 @@
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
     $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
-    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_text_color = $content['button_text_color'] ?? '#000000';
     $button_color = $content['button_color'] ?? '#ffffff';
 
     // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
     $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+    $background_color = $content['background_color'] ?? '#ffffff';
 
 @endphp
 
-<section>
+<section class="w-full" style="background-color:{{$background_color}}">
     @php
         $image = !empty($content['image'])
             ? asset('images/website/' . $domain . '/' . $content['image'])
             : asset('images/default/broken.png');
     @endphp
-    <div class="max-w-7xl mx-auto bg-[#FBFBFA] rounded-[32px] p-6 md:p-12 lg:p-16 shadow-sm">
+    <div class="max-w-7xl mx-auto p-6 md:p-12 lg:p-16">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
 
             <div class="lg:col-span-5 w-full">
