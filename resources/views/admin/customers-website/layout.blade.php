@@ -145,33 +145,50 @@
                             </label>
                         </div>
 
-                        <label class="block">
-                            <span class="text-sm font-medium text-slate-700 dark:text-navy-100">
-                                Section <span class="text-error">*</span>
-                            </span>
+                        <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-slate-700 dark:text-navy-100">
+                                    Section <span class="text-error">*</span>
+                                </span>
+                                <span id="sectionHint" class="text-xs text-slate-400 dark:text-navy-300 italic">
+                                    Pilih filter di atas untuk menampilkan section
+                                </span>
+                            </div>
+                            <input type="hidden" name="templates_section_id" id="sectionSelect" x-model="selectedSectionId" required>
+                            @error('templates_section_id') <span class="text-xs text-error">{{ $message }}</span> @enderror
 
-                            <!-- Select Dropdown -->
-                            <select name="templates_section_id" id="sectionSelect" x-model="selectedSectionId" onchange="updateSectionPreview(this)" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
-                                <option value="">Select Section</option>
+                            <div id="sectionCardGrid" class="mt-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-3 hidden">
                                 @foreach($sections as $sec)
-                                    <option value="{{ $sec->id }}"
-                                        data-image="{{ $sec->preview ? asset($sec->preview) : '' }}"
+                                    <div class="section-card group relative cursor-pointer overflow-hidden rounded-xl border-2 border-slate-200 dark:border-navy-500 bg-white dark:bg-navy-700 transition-all duration-200 hover:border-primary dark:hover:border-accent"
+                                        data-id="{{ $sec->id }}"
                                         data-template="{{ $sec->template_id }}"
-                                        data-slug="{{ $sec->slug }}">
-                                        [{{ $sec->template?->name ?? 'No Template' }}] ({{ $sec->slug }}) - {{ $sec->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                                @error('templates_section_id') <span class="text-xs text-error">{{ $message }}</span> @enderror
-
-                                <!-- Baris Kedua: Preview Image -->
-                                <div id="previewContainer" class="mt-3 hidden">
-                                    <span class="text-xs text-slate-500 dark:text-navy-300 mb-1 block">Preview Section:</span>
-                                    <div class="w-full rounded-lg overflow-hidden border border-slate-200 dark:border-navy-500 bg-slate-100 dark:bg-navy-800 flex items-center justify-center p-2">
-                                        <img id="sectionPreviewImage" src="" alt="Section Preview" class="max-w-full h-auto max-h-[600px] object-contain rounded transition-all duration-300">
+                                        data-slug="{{ $sec->slug }}"
+                                        data-image="{{ $sec->preview ? asset($sec->preview) : '' }}"
+                                        onclick="selectSection(this)">
+                                        {{-- Image Preview --}}
+                                        <div class="relative h-28 w-full overflow-hidden bg-slate-100 dark:bg-navy-800">
+                                            @if($sec->preview)
+                                                <img src="{{ asset($sec->preview) }}" alt="{{ $sec->name }}"
+                                                    onerror="this.src='{{ asset('images/default/broken.png') }}'"
+                                                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                            @else
+                                                <img src="{{ asset('images/default/broken.png') }}" alt="No preview"
+                                                    class="h-full w-full object-cover opacity-40">
+                                            @endif
+                                            {{-- Selected Checkmark --}}
+                                            <div class="section-check absolute top-2 right-2 hidden h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+                                                <i class="fa-solid fa-check text-xs"></i>
+                                            </div>
+                                        </div>
+                                        {{-- Info --}}
+                                        <div class="p-2.5">
+                                            <p class="text-xs font-semibold text-slate-700 dark:text-navy-100 truncate">{{ $sec->name }}</p>
+                                            <p class="mt-0.5 text-[10px] text-slate-400 dark:text-navy-300 truncate">
+                                                <span class="font-mono">[{{ $sec->template?->name ?? '-' }}]</span> ({{ $sec->slug }})
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </label>
+                                @endforeach
+                            </div>
                     
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div class="flex items-end pb-1">
@@ -197,12 +214,7 @@
                             <div id="dynamicFieldsListAdd" class="space-y-3"></div>
                         </div>
 
-                        <label class="block">
-                            <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Position</span>
-                            <input name="position" value="0" placeholder="0"
-                                class="form-input mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                type="number" min="0">
-                        </label>
+                        <input type="hidden" name="position" value="0">
 
                         <div class="flex justify-end pt-2">
                             <button type="submit"
@@ -302,45 +314,19 @@
                                 @csrf
                                 @method('PUT')
 
-                                <label class="block">
-                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section <span class="text-error">*</span></span>
-                                    <select name="templates_section_id"
-                                        id="sectionSelectUpdate-{{ $layout->id }}"
-                                        x-model="selectedSectionId"
-                                        onchange="updateSectionPreviewEdit(this, {{ $layout->id }})"
-                                        class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
-                                        <option value="">Select Section</option>
-                                        @foreach($sections as $sec)
-                                            <option value="{{ $sec->id }}"
-                                                data-image="{{ $sec->preview ? asset($sec->preview) : '' }}"
-                                                {{ $layout->templates_section_id == $sec->id ? 'selected' : '' }}>
-                                                [{{ $sec->template?->name ?? 'No Template' }}] ({{ $sec->slug }}) - {{ $sec->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <input type="hidden" name="templates_section_id" id="sectionSelectUpdate-{{ $layout->id }}" value="{{ $layout->templates_section_id }}">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section:</span>
+                                    <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-accent/10 dark:text-accent-light">
+                                        <i class="fa-solid fa-puzzle-piece mr-1"></i>
+                                        {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
+                                    </span>
+                                    <span class="text-[10px] text-slate-400 dark:text-navy-300 font-mono">
+                                        [{{ $layout->section->template?->name ?? '-' }}] ({{ $layout->section->slug ?? '-' }})
+                                    </span>
+                                </div>
 
-                                    {{-- Preview current section --}}
-                                    @php
-                                        $currentSection = $sections->firstWhere('id', $layout->templates_section_id);
-                                    @endphp
-                                    <div id="previewContainerUpdate-{{ $layout->id }}" class="mt-3 {{ $currentSection && $currentSection->preview ? '' : 'hidden' }}">
-                                        <span class="text-xs text-slate-500 dark:text-navy-300 mb-1 block">Preview Section:</span>
-                                        <div class="w-full rounded-lg overflow-hidden border border-slate-200 dark:border-navy-500 bg-slate-100 dark:bg-navy-800 flex items-center justify-center p-2">
-                                            <img id="sectionPreviewImageUpdate-{{ $layout->id }}"
-                                                src="{{ $currentSection && $currentSection->preview ? asset($currentSection->preview) : '' }}"
-                                                alt="Section Preview"
-                                                class="max-w-full h-auto max-h-[600px] object-contain rounded transition-all duration-300">
-                                        </div>
-                                    </div>
-                                </label>
-
-                                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                    <label class="block">
-                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Position</span>
-                                        <input name="position" value="{{ old('position', $layout->position) }}"
-                                            class="form-input mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
-                                            type="number" min="0">
-                                    </label>
+                                <input type="hidden" name="position" value="{{ $layout->position }}">
                                     <div class="flex items-end pb-1">
                                         <label class="inline-flex items-center space-x-2 cursor-pointer">
                                             <input name="status" type="checkbox" value="1" {{ $layout->status ? 'checked' : '' }}
@@ -348,7 +334,6 @@
                                             <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Active</span>
                                         </label>
                                     </div>
-                                </div>
 
                                 <label class="block hidden">
                                     <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
@@ -396,24 +381,59 @@
     <script>
         const websiteDomain = '{{ $website->domain ?? "" }}';
 
-        // Filter sections by template and slug
+        // Select section card
+        function selectSection(card) {
+            const id = card.dataset.id;
+            const hidden = document.getElementById('sectionSelect');
+            // Deselect all
+            document.querySelectorAll('.section-card').forEach(c => {
+                c.classList.remove('border-primary', 'dark:border-accent', 'bg-primary/5', 'dark:bg-accent/5');
+                c.classList.add('border-slate-200', 'dark:border-navy-500');
+                c.querySelector('.section-check').classList.add('hidden');
+            });
+            // Select clicked
+            card.classList.add('border-primary', 'dark:border-accent', 'bg-primary/5', 'dark:bg-accent/5');
+            card.classList.remove('border-slate-200', 'dark:border-navy-500');
+            card.querySelector('.section-check').classList.remove('hidden');
+            hidden.value = id;
+            hidden.dispatchEvent(new Event('change'));
+            // Load dynamic fields
+            const containerEl = document.getElementById('dynamicFieldsContainerAdd');
+            const listEl = document.getElementById('dynamicFieldsListAdd');
+            const contentTextarea = document.getElementById('contentAdd');
+            if (containerEl && listEl && contentTextarea && typeof window.loadSectionContents === 'function') {
+                window.loadSectionContents(id, containerEl, listEl, contentTextarea, contentTextarea.value);
+            }
+        }
+
+        // Filter section cards by template and slug
         function filterSections() {
             const templateFilter = document.getElementById('filterTemplate').value;
             const slugFilter = document.getElementById('filterSlug').value;
             const sectionSelect = document.getElementById('sectionSelect');
-            const options = sectionSelect.querySelectorAll('option[data-template]');
+            const grid = document.getElementById('sectionCardGrid');
+            const hint = document.getElementById('sectionHint');
+            const cards = document.querySelectorAll('.section-card');
 
-            options.forEach(opt => {
-                const matchTemplate = !templateFilter || opt.dataset.template === templateFilter;
-                const matchSlug = !slugFilter || opt.dataset.slug === slugFilter;
-                opt.style.display = (matchTemplate && matchSlug) ? '' : 'none';
+            // Show/hide grid based on whether a filter is selected
+            const hasFilter = templateFilter !== '' || slugFilter !== '';
+            if (grid) grid.classList.toggle('hidden', !hasFilter);
+            if (hint) hint.classList.toggle('hidden', hasFilter);
+
+            cards.forEach(card => {
+                const matchTemplate = !templateFilter || card.dataset.template === templateFilter;
+                const matchSlug = !slugFilter || card.dataset.slug === slugFilter;
+                card.style.display = (matchTemplate && matchSlug) ? '' : 'none';
             });
 
-            // Reset selection if hidden
+            // Reset selection if selected card is now hidden
             if (sectionSelect.value) {
-                const selectedOpt = sectionSelect.options[sectionSelect.selectedIndex];
-                if (selectedOpt && selectedOpt.style.display === 'none') {
+                const selectedCard = document.querySelector('.section-card[data-id="' + sectionSelect.value + '"]');
+                if (selectedCard && selectedCard.style.display === 'none') {
                     sectionSelect.value = '';
+                    selectedCard.classList.remove('border-primary', 'dark:border-accent', 'bg-primary/5', 'dark:bg-accent/5');
+                    selectedCard.classList.add('border-slate-200', 'dark:border-navy-500');
+                    selectedCard.querySelector('.section-check').classList.add('hidden');
                 }
             }
         }
@@ -819,31 +839,6 @@
                 .catch(err => console.error('Error fetching section contents:', err));
         };
 
-        // Global updateSectionPreview for Create (defined before DOMContentLoaded for inline onchange attribute)
-        function updateSectionPreview(selectElement) {
-            if (!selectElement) return;
-            const selectedOption = selectElement.options ? selectElement.options[selectElement.selectedIndex] : null;
-            const imageUrl = selectedOption ? selectedOption.getAttribute('data-image') : '';
-
-            const previewContainer = document.getElementById('previewContainer');
-            const previewImage = document.getElementById('sectionPreviewImage');
-
-            if (selectElement.value && imageUrl) {
-                if (previewImage) previewImage.src = imageUrl;
-                if (previewContainer) previewContainer.classList.remove('hidden');
-            } else {
-                if (previewContainer) previewContainer.classList.add('hidden');
-            }
-
-            // Load dynamic fields
-            const containerEl = document.getElementById('dynamicFieldsContainerAdd');
-            const listEl = document.getElementById('dynamicFieldsListAdd');
-            const contentTextarea = document.getElementById('contentAdd');
-            if (containerEl && listEl && contentTextarea && typeof window.loadSectionContents === 'function') {
-                window.loadSectionContents(selectElement.value, containerEl, listEl, contentTextarea, contentTextarea.value);
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
             const csrfToken = '{{ csrf_token() }}';
 
@@ -919,36 +914,6 @@
                     }
                 }
             }
-
-            const sectionSelectAdd = document.getElementById('sectionSelect');
-            if (sectionSelectAdd) {
-                sectionSelectAdd.addEventListener('change', function () {
-                    updateSectionPreview(this);
-                });
-            }
-
-            // Global updateSectionPreviewEdit for Edit
-            window.updateSectionPreviewEdit = function (selectElement, layoutId) {
-                const selectedOption = selectElement.options[selectElement.selectedIndex];
-                const imageUrl = selectedOption ? selectedOption.getAttribute('data-image') : '';
-
-                const previewContainer = document.getElementById(`previewContainerUpdate-${layoutId}`);
-                const previewImage = document.getElementById(`sectionPreviewImageUpdate-${layoutId}`);
-
-                if (selectElement.value && imageUrl) {
-                    previewImage.src = imageUrl;
-                    previewContainer.classList.remove('hidden');
-                } else {
-                    previewContainer.classList.add('hidden');
-                }
-
-                // Load dynamic fields for edit (use embedded server data for reliable content matching)
-                const containerEl = document.getElementById(`dynamicFieldsContainerUpdate-${layoutId}`);
-                const listEl = document.getElementById(`dynamicFieldsListUpdate-${layoutId}`);
-                const contentTextarea = document.getElementById(`contentUpdate-${layoutId}`);
-                const existingJson = JSON.stringify((window.__layoutContentData && window.__layoutContentData[layoutId]) || {});
-                window.loadSectionContents(selectElement.value, containerEl, listEl, contentTextarea, existingJson);
-            };
 
             // Layout content data embedded from server (reliable, no DOM parsing issues)
             window.__layoutContentData = {

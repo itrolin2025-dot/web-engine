@@ -407,6 +407,11 @@ class CustomersWebController extends Controller
             $finalContent = json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         }
 
+        // Auto position: always append to end
+        $maxPosition = CustomersWebsiteLayout::where('customers_website_id', $id)
+            ->where('page_type', $page_type)
+            ->max('position');
+
         $layout = CustomersWebsiteLayout::create([
             'customers_website_id' => $id,
             'templates_section_id' => $request->templates_section_id,
@@ -414,7 +419,7 @@ class CustomersWebController extends Controller
             'page_type' => $page_type,
             'content' => $finalContent,
             'status' => $request->has('status') ? 1 : 0,
-            'position' => $request->position ?? 0,
+            'position' => ($maxPosition ?? 0) + 1,
         ]);
 
         if ($request->expectsJson() || $request->ajax()) {
