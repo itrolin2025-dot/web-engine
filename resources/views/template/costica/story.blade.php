@@ -32,7 +32,7 @@
     $image      = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 @endphp
 
-<section class="w-full py-16 md:py-24 bg-white font-sans text-[#1a1a1a] overflow-hidden">
+<section class="w-full bg-white font-sans text-[#1a1a1a] overflow-hidden">
     <div class="w-full grid grid-cols-1 lg:grid-cols-2">
 
         <!-- Left Side: Content & Dual Image Grid -->

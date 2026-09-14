@@ -29,7 +29,7 @@
 
     $image = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 
-    $products = $products ?? collect();
+    $products = $products->take(4) ?? collect();
 @endphp
 
 <section class="w-full py-16 md:py-24 pl-4 md:pl-4 font-sans text-[#1a1a1a] overflow-hidden"
@@ -59,14 +59,14 @@
 
             <!-- Left Column: Image Banner - Full Height, Sticks to Left Edge -->
             @if($image)
-                <div class="lg:col-span-4 relative overflow-hidden min-h-[300px] lg:min-h-[500px]">
+                <div class="border-gray-100 rounded-xl lg:col-span-4 relative overflow-hidden min-h-[300px] lg:min-h-[500px] mr-4 lg:mr-0">
                     <img src="{{ asset($image) }}"
                         alt="{{ $title }}" class="absolute inset-0 w-full h-full object-cover object-center" />
                 </div>
             @endif
 
             <!-- Right Column: Product Cards Grid -->
-            <div class="lg:col-span-{{ $image ? '8' : '12' }} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:p-8 items-stretch">
+            <div class="lg:col-span-{{ $image ? '8' : '12' }} grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 py-4 pr-4 pl-0 md:p-8 items-stretch">
                 @if(isset($products) && count($products) > 0)
                     @foreach($products->take(6) as $product)
                         @php
@@ -100,29 +100,29 @@
                             $numericPrice = (float) $pPrice;
                         @endphp
 
-                        <a href="#" class="bg-[#fcfcfc] border border-gray-100 rounded-xl p-4 flex items-center gap-4 relative shadow-sm hover:shadow-md transition duration-300 group cursor-pointer h-full">
+                        <a href="#" class="bg-[#fcfcfc] border border-gray-100 rounded-xl flex items-stretch relative shadow-sm hover:shadow-md transition duration-300 group cursor-pointer h-full overflow-hidden">
                             <!-- Product Image -->
-                            <div class="w-20 h-20 shrink-0 flex items-center justify-center p-1 bg-white rounded-lg overflow-hidden">
+                            <div class="w-32 sm:w-40 md:w-48 shrink-0 bg-white flex items-center justify-center overflow-hidden">
                                 <img src="{{ $imgSrc }}" alt="{{ $pName }}"
-                                    class="h-full object-contain group-hover:scale-105 transition duration-300"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                     loading="lazy" />
                             </div>
 
                             <!-- Product Details -->
-                            <div class="flex flex-col justify-center min-w-0 flex-1">
+                            <div class="flex flex-col justify-center min-w-0 flex-1 p-4 md:p-5">
                                 <!-- Stars -->
-                                <div class="text-gray-300 text-[11px] mb-1">
+                                <div class="text-[11px] mb-1.5" style="color:{{ $title_color }}">
                                     ★★★★★
                                 </div>
 
                                 <!-- Product Name -->
-                                <h3 class="text-xs md:text-sm font-semibold text-gray-900 truncate mb-1 group-hover:text-[#c80000] transition">
+                                <h3 class="text-sm md:text-base font-semibold line-clamp-2 mb-2 transition leading-snug" style="color:{{ $title_color }}">
                                     {{ $pName }}
                                 </h3>
 
                                 <!-- Price -->
-                                <div class="flex items-center gap-2 text-xs">
-                                    <span class="font-bold text-gray-900">Rp {{ number_format($numericPrice, 0, ',', '.') }}</span>
+                                <div class="flex items-center gap-2 text-sm md:text-base">
+                                    <span class="font-bold" style="color:{{ $title_color }}">Rp {{ number_format($numericPrice, 0, ',', '.') }}</span>
                                 </div>
                             </div>
                         </a>

@@ -40,8 +40,25 @@
 
 
 
+<style>
+    /* Mobile: Solid background by default */
+    #main-header {
+        background-color: {{ $background_color }};
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* shadow-sm */
+        padding-bottom:0.6rem;
+    }
+    
+    /* Desktop: Transparent before scroll */
+    @media (min-width: 768px) {
+        #main-header:not(.scrolled) {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+    }
+</style>
+
 <header id="main-header"
-    class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent">
+    class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
     <div class="w-full px-6 md:px-12 py-5 flex items-center justify-between">
 
         <!-- Left Navigation Links -->
@@ -184,11 +201,9 @@
             const header = document.getElementById('main-header');
             if (header) {
                 if (window.scrollY > 50) {
-                    header.classList.remove('bg-transparent');
-                    header.classList.add('bg-[{{ $background_color }}]', 'shadow-md');
+                    header.classList.add('scrolled');
                 } else {
-                    header.classList.add('bg-transparent');
-                    header.classList.remove('bg-[{{ $background_color }}]', 'shadow-md');
+                    header.classList.remove('scrolled');
                 }
             }
         });
