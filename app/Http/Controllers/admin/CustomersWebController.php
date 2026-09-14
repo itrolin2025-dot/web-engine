@@ -147,6 +147,58 @@ class CustomersWebController extends Controller
         return redirect()->route('admin.customers-website')->with('success', 'Customer Website deleted successfully.');
     }
 
+    public function duplicate($id)
+    {
+        if (canAccess('customers', $this->getProductId(), 'add') == false) {
+            return redirect()->back()->with('error', 'Tidak Memiliki Akses');
+        }
+
+        $website = CustomersWebsite::findOrFail($id);
+
+        // Create new domain with -dupe suffix
+        $newDomain = $website->domain ? $website->domain . '-dupe' : null;
+
+        // Check if domain already exists, add number suffix if needed
+        if ($newDomain) {
+            $counter = 1;
+            $originalDomain = $newDomain;
+            while (CustomersWebsite::where('domain', $newDomain)->exists()) {
+                $newDomain = $originalDomain . '-' . $counter;
+                $counter++;
+            }
+        }
+
+        // Duplicate the website
+        $newWebsite = CustomersWebsite::create([
+            'customer_id' => $website->customer_id,
+            'template_id' => $website->template_id,
+            'title' => $website->title . ' (Copy)',
+            'domain' => $newDomain,
+            'description' => $website->description,
+            'is_active' => 0, // Set as inactive by default
+        ]);
+
+        // Duplicate all layout items
+        $layouts = CustomersWebsiteLayout::where('customers_website_id', $id)->get();
+        foreach ($layouts as $layout) {
+            // Copy content and update image paths if needed
+            $newContent = $layout->content;
+
+            CustomersWebsiteLayout::create([
+                'customers_website_id' => $newWebsite->id,
+                'templates_section_id' => $layout->templates_section_id,
+                'template_content_id' => $layout->template_content_id,
+                'page_type' => $layout->page_type,
+                'content' => $newContent,
+                'status' => $layout->status,
+                'position' => $layout->position,
+            ]);
+        }
+
+        return redirect()->route('admin.customers-website.edit', $newWebsite->id)
+            ->with('success', 'Website duplicated successfully. Domain: ' . ($newDomain ?? 'N/A'));
+    }
+
     // =================== LAYOUT METHODS ===================
 
     public function page($id)
@@ -526,6 +578,25 @@ class CustomersWebController extends Controller
         }
 
         return redirect()->route('admin.customers-website.layout', [$id, $page_type])->with('success', 'Layout item deleted successfully.');
+    }
+
+    public function layoutReorder(Request $request, $id, $page_type)
+    {
+        $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'required|integer|exists:customers_websites_layout,id',
+        ]);
+
+        foreach ($request->order as $position => $layoutId) {
+            CustomersWebsiteLayout::where('id', $layoutId)
+                ->where('customers_website_id', $id)
+                ->update(['position' => $position]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Layout order updated successfully.',
+        ]);
     }
 }
 

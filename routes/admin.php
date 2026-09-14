@@ -109,12 +109,14 @@ Route::middleware('auth')->group(function () {
     Route::get('customers-website/{id}/edit', [CustomersWebController::class, 'edit'])->name('customers-website.edit');
     Route::put('customers-website/{id}', [CustomersWebController::class, 'update'])->name('customers-website.update');
     Route::delete('customers-website/{id}', [CustomersWebController::class, 'destroy'])->name('customers-website.destroy');
+    Route::post('customers-website/{id}/duplicate', [CustomersWebController::class, 'duplicate'])->name('customers-website.duplicate');
     Route::get('customers-website/{id}/page', [CustomersWebController::class, 'page'])->name('customers-website.page');
     Route::get('customers-website/section-contents/{sectionId}', [CustomersWebController::class, 'getSectionContents'])->name('customers-website.section-contents');
     Route::get('customers-website/{id}/layout/{page_type}', [CustomersWebController::class, 'layout'])->name('customers-website.layout');
     Route::post('customers-website/{id}/layout/{page_type}', [CustomersWebController::class, 'layoutStore'])->name('customers-website.layout.store');
     Route::put('customers-website/{id}/layout/{page_type}/{layoutId}', [CustomersWebController::class, 'layoutUpdate'])->name('customers-website.layout.update');
     Route::delete('customers-website/{id}/layout/{page_type}/{layoutId}', [CustomersWebController::class, 'layoutDestroy'])->name('customers-website.layout.destroy');
+    Route::post('customers-website/{id}/layout/{page_type}/reorder', [CustomersWebController::class, 'layoutReorder'])->name('customers-website.layout.reorder');
 
     //Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

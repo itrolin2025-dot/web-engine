@@ -32,41 +32,88 @@
     $image      = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 @endphp
 
-<section class="w-full bg-white py-16 md:py-24 px-4 md:px-8 font-sans text-[#1a1a1a]">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<section class="w-full py-16 md:py-24 bg-white font-sans text-[#1a1a1a] overflow-hidden">
+    <div class="w-full grid grid-cols-1 lg:grid-cols-2">
 
-        <div class="lg:col-span-6 relative pb-16 lg:pb-24">
-            <div class="w-[75%] sm:w-[70%] h-[320px] sm:h-[420px] rounded-xl overflow-hidden shadow-sm">
-                <img src="{{ $background }}"
-                    alt="Beauty Application" class="w-full h-full object-cover object-center" />
+        <!-- Left Side: Content & Dual Image Grid -->
+        <div class="flex flex-col justify-between bg-[#f9f9fb] pt-8 md:pt-16 lg:pt-20 px-8 md:px-16 lg:px-20 pb-0">
+
+            <!-- Text Content -->
+            <div class="text-center max-w-xl mx-auto mb-12">
+                <span class="text-[11px] md:text-xs font-bold tracking-[0.2em] text-[{{ $tag_color }}] uppercase block mb-3">
+                    {{ $tag }}
+                </span>
+
+                <h2 class="text-3xl md:text-4xl font-bold text-[{{ $title_color }}] tracking-tight mb-6">
+                    {{ $title}}
+                </h2>
+
+                <p class="text-xs md:text-sm text-[{{ $subtitle_color }}] leading-relaxed italic">
+                    {{ $subtitle }} 
+                </p>
             </div>
 
+            <!-- Two Column Bottom Images (Rapat tanpa jarak / gap-0) -->
             <div
-                class="absolute bottom-0 right-0 sm:right-6 w-[60%] sm:w-[55%] h-[240px] sm:h-[300px] rounded-xl overflow-hidden shadow-xl border-4 border-white">
-                <img src="{{ $image }}"
-                    alt="Mecca Cosmetica Products" class="w-full h-full object-cover object-center" />
+                class="grid grid-cols-2 gap-0 h-64 md:h-80 -mx-8 md:-mx-16 lg:-mx-20 w-[calc(100%+4rem)] md:w-[calc(100%+8rem)] lg:w-[calc(100%+10rem)] max-w-none mt-auto">
+                <div class="relative overflow-hidden h-full">
+                    <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80"
+                        alt="Skincare Serum Water Ripple" class="w-full h-full object-cover" />
+                </div>
+                <div class="relative overflow-hidden h-full">
+                    <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=80"
+                        alt="Applying Cream Application" class="w-full h-full object-cover" />
+                </div>
             </div>
+
         </div>
 
-        <div class="lg:col-span-6 lg:pl-8 flex flex-col items-start justify-center">
-            <span class="text-[11px] md:text-xs font-bold tracking-[0.2em] block mb-3" style="color: {{ $tag_color ?? '#000000ff' }}">
-                {{ $tag }}
-            </span>
+        <!-- Right Side: Video Feature Banner -->
+        <div
+            class="relative min-h-[450px] lg:min-h-full bg-[#b8a7c6] flex items-center justify-center overflow-hidden group">
 
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 leading-tight" style="color: {{ $title_color ?? '#000000ff' }}">
-                {!! !empty($title) ? nl2br(e($title)) : '' !!}
-            </h2>
+            <!-- Background Image -->
+            <img src="{{ $image }}"
+                alt="Story"
+                class="absolute inset-0 w-full h-full object-cover object-center transition duration-700 group-hover:scale-105" />
 
-            <p class="text-xs md:text-sm leading-relaxed max-w-lg mb-8" style="color: {{ $subtitle_color ?? '#000000ff' }}">
-                {!! !empty($subtitle) ? nl2br(e($subtitle)) : '' !!}
-            </p>
+            <!-- Circular Interactive Play Video Button -->
+            <!-- <button aria-label="Play Video"
+                class="relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-xl hover:scale-110 hover:bg-white transition duration-300">
+              
+                <svg class="absolute w-full h-full animate-spin-slow p-1" viewBox="0 0 100 100">
+                    <path id="circlePath" fill="none" stroke="none"
+                        d="M 10, 50 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" />
+                    <text class="text-[8px] font-bold tracking-widest uppercase fill-gray-800">
+                        <textPath href="#circlePath">
+                            • PRESS PLAY AND IMMERSE YOURSELF IN VIDEO
+                        </textPath>
+                    </text>
+                </svg>
 
-            <a href="#"
-                class="inline-flex items-center gap-2 bg-[{{ $button_color }}] hover:bg-[#ebd8b6] text-[{{ $button_text_color }}] text-xs md:text-sm font-semibold px-7 py-3.5 rounded-md transition duration-300">
-                About Us
-                <span class="text-sm">↗</span>
-            </a>
+                <svg class="w-6 h-6 text-gray-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+            </button> -->
+
         </div>
 
     </div>
 </section>
+
+<!-- Custom Animation Style for Rotating Badge -->
+<!-- <style>
+    @keyframes spinSlow {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .animate-spin-slow {
+        animation: spinSlow 12s linear infinite;
+    }
+</style> -->
