@@ -609,23 +609,25 @@
 
                                 // 3. Container Utama Repeater
                                 const repeaterWrapper = document.createElement('div');
-                                repeaterWrapper.className = 'space-y-2 rounded-lg border border-slate-200 bg-slate-100/60 p-2.5 dark:border-navy-500 dark:bg-navy-900/40';
-
-                                const itemsContainer = document.createElement('div');
-                                itemsContainer.className = 'space-y-2';
-                                repeaterWrapper.appendChild(itemsContainer);
+                                repeaterWrapper.className = 'space-y-2 rounded-lg border border-slate-200 bg-slate-100/60 p-2.5 dark:border-navy-500 dark:bg-navy-900/40';                                    const itemsContainer = document.createElement('div');
+                                    itemsContainer.className = 'space-y-4';
+                                    repeaterWrapper.appendChild(itemsContainer);
 
                                 // Helper: Sync Data ke Hidden Input & Dynamic JSON Textarea
                                 const syncRepeaterValue = () => {
                                     const currentData = [];
                                     itemsContainer.querySelectorAll('.repeater-item-row').forEach(row => {
                                         const lbl = row.querySelector('.repeater-label-input').value;
+                                        const ttl = row.querySelector('.repeater-title-input').value;
+                                        const sub = row.querySelector('.repeater-subtitle-input').value;
                                         const clr = row.querySelector('.repeater-color-text-input').value;
                                         const srt = row.querySelector('.repeater-sort-input').value;
                                         const imgVal = row.querySelector('.repeater-image-value').value;
 
                                         currentData.push({
                                             label: lbl,
+                                            title: ttl,
+                                            subtitle: sub,
                                             color: clr,
                                             sort: srt,
                                             image: imgVal
@@ -638,9 +640,9 @@
                                 };
 
                                 // Helper: Render Row Item
-                                const renderRepeaterRow = (itemData = { label: '', color: '#575757', sort: '1', image: '' }) => {
+                                const renderRepeaterRow = (itemData = { label: '', title: '', subtitle: '', color: '#575757', sort: '1', image: '' }) => {
                                     const row = document.createElement('div');
-                                    row.className = 'repeater-item-row flex flex-col space-y-2 rounded-md border border-slate-200 bg-white dark:bg-navy-700 p-2.5 shadow-sm dark:border-navy-500 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0';
+                                    row.className = 'repeater-item-row rounded-lg border border-slate-200 bg-white dark:bg-navy-700 p-4 shadow-sm dark:border-navy-500';
 
                                     // Hidden input menyimpan string path/base64 gambar per item
                                     const imageValInput = document.createElement('input');
@@ -650,7 +652,7 @@
 
                                     // 1. Upload & Preview Image Element
                                     const imgContainer = document.createElement('div');
-                                    imgContainer.className = 'flex items-center space-x-2 shrink-0';
+                                    imgContainer.className = 'flex flex-col';
 
                                     const imgPreview = document.createElement('img');
                                     let initialImgSrc = itemData.image || '';
@@ -658,7 +660,7 @@
                                         initialImgSrc = websiteDomain ? `{{ asset('images/website') }}/${websiteDomain}/${initialImgSrc}` : `{{ asset('storage') }}/${initialImgSrc}`;
                                     }
                                     imgPreview.src = initialImgSrc;
-                                    imgPreview.className = `h-9 w-9 object-cover rounded border border-slate-200 dark:border-navy-450 ${itemData.image ? '' : 'hidden'}`;
+                                    imgPreview.className = `h-20 w-full object-cover rounded border border-slate-200 dark:border-navy-450 ${itemData.image ? '' : 'hidden'}`;
 
                                     const fileInput = document.createElement('input');
                                     fileInput.type = 'file';
@@ -667,7 +669,7 @@
 
                                     const uploadBtn = document.createElement('button');
                                     uploadBtn.type = 'button';
-                                    uploadBtn.className = 'btn h-8 rounded bg-slate-150 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-100 dark:hover:bg-navy-450 shrink-0';
+                                    uploadBtn.className = 'btn h-9 w-full rounded bg-slate-150 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-100 dark:hover:bg-navy-450 mt-2';
                                     uploadBtn.innerHTML = '<i class="fa-solid fa-image mr-1"></i> Pic';
                                     uploadBtn.addEventListener('click', () => fileInput.click());
 
@@ -703,9 +705,7 @@
                                     labelInput.value = itemData.label || '';
                                     labelInput.className = 'repeater-label-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
 
-                                    // 3. Color Picker Wrapper
-                                    const colorPickerDiv = document.createElement('div');
-                                    colorPickerDiv.className = 'flex items-center space-x-1 shrink-0';
+                                    // 3. Color Picker (individual elements, no wrapper needed)
 
                                     const colorPicker = document.createElement('input');
                                     colorPicker.type = 'color';
@@ -729,42 +729,97 @@
                                         syncRepeaterValue();
                                     });
 
-                                    colorPickerDiv.appendChild(colorPicker);
-                                    colorPickerDiv.appendChild(colorTextInput);
+                                    // Color elements are used individually in row5 and row6
 
-                                    // 4. Input Sort
+                                    // 4. Input Sort (hidden, auto-managed)
                                     const sortInput = document.createElement('input');
-                                    sortInput.type = 'number';
-                                    sortInput.placeholder = 'Sort';
+                                    sortInput.type = 'hidden';
                                     sortInput.value = itemData.sort !== undefined ? itemData.sort : (itemsContainer.children.length + 1).toString();
-                                    sortInput.className = 'repeater-sort-input form-input w-16 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+                                    sortInput.className = 'repeater-sort-input';
+
+                                    // 5. Input Title
+                                    const titleInput = document.createElement('input');
+                                    titleInput.type = 'text';
+                                    titleInput.placeholder = 'Title';
+                                    titleInput.value = itemData.title || '';
+                                    titleInput.className = 'repeater-title-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+
+                                    // 6. Input Subtitle
+                                    const subtitleInput = document.createElement('input');
+                                    subtitleInput.type = 'text';
+                                    subtitleInput.placeholder = 'Subtitle / Description';
+                                    subtitleInput.value = itemData.subtitle || '';
+                                    subtitleInput.className = 'repeater-subtitle-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
 
                                     labelInput.addEventListener('input', syncRepeaterValue);
+                                    titleInput.addEventListener('input', syncRepeaterValue);
+                                    subtitleInput.addEventListener('input', syncRepeaterValue);
                                     sortInput.addEventListener('input', syncRepeaterValue);
 
-                                    // 5. Tombol Hapus Baris
+                                    // 7. Tombol Hapus Baris
                                     const removeBtn = document.createElement('button');
                                     removeBtn.type = 'button';
-                                    removeBtn.className = 'btn h-7 w-7 rounded-md p-0 text-error hover:bg-error/10 shrink-0 self-end sm:self-center';
+                                    removeBtn.className = 'btn h-7 w-7 rounded-md p-0 text-error hover:bg-error/10 shrink-0';
                                     removeBtn.innerHTML = '<i class="fa-solid fa-trash-can text-xs"></i>';
                                     removeBtn.addEventListener('click', () => {
                                         row.remove();
                                         syncRepeaterValue();
                                     });
 
+                                    // ─── Vertical Layout ───
+                                    // Row 1: Image
+                                    const row1 = document.createElement('div');
+                                    row1.className = 'mb-3';
+                                    row1.appendChild(imgContainer);
+
+                                    // Row 2: Label
+                                    const row2 = document.createElement('div');
+                                    row2.className = 'mb-3';
+                                    row2.appendChild(labelInput);
+
+                                    // Row 3: Title
+                                    const row3 = document.createElement('div');
+                                    row3.className = 'mb-3';
+                                    row3.appendChild(titleInput);
+
+                                    // Row 4: Subtitle
+                                    const row4 = document.createElement('div');
+                                    row4.className = 'mb-3';
+                                    row4.appendChild(subtitleInput);
+
+                                    // Row 5: Color Hex Text
+                                    const row5 = document.createElement('div');
+                                    row5.className = 'mb-3';
+                                    row5.appendChild(colorTextInput);
+
+                                    // Row 6: Color Picker + Sort (hidden) + Delete
+                                    const row6 = document.createElement('div');
+                                    row6.className = 'flex items-center justify-between mb-1';
+                                    row6.appendChild(colorPicker);
+                                    row6.appendChild(sortInput);
+                                    row6.appendChild(removeBtn);
+
                                     // Masukkan elemen ke row
-                                    row.appendChild(imgContainer);
-                                    row.appendChild(labelInput);
-                                    row.appendChild(colorPickerDiv);
-                                    row.appendChild(sortInput);
-                                    row.appendChild(removeBtn);
+                                    row.appendChild(row1);
+                                    row.appendChild(row2);
+                                    row.appendChild(row3);
+                                    row.appendChild(row4);
+                                    row.appendChild(row5);
+                                    row.appendChild(row6);
 
                                     itemsContainer.appendChild(row);
                                 };
 
                                 // Render data awal
                                 if (repeaterItems.length > 0) {
-                                    repeaterItems.forEach(item => renderRepeaterRow(item));
+                                    repeaterItems.forEach(item => renderRepeaterRow({
+                                        label: item.label || '',
+                                        title: item.title || '',
+                                        subtitle: item.subtitle || '',
+                                        color: item.color || '#575757',
+                                        sort: item.sort || '1',
+                                        image: item.image || ''
+                                    }));
                                 } else {
                                     renderRepeaterRow();
                                 }
