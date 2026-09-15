@@ -207,11 +207,8 @@
                         </label>
 
                         <!-- Dynamic Section Content Fields loaded via AJAX -->
-                        <div id="dynamicFieldsContainerAdd" class="hidden space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-navy-500 dark:bg-navy-800">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-gray-800 flex items-center">
-                                <i class="fa-solid fa-sliders mr-1.5 text-primary dark:text-accent-light"></i> Section Dynamic Content Fields
-                            </h4>
-                            <div id="dynamicFieldsListAdd" class="space-y-3"></div>
+                        <div id="dynamicFieldsContainerAdd" class="hidden">
+                            <div id="dynamicFieldsListAdd" class="space-y-4 p-3"></div>
                         </div>
 
                         <input type="hidden" name="position" value="0">
@@ -315,25 +312,24 @@
                                 @method('PUT')
 
                                 <input type="hidden" name="templates_section_id" id="sectionSelectUpdate-{{ $layout->id }}" value="{{ $layout->templates_section_id }}">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section:</span>
-                                    <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-accent/10 dark:text-accent-light">
-                                        <i class="fa-solid fa-puzzle-piece mr-1"></i>
-                                        {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
-                                    </span>
-                                    <span class="text-[10px] text-slate-400 dark:text-navy-300 font-mono">
-                                        [{{ $layout->section->template?->name ?? '-' }}] ({{ $layout->section->slug ?? '-' }})
-                                    </span>
-                                </div>
-
                                 <input type="hidden" name="position" value="{{ $layout->position }}">
-                                    <div class="flex items-end pb-1">
-                                        <label class="inline-flex items-center space-x-2 cursor-pointer">
-                                            <input name="status" type="checkbox" value="1" {{ $layout->status ? 'checked' : '' }}
-                                                class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
-                                            <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Active</span>
-                                        </label>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section:</span>
+                                        <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-accent/10 dark:text-accent-light">
+                                            <i class="fa-solid fa-puzzle-piece mr-1"></i>
+                                            {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
+                                        </span>
+                                        <span class="text-[10px] text-slate-400 dark:text-navy-300 font-mono">
+                                            [{{ $layout->section->template?->name ?? '-' }}] ({{ $layout->section->slug ?? '-' }})
+                                        </span>
                                     </div>
+                                    <label class="inline-flex items-center space-x-2 cursor-pointer">
+                                        <input name="status" type="checkbox" value="1" {{ $layout->status ? 'checked' : '' }}
+                                            class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
+                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Active</span>
+                                    </label>
+                                </div>
 
                                 <label class="block hidden">
                                     <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
@@ -342,27 +338,24 @@
                                 </label>
 
                                 <!-- Dynamic Section Content Fields loaded via AJAX -->
-                                <div id="dynamicFieldsContainerUpdate-{{ $layout->id }}" class="hidden space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-navy-500 dark:bg-navy-800">
-                                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-navy-200 border-b pb-1 border-slate-200 dark:border-gray-800 flex items-center">
-                                        <i class="fa-solid fa-sliders mr-1.5 text-primary dark:text-accent-light"></i> Section Dynamic Content Fields
-                                    </h4>
-                                    <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-3"></div>
+                                <div id="dynamicFieldsContainerUpdate-{{ $layout->id }}" class="hidden">
+                                    <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-4 p-3"></div>
                                 </div>
 
-                                <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-gray-800">
-                                    <button type="submit"
-                                        class="btn h-8 rounded-full bg-primary px-4 text-xs font-medium text-white hover:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
-                                        <i class="fa-solid fa-check mr-1.5"></i> Save Changes
-                                    </button>
+                                <div class="flex items-center justify-between pt-4">
                                     <form action="{{ route('admin.customers-website.layout.destroy', [$website->id, $page_type, $layout->id]) }}"
                                         method="POST" class="layout-delete-form" data-layout-id="{{ $layout->id }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="btn h-8 rounded-full bg-error/10 px-4 text-xs font-medium text-error hover:bg-error/20">
+                                            class="btn bg-error/10 font-medium text-error hover:bg-error/20 dark:bg-error/10 dark:text-error dark:hover:bg-error/20">
                                             <i class="fa-solid fa-trash mr-1.5"></i> Delete
                                         </button>
                                     </form>
+                                    <button type="submit"
+                                        class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
+                                        <i class="fa-solid fa-check mr-1.5"></i> Save Changes
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -462,7 +455,23 @@
                     if (data.success && data.contents && data.contents.length > 0) {
                         if (containerEl) containerEl.classList.remove('hidden');
 
+                        // Build a map of all items for pairing
+                        const contentsMap = {};
+                        data.contents.forEach(c => { contentsMap[c.key] = c; });
+                        const renderedKeys = new Set();
+
                         data.contents.forEach(item => {
+                            // Skip color items that have a paired TEXT item (they'll be rendered with the text item)
+                            const typeLower = (item.type || '').toLowerCase();
+                            if (typeLower === 'color') {
+                                const pairedKey = item.key.replace(/_color$/, '');
+                                const pairedItem = contentsMap[pairedKey];
+                                if (pairedItem && (pairedItem.type || '').toLowerCase() === 'text') {
+                                    renderedKeys.add(item.key);
+                                    return; // Will be rendered alongside the text field
+                                }
+                            }
+
                             const fieldWrapper = document.createElement('div');
                             fieldWrapper.className = 'block';
 
@@ -478,8 +487,6 @@
                             const val = existingData[item.key] !== undefined ? existingData[item.key] : (item.value || '');
                             const inputName = `dynamic_content[${item.key}]`;
                             const fileInputName = `dynamic_files[${item.key}]`;
-
-                            const typeLower = (item.type || '').toLowerCase();
 
                             if (typeLower === 'image' || typeLower === 'file') {
                                 const fileInput = document.createElement('input');
@@ -609,7 +616,7 @@
 
                                 // 3. Container Utama Repeater
                                 const repeaterWrapper = document.createElement('div');
-                                repeaterWrapper.className = 'space-y-2 rounded-lg border border-slate-200 bg-slate-100/60 p-2.5 dark:border-navy-500 dark:bg-navy-900/40';                                    const itemsContainer = document.createElement('div');
+                                repeaterWrapper.className = 'space-y-3';                                    const itemsContainer = document.createElement('div');
                                     itemsContainer.className = 'space-y-4';
                                     repeaterWrapper.appendChild(itemsContainer);
 
@@ -827,7 +834,7 @@
                                 // Tombol Add Item
                                 const addMoreBtn = document.createElement('button');
                                 addMoreBtn.type = 'button';
-                                addMoreBtn.className = 'btn mt-2 h-7 rounded-lg bg-primary/10 px-3 text-xs font-medium text-primary hover:bg-primary/20 dark:bg-accent/10 dark:text-accent-light dark:hover:bg-accent/20';
+                                addMoreBtn.className = 'btn mt-3 block mx-auto h-7 rounded-lg bg-primary/10 px-3 text-xs font-medium text-primary hover:bg-primary/20 dark:bg-accent/10 dark:text-accent-light dark:hover:bg-accent/20';
                                 addMoreBtn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Add Item';
                                 addMoreBtn.addEventListener('click', () => {
                                     renderRepeaterRow();
@@ -844,7 +851,52 @@
                                 input.name = inputName;
                                 input.value = val;
                                 input.className = 'form-input w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
-                                label.appendChild(input);
+
+                                // Check if there's a paired color field (e.g., tag -> tag_color)
+                                const colorKey = item.key + '_color';
+                                const colorItem = contentsMap[colorKey];
+                                if (colorItem && typeLower !== 'color') {
+                                    const colorVal = existingData[colorKey] !== undefined ? existingData[colorKey] : (colorItem.value || '#000000');
+                                    const colorInputName = `dynamic_content[${colorKey}]`;
+
+                                    // Create grid row: text + color side by side
+                                    const gridRow = document.createElement('div');
+                                    gridRow.className = 'grid grid-cols-3 gap-2 items-end';
+
+                                    // Text field (2 cols)
+                                    const textCol = document.createElement('div');
+                                    textCol.className = 'col-span-2';
+                                    const textLabel = document.createElement('span');
+                                    textLabel.className = 'text-xs font-semibold capitalize text-slate-700 dark:text-navy-100 mb-1 block';
+                                    textLabel.textContent = item.key.replace(/_/g, ' ');
+                                    input.className = 'form-input w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+                                    textCol.appendChild(textLabel);
+                                    textCol.appendChild(input);
+
+                                    // Color field (1 col)
+                                    const colorCol = document.createElement('div');
+                                    colorCol.className = 'col-span-1';
+                                    const colorLabel = document.createElement('span');
+                                    colorLabel.className = 'text-xs font-semibold capitalize text-slate-700 dark:text-navy-100 mb-1 block';
+                                    colorLabel.textContent = 'color';
+                                    const colorInput = document.createElement('input');
+                                    colorInput.type = 'color';
+                                    colorInput.name = colorInputName;
+                                    colorInput.value = colorVal && colorVal.startsWith('#') ? colorVal : '#000000';
+                                    colorInput.className = 'h-9 w-full cursor-pointer rounded-lg border border-slate-300 bg-transparent p-0.5 dark:border-navy-450';
+                                    colorCol.appendChild(colorLabel);
+                                    colorCol.appendChild(colorInput);
+
+                                    gridRow.appendChild(textCol);
+                                    gridRow.appendChild(colorCol);
+                                    fieldWrapper.appendChild(gridRow);
+                                    renderedKeys.add(colorKey);
+                                    listEl.appendChild(fieldWrapper);
+                                    return;
+                                } else {
+                                    // No paired color - render text field normally
+                                    label.appendChild(input);
+                                }
                             }
 
                             fieldWrapper.appendChild(label);
