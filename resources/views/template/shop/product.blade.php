@@ -45,31 +45,56 @@
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
 
-        @foreach ($products as $product)
-            @php
-                $image = !empty($product['image'])
-                    ? asset('images/website/' . $domain . '/' . $product['image'])
-                    : asset('images/default/broken.png');
-                // Extract numeric price (remove non-digit except dots)
-                $numericPrice = preg_replace('/[^0-9]/', '', $product['price'] ?? '0');
-            @endphp
+        @if(isset($products) && count($products) > 0)
+            @foreach($products->take(6) as $product)
+                @php
+                    $pId = is_array($product) ? ($product['id'] ?? '') : $product->id;
+                    $pName = is_array($product) ? ($product['name'] ?? '') : $product->name;
+                    $pPrice = is_array($product) ? ($product['price'] ?? 0) : $product->price;
 
-            <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
-                <div>
-                    <div class="bg-yellow-100 aspect-square rounded-lg overflow-hidden mb-3">
-                        <img src="{{ $image }}"
-                            class="w-full h-full object-cover">
+                    // Handle image logic
+                    $rawImages = is_array($product) ? ($product['images'] ?? $product['image'] ?? null) : $product->images;
+                    $firstImg = null;
+
+                    if (is_string($rawImages) && !empty(trim($rawImages))) {
+                        $decoded = json_decode($rawImages, true);
+                        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                            $firstImg = count($decoded) > 0 ? $decoded[0] : null;
+                        } else {
+                            $firstImg = $rawImages === '[]' ? null : $rawImages;
+                        }
+                    } elseif (is_array($rawImages) && count($rawImages) > 0) {
+                        $firstImg = $rawImages[0];
+                    }
+
+                    if ($firstImg) {
+                        $imgSrc = str_contains($firstImg, '/') || str_contains($firstImg, '\\')
+                            ? asset('storage/' . $firstImg)
+                            : asset('images/website/' . $domain . '/' . $firstImg);
+                    } else {
+                        $imgSrc = asset('images/default/broken.png');
+                    }
+
+                    $numericPrice = (float) $pPrice;
+                @endphp
+
+                <div class="border border-stone-100 rounded-lg p-3 text-center flex flex-col justify-between">
+                    <div>
+                        <div class="bg-yellow-100 aspect-square rounded-lg overflow-hidden mb-3">
+                            <img src="{{ $imgSrc }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <span
+                            class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">{{ $pCatName }}</span>
+                        <h4 class="font-bold text-sm mb-1">{{ $pName }}</h4>
+                            <p class="text-xs font-semibold text-stone-600 mb-3">Rp {{ number_format($pPrice, 0, ',', '.') }}</p>
                     </div>
-                    <span
-                        class="text-[9px] text-stone-400 font-semibold uppercase tracking-widest">{{ $product['name'] }}</span>
-                    <h4 class="font-bold text-sm mb-1">{{ $product['name'] }}</h4>
-                    <p class="text-xs font-semibold text-stone-600 mb-3">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
+                    <button
+                        onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $imgSrc }}')"
+                        class="w-full border border-black text-black py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Add
+                        To Cart</button>
                 </div>
-                <button
-                    onclick="addToCart('{{ addslashes($product['name']) }}', {{ $numericPrice }}, '{{ $image }}')"
-                    class="w-full border border-black text-black py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-colors">Add
-                    To Cart</button>
-            </div>
-        @endforeach
+            @endforeach
+        @endif
     </div>
 </section>

@@ -138,6 +138,9 @@
         @include($layout->template_path . '.' . $layout->section_slug)
     @endforeach
 
+    @include('template.shop.cart')
+    @include('template.shop.checkout')
+    
 
     <!-- FLOATING BUTTONS -->
     <div class="floating-actions">
