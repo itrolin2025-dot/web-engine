@@ -211,12 +211,15 @@ class TemplateController extends Controller
             $previewPath = 'uploads/templates/' . $filename;
         }
 
+        // Auto position: always append to end
+        $maxPosition = TemplatesSection::where('template_id', $id)->max('position');
+
         $section = TemplatesSection::create([
             'template_id' => $id,
             'name' => $request->name,
             'slug' => $request->slug ?? \Illuminate\Support\Str::slug($request->name),
             'status' => $request->has('status') ? 1 : 0,
-            'position' => $request->position ?? 0,
+            'position' => ($maxPosition ?? 0) + 1,
             'preview' => $previewPath,
         ]);
 
@@ -361,6 +364,19 @@ class TemplateController extends Controller
         }
 
         return redirect()->route('admin.template.section', $id)->with('success', 'Section has been deleted successfully.');
+    }
+
+    public function sectionReorder(Request $request, $id)
+    {
+        $order = $request->input('order', []);
+
+        foreach ($order as $position => $sectionId) {
+            TemplatesSection::where('id', $sectionId)
+                ->where('template_id', $id)
+                ->update(['position' => $position]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Section order updated.']);
     }
 
     public function sectionContentDestroy(Request $request, $id, $contentId)

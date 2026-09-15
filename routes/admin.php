@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::post('template/{id}/section', [TemplateController::class, 'sectionStore'])->name('template.section.store');
     Route::put('template/{id}/section/{sectionId}', [TemplateController::class, 'sectionUpdate'])->name('template.section.update');
     Route::delete('template/{id}/section/{sectionId}', [TemplateController::class, 'sectionDestroy'])->name('template.section.destroy');
+    Route::post('template/{id}/section/reorder', [TemplateController::class, 'sectionReorder'])->name('template.section.reorder');
     Route::delete('template/{id}/section-content/{contentId}', [TemplateController::class, 'sectionContentDestroy'])->name('template.section.content.destroy');
     Route::put('template/{id}', [TemplateController::class, 'update'])->name('template.update');
     Route::delete('template/{id}', [TemplateController::class, 'destroy'])->name('template.destroy');
