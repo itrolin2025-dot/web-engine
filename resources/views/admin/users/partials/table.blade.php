@@ -107,7 +107,7 @@
 
                 // AJAX to delete
                 $.ajax({
-                    url: '{{ url($modul) }}/' + deleteId,
+                    url: '{{ route('admin.' . $modul . ".destroy", ":id") }}'.replace(':id', deleteId),
                     type: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

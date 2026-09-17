@@ -1,33 +1,51 @@
 <!-- Table With Filter -->
 <style>
     /* === Table Header === */
-    .customers-table thead th,
+    .customers-table thead th {
         font-size: 0.8125rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.06em !important;
         color: #94a3b8 !important;
-        padding: 0.875rem 1rem !important;
+        padding: 0.75rem 1rem !important;
+        height: 2.5rem !important;
+        vertical-align: middle !important;
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
     }
 
-    .customers-table thead th,
     /* === Table Body === */
-    .customers-table tbody td,
+    .customers-table tbody td {
         font-size: 0.875rem !important;
         color: #cbd5e1 !important;
-        padding: 0.875rem 1rem !important;
+        padding: 0.5rem 1rem !important;
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
     }
 
-    .customers-table tbody tr:last-child td,
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    /* === Dark Mode: brighter, more readable text === */
+    .dark .customers-table thead th {
+        color: #cbd5e1 !important;
+    }
+    .dark .customers-table tbody td {
+        color: #e2e8f0 !important;
+    }
+
+    /* === Light Mode: darker text & row separators === */
+    html:not(.dark) .customers-table thead th {
+        color: #475569 !important;
+    }
+    html:not(.dark) .customers-table tbody td {
+        color: #1e293b !important;
+    }
+    html:not(.dark) .customers-table thead th,
+    html:not(.dark) .customers-table tbody td,
+    html:not(.dark) .customers-table tbody tr:last-child td {
+        border-bottom: 1px solid #e2e8f0 !important;
     }
 
     .customers-table tbody tr:hover td {
         background-color: rgba(255,255,255,0.02) !important;
     }
 
-    /* === Pagination === */
+    /* === Pagination (matches template module style) === */
     .dataTables_paginate .paginate_button {
         display: inline-flex !important;
         align-items: center;
@@ -35,30 +53,49 @@
         min-width: 2rem !important;
         height: 2rem !important;
         padding: 0 !important;
-        margin: 0 2px !important;
-        border-radius: 9999px !important;
+        margin: 0 !important;
+        border-radius: 0.5rem !important;
         font-size: 0.75rem !important;
-        font-weight: 500 !important;
-        border: none !important;
-        color: #94a3b8 !important;
-        background: transparent !important;
+        font-weight: 400 !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #475569 !important;
+        background: #fff !important;
         transition: all 0.15s ease;
     }
+    .dark .dataTables_paginate .paginate_button {
+        border-color: #2a3040 !important;
+        background: #1a2130 !important;
+        color: #cbd5e1 !important;
+    }
     .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
-        background-color: rgba(255,255,255,0.06) !important;
+        background-color: #f8fafc !important;
+        color: #334155 !important;
+    }
+    .dark .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
+        background-color: #232a3a !important;
         color: #e2e8f0 !important;
     }
     .dataTables_paginate .paginate_button.current {
         background-color: #6366f1 !important;
         color: #fff !important;
-        border: none !important;
+        border-color: #6366f1 !important;
     }
     .dataTables_paginate .paginate_button.disabled {
-        opacity: 0.25 !important;
+        opacity: 0.35 !important;
         pointer-events: none !important;
     }
 
-    /* === Length Select === */
+    /* === Length Select === (identical to articles module) */
+    .dataTables_length {
+        font-size: 0.8125rem !important;
+        color: #94a3b8 !important;
+    }
+    .dataTables_length label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0 !important;
+    }
     .dataTables_length select {
         background-color: rgba(255,255,255,0.05) !important;
         border: 1px solid rgba(255,255,255,0.1) !important;
@@ -72,10 +109,19 @@
         border-color: rgba(99,102,241,0.5) !important;
     }
 
-    /* === Info Text === */
+    /* === Info Text === (identical to articles module) */
     .dataTables_info {
         color: #64748b !important;
         font-size: 0.8125rem !important;
+    }
+
+    /* === Search Box (styled like template module) === */
+    .dataTables_filter {
+        position: relative;
+    }
+    .dataTables_filter label input {
+        width: 100% !important;
+        margin-left: 0 !important;
     }
 </style>
 
@@ -84,18 +130,11 @@
 
         @include('components.forms.notification')
 
-        {{-- DataTables Controls (outside card) --}}
-        <div id="dt-controls" class="flex items-center justify-between gap-3 mb-4 px-1">
+        {{-- DataTables Controls (outside card): Show length left, Search right --}}
+        <div id="dt-controls" class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between mb-6 px-1">
             <div id="dt-length-area"></div>
-            <div class="flex items-center gap-3">
-                <div id="dt-search-area"></div>
-                @if($canAdd)
-                <a href="{{ route('admin.' . $modul . '.create') }}"
-                    class="btn h-9 px-3 bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                    <span class="text-xs">&nbsp; Add New</span>
-                </a>
-                @endif
+            <div class="flex w-full items-center justify-end gap-3 sm:w-auto sm:ml-auto">
+                <div id="dt-search-area" class="w-full max-w-xs sm:w-64"></div>
             </div>
         </div>
 
@@ -117,11 +156,12 @@
                 </tbody>
             </table>
 
-            {{-- Card footer: info left, pagination right --}}
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3" style="border-top: 1px solid rgba(255,255,255,0.08); padding: 0.75rem 1.25rem;">
-                <div id="dt-info-area"></div>
-                <div id="dt-pagination-area"></div>
-            </div>
+        </div>
+
+        {{-- Info + Pagination outside card (like template module) --}}
+        <div class="mt-5 flex flex-col items-center gap-3 px-1 sm:flex-row sm:justify-between">
+            <div id="dt-info-area"></div>
+            <div id="dt-pagination-area"></div>
         </div>
     </div>
 </div>
@@ -138,9 +178,10 @@
                 pagingType: 'simple_numbers',
                 language: {
                     paginate: {
-                        previous: '<i class="fa-solid fa-chevron-left text-xs"></i>',
-                        next: '<i class="fa-solid fa-chevron-right text-xs"></i>'
+                        previous: '<i class="fa-solid fa-angle-left"></i>',
+                        next: '<i class="fa-solid fa-angle-right"></i>'
                     },
+                    lengthMenu: 'Show _MENU_ items',
                     info: 'Showing _START_ to _END_ of _TOTAL_ entries'
                 },
                 processing: true,
@@ -188,8 +229,16 @@
             // Move controls outside card
             var dtWrapper = window.table.table().container();
 
-            // Hide search box
-            $(dtWrapper).find('.dataTables_filter').hide();
+            // Style & move search box to top right (like template module)
+            var $search = $(dtWrapper).find('.dataTables_filter');
+            $search.find('label').contents().filter(function () {
+                return this.nodeType === 3;
+            }).remove();
+            $search.find('input')
+                .attr('placeholder', 'Search customer...')
+                .addClass('form-input w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700');
+            $search.addClass('relative w-full').prepend('<i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>');
+            $search.detach().appendTo('#dt-search-area');
 
             // Move length dropdown to top left
             $(dtWrapper).find('.dataTables_length').detach().appendTo('#dt-length-area');

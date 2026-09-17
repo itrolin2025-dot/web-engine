@@ -6,7 +6,9 @@
         font-weight: 700 !important;
         letter-spacing: 0.06em !important;
         color: #94a3b8 !important;
-        padding: 0.875rem 1rem !important;
+        padding: 0.75rem 1rem !important;
+        height: 2.5rem !important;
+        vertical-align: middle !important;
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
     }
 
@@ -14,19 +16,36 @@
     .customers-table tbody td {
         font-size: 0.875rem !important;
         color: #cbd5e1 !important;
-        padding: 0.875rem 1rem !important;
+        padding: 0.5rem 1rem !important;
         border-bottom: 1px solid rgba(255,255,255,0.08) !important;
     }
 
-    .customers-table tbody tr:last-child td {
-        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    /* === Dark Mode: brighter, more readable text === */
+    .dark .customers-table thead th {
+        color: #cbd5e1 !important;
+    }
+    .dark .customers-table tbody td {
+        color: #e2e8f0 !important;
+    }
+
+    /* === Light Mode: darker text & row separators === */
+    html:not(.dark) .customers-table thead th {
+        color: #475569 !important;
+    }
+    html:not(.dark) .customers-table tbody td {
+        color: #1e293b !important;
+    }
+    html:not(.dark) .customers-table thead th,
+    html:not(.dark) .customers-table tbody td,
+    html:not(.dark) .customers-table tbody tr:last-child td {
+        border-bottom: 1px solid #e2e8f0 !important;
     }
 
     .customers-table tbody tr:hover td {
         background-color: rgba(255,255,255,0.02) !important;
     }
 
-    /* === Pagination === */
+    /* === Pagination (matches template module style) === */
     .dataTables_paginate .paginate_button {
         display: inline-flex !important;
         align-items: center;
@@ -34,26 +53,35 @@
         min-width: 2rem !important;
         height: 2rem !important;
         padding: 0 !important;
-        margin: 0 2px !important;
-        border-radius: 9999px !important;
+        margin: 0 !important;
+        border-radius: 0.5rem !important;
         font-size: 0.75rem !important;
-        font-weight: 500 !important;
-        border: none !important;
-        color: #94a3b8 !important;
-        background: transparent !important;
+        font-weight: 400 !important;
+        border: 1px solid #e2e8f0 !important;
+        color: #475569 !important;
+        background: #fff !important;
         transition: all 0.15s ease;
     }
+    .dark .dataTables_paginate .paginate_button {
+        border-color: #2a3040 !important;
+        background: #1a2130 !important;
+        color: #cbd5e1 !important;
+    }
     .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
-        background-color: rgba(255,255,255,0.06) !important;
+        background-color: #f8fafc !important;
+        color: #334155 !important;
+    }
+    .dark .dataTables_paginate .paginate_button:hover:not(.current):not(.disabled) {
+        background-color: #232a3a !important;
         color: #e2e8f0 !important;
     }
     .dataTables_paginate .paginate_button.current {
         background-color: #6366f1 !important;
         color: #fff !important;
-        border: none !important;
+        border-color: #6366f1 !important;
     }
     .dataTables_paginate .paginate_button.disabled {
-        opacity: 0.25 !important;
+        opacity: 0.35 !important;
         pointer-events: none !important;
     }
 

@@ -10,6 +10,8 @@ use App\Models\Template;
 use App\Models\TemplatesSection;
 use App\Models\TemplatesSectionContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class CustomersWebController extends Controller
 {
@@ -40,6 +42,74 @@ class CustomersWebController extends Controller
             'modul_name' => $this->modul_name,
             'modul_type' => 'List'
         ]);
+    }
+
+    public function getData(Request $request)
+    {
+        $query = DB::table('customers_website')
+            ->leftJoin('customers', 'customers.id', '=', 'customers_website.customer_id')
+            ->leftJoin('template', 'template.id', '=', 'customers_website.template_id')
+            ->select([
+                'customers_website.*',
+                'customers.name as customer_name',
+                'template.name as template_name',
+            ]);
+
+        if ($request->filled('filter_title')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('customers_website.title', 'like', "%{$request->filter_title}%")
+                  ->orWhere('customers_website.domain', 'like', "%{$request->filter_title}%")
+                  ->orWhere('customers.name', 'like', "%{$request->filter_title}%");
+            });
+        }
+
+        $data = $query->get();
+
+        return DataTables::of($data)
+            ->addColumn('title_view', function ($row) {
+                $desc = $row->description
+                    ? '<p class="text-xs text-slate-400 dark:text-navy-300 truncate max-w-xs">' . e($row->description) . '</p>'
+                    : '';
+                return '<p class="font-semibold dark:text-navy-100 text-sm">' . e($row->title) . '</p>' . $desc;
+            })
+            ->addColumn('customer_view', function ($row) {
+                return e($row->customer_name ?? '-');
+            })
+            ->addColumn('template_view', function ($row) {
+                return '<span class="badge rounded-full bg-slate-150 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-navy-500 dark:text-navy-100">'
+                    . e($row->template_name ?? '-') . '</span>';
+            })
+            ->addColumn('domain_view', function ($row) {
+                if (!$row->domain) return '-';
+                $url = \Illuminate\Support\Str::startsWith($row->domain, 'http') ? $row->domain : 'https://' . $row->domain;
+                return '<a href="' . e($url) . '" target="_blank" class="text-primary hover:underline dark:text-accent-light text-xs font-mono">'
+                    . e($row->domain) . ' <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i></a>';
+            })
+            ->addColumn('status_view', function ($row) {
+                $active = (int) $row->is_active === 1;
+                return '<span class="badge rounded-full px-2.5 py-0.5 text-xs font-semibold ' . ($active ? 'bg-success/10 text-success' : 'bg-error/10 text-error') . '">'
+                    . ($active ? 'Active' : 'Inactive') . '</span>';
+            })
+            ->addColumn('action', function ($row) {
+                $canEdit = canAccess('customers', $this->getProductId(), 'edit');
+                $canDelete = canAccess('customers', $this->getProductId(), 'delete');
+                $btn = '<div class="flex justify-end space-x-1.5">';
+
+                if ($canEdit) {
+                    $btn .= '<a href="' . route('admin.customers-website.page', $row->id) . '" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20" title="Manage Pages"><i class="fa-solid fa-list text-xs"></i></a>';
+                    $btn .= '<a href="' . route('admin.customers-website.edit', $row->id) . '" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20" title="Edit Website"><i class="fa-solid fa-pen text-xs"></i></a>';
+                }
+                if ($canDelete) {
+                    $btn .= '<form action="' . route('admin.customers-website.destroy', $row->id) . '" method="POST" class="inline-block" onsubmit="return confirm(\'Are you sure you want to delete this customer website?\')">';
+                    $btn .= csrf_field() . method_field('DELETE');
+                    $btn .= '<button type="submit" class="btn h-8 w-8 rounded-full bg-error/10 p-0 font-medium text-error hover:bg-error/20 focus:bg-error/20" title="Delete Website"><i class="fa-solid fa-trash text-xs"></i></button>';
+                    $btn .= '</form>';
+                }
+                $btn .= '</div>';
+                return $btn;
+            })
+            ->rawColumns(['title_view', 'template_view', 'domain_view', 'status_view', 'action'])
+            ->make(true);
     }
 
     public function create()

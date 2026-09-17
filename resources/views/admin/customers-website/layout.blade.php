@@ -343,20 +343,24 @@
                                 </div>
 
                                 <div class="flex items-center justify-between pt-4">
-                                    <form action="{{ route('admin.customers-website.layout.destroy', [$website->id, $page_type, $layout->id]) }}"
-                                        method="POST" class="layout-delete-form" data-layout-id="{{ $layout->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="btn bg-error/10 font-medium text-error hover:bg-error/20 dark:bg-error/10 dark:text-error dark:hover:bg-error/20">
-                                            <i class="fa-solid fa-trash mr-1.5"></i> Delete
-                                        </button>
-                                    </form>
+                                    {{-- form attribute links this button to the delete form OUTSIDE the update form (no nested forms) --}}
+                                    <button type="submit" form="deleteLayoutForm-{{ $layout->id }}"
+                                        class="btn bg-error/10 font-medium text-error hover:bg-error/20 dark:bg-error/10 dark:text-error dark:hover:bg-error/20">
+                                        <i class="fa-solid fa-trash mr-1.5"></i> Delete
+                                    </button>
                                     <button type="submit"
                                         class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
                                         <i class="fa-solid fa-check mr-1.5"></i> Save Changes
                                     </button>
                                 </div>
+                            </form>
+
+                            {{-- Delete form: sibling of update form (valid HTML) --}}
+                            <form id="deleteLayoutForm-{{ $layout->id }}"
+                                action="{{ route('admin.customers-website.layout.destroy', [$website->id, $page_type, $layout->id]) }}"
+                                method="POST" class="layout-delete-form hidden" data-layout-id="{{ $layout->id }}">
+                                @csrf
+                                @method('DELETE')
                             </form>
                         </div>
                     </div>
@@ -593,12 +597,12 @@
                                 textarea.value = typeof val === 'object' ? JSON.stringify(val, null, 2) : val;
                                 textarea.className = 'form-textarea w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
                                 label.appendChild(textarea);
-                            } else if (typeLower === 'repeater' || typeof val === 'object') {
+                            } else if (typeLower === 'repeater' || Array.isArray(val)) {
                                 // 1. Inisialisasi Data Repeater
                                 let repeaterItems = [];
                                 if (Array.isArray(val)) {
                                     repeaterItems = val;
-                                } else if (typeof val === 'string') {
+                                } else if (typeof val === 'string' && val.trim() !== '') {
                                     try {
                                         const parsed = JSON.parse(val);
                                         repeaterItems = Array.isArray(parsed) ? parsed : [];
@@ -624,18 +628,30 @@
                                 const syncRepeaterValue = () => {
                                     const currentData = [];
                                     itemsContainer.querySelectorAll('.repeater-item-row').forEach(row => {
-                                        const lbl = row.querySelector('.repeater-label-input').value;
-                                        const ttl = row.querySelector('.repeater-title-input').value;
-                                        const sub = row.querySelector('.repeater-subtitle-input').value;
-                                        const clr = row.querySelector('.repeater-color-text-input').value;
-                                        const srt = row.querySelector('.repeater-sort-input').value;
-                                        const imgVal = row.querySelector('.repeater-image-value').value;
+                                        const lbl = row.querySelector('.repeater-label-input') ? row.querySelector('.repeater-label-input').value : '';
+                                        const clr = row.querySelector('.repeater-color-text-input') ? row.querySelector('.repeater-color-text-input').value : '';
+                                        const ttl = row.querySelector('.repeater-title-input') ? row.querySelector('.repeater-title-input').value : '';
+                                        const ttlClr = row.querySelector('.repeater-title-color-input') ? row.querySelector('.repeater-title-color-input').value : '';
+                                        const sub = row.querySelector('.repeater-subtitle-input') ? row.querySelector('.repeater-subtitle-input').value : '';
+                                        const subClr = row.querySelector('.repeater-subtitle-color-input') ? row.querySelector('.repeater-subtitle-color-input').value : '';
+                                        const btnTxt = row.querySelector('.repeater-button-text-input') ? row.querySelector('.repeater-button-text-input').value : '';
+                                        const btnTxtClr = row.querySelector('.repeater-button-text-color-input') ? row.querySelector('.repeater-button-text-color-input').value : '';
+                                        const btnClr = row.querySelector('.repeater-button-color-input') ? row.querySelector('.repeater-button-color-input').value : '';
+                                        const btnUrl = row.querySelector('.repeater-button-url-input') ? row.querySelector('.repeater-button-url-input').value : '';
+                                        const srt = row.querySelector('.repeater-sort-input') ? row.querySelector('.repeater-sort-input').value : '';
+                                        const imgVal = row.querySelector('.repeater-image-value') ? row.querySelector('.repeater-image-value').value : '';
 
                                         currentData.push({
                                             label: lbl,
-                                            title: ttl,
-                                            subtitle: sub,
                                             color: clr,
+                                            title: ttl,
+                                            title_color: ttlClr,
+                                            subtitle: sub,
+                                            subtitle_color: subClr,
+                                            button_text: btnTxt,
+                                            button_text_color: btnTxtClr,
+                                            button_color: btnClr,
+                                            button_url: btnUrl,
                                             sort: srt,
                                             image: imgVal
                                         });
@@ -646,8 +662,28 @@
                                     hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
                                 };
 
+                                // Helper: Wrap input with a label above it
+                                const makeLabeledField = (labelText, inputEl) => {
+                                    const wrapper = document.createElement('div');
+                                    const span = document.createElement('span');
+                                    span.className = 'mb-1 block text-xs font-semibold capitalize text-slate-700 dark:text-navy-100';
+                                    span.textContent = labelText;
+                                    wrapper.appendChild(span);
+                                    wrapper.appendChild(inputEl);
+                                    return wrapper;
+                                };
+
+                                // Helper: Create a labeled color field (picker + hex input in one row)
+                                const makeColorField = (labelText, pickerEl, hexInputEl) => {
+                                    const row = document.createElement('div');
+                                    row.className = 'flex items-center gap-2';
+                                    row.appendChild(pickerEl);
+                                    row.appendChild(hexInputEl);
+                                    return makeLabeledField(labelText, row);
+                                };
+
                                 // Helper: Render Row Item
-                                const renderRepeaterRow = (itemData = { label: '', title: '', subtitle: '', color: '#575757', sort: '1', image: '' }) => {
+                                const renderRepeaterRow = (itemData = { label: '', color: '#575757', title: '', title_color: '#000000', subtitle: '', subtitle_color: '#000000', button_text: '', button_text_color: '#ffffff', button_color: '#000000', button_url: '', sort: '1', image: '' }) => {
                                     const row = document.createElement('div');
                                     row.className = 'repeater-item-row rounded-lg border border-slate-200 bg-white dark:bg-navy-700 p-4 shadow-sm dark:border-navy-500';
 
@@ -659,7 +695,7 @@
 
                                     // 1. Upload & Preview Image Element
                                     const imgContainer = document.createElement('div');
-                                    imgContainer.className = 'flex flex-col';
+                                    imgContainer.className = 'flex flex-col h-32';
 
                                     const imgPreview = document.createElement('img');
                                     let initialImgSrc = itemData.image || '';
@@ -667,7 +703,7 @@
                                         initialImgSrc = websiteDomain ? `{{ asset('images/website') }}/${websiteDomain}/${initialImgSrc}` : `{{ asset('storage') }}/${initialImgSrc}`;
                                     }
                                     imgPreview.src = initialImgSrc;
-                                    imgPreview.className = `h-20 w-full object-cover rounded border border-slate-200 dark:border-navy-450 ${itemData.image ? '' : 'hidden'}`;
+                                    imgPreview.className = `h-full w-full object-cover rounded border border-slate-200 dark:border-navy-450 ${itemData.image ? '' : 'hidden'}`;
 
                                     const fileInput = document.createElement('input');
                                     fileInput.type = 'file';
@@ -676,7 +712,7 @@
 
                                     const uploadBtn = document.createElement('button');
                                     uploadBtn.type = 'button';
-                                    uploadBtn.className = 'btn h-9 w-full rounded bg-slate-150 px-2.5 text-xs font-medium text-slate-700 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-100 dark:hover:bg-navy-450 mt-2';
+                                    uploadBtn.className = 'btn h-7 w-full rounded bg-slate-150 px-2 text-[10px] font-medium text-slate-700 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-100 dark:hover:bg-navy-450 mt-1.5';
                                     uploadBtn.innerHTML = '<i class="fa-solid fa-image mr-1"></i> Pic';
                                     uploadBtn.addEventListener('click', () => fileInput.click());
 
@@ -705,38 +741,45 @@
                                     imgContainer.appendChild(fileInput);
                                     imgContainer.appendChild(imageValInput);
 
+                                    // Helper: Create paired picker + hex input for a color
+                                    const makeColorPair = (defaultColor, pickerClass, hexClass) => {
+                                        const picker = document.createElement('input');
+                                        picker.type = 'color';
+                                        picker.value = (defaultColor && defaultColor.startsWith('#')) ? defaultColor : '#000000';
+                                        picker.className = pickerClass;
+
+                                        const hex = document.createElement('input');
+                                        hex.type = 'text';
+                                        hex.placeholder = '#000000';
+                                        hex.value = defaultColor || '#000000';
+                                        hex.className = hexClass;
+
+                                        picker.addEventListener('input', () => {
+                                            hex.value = picker.value;
+                                            syncRepeaterValue();
+                                        });
+                                        hex.addEventListener('input', () => {
+                                            if (hex.value.startsWith('#') && (hex.value.length === 4 || hex.value.length === 7)) {
+                                                picker.value = hex.value;
+                                            }
+                                            syncRepeaterValue();
+                                        });
+
+                                        return { picker, hex };
+                                    };
+
                                     // 2. Input Label
                                     const labelInput = document.createElement('input');
                                     labelInput.type = 'text';
                                     labelInput.placeholder = 'Tag / Label';
                                     labelInput.value = itemData.label || '';
                                     labelInput.className = 'repeater-label-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+                                    const labelField = makeLabeledField('Tag / Label', labelInput);
 
-                                    // 3. Color Picker (individual elements, no wrapper needed)
-
-                                    const colorPicker = document.createElement('input');
-                                    colorPicker.type = 'color';
-                                    colorPicker.value = (itemData.color && itemData.color.startsWith('#')) ? itemData.color : '#575757';
-                                    colorPicker.className = 'h-7 w-8 cursor-pointer rounded border border-slate-300 bg-transparent p-0.5 dark:border-navy-450';
-
-                                    const colorTextInput = document.createElement('input');
-                                    colorTextInput.type = 'text';
-                                    colorTextInput.placeholder = '#000000';
-                                    colorTextInput.value = itemData.color || '#575757';
-                                    colorTextInput.className = 'repeater-color-text-input form-input w-20 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450';
-
-                                    colorPicker.addEventListener('input', () => {
-                                        colorTextInput.value = colorPicker.value;
-                                        syncRepeaterValue();
-                                    });
-                                    colorTextInput.addEventListener('input', () => {
-                                        if (colorTextInput.value.startsWith('#') && (colorTextInput.value.length === 4 || colorTextInput.value.length === 7)) {
-                                            colorPicker.value = colorTextInput.value;
-                                        }
-                                        syncRepeaterValue();
-                                    });
-
-                                    // Color elements are used individually in row5 and row6
+                                    // 3. Tag Color (picker + hex)
+                                    const tagColor = makeColorPair(itemData.color || '#575757',
+                                        'repeater-tag-color-picker h-7 w-10 shrink-0 cursor-pointer rounded-md border border-slate-300 bg-transparent p-0.5 dark:border-navy-450',
+                                        'repeater-color-text-input form-input min-w-0 flex-1 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450');
 
                                     // 4. Input Sort (hidden, auto-managed)
                                     const sortInput = document.createElement('input');
@@ -750,69 +793,120 @@
                                     titleInput.placeholder = 'Title';
                                     titleInput.value = itemData.title || '';
                                     titleInput.className = 'repeater-title-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+                                    const titleField = makeLabeledField('Title', titleInput);
 
-                                    // 6. Input Subtitle
+                                    // 6. Title Color (picker + hex)
+                                    const titleColor = makeColorPair(itemData.title_color || '#000000',
+                                        'repeater-title-color-picker h-7 w-10 shrink-0 cursor-pointer rounded-md border border-slate-300 bg-transparent p-0.5 dark:border-navy-450',
+                                        'repeater-title-color-input form-input min-w-0 flex-1 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450');
+
+                                    // 7. Input Subtitle
                                     const subtitleInput = document.createElement('input');
                                     subtitleInput.type = 'text';
                                     subtitleInput.placeholder = 'Subtitle / Description';
                                     subtitleInput.value = itemData.subtitle || '';
                                     subtitleInput.className = 'repeater-subtitle-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+                                    const subtitleField = makeLabeledField('Subtitle', subtitleInput);
+
+                                    // 8. Subtitle Color (picker + hex)
+                                    const subtitleColor = makeColorPair(itemData.subtitle_color || '#000000',
+                                        'repeater-subtitle-color-picker h-7 w-10 shrink-0 cursor-pointer rounded-md border border-slate-300 bg-transparent p-0.5 dark:border-navy-450',
+                                        'repeater-subtitle-color-input form-input min-w-0 flex-1 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450');
+
+                                    // 9. Input Button Text
+                                    const buttonText = document.createElement('input');
+                                    buttonText.type = 'text';
+                                    buttonText.placeholder = 'Button Text';
+                                    buttonText.value = itemData.button_text || '';
+                                    buttonText.className = 'repeater-button-text-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+                                    const buttonTextField = makeLabeledField('Button Text', buttonText);
+
+                                    // 10. Button Text Color (picker + hex)
+                                    const buttonTextColor = makeColorPair(itemData.button_text_color || '#ffffff',
+                                        'repeater-button-text-color-picker h-7 w-10 shrink-0 cursor-pointer rounded-md border border-slate-300 bg-transparent p-0.5 dark:border-navy-450',
+                                        'repeater-button-text-color-input form-input min-w-0 flex-1 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450');
+
+                                    // 11. Button Color (picker + hex)
+                                    const buttonColor = makeColorPair(itemData.button_color || '#000000',
+                                        'repeater-button-color-picker h-7 w-10 shrink-0 cursor-pointer rounded-md border border-slate-300 bg-transparent p-0.5 dark:border-navy-450',
+                                        'repeater-button-color-input form-input min-w-0 flex-1 rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs font-mono dark:border-navy-450');
+
+                                    // 12. Input Button URL
+                                    const buttonUrl = document.createElement('input');
+                                    buttonUrl.type = 'text';
+                                    buttonUrl.placeholder = 'https://...';
+                                    buttonUrl.value = itemData.button_url || '';
+                                    buttonUrl.className = 'repeater-button-url-input form-input w-full rounded-md border border-slate-300 bg-transparent px-2 py-1 text-xs dark:border-navy-450';
+                                    const buttonUrlField = makeLabeledField('Button URL', buttonUrl);
 
                                     labelInput.addEventListener('input', syncRepeaterValue);
                                     titleInput.addEventListener('input', syncRepeaterValue);
                                     subtitleInput.addEventListener('input', syncRepeaterValue);
+                                    buttonText.addEventListener('input', syncRepeaterValue);
+                                    buttonUrl.addEventListener('input', syncRepeaterValue);
                                     sortInput.addEventListener('input', syncRepeaterValue);
 
                                     // 7. Tombol Hapus Baris
                                     const removeBtn = document.createElement('button');
                                     removeBtn.type = 'button';
-                                    removeBtn.className = 'btn h-7 w-7 rounded-md p-0 text-error hover:bg-error/10 shrink-0';
-                                    removeBtn.innerHTML = '<i class="fa-solid fa-trash-can text-xs"></i>';
+                                    removeBtn.className = 'btn w-full h-7 rounded-md text-xs font-medium text-error hover:bg-error/10 bg-error/5 dark:bg-error/10 dark:hover:bg-error/20';
+                                    removeBtn.innerHTML = '<i class="fa-solid fa-trash-can mr-1"></i> Delete Item';
                                     removeBtn.addEventListener('click', () => {
                                         row.remove();
                                         syncRepeaterValue();
                                     });
 
-                                    // ─── Vertical Layout ───
-                                    // Row 1: Image
-                                    const row1 = document.createElement('div');
-                                    row1.className = 'mb-3';
-                                    row1.appendChild(imgContainer);
+                                    // ─── 2-Column Layout ───
+                                    // Left column: Image
+                                    const leftCol = document.createElement('div');
+                                    leftCol.className = 'flex-shrink-0 w-28';
+                                    leftCol.appendChild(makeLabeledField('Image', imgContainer));
 
-                                    // Row 2: Label
-                                    const row2 = document.createElement('div');
-                                    row2.className = 'mb-3';
-                                    row2.appendChild(labelInput);
+                                    // Helper to build a row: text field (2 cols) + color field (1 col)
+                                    const makePairRow = (textField, colorField) => {
+                                        const pairRow = document.createElement('div');
+                                        pairRow.className = 'grid grid-cols-3 gap-2 items-end';
+                                        const textCol = document.createElement('div');
+                                        textCol.className = 'col-span-2';
+                                        textCol.appendChild(textField);
+                                        pairRow.appendChild(textCol);
+                                        pairRow.appendChild(colorField);
+                                        return pairRow;
+                                    };
 
-                                    // Row 3: Title
-                                    const row3 = document.createElement('div');
-                                    row3.className = 'mb-3';
-                                    row3.appendChild(titleInput);
+                                    // Right column: Label + Tag Color, Title + Title Color, Subtitle + Subtitle Color, Button fields
+                                    const rightCol = document.createElement('div');
+                                    rightCol.className = 'flex-1 space-y-2';
 
-                                    // Row 4: Subtitle
-                                    const row4 = document.createElement('div');
-                                    row4.className = 'mb-3';
-                                    row4.appendChild(subtitleInput);
+                                    // Row: Tag / Label (wide) + Tag Color
+                                    rightCol.appendChild(makePairRow(labelField, makeColorField('Tag Color', tagColor.picker, tagColor.hex)));
 
-                                    // Row 5: Color Hex Text
-                                    const row5 = document.createElement('div');
-                                    row5.className = 'mb-3';
-                                    row5.appendChild(colorTextInput);
+                                    // Row: Title (wide) + Title Color
+                                    rightCol.appendChild(makePairRow(titleField, makeColorField('Title Color', titleColor.picker, titleColor.hex)));
 
-                                    // Row 6: Color Picker + Sort (hidden) + Delete
-                                    const row6 = document.createElement('div');
-                                    row6.className = 'flex items-center justify-between mb-1';
-                                    row6.appendChild(colorPicker);
-                                    row6.appendChild(sortInput);
-                                    row6.appendChild(removeBtn);
+                                    // Row: Subtitle (wide) + Subtitle Color
+                                    rightCol.appendChild(makePairRow(subtitleField, makeColorField('Subtitle Color', subtitleColor.picker, subtitleColor.hex)));
+
+                                    // Row: Button Text (wide) + Button Text Color
+                                    rightCol.appendChild(makePairRow(buttonTextField, makeColorField('Button Text Color', buttonTextColor.picker, buttonTextColor.hex)));
+
+                                    // Row: Button URL (wide) + Button Color
+                                    rightCol.appendChild(makePairRow(buttonUrlField, makeColorField('Button Color', buttonColor.picker, buttonColor.hex)));
+
+                                    // Main grid: left + right
+                                    const gridRow = document.createElement('div');
+                                    gridRow.className = 'flex gap-3';
+                                    gridRow.appendChild(leftCol);
+                                    gridRow.appendChild(rightCol);
+
+                                    // Delete button full width below
+                                    const deleteRow = document.createElement('div');
+                                    deleteRow.className = 'mt-3 pt-3 border-t border-slate-200 dark:border-navy-600';
+                                    deleteRow.appendChild(removeBtn);
 
                                     // Masukkan elemen ke row
-                                    row.appendChild(row1);
-                                    row.appendChild(row2);
-                                    row.appendChild(row3);
-                                    row.appendChild(row4);
-                                    row.appendChild(row5);
-                                    row.appendChild(row6);
+                                    row.appendChild(gridRow);
+                                    row.appendChild(deleteRow);
 
                                     itemsContainer.appendChild(row);
                                 };
@@ -821,9 +915,15 @@
                                 if (repeaterItems.length > 0) {
                                     repeaterItems.forEach(item => renderRepeaterRow({
                                         label: item.label || '',
-                                        title: item.title || '',
-                                        subtitle: item.subtitle || '',
                                         color: item.color || '#575757',
+                                        title: item.title || '',
+                                        title_color: item.title_color || '#000000',
+                                        subtitle: item.subtitle || '',
+                                        subtitle_color: item.subtitle_color || '#000000',
+                                        button_text: item.button_text || '',
+                                        button_text_color: item.button_text_color || '#ffffff',
+                                        button_color: item.button_color || '#000000',
+                                        button_url: item.button_url || '',
                                         sort: item.sort || '1',
                                         image: item.image || ''
                                     }));
@@ -873,19 +973,42 @@
                                     textCol.appendChild(textLabel);
                                     textCol.appendChild(input);
 
-                                    // Color field (1 col)
+                                    // Color field (1 col) - picker + hex input (same as background_color/button_color)
                                     const colorCol = document.createElement('div');
                                     colorCol.className = 'col-span-1';
                                     const colorLabel = document.createElement('span');
                                     colorLabel.className = 'text-xs font-semibold capitalize text-slate-700 dark:text-navy-100 mb-1 block';
                                     colorLabel.textContent = 'color';
+
+                                    const colorRow = document.createElement('div');
+                                    colorRow.className = 'flex items-center space-x-1.5';
+
                                     const colorInput = document.createElement('input');
                                     colorInput.type = 'color';
-                                    colorInput.name = colorInputName;
                                     colorInput.value = colorVal && colorVal.startsWith('#') ? colorVal : '#000000';
-                                    colorInput.className = 'h-9 w-full cursor-pointer rounded-lg border border-slate-300 bg-transparent p-0.5 dark:border-navy-450';
+                                    colorInput.className = 'h-8 w-9 shrink-0 cursor-pointer rounded-md border border-slate-300 bg-transparent p-0.5 dark:border-navy-450';
+
+                                    const colorHexInput = document.createElement('input');
+                                    colorHexInput.type = 'text';
+                                    colorHexInput.name = colorInputName;
+                                    colorHexInput.value = colorVal || '#000000';
+                                    colorHexInput.className = 'form-input w-full min-w-0 rounded-md border border-slate-300 bg-white px-2 py-1 text-xs font-mono hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
+
+                                    colorInput.addEventListener('input', function() {
+                                        colorHexInput.value = colorInput.value;
+                                        colorHexInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                    });
+
+                                    colorHexInput.addEventListener('input', function() {
+                                        if (colorHexInput.value.startsWith('#') && (colorHexInput.value.length === 4 || colorHexInput.value.length === 7)) {
+                                            colorInput.value = colorHexInput.value;
+                                        }
+                                    });
+
+                                    colorRow.appendChild(colorInput);
+                                    colorRow.appendChild(colorHexInput);
                                     colorCol.appendChild(colorLabel);
-                                    colorCol.appendChild(colorInput);
+                                    colorCol.appendChild(colorRow);
 
                                     gridRow.appendChild(textCol);
                                     gridRow.appendChild(colorCol);
@@ -953,27 +1076,42 @@
             const existing = document.getElementById('ajax-toast-notification');
             if (existing) existing.remove();
 
+            const isSuccess = type === 'success';
+            const accent = isSuccess ? '#10b981' : '#f43f5e';
+
             const toast = document.createElement('div');
             toast.id = 'ajax-toast-notification';
-            toast.style.zIndex = '99999';
-            toast.className = `flex items-center space-x-3 rounded-xl border px-4 py-3 shadow-2xl fixed top-6 right-6 transition-all duration-300 transform translate-y-0 ${
-                type === 'success' 
-                    ? 'border-emerald-500/30 bg-emerald-50 text-emerald-800 dark:bg-navy-700 dark:text-emerald-300 dark:border-emerald-500/40' 
-                    : 'border-rose-500/30 bg-rose-50 text-rose-800 dark:bg-navy-700 dark:text-rose-300 dark:border-rose-500/40'
-            }`;
+            // Inline styles agar tidak bergantung pada Tailwind build (class utility bisa belum ter-generate)
+            toast.style.cssText = `
+                position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99999;
+                display: flex; align-items: center; gap: 0.75rem;
+                background: #1e293b; color: #f1f5f9;
+                border: 1px solid ${accent}55; border-radius: 0.75rem;
+                padding: 0.75rem 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.45);
+                font-family: inherit; max-width: 22rem;
+                opacity: 0; transform: translateY(15px);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            `;
             toast.innerHTML = `
-                <div class="flex h-8 w-8 items-center justify-center rounded-lg ${type === 'success' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'}">
-                    <i class="fa-solid ${type === 'success' ? 'fa-check' : 'fa-xmark'} text-sm"></i>
+                <div style="flex-shrink:0; width:2rem; height:2rem; display:flex; align-items:center; justify-content:center; border-radius:0.5rem; background:${accent}; color:#fff;">
+                    <i class="fa-solid ${isSuccess ? 'fa-check' : 'fa-xmark'}" style="font-size:0.8rem;"></i>
                 </div>
-                <div>
-                    <h5 class="text-xs font-bold uppercase tracking-wider ${type === 'success' ? 'text-emerald-700 dark:text-emerald-300' : 'text-rose-700 dark:text-rose-300'}">${type === 'success' ? 'Berhasil' : 'Gagal'}</h5>
-                    <p class="text-xs font-medium">${message}</p>
+                <div style="min-width:0;">
+                    <h5 style="font-size:0.65rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:${accent}; margin:0 0 0.125rem;">${isSuccess ? 'Berhasil' : 'Gagal'}</h5>
+                    <p style="font-size:0.75rem; font-weight:500; margin:0; word-break:break-word;">${message}</p>
                 </div>
             `;
             document.body.appendChild(toast);
+
+            // Trigger masuk (fade + slide up)
+            requestAnimationFrame(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            });
+
             setTimeout(() => {
                 toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-15px)';
+                toast.style.transform = 'translateY(15px)';
                 setTimeout(() => toast.remove(), 300);
             }, 3500);
         };
@@ -1092,7 +1230,7 @@
                     if (!confirm('Are you sure you want to delete this layout item?')) return;
                     const layoutId = targetForm.dataset.layoutId;
                     handleFormSubmit(targetForm, function () {
-                        const row = document.getElementById(`layout-row-${layoutId}`);
+                        const row = document.querySelector(`.layout-card[data-id="${layoutId}"]`);
                         if (row) {
                             row.style.transition = 'all 0.3s ease';
                             row.style.opacity = '0';

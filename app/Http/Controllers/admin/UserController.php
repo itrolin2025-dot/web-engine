@@ -54,7 +54,7 @@ class UserController extends Controller
     {
         if (canAccess($this->modul, $this->role_id, 'recycle') == false) {
             if (canAccess($this->modul, $this->role_id, 'view') == true) {
-                return redirect()->route($this->modul . '.index')->with('warning', 'Tidak Memiliki Akses');
+                return redirect()->route($this->path . '.index')->with('warning', 'Tidak Memiliki Akses');
             } else {
                 return redirect()->route('dashboard');
             }
@@ -104,7 +104,8 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'role_id' => $request->role_id,
+                // role_id 0 = Super Admin (bukan baris di tabel roles) → simpan NULL agar lolos FK
+                'role_id' => $request->role_id == 0 ? null : (int) $request->role_id,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -126,7 +127,7 @@ class UserController extends Controller
 
             // optionally log error here
 
-            return redirect()->route($this->modul . '.index')->with('error', 'Failed to create data. Please try again.
+            return redirect()->route($this->path . '.index')->with('error', 'Failed to create data. Please try again.
              : ' . $e->getMessage());
         }
 
@@ -160,7 +161,8 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            $data = $request->only(['name', 'email', 'role_id']);
+            $data = $request->only(['name', 'email']);
+            $data['role_id'] = $request->role_id == 0 ? null : (int) $request->role_id;
 
             if ($request->filled('password')) {
                 $data['password'] = Hash::make($request->password);
@@ -216,15 +218,18 @@ class UserController extends Controller
             ->leftjoin('roles', 'users.role_id', '=', 'roles.id')
             ->select([
                 'users.*',
-                DB::raw("CASE WHEN users.role_id = 0 THEN 'Super Admin' ELSE roles.name END as role_name"),
+                DB::raw("CASE WHEN COALESCE(users.role_id, 0) = 0 THEN 'Super Admin' ELSE roles.name END as role_name"),
             ])
             ->whereNull('users.deleted_at');
 
         if ($request->filled('filter_role')) {
 
-            $query->where(function ($q) use ($request) {
-                $q->where('users.role_id', $request->filter_role);
-            });
+            if ($request->filter_role == 0) {
+                // Super Admin disimpan sebagai NULL (bukan role di tabel roles)
+                $query->whereNull('users.role_id');
+            } else {
+                $query->where('users.role_id', $request->filter_role);
+            }
 
         }
 
@@ -313,15 +318,18 @@ class UserController extends Controller
             ->leftjoin('roles', 'users.role_id', '=', 'roles.id')
             ->select([
                 'users.*',
-                DB::raw("CASE WHEN users.role_id = 0 THEN 'Super Admin' ELSE roles.name END as role_name"),
+                DB::raw("CASE WHEN COALESCE(users.role_id, 0) = 0 THEN 'Super Admin' ELSE roles.name END as role_name"),
             ])
             ->whereNotNull('users.deleted_at');
 
         if ($request->filled('filter_role')) {
 
-            $query->where(function ($q) use ($request) {
-                $q->where('users.role_id', $request->filter_role);
-            });
+            if ($request->filter_role == 0) {
+                // Super Admin disimpan sebagai NULL (bukan role di tabel roles)
+                $query->whereNull('users.role_id');
+            } else {
+                $query->where('users.role_id', $request->filter_role);
+            }
 
         }
 

@@ -42,7 +42,6 @@
 
     .navbar-menu li a {
         text-decoration: none;
-        color: white;
         font-family: 'Inter', sans-serif;
         font-weight: 500;
         font-size: 1rem;
@@ -194,7 +193,6 @@
         .dropdown-menu {
             position: static;
             box-shadow: none;
-            background-color: rgba(0, 0, 0, 0.03);
             border-radius: 8px;
             margin-top: 0.5rem;
             width: 100%;
@@ -240,15 +238,15 @@
     //ambil tombol cta
     $cta_text = $navContent['cta_text'] ?? 'Contact Us';
     $cta_url = $navContent['cta_url'] ?? '#';
-    $cta_color = $navContent['cta_color'] ?? '#000000ff';
+    $button_text_color = $navContent['button_text_color'] ?? '#ffffff';
 @endphp
 
-<nav class="navbar">
+<nav class="navbar text-red">
     <a href="#" class="navbar-logo">
         @if($logo)
             <img src="{{ asset($logo) }}" alt="{{ $brand }}" class="h-20 w-auto object-contain">
         @else
-            <span class="text-xl font-bold tracking-tight" style="color: {{ $cta_color }}">{{ $brand }}</span>
+            <span class="text-xl font-bold tracking-tight" style="color: {{ $button_color }}">{{ $brand }}</span>
         @endif
     </a>
     <div class="hamburger">
@@ -256,7 +254,7 @@
         <span></span>
         <span></span>
     </div>
-    <ul class="navbar-menu">
+    <ul class="navbar-menu" style="color:{{ $button_text_color }};">
         @foreach($menus as $menu)
             @php
                 $menuUrl = $menu['url'] ?? '#';
@@ -307,13 +305,15 @@
             {{-- Cart --}}
             <li>
                 <a type="button"
-                        onclick="toggleCartDrawer()"
-                        class="relative text-white hover:text-black transition-colors"
-                        aria-label="Cart">
+                    onclick="toggleCartDrawer()"
+                    class="relative transition-colors"
+                    style="color: {{ $button_text_color }};"
+                    aria-label="Cart">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <span id="cart-badge"
-                        class="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px]
-                                w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">
+                        class="absolute -top-2 -right-2 text-red text-[10px]
+                                w-4 h-4 rounded-full flex items-center justify-center font-bold hidden"
+                        style="background-color: red;">
                         0
                     </span>
                 </a>

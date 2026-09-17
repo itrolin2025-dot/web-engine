@@ -4,7 +4,7 @@
 
     <div class="grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
         <div class="col-span-12 sm:col-span-12">
-            <form id="user-create-form" method="POST" action="{{ route($modul . '.store') }}" >
+            <form id="user-create-form" method="POST" action="{{ route('admin.' . $modul . '.store') }}" >
                 @csrf
                 <div class="card p-4 sm:p-5">
                     <p class="text-base font-medium text-slate-700 dark:text-navy-100"></p>

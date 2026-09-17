@@ -179,6 +179,7 @@
                                 <!-- Add Button -->
                                 <div class="mt-4">
                                     <button class="w-full hover:text-white text-white text-[10px] font-bold py-2.5 rounded uppercase tracking-wider transition duration-200"
+                                        onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $image }}')"
                                         style="background:{{ $button_color }}; color:{{ $button_text_color }}; hover:{{ $button_color }}/60;">
                                         Add to Cart
                                     </button>

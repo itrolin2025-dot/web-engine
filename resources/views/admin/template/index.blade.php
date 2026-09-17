@@ -1,5 +1,10 @@
 {{-- Admin Template Index --}}
 <x-app-layout>
+    <style>
+        .dark .template-card .card-info {
+            border-top-color: rgba(0, 0, 0, 0.35) !important;
+        }
+    </style>
     <div>
         <div class="flex mb-4 items-center justify-between py-5 lg:py-6">
             <div class="flex items-center space-x-4">
@@ -43,20 +48,48 @@
             </div>
         @endif
 
-        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
+        {{-- Toolbar: Show items (left) + Search (right) --}}
+        <div class="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <form method="GET" action="{{ route('admin.template') }}" class="flex shrink-0 items-center gap-2 text-xs text-slate-500 dark:text-navy-300">
+                @if($search)
+                    <input type="hidden" name="search" value="{{ $search }}">
+                @endif
+                <span>Show</span>
+                <select onchange="this.form.submit()" name="per_page"
+                    class="form-select h-9 w-20 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700">
+                    @foreach([10, 25, 50] as $option)
+                        <option value="{{ $option }}" {{ $perPage == $option ? 'selected' : '' }}>{{ $option }}</option>
+                    @endforeach
+                </select>
+                <span>items</span>
+            </form>
+
+            <form method="GET" action="{{ route('admin.template') }}" id="searchForm" class="flex w-full items-center justify-end gap-2 sm:w-auto sm:ml-auto">
+                @if($perPage != 10)
+                    <input type="hidden" name="per_page" value="{{ $perPage }}">
+                @endif
+                <div class="relative w-full max-w-xs sm:w-64">
+                    <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+                    <input type="text" name="search" id="searchInput" value="{{ $search }}" placeholder="Search template..." autocomplete="off"
+                        class="form-input w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700">
+                </div>
+            </form>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3">
             @foreach($templates as $template)
-            <div class="card flex flex-col overflow-hidden">
-                <a href="{{ $template->preview ? asset($template->preview) : asset('images/default/broken.png') }}" class="template-preview relative block h-56 w-full overflow-hidden bg-slate-100 dark:bg-navy-800" onmouseenter="this.querySelector('.preview-overlay').style.opacity='1';this.querySelector('.preview-overlay').style.backgroundColor='rgba(0,0,0,0.4)';this.querySelector('.preview-img').style.transform='scale(1.05)'" onmouseleave="this.querySelector('.preview-overlay').style.opacity='0';this.querySelector('.preview-overlay').style.backgroundColor='rgba(0,0,0,0)';this.querySelector('.preview-img').style.transform='scale(1)'">
+            <div class="card template-card flex flex-col overflow-hidden">
+                <a href="{{ $template->preview ? asset($template->preview) : asset('images/default/broken.png') }}" class="template-preview relative block aspect-square w-full overflow-hidden bg-slate-100 dark:bg-navy-800" onmouseenter="this.querySelector('.preview-overlay').style.opacity='1';this.querySelector('.preview-overlay').style.backgroundColor='rgba(0,0,0,0.4)';this.querySelector('.preview-img').style.transform='scale(1.05)'" onmouseleave="this.querySelector('.preview-overlay').style.opacity='0';this.querySelector('.preview-overlay').style.backgroundColor='rgba(0,0,0,0)';this.querySelector('.preview-img').style.transform='scale(1)'">
                     <img loading="lazy"
                          src="{{ $template->preview ? asset($template->preview) : asset('images/default/broken.png') }}"
                          onerror="this.onerror=null;this.src='{{ asset('images/default/broken.png') }}';this.className='absolute inset-0 m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40'"
-                         class="preview-img absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300{{ $template->preview ? '' : ' m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40' }} pointer-events-none"
+                         class="preview-img absolute inset-0 h-full w-full object-cover object-top transition-transform duration-300{{ $template->preview ? '' : ' m-auto h-24 w-24 object-contain opacity-60 dark:opacity-40' }} pointer-events-none"
                          alt="preview">
                     <div class="preview-overlay absolute inset-0 z-10 flex items-center justify-center transition-opacity duration-300" style="opacity:0;background-color:transparent;">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl text-white"></i>
                     </div>
                 </a>
-                <div class="flex flex-col border-t border-slate-150 px-4 py-3 dark:border-gray-800">
+                <div class="card-info flex flex-col border-t border-slate-150 px-4 py-3 dark:border-navy-600/60">
                     <div class="flex items-center justify-between gap-2">
                         <h3 class="text-sm font-semibold text-slate-700 dark:text-navy-100 truncate">{{ $template->name }}</h3>
                         <span class="badge shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold {{ $template->status ? 'bg-success/10 text-success' : 'bg-error/10 text-error' }}">
@@ -89,6 +122,66 @@
             </div>
             @endforeach
         </div>
+
+        @if($templates->count())
+            <div class="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
+                <p class="text-xs text-slate-500 dark:text-navy-300">
+                    Showing
+                    <span class="font-semibold text-slate-700 dark:text-navy-100">{{ $templates->firstItem() }}</span>
+                    to
+                    <span class="font-semibold text-slate-700 dark:text-navy-100">{{ $templates->lastItem() }}</span>
+                    of
+                    <span class="font-semibold text-slate-700 dark:text-navy-100">{{ $templates->total() }}</span>
+                    entries
+                </p>
+                @if($templates->hasPages())
+                    <nav class="flex items-center gap-2" aria-label="Pagination">
+                        {{-- Previous --}}
+                        @if($templates->onFirstPage())
+                            <span class="flex h-8 items-center rounded-lg border border-slate-200 px-3 text-xs text-slate-400 dark:border-navy-500 dark:text-navy-500">
+                                <i class="fa-solid fa-angle-left"></i>
+                            </span>
+                        @else
+                            <a href="{{ $templates->previousPageUrl() }}"
+                                class="flex h-8 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-600 transition-colors hover:bg-slate-50 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:hover:bg-navy-600">
+                                <i class="fa-solid fa-angle-left"></i>
+                            </a>
+                        @endif
+
+                        {{-- Page numbers --}}
+                        @foreach($templates->getUrlRange(1, $templates->lastPage()) as $page => $url)
+                            @if($page == $templates->currentPage())
+                                <span aria-current="page"
+                                    class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-medium text-white dark:bg-accent">{{ $page }}</span>
+                            @else
+                                <a href="{{ $url }}"
+                                    class="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-xs text-slate-600 transition-colors hover:bg-slate-50 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:hover:bg-navy-600">{{ $page }}</a>
+                            @endif
+                        @endforeach
+
+                        {{-- Next --}}
+                        @if($templates->hasMorePages())
+                            <a href="{{ $templates->nextPageUrl() }}"
+                                class="flex h-8 items-center rounded-lg border border-slate-200 bg-white px-3 text-xs text-slate-600 transition-colors hover:bg-slate-50 dark:border-navy-500 dark:bg-navy-700 dark:text-navy-100 dark:hover:bg-navy-600">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </a>
+                        @else
+                            <span class="flex h-8 items-center rounded-lg border border-slate-200 px-3 text-xs text-slate-400 dark:border-navy-500 dark:text-navy-500">
+                                <i class="fa-solid fa-angle-right"></i>
+                            </span>
+                        @endif
+                    </nav>
+                @endif
+            </div>
+        @else
+            <div class="mt-6 flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 py-10 text-center dark:border-navy-500">
+                <i class="fa-solid fa-box-open mb-2 text-2xl text-slate-300 dark:text-navy-400"></i>
+                <p class="text-sm font-medium text-slate-500 dark:text-navy-300">No templates found</p>
+                @if($search)
+                    <a href="{{ route('admin.template') }}" class="mt-1 text-xs text-primary hover:underline dark:text-accent-light">Clear search</a>
+                @endif
+            </div>
+        @endif
     </div>
     </div>
 
@@ -106,6 +199,31 @@
                 openEffect: 'zoom',
                 closeEffect: 'zoom'
             });
+
+            // Debounced auto-search (3 seconds after typing stops)
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            let searchTimer = null;
+            const initialSearch = "{{ $search }}";
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimer);
+
+                    // No change from initial value -> do nothing
+                    if (searchInput.value.trim() === initialSearch.trim()) return;
+
+                    // Empty input -> search immediately (reset)
+                    if (searchInput.value.trim() === '') {
+                        searchForm.submit();
+                        return;
+                    }
+
+                    searchTimer = setTimeout(() => {
+                        searchForm.submit();
+                    }, 3000);
+                });
+            }
         });
     </script>
 </x-app-layout>

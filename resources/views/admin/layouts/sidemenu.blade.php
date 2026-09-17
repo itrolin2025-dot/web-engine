@@ -38,7 +38,9 @@
 
                     @forelse($sideModules as $modul)
                         @php
-                            $isActive = request()->routeIs('admin.' . $modul->kode . '*');
+                            // Match 'admin.customers.index', 'admin.customers.edit', etc.
+                            // but NOT 'admin.customers-website.*' (needs dot boundary after kode)
+                            $isActive = request()->routeIs('admin.' . $modul->kode) || request()->routeIs('admin.' . $modul->kode . '.*');
                         @endphp
                         <a href="{{ route('admin.' . $modul->kode . '.index') }}" data-tooltip="{{ $modul->name }}" data-placement="right"
                             class="tooltip-main-sidebar flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 {{ $isActive ? 'bg-primary/10 text-primary dark:bg-navy-600 dark:text-accent-light' : 'hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25' }}">
@@ -58,7 +60,7 @@
                     @endphp
                     @foreach($adminModules as $modul)
                         @php
-                            $isActive = request()->routeIs('admin.' . $modul->kode . '*');
+                            $isActive = request()->routeIs('admin.' . $modul->kode) || request()->routeIs('admin.' . $modul->kode . '.*');
                         @endphp
                         <a href="{{ route('admin.' . $modul->kode . '.index') }}" data-tooltip="{{ $modul->name }}" data-placement="right"
                             class="tooltip-main-sidebar flex size-11 items-center justify-center rounded-lg outline-hidden transition-colors duration-200 {{ $isActive ? 'bg-primary/10 text-primary dark:bg-navy-600 dark:text-accent-light' : 'hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:hover:bg-navy-300/20 dark:focus:bg-navy-300/20 dark:active:bg-navy-300/25' }}">

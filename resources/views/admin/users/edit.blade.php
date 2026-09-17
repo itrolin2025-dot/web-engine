@@ -4,7 +4,7 @@
 
     <div class="grid grid-cols-12 gap-4 sm:gap-5 lg:gap-6">
         <div class="col-span-12 sm:col-span-12">
-            <form id="user-create-form" method="POST" action="{{ route($modul . '.update', $user->id) }}">
+            <form id="user-create-form" method="POST" action="{{ route('admin.' . $modul . '.update', $user->id) }}">
                 @csrf
                 @method('PUT')
                 <div class="card p-4 sm:p-5">

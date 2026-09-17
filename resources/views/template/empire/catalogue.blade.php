@@ -15,7 +15,7 @@
 
     $domain = $website->domain ?? '';
 
-    $title = $content['title'] ?? $content['title_en'] ?? 'Article';
+    $title = $content['title'] ?? $content['title_en'] ?? '';
     $subtitle = $content['subtitle'] ?? $content['subtitle_en'] ?? '';
     $title_color = $content['title_color'] ?? '#ffffff';
 
@@ -39,11 +39,11 @@
     $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
 @endphp
 
-<section class="bg-white py-10 px-6 lg:px-12 text-black">
+<section class="bg-white py-8 px-6 lg:px-8 text-black">
     <div class="max-w-7xl mx-auto space-y-8">
 
         <!-- 1. CATEGORIES TITLE & PILLS -->
-        <div class="space-y-4">
+        <div class="space-y-2">
             <h2 class="text-3xl font-bold tracking-tight" style="color: {{ $title_color }};">{{ $title }}</h2>
             <h3 class="text-3xl font-bold tracking-tight" style="color: {{ $subtitle_color }};">{{ $subtitle }}</h3>
 
@@ -71,7 +71,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
             </div>
-            <span class="text-gray-400">1723 product(s)</span>
+            <span class="text-gray-400" id="catalogue-result-count">{{ isset($products) ? count($products) : 0 }} product(s)</span>
         </div>
 
         <!-- 3. MAIN CATALOG CONTENT (STICKY SIDEBAR + PRODUCT GRID) -->
@@ -82,7 +82,7 @@
                 class="w-full lg:w-1/5 sticky top-24 self-start space-y-6 max-h-[calc(100vh-6rem)] overflow-y-auto pr-2 scrollbar-none">
                 <div class="flex items-center justify-between border-b border-gray-100 pb-3">
                     <span class="font-bold text-sm">Filters</span>
-                    <span
+                    <span id="catalogue-filter-count"
                         class="w-5 h-5 rounded-full border border-gray-400 text-[10px] font-semibold flex items-center justify-center">0</span>
                 </div>
 
@@ -92,7 +92,8 @@
                         @foreach ($categories as $category)
                             <label
                                 class="flex items-center space-x-2 bg-gray-50 p-2.5 rounded-md cursor-pointer hover:bg-gray-100 transition">
-                                <input type="checkbox" class="w-4 h-4 rounded-xs border-gray-300 text-black focus:ring-0">
+                                <input type="checkbox" class="catalogue-filter w-4 h-4 rounded-xs border-gray-300 text-black focus:ring-0"
+                                    data-filter="{{ is_array($category) ? ($category['id'] ?? $category['kode'] ?? '') : $category->id }}">
                                 <span class="text-xs text-gray-700">{{ is_array($category) ? $category['name'] : $category->name }}</span>
                             </label>
                         @endforeach
@@ -159,17 +160,18 @@
                             @endphp
 
                             <!-- BARIS 1 - CARD 1 -->
-                            <div class="group flex flex-col justify-between space-y-3 cursor-pointer">
+                            <div class="group flex flex-col justify-between space-y-3 cursor-pointer product-card"
+                                data-category="{{ $pCatId }}">
                                 <div
-                                    class="relative bg-[#f6f6f6] rounded-xl aspect-square flex items-center justify-center p-6 overflow-hidden">
+                                    class="relative bg-[#f6f6f6] rounded-xl aspect-square overflow-hidden">
                                     @if($pCatName)
                                         <span
                                         class="absolute top-3 left-3 bg-black text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider z-10">{{ $pCatName }}</span>
                                     @endif
-                                    
+
                                     <img src="{{ $image }}"
                                         alt="{{ $pName }}"
-                                        class="max-h-full object-contain group-hover:scale-105 transition duration-300" />
+                                        class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                                     <!-- Hover Add to Cart Button -->
                                     <button
                                         onclick="addToCart('{{ addslashes($pName) }}', {{ $numericPrice }}, '{{ $image }}')"
@@ -192,3 +194,33 @@
 
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterChecks = document.querySelectorAll('.catalogue-filter');
+        const cards = document.querySelectorAll('.product-card[data-category]');
+        const filterCount = document.getElementById('catalogue-filter-count');
+        const resultCount = document.getElementById('catalogue-result-count');
+
+        function applyFilters() {
+            // Kumpulkan id kategori yang dicentang
+            const activeFilters = Array.from(filterChecks)
+                .filter(chk => chk.checked)
+                .map(chk => String(chk.dataset.filter));
+
+            let visible = 0;
+            cards.forEach(function (card) {
+                const show = activeFilters.length === 0 || activeFilters.includes(String(card.dataset.category));
+                card.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+
+            if (filterCount) filterCount.textContent = activeFilters.length;
+            if (resultCount) resultCount.textContent = visible + ' product(s)';
+        }
+
+        filterChecks.forEach(function (chk) {
+            chk.addEventListener('change', applyFilters);
+        });
+    });
+</script>

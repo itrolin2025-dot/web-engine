@@ -79,8 +79,13 @@ class FrontController extends Controller
                 ->get();
 
             $articles = DB::table('articles')
-                ->where('customers_website_id', $website->id)
-                ->whereNull('deleted_at')
+                ->join('article_categories', 'article_categories.id', '=', 'articles.article_categories_id')
+                ->select(
+                    'articles.*',
+                    'article_categories.name as article_category'
+                )
+                ->where('articles.customers_website_id', $website->id)
+                ->whereNull('articles.deleted_at')
                 ->get();
 
         } else {

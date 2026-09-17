@@ -295,15 +295,17 @@ class CustomersController extends Controller
             ->addColumn('mobile_view', function ($row) {
 
                 $photoUrl = $row->photo ? asset($row->photo) : asset('images/' . $this->path . '/default.png');
+                $imgHtml = $row->photo
+                    ? '<img src="' . $photoUrl . '" alt="' . e($row->name) . '" class="h-10 w-10 object-cover rounded-lg mr-3 shadow-sm border border-slate-200" />'
+                    : '<div class="h-10 w-10 rounded-lg bg-slate-100 dark:bg-navy-600 flex items-center justify-center text-xs text-slate-400 mr-3">No Img</div>';
                 return '
                 <div class="mobile-expandable">
                     <div class="flex items-center justify-between" style="padding:15px;">
-                        <div class="avatar flex-shrink-0 size-10">
-                            <img class="rounded-full" src="' . $photoUrl . '" alt="avatar">
+                        <div class="flex items-center flex-1 min-w-0">
+                            ' . $imgHtml . '
+                            <div class="fw-bold truncate">' . e($row->name) . '</div>
                         </div>
-                        <div style="width:16px;"></div>
-                        <div class="fw-bold flex-1">' . e($row->name) . '</div>
-                        <a class="toggle-expand btn btn-xs btn-secondary">
+                        <a class="toggle-expand btn btn-xs btn-secondary ml-2">
                             <i class="fa fa-chevron-down"></i>
                         </a>
                     </div>

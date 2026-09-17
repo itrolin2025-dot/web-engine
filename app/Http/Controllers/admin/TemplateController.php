@@ -25,16 +25,29 @@ class TemplateController extends Controller
         return auth()->check() ? auth()->user()->product_id : null;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if (canAccess($this->modul, $this->getProductId(), 'view') == false) {
             return redirect()->route('admin.dashboard');
         }
 
-        $templates = Template::orderBy('id', 'desc')->get();
+        $search = $request->input('search');
+        $perPage = in_array((int) $request->input('per_page'), [10, 25, 50]) ? (int) $request->input('per_page') : 10;
+
+        $templates = Template::when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('path', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('admin.template.index', [
             'templates' => $templates,
+            'search' => $search,
+            'perPage' => $perPage,
             'canAdd' => canAccess($this->modul, $this->getProductId(), 'add'),
             'canEdit' => canAccess($this->modul, $this->getProductId(), 'edit'),
             'canDelete' => canAccess($this->modul, $this->getProductId(), 'delete'),

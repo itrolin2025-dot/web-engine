@@ -105,6 +105,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('customers-website', [CustomersWebController::class, 'index'])->name('customers-website');
     Route::get('customers-website/index', [CustomersWebController::class, 'index'])->name('customers-website.index');
+    Route::get('customers-website/get-data', [CustomersWebController::class, 'getData'])->name('customers-website.getData');
     Route::get('customers-website/create', [CustomersWebController::class, 'create'])->name('customers-website.create');
     Route::post('customers-website', [CustomersWebController::class, 'store'])->name('customers-website.store');
     Route::get('customers-website/{id}/edit', [CustomersWebController::class, 'edit'])->name('customers-website.edit');

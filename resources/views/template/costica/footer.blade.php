@@ -99,7 +99,7 @@
 
             <!-- Copyright Text -->
             <div class="text-center pt-12 border-t border-gray-200/60 text-[11px] text-[{{ $title_color }}]">
-                Copyright © 2024 Rolin. All Rights Reserved.
+                Copyright © 2026 Rolin. All Rights Reserved.
             </div>
 
         </div>

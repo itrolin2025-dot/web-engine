@@ -144,14 +144,15 @@
             </button>
 
             <!-- Cart Icon with Badge -->
-            <button aria-label="Cart" class="relative hover:text-black transition">
+            <button aria-label="Cart" class="relative hover:text-black transition"
+                onclick="toggleCartDrawer()">
                 <svg class="w-5 h-5" fill="none" stroke="{{ $button_text_color }}" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                 </svg>
-                <span
+                <span id="cart-badge"
                     class="absolute -top-1.5 -right-2 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold"
-                    style="background-color:{{ $button_color }}">1</span>
+                    style="background-color:{{ $button_color }}">0</span>
             </button>
         </div>
 

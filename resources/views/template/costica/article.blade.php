@@ -45,8 +45,8 @@
 
 @endphp
 
-<section class="w-full bg-white py-16 md:py-12 px-4 md:px-8 font-sans text-[#1a1a1a]" 
-style="background-color:{{ $background_color }};">
+<section class="w-full bg-white py-16 md:py-24 px-4 md:px-8 font-sans text-[#1a1a1a]" 
+style="">
     <div class="max-w-7xl mx-auto">
 
         <!-- Section Header -->

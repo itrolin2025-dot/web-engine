@@ -163,7 +163,7 @@
                                 @foreach($contentPresets as $preset)
                                     <label class="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-navy-500 bg-white dark:bg-navy-700 px-3 py-2 transition-colors cursor-pointer hover:bg-slate-50 dark:hover:bg-navy-600">
                                         <input name="section_contents[{{ $preset['key'] }}][enabled]" type="checkbox" value="1"
-                                            class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-navy-450 dark:bg-navy-800 dark:checked:bg-accent dark:checked:border-accent cursor-pointer">
+                                            class="h-4 w-4 rounded border-slate-300 accent-primary cursor-pointer dark:border-navy-450 dark:bg-navy-800">
                                         <span class="text-xs text-slate-600 dark:text-navy-200 truncate">{{ $preset['key'] }}</span>
                                         <input type="hidden" name="section_contents[{{ $preset['key'] }}][key]" value="{{ $preset['key'] }}">
                                         <input type="hidden" name="section_contents[{{ $preset['key'] }}][type]" value="{{ $preset['type'] }}">
@@ -336,8 +336,8 @@
                                                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-12 items-center">
                                                     <div class="sm:col-span-1 flex items-center justify-center">
                                                         <label class="inline-flex items-center cursor-pointer">
-                                                            <input name="section_contents[{{ $dummyItem['key'] }}][enabled]" type="checkbox" value="1" {{ $isActive ? 'checked' : '' }}
-                                                                class="form-checkbox is-basic h-5 w-5 rounded border-slate-300 text-primary focus:border-primary dark:border-navy-450 dark:checked:bg-accent dark:checked:border-accent">
+                                                        <input name="section_contents[{{ $dummyItem['key'] }}][enabled]" type="checkbox" value="1" {{ $isActive ? 'checked' : '' }}
+                                                            class="form-checkbox is-basic h-5 w-5 rounded border-slate-300 checked:bg-primary checked:border-primary hover:border-primary focus:border-primary dark:border-navy-450 dark:checked:bg-accent dark:checked:border-accent cursor-pointer">
                                                         </label>
                                                     </div>
                                                     <div class="sm:col-span-4">
@@ -369,16 +369,18 @@
                                         class="btn h-8 rounded-full bg-primary px-4 text-xs font-medium text-white hover:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
                                         <i class="fa-solid fa-check mr-1.5"></i> Save Changes
                                     </button>
-                                    <form action="{{ route('admin.template.section.destroy', [$template->id, $section->id]) }}"
-                                        method="POST" class="section-delete-form" data-section-id="{{ $section->id }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="btn h-8 rounded-full bg-error/10 px-4 text-xs font-medium text-error hover:bg-error/20">
-                                            <i class="fa-solid fa-trash mr-1.5"></i> Delete
-                                        </button>
-                                    </form>
+                                    <button type="submit" form="delete-section-form-{{ $section->id }}"
+                                        class="btn h-8 rounded-full bg-error/10 px-4 text-xs font-medium text-error hover:bg-error/20">
+                                        <i class="fa-solid fa-trash mr-1.5"></i> Delete
+                                    </button>
                                 </div>
+                            </form>
+
+                            {{-- Delete form kept OUTSIDE the update form (HTML forbids nested forms) --}}
+                            <form action="{{ route('admin.template.section.destroy', [$template->id, $section->id]) }}"
+                                method="POST" id="delete-section-form-{{ $section->id }}" class="section-delete-form" data-section-id="{{ $section->id }}">
+                                @csrf
+                                @method('DELETE')
                             </form>
                         </div>
                     </div>

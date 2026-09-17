@@ -152,18 +152,24 @@
         const badge = document.getElementById('cart-badge');
         const subtotalEl = document.getElementById('cart-subtotal');
 
+        // Elemen badge/subtotal boleh tidak ada (mis. navbar tanpa badge):
+        // jangan sampai crash dan blok render item keranjang.
+        if (!container) return;
+
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-        if (totalItems > 0) {
-            badge.innerText = totalItems;
-            badge.classList.remove('hidden');
-        } else {
-            badge.classList.add('hidden');
+        if (badge) {
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         if (cart.length === 0) {
             container.innerHTML = `<div class="text-center text-stone-400 py-12 text-xs uppercase tracking-widest">Keranjang belanja Anda kosong.</div>`;
-            subtotalEl.innerText = 'Rp 0';
+            if (subtotalEl) subtotalEl.innerText = 'Rp 0';
             return;
         }
 
@@ -197,7 +203,7 @@
         });
 
         container.innerHTML = html;
-        subtotalEl.innerText = `Rp ${subtotal.toLocaleString('id-ID')}`;
+        if (subtotalEl) subtotalEl.innerText = `Rp ${subtotal.toLocaleString('id-ID')}`;
     }
 
     // Initialize UI on Page Load

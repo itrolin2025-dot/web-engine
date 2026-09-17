@@ -15,6 +15,14 @@
                     <li>{{ $modul_type }}</li>
                 </ul>
             </div>
+
+            @if($canAdd)
+            <a href="{{ route('admin.' . $modul . '.create') }}"
+                class="btn space-x-2 bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus active:bg-primary-focus/90 dark:bg-accent dark:hover:bg-accent-focus dark:focus:bg-accent-focus dark:active:bg-accent/90">
+                <i class="fa-solid fa-plus text-base"></i>
+                <span>Add</span>
+            </a>
+            @endif
         </div>
 
         @if(session('success'))
