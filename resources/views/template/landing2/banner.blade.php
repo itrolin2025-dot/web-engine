@@ -29,7 +29,7 @@
     $background = !empty($content['background']) ? 'images/website/' . $domain . '/' . $content['background'] : 'images/default/broken.png';
 @endphp
 
-<section class="bg-white py-16 md:py-24">
+<section id="contact" class="bg-white py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-1 gap-6">
 
         <div class="relative rounded-[24px] overflow-hidden bg-cover bg-center min-h-[380px] md:min-h-[440px] flex flex-col justify-between p-8 md:p-12 lg:p-16 shadow-sm"

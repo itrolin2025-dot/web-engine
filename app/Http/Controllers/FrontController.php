@@ -26,13 +26,15 @@ class FrontController extends Controller
             ->select(
                 'customers_website.*',
                 'customers.name as customer_name',
-                'customers.email as customer_email'
+                'customers.email as customer_email',
+                'customers_website.customer_type as cust_type'
             )
             ->first();
 
         $title = $website->title ?? 'Your Brand Page';
         $customerName = $website->customer_name ?? 'Your Brand';
-
+        $customerType = $website->cust_type ?? 'Free Edition';
+        
         // Get layout sections for this website, ordered by position
         $layouts = collect();
         if ($website) {
@@ -95,38 +97,8 @@ class FrontController extends Controller
             $articles = collect();
         }
 
-        $categoryChildren = [];
-        foreach ($categories as $cat) {
-            $categoryChildren[] = [
-                'label' => $cat->name,
-                'url' => 'categories/' . $cat->code
-            ];
-        }
-
-        $navbarPresets = [
-            'brand' => 'Your Brand',
-            'cta_text' => 'Get Started',
-            'cta_url' => '#',
-            'cta_color' => '#000000',
-            'menus' => [
-                ['label' => 'Home', 'url' => ''],
-                ['label' => 'About', 'url' => 'about'],
-                ['label' => 'Shop', 'url' => 'shop'],
-                ['label' => 'Categories', 'url' => 'categories', 'children' => $categoryChildren],
-                ['label' => 'Contact', 'url' => 'contact'],
-            ]
-        ];
-
-        $footerPresets = [
-            'title' => 'Menus',
-            'footer_menu' => [
-                ['label' => 'Home', 'url' => '', 'type' => 'child'],
-                ['label' => 'About', 'url' => 'about', 'type' => 'child'],
-                ['label' => 'Shop', 'url' => 'shop', 'type' => 'child'],
-                ['label' => 'Contact', 'url' => 'contact', 'type' => 'child'],
-            ],
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        ];
+        $navbarPresets = self::getNavbarPresets($categories, $customerType);
+        $footerPresets = self::getFooterPresets();
 
         return view('template.index', compact('title', 'website', 'customerName', 'layouts', 'categories', 'products', 'article_categories', 'articles', 'navbarPresets', 'footerPresets'));
     }
@@ -155,5 +127,78 @@ class FrontController extends Controller
         $tabs = $sections->unique('slug')->values();
 
         return view('template.layout', compact('title', 'website', 'sections', 'tabs'));
+    }
+
+    public static function getNavbarPresets($categories = [], $customerType = 'Free Edition')
+    {
+        $categoryChildren = [];
+        foreach ($categories as $cat) {
+            $categoryChildren[] = [
+                'label' => $cat->name,
+                'url' => 'categories/' . $cat->code
+            ];
+        }
+
+        if ($customerType == 'Free Edition') {
+            return [
+            'brand' => 'Your Brand',
+            'cta_text' => 'Get Started',
+            'cta_url' => '#',
+            'cta_color' => '#000000',
+            'menus' => [
+                ['label' => 'Home', 'url' => '', 'samepage' => true],
+                ['label' => 'About', 'url' => 'about', 'samepage' => true],
+                ['label' => 'Product', 'url' => 'shop', 'samepage' => true],
+                ['label' => 'Contact', 'url' => 'contact', 'samepage' => true],
+            ]
+        ];
+        }
+
+        if($customerType == 'Starter Edition'){
+            return [
+                'brand' => 'Your Brand',
+                'cta_text' => 'Get Started',
+                'cta_url' => '#',
+                'cta_color' => '#000000',
+                'menus' => [
+                    ['label' => 'Home', 'url' => '', 'samepage' => false],
+                    ['label' => 'About', 'url' => 'about', 'samepage' => false],
+                    ['label' => 'Article', 'url' => 'article', 'samepage' => false],
+                    ['label' => 'Product', 'url' => 'shop', 'samepage' => false],
+                    // ['label' => 'Categories', 'url' => 'categories', 'samepage' => false, 'children' => $categoryChildren],
+                    ['label' => 'Contact', 'url' => 'contact', 'samepage' => false],
+                ]
+            ];
+            
+        }else{
+            
+            return [
+                'brand' => 'Your Brand',
+                'cta_text' => 'Get Started',
+                'cta_url' => '#',
+                'cta_color' => '#000000',
+                'menus' => [
+                    ['label' => 'Home', 'url' => '', 'samepage' => true],
+                    ['label' => 'About', 'url' => 'about', 'samepage' => true],
+                    ['label' => 'Product', 'url' => 'shop', 'samepage' => true],
+                    ['label' => 'Categories', 'url' => 'categories', 'samepage' => true, 'children' => $categoryChildren],
+                    ['label' => 'Contact', 'url' => 'contact', 'samepage' => true],
+                ]
+            ];
+        }
+    }
+
+    public static function getFooterPresets()
+    {
+        return [
+            'title' => 'Menus',
+            'footer_menu' => [
+                ['label' => 'Home', 'url' => '', 'type' => 'child'],
+                ['label' => 'About', 'url' => 'about', 'type' => 'child'],
+                ['label' => 'Shop', 'url' => 'shop', 'type' => 'child'],
+                ['label' => 'Contact', 'url' => 'contact', 'type' => 'child'],
+            ],
+            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
     }
 }

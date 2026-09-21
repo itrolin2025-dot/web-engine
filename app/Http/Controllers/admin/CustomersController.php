@@ -106,6 +106,14 @@ class CustomersController extends Controller
                 'address' => 'nullable|string',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'status' => 'nullable|string',
+                'customer_type' => 'nullable|string|max:255',
+                'instagram' => 'nullable|string|max:255',
+                'tiktok' => 'nullable|string|max:255',
+                'facebook' => 'nullable|string|max:255',
+                'x' => 'nullable|string|max:255',
+                'threads' => 'nullable|string|max:255',
+                'shopee' => 'nullable|string|max:255',
+                'tokopedia' => 'nullable|string|max:255',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()
@@ -134,6 +142,7 @@ class CustomersController extends Controller
             $customer = Customer::create([
                 'code' => $code,
                 'name' => $request->name,
+                'customer_type' => $request->customer_type,
                 'source' => $request->source,
                 'interest' => $request->interest,
                 'email' => $request->email,
@@ -141,6 +150,13 @@ class CustomersController extends Controller
                 'province' => $request->province,
                 'city' => $request->city,
                 'address' => $request->address,
+                'instagram' => $request->instagram,
+                'tiktok' => $request->tiktok,
+                'facebook' => $request->facebook,
+                'x' => $request->x,
+                'threads' => $request->threads,
+                'shopee' => $request->shopee,
+                'tokopedia' => $request->tokopedia,
                 'photo' => $photoPath,
                 'status' => $request->status ?? 'Active',
                 'created_by' => auth()->id(),
@@ -181,7 +197,7 @@ class CustomersController extends Controller
             }
         }
 
-        return view($this->modul . '.edit', [
+        return view('admin.' . $this->modul . '.edit', [
             'lead' => $customer, // Kept variable name as 'lead' to minimize blade changes if they use $lead
             'customer' => $customer,
             'provinces' => $provinces,
@@ -206,6 +222,14 @@ class CustomersController extends Controller
                 'email' => 'nullable|string|email|max:255',
                 'phone' => 'nullable|string|max:25',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'customer_type' => 'nullable|string|max:255',
+                'instagram' => 'nullable|string|max:255',
+                'tiktok' => 'nullable|string|max:255',
+                'facebook' => 'nullable|string|max:255',
+                'x' => 'nullable|string|max:255',
+                'threads' => 'nullable|string|max:255',
+                'shopee' => 'nullable|string|max:255',
+                'tokopedia' => 'nullable|string|max:255',
             ]);
 
             // Handle file upload
@@ -226,6 +250,7 @@ class CustomersController extends Controller
 
             $customer->update([
                 'name' => $request->name,
+                'customer_type' => $request->customer_type,
                 'source' => $request->source,
                 'interest' => $request->interest,
                 'email' => $request->email,
@@ -233,6 +258,13 @@ class CustomersController extends Controller
                 'province' => $request->province,
                 'city' => $request->city,
                 'address' => $request->address,
+                'instagram' => $request->instagram,
+                'tiktok' => $request->tiktok,
+                'facebook' => $request->facebook,
+                'x' => $request->x,
+                'threads' => $request->threads,
+                'shopee' => $request->shopee,
+                'tokopedia' => $request->tokopedia,
                 'status' => $request->status,
             ]);
 

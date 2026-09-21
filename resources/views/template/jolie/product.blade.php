@@ -37,7 +37,7 @@
 
 @endphp
 
-<section class="py-16 px-4 max-w-7xl mx-auto bg-red font-sans text-[#1a1a1a]">
+<section id="shop" class="py-16 px-4 max-w-7xl mx-auto bg-red font-sans text-[#1a1a1a]">
 
     <!-- Title & Tab Filter Navigation -->
     <div class="text-center mb-8">

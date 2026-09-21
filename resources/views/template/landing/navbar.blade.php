@@ -242,7 +242,7 @@
 @endphp
 
 <nav class="navbar text-red">
-    <a href="#" class="navbar-logo">
+    <a href="#hero" class="navbar-logo" onclick="scrollToSection(event, 'hero')">
         @if($logo)
             <img src="{{ asset($logo) }}" alt="{{ $brand }}" class="h-20 w-auto object-contain">
         @else
@@ -269,28 +269,41 @@
                         @foreach($menu['children'] as $child)
                             @php
                                 $childUrl = $child['url'] ?? '#';
+                                $isChildSamePage = $child['samepage'] ?? false;
+                                $childSectionId = !empty($child['url']) ? $child['url'] : 'hero';
                                 if (!empty($childUrl) && $childUrl !== '#' && !str_starts_with($childUrl, 'http') && !str_starts_with($childUrl, '/')) {
                                     $childUrl = '/' . ($website->domain ?? '') . '/' . ltrim($childUrl, '/');
                                 }
                             @endphp
                             <li>
+                                @if($isChildSamePage)
+                                <a href="#{{ $childSectionId }}" onclick="scrollToSection(event, '{{ $childSectionId }}')">
+                                    {{ $child['label'] }}
+                                </a>
+                                @else
                                 <a href="{{ $childUrl }}">
                                     {{ $child['label'] }}
                                 </a>
+                                @endif
                             </li>
                         @endforeach
                     </ul>
                 </li>
             @else
                 @php
+                    $isSamePage = $menu['samepage'] ?? false;
+                    $sectionId = !empty($menu['url']) ? $menu['url'] : 'hero';
                     $routeName = !empty($menu['url']) ? 'pages' : 'template';
                     $routeParams = ($routeName === 'template')
                         ? ['client' => $website->domain ?? '']
                         : ['client' => $website->domain ?? '', 'pages' => $menu['url']];
                 @endphp
                 {{-- Menu biasa --}}
-                <li><a href="{{ route($routeName, $routeParams) }}">{{ $menu['label'] }}</a>
-            </li>
+                @if($isSamePage)
+                <li><a href="#{{ $sectionId }}" onclick="scrollToSection(event, '{{ $sectionId }}')">{{ $menu['label'] }}</a></li>
+                @else
+                <li><a href="{{ route($routeName, $routeParams) }}">{{ $menu['label'] }}</a></li>
+                @endif
             @endif
         @endforeach
         <div class="flex items-center gap-5 text-lg text-white">

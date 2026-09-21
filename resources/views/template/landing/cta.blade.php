@@ -89,7 +89,7 @@
 
 @endphp
 
-<section class="cta" style="background-image: url('{{ asset($background) }}');">
+<section id="contact" class="cta" style="background-image: url('{{ asset($background) }}');">
     
     <h2 class="line-clamp-2 max-w-[600px] leading-tight" style="color: {{ $title_color }};">
         {!! nl2br(e($title)) !!}

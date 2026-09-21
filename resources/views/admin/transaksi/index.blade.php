@@ -26,14 +26,6 @@
         </div>
 
         {{-- Success notice is rendered once by components.forms.notification (included in the table partial) --}}
-        @if(session('warning'))
-            <div class="alert flex items-center justify-between space-x-2 rounded-lg border border-warning bg-warning/10 p-4 text-warning dark:border-warning dark:bg-warning/5 mb-4">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                    <p class="font-medium">{{ session('warning') }}</p>
-                </div>
-            </div>
-        @endif
 
         @include('admin.' . $modul_path . '.partials.table')
     </div>

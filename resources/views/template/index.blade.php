@@ -165,6 +165,19 @@
             }
         });
     </script>
+
+    <script>
+        function scrollToSection(event, sectionId) {
+            // Mencegah URL berubah atau menambahkan tanda #
+            event.preventDefault(); 
+            
+            // Melakukan scroll secara mulus ke elemen tujuan
+            const targetElement = document.getElementById(sectionId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+     </script>
 </body>
 
 </html>

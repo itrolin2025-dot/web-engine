@@ -243,7 +243,7 @@
 
 @endphp
 
-<section class="collections" id="products">
+<section id="shop" class="collections" id="products">
     <h2>{{ $title }}</h2>
     <div class="collection-tabs">
         <button class="tab-btn active" data-filter="all">All Collection</button>

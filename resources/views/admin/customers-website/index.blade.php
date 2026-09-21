@@ -195,7 +195,9 @@
                         <th style="width:50px; text-align:center;">No</th>
                         <th>Title</th>
                         <th>Customer</th>
+                        <th>Customer Type</th>
                         <th>Template</th>
+                        <th style="text-align:center;">QR</th>
                         <th>Domain</th>
                         <th style="text-align:center;">Status</th>
                         <th style="width:150px; text-align:right;">Action</th>
@@ -240,7 +242,7 @@
                 order: [[0, 'desc']],
                 columnDefs: [
                     {
-                        targets: [0, 5],
+                        targets: [0, 5, 7],
                         className: 'text-center'
                     },
                 ],
@@ -257,7 +259,9 @@
                     },
                     { data: 'title_view', name: 'title' },
                     { data: 'customer_view', name: 'customer_name', className: 'dt-hide-mobile', defaultContent: '-' },
+                    { data: 'customer_type_view', className: 'dt-hide-mobile', defaultContent: '-' },
                     { data: 'template_view', name: 'template_name', className: 'dt-hide-mobile', defaultContent: '-' },
+                    { data: 'qr_view', orderable: false, searchable: false, className: 'text-center' },
                     { data: 'domain_view', name: 'domain', className: 'dt-hide-mobile', defaultContent: '-' },
                     { data: 'status_view', name: 'is_active', className: 'dt-hide-mobile text-center' },
                     {

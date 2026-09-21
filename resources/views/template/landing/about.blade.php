@@ -136,7 +136,7 @@
     $about_image = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : 'images/default/broken.png';
 @endphp
 
-<section class="about">
+<section class="about" id="about">
     <div class="about-grid">
         <div class="about-image" style="
                     width: 100%;

@@ -73,7 +73,15 @@ class CustomersWebController extends Controller
                 return '<p class="font-semibold dark:text-navy-100 text-sm">' . e($row->title) . '</p>' . $desc;
             })
             ->addColumn('customer_view', function ($row) {
-                return e($row->customer_name ?? '-');
+                $type = $row->customer_type
+                    ? '<span class="badge rounded-full bg-secondary/10 px-2 py-0.5 text-[11px] font-medium text-secondary dark:bg-secondary-light/10 dark:text-secondary-light">' . e($row->customer_type) . '</span>'
+                    : '';
+                return '<p class="font-medium dark:text-navy-100 text-sm">' . e($row->customer_name ?? '-') . '</p>' . $type;
+            })
+            ->addColumn('customer_type_view', function ($row) {
+                if (!$row->customer_type) return '<span class="text-xs text-slate-400">-</span>';
+                return '<span class="badge rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs font-medium text-secondary dark:bg-secondary-light/10 dark:text-secondary-light">'
+                    . e($row->customer_type) . '</span>';
             })
             ->addColumn('template_view', function ($row) {
                 return '<span class="badge rounded-full bg-slate-150 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-navy-500 dark:text-navy-100">'
@@ -84,6 +92,14 @@ class CustomersWebController extends Controller
                 $url = \Illuminate\Support\Str::startsWith($row->domain, 'http') ? $row->domain : 'https://' . $row->domain;
                 return '<a href="' . e($url) . '" target="_blank" class="text-primary hover:underline dark:text-accent-light text-xs font-mono">'
                     . e($row->domain) . ' <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i></a>';
+            })
+            ->addColumn('qr_view', function ($row) {
+                if (!$row->qr_payment || !file_exists(public_path($row->qr_payment))) {
+                    return '<span class="text-xs text-slate-400">-</span>';
+                }
+                return '<a href="' . asset($row->qr_payment) . '" target="_blank" title="Lihat QR Payment">'
+                    . '<img src="' . asset($row->qr_payment) . '" alt="QR Payment" class="h-10 w-10 object-contain rounded-lg border border-slate-200 bg-white p-0.5 shadow-sm" />'
+                    . '</a>';
             })
             ->addColumn('status_view', function ($row) {
                 $active = (int) $row->is_active === 1;
@@ -108,7 +124,7 @@ class CustomersWebController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['title_view', 'template_view', 'domain_view', 'status_view', 'action'])
+            ->rawColumns(['title_view', 'customer_view', 'customer_type_view', 'template_view', 'domain_view', 'qr_view', 'status_view', 'action'])
             ->make(true);
     }
 
@@ -139,19 +155,40 @@ class CustomersWebController extends Controller
 
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'template_id' => 'required|exists:template,id',
+            'template_id' => 'nullable|exists:template,id',
+            'customer_type' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
             'domain' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'qr_payment' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'remove_qr_payment' => 'nullable|boolean',
+            'instagram' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
+            'x' => 'nullable|string|max:255',
+            'threads' => 'nullable|string|max:255',
+            'shopee' => 'nullable|string|max:255',
+            'tokopedia' => 'nullable|string|max:255',
         ]);
+
+        $qrPath = $this->handleQrUpload($request, null);
 
         CustomersWebsite::create([
             'customer_id' => $request->customer_id,
+            'customer_type' => $request->customer_type,
             'template_id' => $request->template_id,
             'title' => $request->title,
             'domain' => $request->domain,
             'description' => $request->description,
             'is_active' => $request->has('is_active') ? 1 : 0,
+            'qr_payment' => $qrPath,
+            'instagram' => $request->instagram,
+            'tiktok' => $request->tiktok,
+            'facebook' => $request->facebook,
+            'x' => $request->x,
+            'threads' => $request->threads,
+            'shopee' => $request->shopee,
+            'tokopedia' => $request->tokopedia,
         ]);
 
         return redirect()->route('admin.customers-website')->with('success', 'Customer Website created successfully.');
@@ -186,20 +223,41 @@ class CustomersWebController extends Controller
 
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
-            'template_id' => 'required|exists:template,id',
+            'template_id' => 'nullable|exists:template,id',
+            'customer_type' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
             'domain' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'qr_payment' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'remove_qr_payment' => 'nullable|boolean',
+            'instagram' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
+            'facebook' => 'nullable|string|max:255',
+            'x' => 'nullable|string|max:255',
+            'threads' => 'nullable|string|max:255',
+            'shopee' => 'nullable|string|max:255',
+            'tokopedia' => 'nullable|string|max:255',
         ]);
 
         $website = CustomersWebsite::findOrFail($id);
+        $qrPath = $this->handleQrUpload($request, $website->qr_payment);
+
         $website->update([
             'customer_id' => $request->customer_id,
+            'customer_type' => $request->customer_type,
             'template_id' => $request->template_id,
             'title' => $request->title,
             'domain' => $request->domain,
             'description' => $request->description,
             'is_active' => $request->has('is_active') ? 1 : 0,
+            'qr_payment' => $qrPath,
+            'instagram' => $request->instagram,
+            'tiktok' => $request->tiktok,
+            'facebook' => $request->facebook,
+            'x' => $request->x,
+            'threads' => $request->threads,
+            'shopee' => $request->shopee,
+            'tokopedia' => $request->tokopedia,
         ]);
 
         return redirect()->route('admin.customers-website')->with('success', 'Customer Website updated successfully.');
@@ -241,11 +299,19 @@ class CustomersWebController extends Controller
         // Duplicate the website
         $newWebsite = CustomersWebsite::create([
             'customer_id' => $website->customer_id,
+            'customer_type' => $website->customer_type,
             'template_id' => $website->template_id,
             'title' => $website->title . ' (Copy)',
             'domain' => $newDomain,
             'description' => $website->description,
             'is_active' => 0, // Set as inactive by default
+            'instagram' => $website->instagram,
+            'tiktok' => $website->tiktok,
+            'facebook' => $website->facebook,
+            'x' => $website->x,
+            'threads' => $website->threads,
+            'shopee' => $website->shopee,
+            'tokopedia' => $website->tokopedia,
         ]);
 
         // Duplicate all layout items
@@ -267,6 +333,47 @@ class CustomersWebController extends Controller
 
         return redirect()->route('admin.customers-website.edit', $newWebsite->id)
             ->with('success', 'Website duplicated successfully. Domain: ' . ($newDomain ?? 'N/A'));
+    }
+
+    // =================== QR PAYMENT ===================
+
+    /**
+     * Handle the QR payment image upload.
+     *
+     * Returns the stored path (or null when removed / not provided).
+     * Replaces the old image (and deletes it from disk) when a new one is uploaded
+     * or when the remove checkbox is ticked.
+     */
+    private function handleQrUpload(Request $request, ?string $currentPath): ?string
+    {
+        $qrDir = public_path('images/qr_payment');
+        if (!file_exists($qrDir)) {
+            mkdir($qrDir, 0755, true);
+        }
+
+        // Explicit removal
+        if ($request->boolean('remove_qr_payment')) {
+            if ($currentPath && file_exists(public_path($currentPath))) {
+                @unlink(public_path($currentPath));
+            }
+            return null;
+        }
+
+        // New upload replaces the old file
+        if ($request->hasFile('qr_payment') && $request->file('qr_payment')->isValid()) {
+            if ($currentPath && file_exists(public_path($currentPath))) {
+                @unlink(public_path($currentPath));
+            }
+
+            $file = $request->file('qr_payment');
+            $filename = time() . '_qr_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+            $file->move($qrDir, $filename);
+
+            return 'images/qr_payment/' . $filename;
+        }
+
+        // Keep the current image
+        return $currentPath;
     }
 
     // =================== LAYOUT METHODS ===================

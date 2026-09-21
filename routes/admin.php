@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\LeadsController;
 use App\Http\Controllers\admin\CustomersController;
 use App\Http\Controllers\admin\CustomersWebController;
 use App\Http\Controllers\admin\LeadsTrackerController;
+use App\Http\Controllers\admin\TransactionsController;
 
 use App\Http\Controllers\admin\CategoryProductController;
 use App\Http\Controllers\admin\ArticleCategoryController;
@@ -86,6 +87,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/{product}/edit', [ProductsController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+
+    // Transactions
+    Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
+    Route::get('/transactions/index', [TransactionsController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/get-data', [TransactionsController::class, 'getData'])->name('transactions.getData');
+    Route::get('/transactions/get-dataRecycle', [TransactionsController::class, 'getDataRecycle'])->name('transactions.getDataRecycle');
+    Route::get('/transactions/create', [TransactionsController::class, 'create'])->name('transactions.create');
+    Route::get('/transactions/recycle', [TransactionsController::class, 'recycle'])->name('transactions.recycle');
+    Route::post('/transactions/restore/{id}', [TransactionsController::class, 'restore'])->name('transactions.restore');
+    Route::post('/transactions', [TransactionsController::class, 'store'])->name('transactions.store');
+    Route::get('/transactions/get-customer/{customers_website_id}', [TransactionsController::class, 'getCustomerByWebsite'])->name('transactions.getCustomer');
+    Route::get('/transactions/get-products/{customers_website_id}', [TransactionsController::class, 'getProductsByWebsite'])->name('transactions.getProducts');
+    Route::get('/transactions/{transaction}/edit', [TransactionsController::class, 'edit'])->name('transactions.edit');
+    Route::put('/transactions/{transaction}', [TransactionsController::class, 'update'])->name('transactions.update');
+    Route::delete('/transactions/{transaction}', [TransactionsController::class, 'destroy'])->name('transactions.destroy');
 
     Route::get('template', [TemplateController::class, 'index'])->name('template');
     Route::get('template/index', [TemplateController::class, 'index'])->name('template.index');

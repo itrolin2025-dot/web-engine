@@ -44,34 +44,34 @@
 
             <!-- Brand & Contact (2 Columns Width on LG) -->
             <div class="lg:col-span-2 space-y-4">
-                <h2 class="text-2xl font-bold tracking-tight text-[{{ $title_color }}] mb-6">Jolie</h2>
+                <h2 class="text-2xl font-bold tracking-tight text-[{{ $title_color }}] mb-6">{{ $title }}</h2>
 
-                <p class="text-xs text-[{{ $subtitle_color }}] leading-relaxed">Calista Wise 7292 Dictum Av. Antonio, Italy.</p>
-                <p class="text-xs text-[{{ $subtitle_color }}] font-medium">(+01)-800-3456-88</p>
+                <p class="text-xs text-[{{ $subtitle_color }}] leading-relaxed">{{ $subtitle }}</p>
+                <!-- <p class="text-xs text-[{{ $subtitle_color }}] font-medium">(+01)-800-3456-88</p>
                 <p class="text-xs text-[{{ $subtitle_color }}]">aloshopify@alothemes.com</p>
-                <p class="text-xs text-[{{ $subtitle_color }}]">jolie.alotheme.com</p>
+                <p class="text-xs text-[{{ $subtitle_color }}]">jolie.alotheme.com</p> -->
 
                 <!-- Social Media Icons -->
                 <div class="flex items-center gap-2 pt-2">
                     <!-- X / Twitter -->
                     <a href="#"
                         class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs text-[{{ $subtitle_color }}] hover:bg-black hover:text-white hover:border-black transition">
-                        x
+                        <i class="fab fa-twitter"></i>
                     </a>
                     <!-- Facebook -->
                     <a href="#"
                         class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs text-[{{ $subtitle_color }}] hover:bg-black hover:text-white hover:border-black transition">
-                        f
+                        <i class="fab fa-facebook"></i>
                     </a>
                     <!-- Instagram -->
                     <a href="#"
                         class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs text-[{{ $subtitle_color }}] hover:bg-black hover:text-white hover:border-black transition">
-                        i
+                        <i class="fab fa-instagram"></i>
                     </a>
                     <!-- TikTok -->
                     <a href="#"
                         class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-xs text-[{{ $subtitle_color }}] hover:bg-black hover:text-white hover:border-black transition">
-                        t
+                        <i class="fab fa-tiktok"></i>
                     </a>
                 </div>
             </div>
@@ -107,11 +107,6 @@
 
             <!-- Newsletter -->
             <div>
-                <h3 class="text-sm font-bold text-[{{ $title_color }}] mb-4">{{ $title }}</h3>
-                <p class="text-xs text-[{{ $subtitle_color }}] mb-4 leading-relaxed">
-                   {{ $subtitle }}
-                </p>
-
                 <form class="space-y-3">
                     <div
                         class="flex items-center bg-gray-50 border border-gray-200 rounded-full p-1 focus-within:border-gray-400 transition">
@@ -124,17 +119,13 @@
                         </button>
                     </div>
                 </form>
-
-                <p class="text-[11px] text-[{{ $subtitle_color }}] mt-3 leading-relaxed">
-                   {{ $desc }}
-                </p>
             </div>
 
         </div>
     </div>
 
     <!-- Bottom Copyright Bar -->
-    <div class="border-t border-gray-100 py-6 px-4">
+    <div class="border-[#{{ $background_color }}]-100 py-6 px-4">
         <div class="max-w-7xl mx-auto text-xs text-[{{ $title_color }}]">
             Copyright © <span class="text-[{{ $subtitle_color }}]">Rolin</span>. 2026
         </div>

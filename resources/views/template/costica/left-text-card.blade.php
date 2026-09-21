@@ -45,13 +45,17 @@
             <a href="#"
                 class="inline-flex items-center gap-2 bg-[{{ $button_color }}] text-[{{ $button_text_color }}] text-xs md:text-sm font-semibold px-8 py-3.5 rounded-md transition duration-300">
                 {{ $button_text }}
-                <span class="text-sm">↗</span>
+                 @php
+                    if($button_text!=''){
+                        echo "<span class='text-sm'>↗</span>";
+                    }
+                @endphp
             </a>
         </div>
 
         <!-- Image Right -->
         <div class="relative min-h-[350px] md:min-h-[450px] lg:min-h-[500px] order-1 lg:order-2">
-            <img src="{{ $image }}" alt="{{ $title }}" class="absolute inset-0 w-full h-full object-cover object-center" />
+            <img src="{{ asset($image) }}" alt="{{ $title }}" class="absolute inset-0 w-full h-full object-cover object-center" />
         </div>
     </div>
 </section>

@@ -25,7 +25,7 @@
         <div class="card p-4 sm:p-5">
             <h3 class="text-base font-medium text-slate-700 dark:text-navy-100 mb-4">Add New Customer Website</h3>
 
-            <form action="{{ route('admin.customers-website.store') }}" method="POST" class="space-y-4">
+            <form action="{{ route('admin.customers-website.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                 @csrf
 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -45,18 +45,16 @@
                         @enderror
                     </label>
 
-                    <!-- Template -->
+                    <!-- Customer Type -->
                     <label class="block">
-                        <span class="font-medium text-slate-700 dark:text-navy-100">Template <span class="text-error">*</span></span>
-                        <select name="template_id" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent" required>
-                            <option value="">Select Template</option>
-                            @foreach($templates as $template)
-                                <option value="{{ $template->id }}" {{ old('template_id') == $template->id ? 'selected' : '' }}>
-                                    {{ $template->name }}
-                                </option>
+                        <span class="font-medium text-slate-700 dark:text-navy-100">Customer Type</span>
+                        <select name="customer_type" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
+                            <option value="">-- Select Customer Type --</option>
+                            @foreach(['Free Edition', 'Starter Edition', 'Standar Edition', 'Business Edition', 'Enterprise Edition'] as $customerType)
+                                <option value="{{ $customerType }}" {{ old('customer_type') == $customerType ? 'selected' : '' }}>{{ $customerType }}</option>
                             @endforeach
                         </select>
-                        @error('template_id')
+                        @error('customer_type')
                             <span class="text-xs text-error mt-1">{{ $message }}</span>
                         @enderror
                     </label>
@@ -96,6 +94,94 @@
                     @enderror
                 </label>
 
+                <!-- QR Payment -->
+                <div class="rounded-xl border border-slate-200 dark:border-navy-500 p-4">
+                    <div class="flex flex-col sm:flex-row sm:items-start gap-4">
+                        <div class="sm:w-40 shrink-0">
+                            <label for="qr-payment-input"
+                                class="cursor-pointer group flex w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 p-4 text-center transition-colors hover:border-primary hover:bg-primary/5 dark:border-navy-450 dark:bg-navy-700/40 dark:hover:border-accent dark:hover:bg-accent/5">
+                                <img id="qr-payment-preview"
+                                    class="h-24 w-24 rounded-lg border border-slate-200 bg-white object-contain p-1 transition-transform group-hover:scale-105 dark:border-navy-500"
+                                    src="{{ asset('images/200x200.png') }}"
+                                    alt="QR Payment preview" />
+                                <span class="flex items-center gap-1.5 text-xs font-medium text-primary dark:text-accent-light">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                    Upload QR Payment
+                                </span>
+                                <input id="qr-payment-input" type="file" name="qr_payment" accept="image/png,image/jpeg,image/webp"
+                                    onchange="previewQrPayment(event)" class="hidden" />
+                            </label>
+                        </div>
+                        <div class="text-xs text-slate-500 dark:text-navy-200 space-y-1">
+                            <p class="font-medium text-slate-700 dark:text-navy-100">QR Payment (Opsional)</p>
+                            <p>Unggah gambar QR pembayaran (misalnya QRIS) untuk website ini. QR akan ditampilkan kepada pembeli saat checkout.</p>
+                            <p class="text-slate-400">Format: JPG, PNG, atau WEBP &mdash; ukuran maksimal 2MB. Rasio 1:1 disarankan.</p>
+                            <p id="qr-payment-file-name" class="hidden font-medium text-primary dark:text-accent-light"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="rounded-xl border border-slate-200 dark:border-navy-500 p-4 space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="flex size-7 items-center justify-center rounded-lg bg-primary/10 p-1 text-primary dark:bg-accent-light/10 dark:text-accent-light">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h4 class="text-base font-medium text-slate-700 dark:text-navy-100">
+                            Social Media
+                        </h4>
+                    </div>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Instagram URL</span>
+                        <input name="instagram" value="{{ old('instagram') }}" placeholder="https://instagram.com/username" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">TikTok URL</span>
+                        <input name="tiktok" value="{{ old('tiktok') }}" placeholder="https://tiktok.com/@username" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Facebook URL</span>
+                        <input name="facebook" value="{{ old('facebook') }}" placeholder="https://facebook.com/username" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">X (Twitter) URL</span>
+                        <input name="x" value="{{ old('x') }}" placeholder="https://x.com/username" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Threads URL</span>
+                        <input name="threads" value="{{ old('threads') }}" placeholder="https://threads.net/@username" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Shopee URL</span>
+                        <input name="shopee" value="{{ old('shopee') }}" placeholder="https://shopee.co.id/shopname" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Tokopedia URL</span>
+                        <input name="tokopedia" value="{{ old('tokopedia') }}" placeholder="https://tokopedia.com/shopname" autocomplete="off"
+                            class="form-input mt-1.5 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
+                            type="text">
+                    </label>
+                </div>
+
                 <!-- Is Active Status -->
                 <div class="flex items-center justify-between pt-2">
                     <span class="font-medium text-slate-700 dark:text-navy-100">Status</span>
@@ -119,4 +205,37 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+        <script>
+            function previewQrPayment(event) {
+                const input = event.target;
+                const file = input.files[0];
+                const preview = document.getElementById('qr-payment-preview');
+                const nameEl = document.getElementById('qr-payment-file-name');
+
+                if (!file) {
+                    preview.src = "{{ asset('images/200x200.png') }}";
+                    if (nameEl) nameEl.classList.add('hidden');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    alert('Only image files (JPG, PNG, WEBP) are allowed.');
+                    input.value = '';
+                    preview.src = "{{ asset('images/200x200.png') }}";
+                    if (nameEl) nameEl.classList.add('hidden');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                if (nameEl) {
+                    nameEl.textContent = 'Selected: ' + file.name;
+                    nameEl.classList.remove('hidden');
+                }
+            }
+        </script>
+    @endpush
 </x-app-layout>

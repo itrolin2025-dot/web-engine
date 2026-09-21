@@ -171,7 +171,7 @@
     $hero_img = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 @endphp
 
-<section class="hero">
+<section id="hero" class="hero">
     <div class="hero-slider-bg">
         <div class="hero-slide-bg" style="background-image: url('{{ asset($hero_bg) }}');"></div>
     </div>
