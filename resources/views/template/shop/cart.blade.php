@@ -24,7 +24,7 @@
                     <span>Subtotal:</span>
                     <span id="cart-subtotal">Rp 0</span>
                 </div>
-                <button onclick="openWizardModal()"
+                <button onclick="goToCheckout()"
                     class="w-full bg-black text-white py-3.5 text-xs font-bold uppercase tracking-widest hover:bg-stone-800 transition-colors">
                     Checkout
                 </button>
@@ -140,6 +140,37 @@
         saveAndUpdateCart();
     }
 
+    // --- CHECKOUT: send the CHECKED items to the checkout page ---
+    // Checked state is kept in a per-website cookie so it survives page loads.
+    function getCheckedItems() {
+        const saved = getCookie('checkout_items_' + pathSegment);
+        if (Array.isArray(saved)) return saved;
+        return cart.map(item => item.name); // default: all checked
+    }
+
+    function toggleCheckedItem(name, checked) {
+        let checkedNames = getCheckedItems();
+        if (checked) {
+            if (!checkedNames.includes(name)) checkedNames.push(name);
+        } else {
+            checkedNames = checkedNames.filter(n => n !== name);
+        }
+        setCookie('checkout_items_' + pathSegment, checkedNames, 7);
+        renderCartUI();
+    }
+
+    function goToCheckout() {
+        const checkedNames = getCheckedItems();
+        const hasChecked = cart.some(item => checkedNames.includes(item.name));
+        if (cart.length === 0 || !hasChecked) {
+            alert('Please select at least one item to checkout.');
+            return;
+        }
+        setCookie('checkout_items_' + pathSegment, checkedNames, 7);
+        const client = encodeURIComponent(pathSegment);
+        window.location.href = '/' + client + '/checkout';
+    }
+
     // --- SAVE TO COOKIES & UPDATE UI ---
     function saveAndUpdateCart() {
         setCookie(cookieName, cart, 7);
@@ -175,6 +206,7 @@
 
         let html = '';
         let subtotal = 0;
+        const checkedNames = getCheckedItems();
 
         cart.forEach(item => {
             const itemPrice = typeof item.price === 'number' ? item.price : parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0;
@@ -182,9 +214,12 @@
             subtotal += itemTotal;
 
             const escapedName = item.name.replace(/'/g, "\\'");
+            const isChecked = checkedNames.includes(item.name);
 
             html += `
                     <div class="flex gap-4 items-center border-b border-stone-100 pb-4">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheckedItem('${escapedName}', this.checked)"
+                            class="w-4 h-4 rounded border-stone-300 text-black focus:ring-0 cursor-pointer shrink-0" title="Select item for checkout">
                         <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg bg-stone-100">
                         <div class="flex-1">
                             <h4 class="font-bold text-xs">${item.name}</h4>

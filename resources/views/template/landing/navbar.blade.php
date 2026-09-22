@@ -53,6 +53,16 @@
         color: var(--dark);
     }
 
+    /* Cart icon color: awal dari --cart-color, saat scroll jadi hitam */
+    .navbar-cart-icon {
+        color: var(--cart-color, #ffffff);
+        transition: color 0.3s ease;
+    }
+
+    .navbar.scrolled .navbar-cart-icon {
+        color: var(--dark);
+    }
+
     .navbar-menu li a:hover {
         color: var(--coral);
     }
@@ -319,12 +329,12 @@
             <li>
                 <a type="button"
                     onclick="toggleCartDrawer()"
-                    class="relative transition-colors"
-                    style="color: {{ $button_text_color }};"
+                    class="relative navbar-cart-icon"
+                    style="--cart-color: {{ $button_text_color }};"
                     aria-label="Cart">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <span id="cart-badge"
-                        class="absolute -top-2 -right-2 text-red text-[10px]
+                        class="absolute -top-2 -right-4 text-white text-[10px]
                                 w-4 h-4 rounded-full flex items-center justify-center font-bold hidden"
                         style="background-color: red;">
                         0
