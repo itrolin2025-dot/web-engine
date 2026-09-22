@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
 
+@php
+    $navContent = $navbarPresets ?? [];
+    $logoFile = $navContent['image'] ?? null;
+    $favicon = $logoFile ? '/images/website/' . ($website->domain ?? '') . '/' . $logoFile : null;
+@endphp
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
+    @if($favicon)
+        <link rel="icon" type="image/png" href="{{ asset($favicon) }}">
+    @else
+        <link rel="icon" href="data:,">
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -122,16 +133,14 @@
 </head>
 
 <body>
+
     @foreach($layouts as $layout)
         @include($layout->template_path . '.' . $layout->section_slug)
     @endforeach
 
-
-    <script>
-        document.getElementById('backToTop').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
+    @include('template.shop.cart')
+    @include('template.shop.checkout')
+    
 
     <!-- FLOATING BUTTONS -->
     <div class="floating-actions">
@@ -145,6 +154,30 @@
             </svg>
         </a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                backToTop.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+
+    <script>
+        function scrollToSection(event, sectionId) {
+            // Mencegah URL berubah atau menambahkan tanda #
+            event.preventDefault(); 
+            
+            // Melakukan scroll secara mulus ke elemen tujuan
+            const targetElement = document.getElementById(sectionId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+     </script>
 </body>
 
 </html>

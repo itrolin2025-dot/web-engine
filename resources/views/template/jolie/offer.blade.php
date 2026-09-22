@@ -49,7 +49,7 @@
 
         <!-- Left Image Column -->
         <div class="relative w-full h-full bg-[#eee]">
-            <img src="{{ $image }}"
+            <img src="{{ asset($image) }}"
                 alt="Summer Collection Model" class="w-full h-full object-cover object-center" />
         </div>
 
