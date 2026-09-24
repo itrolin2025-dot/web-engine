@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomersWebsite;
+use App\Models\CustomersWebsiteIdentity;
 use App\Models\CustomersWebsiteLayout;
 use App\Models\Template;
 use App\Models\TemplatesSection;
@@ -67,39 +68,28 @@ class CustomersWebController extends Controller
 
         return DataTables::of($data)
             ->addColumn('title_view', function ($row) {
-                $desc = $row->description
-                    ? '<p class="text-xs text-slate-400 dark:text-navy-300 truncate max-w-xs">' . e($row->description) . '</p>'
-                    : '';
-                return '<p class="font-semibold dark:text-navy-100 text-sm">' . e($row->title) . '</p>' . $desc;
+                $cust = '<p class="text-xs text-slate-400 dark:text-navy-300 truncate max-w-xs">' . e($row->customer_name ?? '-') . '</p>';
+                return '<p class="font-semibold dark:text-navy-100 text-sm">' . e($row->title) . '</p>' . $cust;
             })
-            ->addColumn('customer_view', function ($row) {
-                $type = $row->customer_type
-                    ? '<span class="badge rounded-full bg-secondary/10 px-2 py-0.5 text-[11px] font-medium text-secondary dark:bg-secondary-light/10 dark:text-secondary-light">' . e($row->customer_type) . '</span>'
-                    : '';
-                return '<p class="font-medium dark:text-navy-100 text-sm">' . e($row->customer_name ?? '-') . '</p>' . $type;
-            })
-            ->addColumn('customer_type_view', function ($row) {
-                if (!$row->customer_type) return '<span class="text-xs text-slate-400">-</span>';
-                return '<span class="badge rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs font-medium text-secondary dark:bg-secondary-light/10 dark:text-secondary-light">'
-                    . e($row->customer_type) . '</span>';
-            })
-            ->addColumn('template_view', function ($row) {
-                return '<span class="badge rounded-full bg-slate-150 px-2.5 py-0.5 text-xs font-medium text-slate-700 dark:bg-navy-500 dark:text-navy-100">'
-                    . e($row->template_name ?? '-') . '</span>';
-            })
+            // Template kept in the payload (template_name) but the column is hidden from the table.
             ->addColumn('domain_view', function ($row) {
                 if (!$row->domain) return '-';
                 $url = \Illuminate\Support\Str::startsWith($row->domain, 'http') ? $row->domain : 'https://' . $row->domain;
                 return '<a href="' . e($url) . '" target="_blank" class="text-primary hover:underline dark:text-accent-light text-xs font-mono">'
                     . e($row->domain) . ' <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i></a>';
             })
-            ->addColumn('qr_view', function ($row) {
-                if (!$row->qr_payment || !file_exists(public_path($row->qr_payment))) {
-                    return '<span class="text-xs text-slate-400">-</span>';
-                }
-                return '<a href="' . asset($row->qr_payment) . '" target="_blank" title="Lihat QR Payment">'
-                    . '<img src="' . asset($row->qr_payment) . '" alt="QR Payment" class="h-10 w-10 object-contain rounded-lg border border-slate-200 bg-white p-0.5 shadow-sm" />'
-                    . '</a>';
+            ->addColumn('selected_view', function ($row) {
+                $selected = (int) $row->is_selected === 1;
+                $csrf = csrf_token();
+                $title = $selected ? 'Unselect (remove star)' : 'Select as highlighted product';
+                $btn = '<button type="button" data-id="' . $row->id . '" data-selected="' . ($selected ? 1 : 0) . "\" class=\"toggle-selected btn h-8 w-8 rounded-full p-0 text-sm transition-colors "
+                    . ($selected
+                        ? 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20'
+                        : 'bg-slate-150 text-slate-400 hover:bg-amber-500/10 hover:text-amber-500 dark:bg-navy-500 dark:text-navy-300 dark:hover:bg-amber-500/20 dark:hover:text-amber-300')
+                    . '" title="' . $title . '">'
+                    . '<i class="' . ($selected ? 'fa-solid' : 'fa-regular') . ' fa-star"></i>'
+                    . '</button>';
+                return $btn;
             })
             ->addColumn('status_view', function ($row) {
                 $active = (int) $row->is_active === 1;
@@ -124,7 +114,7 @@ class CustomersWebController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['title_view', 'customer_view', 'customer_type_view', 'template_view', 'domain_view', 'qr_view', 'status_view', 'action'])
+            ->rawColumns(['title_view', 'selected_view', 'domain_view', 'status_view', 'action'])
             ->make(true);
     }
 
@@ -156,7 +146,6 @@ class CustomersWebController extends Controller
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'template_id' => 'nullable|exists:template,id',
-            'customer_type' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
             'domain' => 'nullable|string|max:255',
             'description' => 'nullable|string',
@@ -169,13 +158,22 @@ class CustomersWebController extends Controller
             'threads' => 'nullable|string|max:255',
             'shopee' => 'nullable|string|max:255',
             'tokopedia' => 'nullable|string|max:255',
+
+            // Website Identity (opsional)
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'remove_logo' => 'nullable|boolean',
+            'primary_color' => 'nullable|string|max:20',
+            'secondary_color' => 'nullable|string|max:20',
+            'accent_color' => 'nullable|string|max:20',
+            'primary_font' => 'nullable|string|max:100',
+            'secondary_font' => 'nullable|string|max:100',
+            'font_color' => 'nullable|string|max:20',
         ]);
 
         $qrPath = $this->handleQrUpload($request, null);
 
-        CustomersWebsite::create([
+        $website = CustomersWebsite::create([
             'customer_id' => $request->customer_id,
-            'customer_type' => $request->customer_type,
             'template_id' => $request->template_id,
             'title' => $request->title,
             'domain' => $request->domain,
@@ -191,6 +189,8 @@ class CustomersWebController extends Controller
             'tokopedia' => $request->tokopedia,
         ]);
 
+        $this->saveIdentity($request, $website);
+
         return redirect()->route('admin.customers-website')->with('success', 'Customer Website created successfully.');
     }
 
@@ -200,7 +200,7 @@ class CustomersWebController extends Controller
             return redirect()->route('admin.customers-website')->with('warning', 'Tidak Memiliki Akses');
         }
 
-        $website = CustomersWebsite::findOrFail($id);
+        $website = CustomersWebsite::with('identity')->findOrFail($id);
         $customers = Customer::orderBy('name', 'asc')->get();
         $templates = Template::orderBy('name', 'asc')->get();
 
@@ -224,7 +224,6 @@ class CustomersWebController extends Controller
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'template_id' => 'nullable|exists:template,id',
-            'customer_type' => 'nullable|string|max:255',
             'title' => 'required|string|max:255',
             'domain' => 'nullable|string|max:255',
             'description' => 'nullable|string',
@@ -243,8 +242,8 @@ class CustomersWebController extends Controller
         $qrPath = $this->handleQrUpload($request, $website->qr_payment);
 
         $website->update([
+
             'customer_id' => $request->customer_id,
-            'customer_type' => $request->customer_type,
             'template_id' => $request->template_id,
             'title' => $request->title,
             'domain' => $request->domain,
@@ -259,6 +258,8 @@ class CustomersWebController extends Controller
             'shopee' => $request->shopee,
             'tokopedia' => $request->tokopedia,
         ]);
+
+        $this->saveIdentity($request, $website);
 
         return redirect()->route('admin.customers-website')->with('success', 'Customer Website updated successfully.');
     }
@@ -299,7 +300,6 @@ class CustomersWebController extends Controller
         // Duplicate the website
         $newWebsite = CustomersWebsite::create([
             'customer_id' => $website->customer_id,
-            'customer_type' => $website->customer_type,
             'template_id' => $website->template_id,
             'title' => $website->title . ' (Copy)',
             'domain' => $newDomain,
@@ -313,6 +313,30 @@ class CustomersWebController extends Controller
             'shopee' => $website->shopee,
             'tokopedia' => $website->tokopedia,
         ]);
+
+        // Duplicate identity (logo, colors, fonts) — logo file is copied so each
+        // website owns its own file
+        if ($website->identity) {
+            $identityData = $website->identity->only([
+                'logo', 'primary_color', 'secondary_color', 'accent_color',
+                'primary_font', 'secondary_font', 'font_color',
+            ]);
+
+            if (!empty($identityData['logo']) && file_exists(public_path($identityData['logo']))) {
+                $oldLogo = public_path($identityData['logo']);
+                $ext = pathinfo($oldLogo, PATHINFO_EXTENSION);
+                $newName = time() . '_logo_' . uniqid() . '.' . $ext;
+                $domainFolder = $newWebsite->domain ?: 'shared';
+                $targetDir = public_path('images/website/' . $domainFolder);
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0755, true);
+                }
+                copy($oldLogo, $targetDir . '/' . $newName);
+                $identityData['logo'] = 'images/website/' . $domainFolder . '/' . $newName;
+            }
+
+            $newWebsite->identity()->create($identityData);
+        }
 
         // Duplicate all layout items
         $layouts = CustomersWebsiteLayout::where('customers_website_id', $id)->get();
@@ -333,6 +357,90 @@ class CustomersWebController extends Controller
 
         return redirect()->route('admin.customers-website.edit', $newWebsite->id)
             ->with('success', 'Website duplicated successfully. Domain: ' . ($newDomain ?? 'N/A'));
+    }
+
+    // =================== WEBSITE IDENTITY ===================
+
+    /**
+     * Create/update the identity row of a customer website
+     * (logo, colors, fonts). Logo upload replaces the old file on disk.
+     */
+    private function saveIdentity(Request $request, CustomersWebsite $website): void
+    {
+        $identity = $website->identity;
+        $logoPath = $identity->logo ?? null;
+
+        // Explicit removal
+        if ($request->boolean('remove_logo')) {
+            if ($logoPath && file_exists(public_path($logoPath))) {
+                @unlink(public_path($logoPath));
+            }
+            $logoPath = null;
+        }
+
+        // New upload replaces the old file
+        if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
+            if ($logoPath && file_exists(public_path($logoPath))) {
+                @unlink(public_path($logoPath));
+            }
+
+            $file = $request->file('logo');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $filename = time() . '_logo_' . uniqid() . '.' . $ext;
+
+            $domainFolder = $website->domain ?: 'shared';
+            $targetDir = public_path('images/website/' . $domainFolder);
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0755, true);
+            }
+            $file->move($targetDir, $filename);
+            $logoPath = 'images/website/' . $domainFolder . '/' . $filename;
+        }
+
+        $payload = [
+            'logo'            => $logoPath,
+            'primary_color'   => $request->primary_color,
+            'secondary_color' => $request->secondary_color,
+            'accent_color'    => $request->accent_color,
+            'primary_font'    => $request->primary_font,
+            'secondary_font'  => $request->secondary_font,
+            'font_color'      => $request->font_color,
+        ];
+
+        if ($identity) {
+            $identity->update($payload);
+        } else {
+            $website->identity()->create($payload);
+        }
+    }
+
+    // =================== SELECTED PRODUCT (STAR) ===================
+
+    /**
+     * Toggle the "Selected Product" star for a customer website (AJAX).
+     */
+    public function toggleSelected(Request $request, $id)
+    {
+        if (canAccess('customers', $this->getProductId(), 'edit') == false) {
+            return response()->json(['success' => false, 'message' => 'Tidak Memiliki Akses'], 403);
+        }
+
+        $request->validate([
+            'is_selected' => 'required|boolean',
+        ]);
+
+        $website = CustomersWebsite::findOrFail($id);
+        $website->update([
+            'is_selected' => $request->boolean('is_selected') ? 1 : 0,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $website->is_selected
+                ? 'Website ditandai sebagai selected product.'
+                : 'Website dihapus dari selected product.',
+            'is_selected' => (int) $website->is_selected,
+        ]);
     }
 
     // =================== QR PAYMENT ===================

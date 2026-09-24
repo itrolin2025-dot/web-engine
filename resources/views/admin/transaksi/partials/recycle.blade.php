@@ -89,7 +89,14 @@
                             return 'Rp ' + number_format((parseFloat(row.total) || 0));
                         }
                     },
-                    { data: 'status', name: 'status' },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        render: function (data, type, row) {
+                            var labels = { Pending: 'Pending', Paid: 'Validasi Pembayaran', Shipped: 'Proses Pengiriman', ShippedOut: 'Dalam Pengiriman', Completed: 'Barang Diterima', Cancelled: 'Transaksi Dibatalkan' };
+                            return labels[row.status] || row.status || '-';
+                        }
+                    },
                     {
                         render: function (data, type, row) {
                             return row.action;

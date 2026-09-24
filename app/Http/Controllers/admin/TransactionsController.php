@@ -17,6 +17,35 @@ class TransactionsController extends Controller
     protected $path       = "transaksi";
     protected $modul_name = "Transaksi";
 
+    /**
+     * Status transaksi yang tersimpan di DB (value) beserta label Indonesia
+     * yang ditampilkan ke user.
+     */
+    public const STATUSES = [
+        'Pending'    => 'Pending',
+        'Paid'       => 'Validasi Pembayaran',
+        'Shipped'    => 'Proses Pengiriman',
+        'ShippedOut' => 'Dalam Pengiriman',
+        'Completed'  => 'Barang Diterima',
+        'Cancelled'  => 'Transaksi Dibatalkan',
+    ];
+
+    /**
+     * Warna badge per status.
+     */
+    private function statusColor(string $status): string
+    {
+        return match ($status) {
+            'Pending'    => 'bg-warning/10 text-warning',
+            'Paid'       => 'bg-info/10 text-info',
+            'Shipped'    => 'bg-primary/10 text-primary',
+            'ShippedOut' => 'bg-secondary/10 text-secondary',
+            'Completed'  => 'bg-success/10 text-success',
+            'Cancelled'  => 'bg-danger/10 text-danger',
+            default      => 'bg-slate-100 text-slate-500',
+        };
+    }
+
     protected function getRoleId()
     {
         return auth()->user()->role_id ?? 0;
@@ -315,6 +344,8 @@ class TransactionsController extends Controller
             $query->where('transactions.status', $request->filter_status);
         }
 
+        $statuses = self::STATUSES;
+
         $data = $query->orderBy('transactions.id', 'desc')->get();
 
         return DataTables::of($data)
@@ -352,17 +383,16 @@ class TransactionsController extends Controller
                 </div>
                 ';
             })
-            ->addColumn('status_view', function ($row) {
-                $colors = [
-                    'Pending'   => 'bg-warning/10 text-warning',
-                    'Paid'      => 'bg-info/10 text-info',
-                    'Shipped'   => 'bg-primary/10 text-primary',
-                    'Completed' => 'bg-success/10 text-success',
-                    'Cancelled' => 'bg-danger/10 text-danger',
-                ];
-                $color = $colors[$row->status] ?? 'bg-slate-100 text-slate-500';
+            ->addColumn('status_view', function ($row) use ($statuses) {
+                $color = $this->statusColor($row->status);
+                $label = $statuses[$row->status] ?? $row->status;
 
-                return '<span class="badge rounded-full ' . $color . ' px-2.5 py-1 text-xs font-medium">' . e($row->status) . '</span>';
+                // Badge clickable -> popup pilih status
+                return '<button type="button" data-id="' . $row->id . '" data-code="' . e($row->code) . '" data-status="' . e($row->status) . "\" class=\"js-status-toggle badge rounded-full " . $color
+                    . ' px-2.5 py-1 text-xs font-medium cursor-pointer hover:opacity-80 transition-opacity" title="Klik untuk ubah status">'
+                    . e($label)
+                    . ' <i class="fa-solid fa-chevron-down text-[9px] ml-0.5"></i>'
+                    . '</button>';
             })
             ->addColumn('total_view', function ($row) {
                 return '<span class="fw-semibold">Rp ' . number_format((float) $row->total, 0, ',', '.') . '</span>';
@@ -405,6 +435,41 @@ class TransactionsController extends Controller
     }
 
     /**
+     * Quick status update dari popup di tabel (klik badge status).
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $role_id = $this->getRoleId();
+        if (canAccess($this->modul, $role_id, 'edit') == false) {
+            return response()->json(['success' => false, 'message' => 'Tidak Memiliki Akses'], 403);
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|string|in:' . implode(',', array_keys(self::STATUSES)),
+        ]);
+
+        $transaction = Transaction::findOrFail($id);
+        $oldStatus = $transaction->status;
+        $transaction->update(['status' => $validated['status']]);
+
+        ActivityLogger::log(
+            $this->modul,
+            'update_status',
+            $transaction->id,
+            ['name' => $transaction->code, 'code' => $transaction->code, 'old' => $oldStatus, 'new' => $validated['status']],
+            auth()->id()
+        );
+
+        $labels = self::STATUSES;
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status transaksi ' . $transaction->code . ' diubah menjadi "' . ($labels[$validated['status']] ?? $validated['status']) . '".',
+            'status'  => $validated['status'],
+        ]);
+    }
+
+    /**
      * Shared validation for store & update.
      */
     private function validateTransaction(Request $request): array
@@ -418,7 +483,7 @@ class TransactionsController extends Controller
             'shipping_tracking_number' => 'nullable|string|max:100',
             'shipping_cost'            => 'nullable|numeric|min:0',
             'shipping_status'          => 'nullable|string|in:Pending,Packing,Shipped,Delivered',
-            'status'                   => 'nullable|string|in:Pending,Paid,Shipped,Completed,Cancelled',
+            'status'                   => 'nullable|string|in:' . implode(',', array_keys(self::STATUSES)),
 
             // Detail items (parallel arrays from the repeater)
             'product_id'  => 'required|array|min:1',

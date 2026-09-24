@@ -20,7 +20,7 @@ class PagesController extends Controller
                 'customers_website.*',
                 'customers.name as customer_name',
                 'customers.email as customer_email',
-                'customers_website.customer_type as cust_type'
+                'customers.customer_type as cust_type'
             )
             ->first();
 
@@ -110,7 +110,7 @@ class PagesController extends Controller
                 'customers_website.*',
                 'customers.name as customer_name',
                 'customers.email as customer_email',
-                'customers_website.customer_type as cust_type'
+                'customers.customer_type as cust_type'
             )
             ->first();
 

@@ -23,4 +23,9 @@ class CustomersWebsite extends Model
     {
         return $this->hasMany(CustomersWebsiteLayout::class, 'customers_website_id');
     }
+
+    public function identity()
+    {
+        return $this->hasOne(CustomersWebsiteIdentity::class, 'customers_website_id');
+    }
 }

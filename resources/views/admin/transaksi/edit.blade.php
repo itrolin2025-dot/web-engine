@@ -186,8 +186,8 @@
                             <span>Transaction Status</span>
                             <select name="status"
                                 class="form-select w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent">
-                                @foreach(['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'] as $st)
-                                    <option value="{{ $st }}" {{ old('status', $transaction->status) == $st ? 'selected' : '' }}>{{ $st }}</option>
+                                @foreach(['Pending' => 'Pending', 'Paid' => 'Validasi Pembayaran', 'Shipped' => 'Proses Pengiriman', 'ShippedOut' => 'Dalam Pengiriman', 'Completed' => 'Barang Diterima', 'Cancelled' => 'Transaksi Dibatalkan'] as $value => $label)
+                                    <option value="{{ $value }}" {{ old('status', $transaction->status) == $value ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
                             </select>
                         </label>

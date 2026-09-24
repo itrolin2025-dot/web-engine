@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/get-products/{customers_website_id}', [TransactionsController::class, 'getProductsByWebsite'])->name('transactions.getProducts');
     Route::get('/transactions/{transaction}/edit', [TransactionsController::class, 'edit'])->name('transactions.edit');
     Route::put('/transactions/{transaction}', [TransactionsController::class, 'update'])->name('transactions.update');
+    Route::put('/transactions/{id}/status', [TransactionsController::class, 'updateStatus'])->name('transactions.updateStatus');
     Route::delete('/transactions/{transaction}', [TransactionsController::class, 'destroy'])->name('transactions.destroy');
 
     Route::get('template', [TemplateController::class, 'index'])->name('template');
@@ -127,6 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::get('customers-website/{id}/edit', [CustomersWebController::class, 'edit'])->name('customers-website.edit');
     Route::put('customers-website/{id}', [CustomersWebController::class, 'update'])->name('customers-website.update');
     Route::delete('customers-website/{id}', [CustomersWebController::class, 'destroy'])->name('customers-website.destroy');
+    Route::post('customers-website/{id}/toggle-selected', [CustomersWebController::class, 'toggleSelected'])->name('customers-website.toggle-selected');
     Route::post('customers-website/{id}/duplicate', [CustomersWebController::class, 'duplicate'])->name('customers-website.duplicate');
     Route::get('customers-website/{id}/page', [CustomersWebController::class, 'page'])->name('customers-website.page');
     Route::get('customers-website/section-contents/{sectionId}', [CustomersWebController::class, 'getSectionContents'])->name('customers-website.section-contents');

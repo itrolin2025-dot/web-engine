@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers_website', function (Blueprint $table) {
-            $table->string('customer_type')->nullable()->after('customer_id');
-            $table->unsignedBigInteger('template_id')->nullable()->change();
-            $table->string('instagram')->nullable()->after('qr_payment');
-            $table->string('tiktok')->nullable()->after('instagram');
-            $table->string('facebook')->nullable()->after('tiktok');
-            $table->string('x')->nullable()->after('facebook');
-            $table->string('threads')->nullable()->after('x');
-            $table->string('shopee')->nullable()->after('threads');
-            $table->string('tokopedia')->nullable()->after('shopee');
+            // Drop customer_type: requested to be removed (only shown in list, never needed)
+            if (Schema::hasColumn('customers_website', 'customer_type')) {
+                $table->dropColumn('customer_type');
+            }
+
+            // Selected Product: starred websites (used as highlighted/selected products)
+            if (!Schema::hasColumn('customers_website', 'is_selected')) {
+                $table->boolean('is_selected')->default(0)->after('qr_payment');
+            }
         });
     }
 
@@ -30,16 +30,13 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('customers_website', function (Blueprint $table) {
-            $table->dropColumn([
-                'customer_type',
-                'instagram',
-                'tiktok',
-                'facebook',
-                'x',
-                'threads',
-                'shopee',
-                'tokopedia',
-            ]);
+            if (!Schema::hasColumn('customers_website', 'customer_type')) {
+                $table->string('customer_type')->nullable()->after('customer_id');
+            }
+
+            if (Schema::hasColumn('customers_website', 'is_selected')) {
+                $table->dropColumn('is_selected');
+            }
         });
     }
 };

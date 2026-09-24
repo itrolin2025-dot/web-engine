@@ -194,10 +194,8 @@
                     <tr>
                         <th style="width:50px; text-align:center;">No</th>
                         <th>Title</th>
-                        <th>Customer</th>
-                        <th>Customer Type</th>
-                        <th>Template</th>
-                        <th style="text-align:center;">QR</th>
+                        <th style="display:none;">Template</th>
+                        <th style="text-align:center;">Selected</th>
                         <th>Domain</th>
                         <th style="text-align:center;">Status</th>
                         <th style="width:150px; text-align:right;">Action</th>
@@ -242,8 +240,12 @@
                 order: [[0, 'desc']],
                 columnDefs: [
                     {
-                        targets: [0, 5, 7],
+                        targets: [0, 3, 5],
                         className: 'text-center'
+                    },
+                    {
+                        targets: 2,
+                        visible: false
                     },
                 ],
                 ajax: {
@@ -258,10 +260,8 @@
                         className: 'dt-hide-mobile text-center'
                     },
                     { data: 'title_view', name: 'title' },
-                    { data: 'customer_view', name: 'customer_name', className: 'dt-hide-mobile', defaultContent: '-' },
-                    { data: 'customer_type_view', className: 'dt-hide-mobile', defaultContent: '-' },
-                    { data: 'template_view', name: 'template_name', className: 'dt-hide-mobile', defaultContent: '-' },
-                    { data: 'qr_view', orderable: false, searchable: false, className: 'text-center' },
+                    { data: 'template_name', name: 'template_name', className: 'dt-hide-mobile', defaultContent: '-' },
+                    { data: 'selected_view', orderable: false, searchable: false, className: 'text-center' },
                     { data: 'domain_view', name: 'domain', className: 'dt-hide-mobile', defaultContent: '-' },
                     { data: 'status_view', name: 'is_active', className: 'dt-hide-mobile text-center' },
                     {
@@ -295,6 +295,42 @@
 
             // Move pagination to bottom right (outside card)
             $(dtWrapper).find('.dataTables_paginate').detach().appendTo('#dt-pagination-area');
+
+            // Toggle "Selected Product" star (delegated: works after DataTables redraw)
+            $(document).on('click', '.toggle-selected', function () {
+                var $btn = $(this);
+                var id = $btn.data('id');
+                var isSelected = $btn.data('selected') == 1;
+
+                $btn.prop('disabled', true);
+
+                $.ajax({
+                    url: "{{ route('admin.customers-website.toggle-selected', ':id:') }}".replace(':id:', id),
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        _method: 'POST',
+                        is_selected: isSelected ? 0 : 1
+                    },
+                    success: function (res) {
+                        window.table.row($btn.closest('tr')).invalidate().draw(false);
+                        if (typeof toastr !== 'undefined' && res.message) {
+                            toastr.success(res.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        var msg = (xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mengubah status selected.';
+                        if (typeof toastr !== 'undefined') {
+                            toastr.error(msg);
+                        } else {
+                            alert(msg);
+                        }
+                    },
+                    complete: function () {
+                        $btn.prop('disabled', false);
+                    }
+                });
+            });
         });
     </script>
 @endpush

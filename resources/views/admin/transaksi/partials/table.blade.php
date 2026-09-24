@@ -88,8 +88,8 @@
             </select>
             <select class="form-select w-full sm:w-48 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 filter-status">
                 <option value="">-- Semua Status --</option>
-                @foreach(['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'] as $st)
-                    <option value="{{ $st }}">{{ $st }}</option>
+                @foreach(['Pending' => 'Pending', 'Paid' => 'Validasi Pembayaran', 'Shipped' => 'Proses Pengiriman', 'ShippedOut' => 'Dalam Pengiriman', 'Completed' => 'Barang Diterima', 'Cancelled' => 'Transaksi Dibatalkan'] as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
                 @endforeach
             </select>
         </div>
@@ -132,6 +132,33 @@
 </div>
 
 @include('components.modal.confirm-delete')
+
+{{-- Status Change Modal --}}
+<div id="statusModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center">
+    <div class="absolute inset-0 bg-black/70 modal-overlay-status"></div>
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm modal-overlay-status"></div>
+
+    <div class="relative flex max-w-sm w-full mx-2 flex-col overflow-hidden rounded-lg bg-white dark:bg-navy-700">
+        <div class="border-b border-slate-200 p-4 sm:px-5 dark:border-navy-500">
+            <div class="flex items-center space-x-2">
+                <div class="flex size-7 items-center justify-center rounded-lg bg-primary/10 p-1 text-primary dark:bg-accent-light/10 dark:text-accent-light">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                </div>
+                <h3 class="text-lg font-medium text-slate-700 dark:text-navy-100">Ubah Status Transaksi</h3>
+            </div>
+            <p class="mt-1 text-xs text-slate-400">Kode: <span id="statusModalCode" class="font-semibold text-slate-500 dark:text-navy-200"></span></p>
+        </div>
+        <div id="statusOptions" class="space-y-1.5 p-4 sm:px-5">
+            @foreach(['Pending' => 'Pending', 'Paid' => 'Validasi Pembayaran', 'Shipped' => 'Proses Pengiriman', 'ShippedOut' => 'Dalam Pengiriman', 'Completed' => 'Barang Diterima', 'Cancelled' => 'Transaksi Dibatalkan'] as $value => $label)
+                <button type="button" data-value="{{ $value }}"
+                    class="status-option flex w-full items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5 text-sm text-slate-600 transition-colors hover:border-primary hover:bg-primary/5 dark:border-navy-500 dark:text-navy-100 dark:hover:border-accent dark:hover:bg-accent/5">
+                    <span class="font-medium">{{ $label }}</span>
+                    <i class="fa-solid fa-circle-check status-check hidden text-success"></i>
+                </button>
+            @endforeach
+        </div>
+    </div>
+</div>
 
 @push('scripts')
     <script>
@@ -229,6 +256,62 @@
             // Reload table when filters change
             $('.filter-website, .filter-status').on('change', function () {
                 window.table.ajax.reload(null, false);
+            });
+
+            // =================== Status Modal (klik badge status) ===================
+            var statusTransactionId = null;
+
+            // Buka popup saat badge status diklik (delegated: works after redraw)
+            $('#datatables').on('click', '.js-status-toggle', function () {
+                statusTransactionId = $(this).data('id');
+                var status = $(this).data('status');
+                $('#statusModalCode').text($(this).data('code') || '-');
+
+                // Tandai status saat ini
+                $('#statusOptions .status-option').each(function () {
+                    var isCurrent = $(this).data('value') === status;
+                    $(this).toggleClass('border-primary bg-primary/5 dark:border-accent dark:bg-accent/5', isCurrent);
+                    $(this).find('.status-check').toggleClass('hidden', !isCurrent);
+                });
+
+                $('#statusModal').removeClass('hidden');
+            });
+
+            function closeStatusModal() {
+                $('#statusModal').addClass('hidden');
+                statusTransactionId = null;
+            }
+
+            // Close via overlay
+            $('#statusModal .modal-overlay-status').on('click', function (e) {
+                if ($(e.target).hasClass('modal-overlay-status')) closeStatusModal();
+            });
+
+            // Pilih status baru -> simpan via AJAX
+            $('#statusOptions').on('click', '.status-option', function () {
+                if (!statusTransactionId) return;
+                var newStatus = $(this).data('value');
+
+                $.ajax({
+                    url: '{{ route('admin.' . $modul . '.updateStatus', ':id') }}'.replace(':id', statusTransactionId),
+                    type: 'PUT',
+                    data: { status: newStatus },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (response) {
+                        closeStatusModal();
+                        showNotification('success', response.message);
+                        if (window.table) {
+                            window.table.ajax.reload(null, false);
+                        }
+                    },
+                    error: function (xhr) {
+                        var msg = (xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mengubah status.';
+                        closeStatusModal();
+                        showNotification('error', msg);
+                    }
+                });
             });
 
             // Confirm delete handler
