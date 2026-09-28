@@ -150,6 +150,17 @@ class FrontController extends Controller
         $template = DB::table('template')->find($id);
         abort_if(!$template, 404);
 
+        // Self-healing: pastikan broken image preview tersedia. File ini statis,
+        // tapi bisa hilang di server (folder uploads di-gitignore). Salin dari
+        // images/default bila tidak ada, agar semua slot gambar preview tetap
+        // menampilkan broken image, bukan kosong.
+        $previewDir = public_path('images/website/preview');
+        $previewBrokenFile = $previewDir . '/broken.png';
+        if (!is_file($previewBrokenFile)) {
+            @mkdir($previewDir, 0775, true);
+            @copy(public_path('images/default/broken.png'), $previewBrokenFile);
+        }
+
         // Layout dari templates_section (bukan customers_websites_layout),
         // tiap section diberi content default dari templates_sections_content
         $layouts = DB::table('templates_section')

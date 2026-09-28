@@ -19,6 +19,8 @@
 
 # User uploads (logos, avatars, QR payments, per-domain assets) - not versioned
 /public/images/website/*
+# Exception: preview assets are static app files and must be versioned
+!/public/images/website/preview
 /storage/*.key
 /storage/pail
 /vendor
