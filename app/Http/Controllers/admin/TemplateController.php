@@ -408,7 +408,7 @@ class TemplateController extends Controller
         return redirect()->route('admin.template.section', $id)->with('success', 'Section content item deleted successfully.');
     }
 
-    private function getContentPresets()
+    public static function getContentPresets()
 {
     return [
         ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],

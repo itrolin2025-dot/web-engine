@@ -100,6 +100,9 @@
                         <i class="fa-solid fa-folder-open mr-1"></i>{{ $template->path ?: '-' }}
                     </p>
                     <div class="mt-2 flex items-center justify-end space-x-1.5">
+                        <a href="{{ route('preview.template', $template->id) }}" target="_blank" class="btn h-7 w-7 rounded-full bg-success/10 p-0 font-medium text-success hover:bg-success/20 focus:bg-success/20 active:bg-success/25" title="Preview Template">
+                            <i class="fa-solid fa-eye text-[11px]"></i>
+                        </a>
                         @if($canEdit)
                         <a href="{{ route('admin.template.edit', $template->id) }}" class="btn h-7 w-7 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 active:bg-info/25">
                             <i class="fa-solid fa-pen text-[11px]"></i>

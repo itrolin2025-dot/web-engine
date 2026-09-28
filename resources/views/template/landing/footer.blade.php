@@ -383,7 +383,7 @@
     $domain = $website->domain ?? '';
 
     $title = $content['title'] ?? $content['title_en'] ?? '';
-    $title_color = $content['title_color'] ?? '#ffffff';
+    $title_color = $content['title_color'] ?? '#000000';
 
     $repeater = $content['repeater'] ?? $content['tagline'];
     if (is_array($repeater)) {
@@ -391,14 +391,14 @@
     }
 
     $subtitle = $content['subtitle'] ?? $content['subtitle_en'] ?? '';
-    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+    $subtitle_color = $content['subtitle_color'] ?? '#000000';
 
     $desc = $content['desc'] ?? $content['desc_en'] ?? '';
-    $desc_color = $content['desc_color'] ?? '#ffffff';
+    $desc_color = $content['desc_color'] ?? '#000000';
 
 
     $background_image = $content['background_image'] ?? '#ffffff';
-    $background_color = $content['background_color'] ?? '#ffffff';
+    $background_color = $content['background_color'] ?? '#000000';
 
     $button_text = $content['button_text'] ?? $content['button_text_en'] ?? '';
     $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
@@ -406,7 +406,7 @@
 
 @endphp
 
-<footer style="background-color: {{ $background_color ?? '#1a1a2e' }};{{ $background_image && $background_image !== '#000000' ? 'background-image: url(' . asset('images/website/' . $domain . '/' . $background_image) . '); background-size: cover; background-position: center; background-attachment: fixed;' : '' }}">
+<footer style="background-color: {{ $background_color }}; ">
     <div class="footer-wrapper">
         <div class="footer-grid">
             <div class="footer-brand">
