@@ -5,6 +5,7 @@ use App\Models\Modul;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,12 +23,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $menus = Modul::orderBy('sort_order')->get();
+        // Guard: saat tabel belum ada (fresh DB / test sqlite), lewati agar
+        // aplikasi tetap bisa boot dan migrate bisa berjalan.
+        if (Schema::hasTable('moduls')) {
+            $menus = Modul::orderBy('sort_order')->get();
 
-        $menuTree = $this->buildTree($menus);
+            $menuTree = $this->buildTree($menus);
 
-        // Bagikan ke semua view
-        View::share('menus', $menuTree);
+            // Bagikan ke semua view
+            View::share('menus', $menuTree);
+        }
     }
 
     private function buildTree($menus)
