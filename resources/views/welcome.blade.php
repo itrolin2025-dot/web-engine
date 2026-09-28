@@ -113,8 +113,8 @@
                 <!-- Tab Client: klik item membuka URL website yang terdaftar di tab baru -->
                 <a id="stageLink" href="#" target="_blank" rel="noopener" class="block" aria-label="Open website">
                     <div id="stage" class="relative w-full aspect-[437/556] overflow-hidden bg-white">
-                        <img id="stageImgA" src="" alt="main slide" class="stage-layer absolute inset-0 w-full h-full object-contain object-top">
-                        <img id="stageImgB" src="" alt="" class="stage-layer absolute inset-0 w-full h-full object-contain object-top">
+                        <img id="stageImgA" src="" alt="main slide" class="stage-layer absolute inset-0 w-full h-full object-contain {{ $tab === 'template' ? 'object-top' : 'object-middle' }}">
+                        <img id="stageImgB" src="" alt="" class="stage-layer absolute inset-0 w-full h-full object-contain {{ $tab === 'template' ? 'object-top' : 'object-middle' }}">
                     </div>
                 </a>
                 <p id="caption" class="text-center text-xs md:text-sm mt-3 md:mt-4 opacity-80 whitespace-nowrap">Nova Studio</p>
