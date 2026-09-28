@@ -21,13 +21,17 @@ class FrontController extends Controller
             $tab = 'client';
         }
 
+        // Tab Section punya filter slug (dropdown, group by slug).
+        $sectionSlug = $request->query('slug');
+        $sectionSlugs = $tab === 'section' ? self::getSectionSlugs() : collect();
+
         $slides = match ($tab) {
             'template' => self::getTemplateSlides(),
-            'section'  => self::getSectionSlides(),
+            'section'  => self::getSectionSlides($sectionSlug),
             default    => self::getWebsiteSlides(),
         };
 
-        return view('welcome', compact('websites', 'slides', 'tab'));
+        return view('welcome', compact('websites', 'slides', 'tab', 'sectionSlug', 'sectionSlugs'));
     }
 
     /**
@@ -69,14 +73,18 @@ class FrontController extends Controller
      * Data slider dari tabel `templates_section` (dipakai untuk tab Section).
      * Menampilkan preview tiap section; fallback ke broken image bila
      * section tidak punya preview atau file-nya tidak ada.
+     * Bila $slug diisi, hanya section dengan slug tersebut yang diambil.
      *
      * Fungsi terpisah (reusable) agar bisa dipakai di tempat lain.
      */
-    public static function getSectionSlides()
+    public static function getSectionSlides($slug = null)
     {
         $sections = DB::table('templates_section')
+            ->when($slug, function ($query) use ($slug) {
+                $query->where('slug', $slug);
+            })
             ->orderBy('id')
-            ->get(['id', 'name', 'preview']);
+            ->get(['id', 'name', 'preview', 'slug']);
 
         return $sections->map(function ($s) {
             $preview = (!empty($s->preview) && file_exists(public_path($s->preview)))
@@ -88,6 +96,19 @@ class FrontController extends Controller
                 'title' => $s->name ?? 'Section',
             ];
         })->values();
+    }
+
+    /**
+     * Daftar slug unik + jumlah section per slug (untuk dropdown filter
+     * tab Section di halaman welcome).
+     */
+    public static function getSectionSlugs()
+    {
+        return DB::table('templates_section')
+            ->select('slug', DB::raw('count(*) as total'))
+            ->groupBy('slug')
+            ->orderBy('slug')
+            ->get();
     }
 
     /**
@@ -112,6 +133,8 @@ class FrontController extends Controller
             return [
                 'src'   => $preview,
                 'title' => $t->name ?? 'Template',
+                // Klik item di tab Template -> direct ke halaman preview template
+                'url'   => route('preview.template', ['id' => $t->id]),
             ];
         })->values();
     }
