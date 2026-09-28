@@ -16,6 +16,9 @@
 /public/build
 /public/hot
 /public/storage
+
+# User uploads (logos, avatars, QR payments, per-domain assets) - not versioned
+/public/images/website/*
 /storage/*.key
 /storage/pail
 /vendor
