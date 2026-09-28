@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - From First Idea</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans for clean geometric modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #111111;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-neutral-900 antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-200/50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-2xl font-bold tracking-tighter text-neutral-900 uppercase">
+                        Arch<span class="text-neutral-400">Studio</span>
+                    </a>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-8">
+                        <a href="#"
+                            class="text-sm text-neutral-900 font-medium hover:text-neutral-500 transition-colors uppercase tracking-wide">Projects</a>
+                        <a href="#"
+                            class="text-sm text-neutral-500 font-medium hover:text-neutral-900 transition-colors uppercase tracking-wide">Studio</a>
+                        <a href="#"
+                            class="text-sm text-neutral-500 font-medium hover:text-neutral-900 transition-colors uppercase tracking-wide">Journal</a>
+                        <a href="#"
+                            class="text-sm text-neutral-500 font-medium hover:text-neutral-900 transition-colors uppercase tracking-wide">Contact</a>
+                    </div>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-neutral-900 hover:text-neutral-600 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <main class="w-full pt-20 bg-white grid grid-cols-1 lg:grid-cols-2">
+
+        <!-- Left Column: Heading and Description -->
+        <div
+            class="flex flex-col justify-between p-8 sm:p-12 lg:p-16 border-b lg:border-b-0 lg:border-r border-neutral-200 lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)]">
+            <div>
+                <h1
+                    class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.08] text-neutral-900 uppercase">
+                    From first idea to a place that breathes.
+                </h1>
+            </div>
+
+            <div class="mt-12 lg:mt-24 max-w-md">
+                <p class="text-sm sm:text-base text-neutral-700 font-normal leading-relaxed">
+                    We believe that architecture is measured not only in square meters — but in meaning. These numbers
+                    reflect the care, consistency, and vision we bring into every project.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Column: Forced 2x2 Grid (Always 2 Columns even on Mobile) -->
+        <div class="grid grid-cols-2">
+
+            <!-- Image 1 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 1"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+            <!-- Image 2 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 2"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+            <!-- Image 3 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 3"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+            <!-- Image 4 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 4"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+
+            <!-- Image 5 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 5"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+            <!-- Image 6 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 6"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+            <!-- Image 7 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 7"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+            <!-- Image 8 -->
+            <div class="relative overflow-hidden group aspect-square">
+                <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Architecture 8"
+                    class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
+                <div class="absolute inset-0 bg-black/20 transition-opacity duration-700 group-hover:opacity-0"></div>
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Dummy Section to show scrolling -->
+    <section class="h-screen bg-neutral-100 flex flex-col items-center justify-center border-t border-neutral-200">
+
+        <div class="w-full max-w-5xl mx-auto space-y-4">
+
+            <!-- Accordion Item 1: About Us (+348) -->
+            <div class="border-b border-zinc-800 pb-6 transition-all duration-300">
+                <!-- Trigger Header -->
+                <button onclick="toggleAccordion('content-1', 'arrow-1', 'title-1')"
+                    class="w-full flex items-center justify-between text-left group focus:outline-none">
+                    <span id="title-1"
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-500 group-hover:text-zinc-200 transition-all duration-300">
+                        About Us
+                    </span>
+                    <span id="arrow-1"
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-600 transition-all duration-300">
+                        +348
+                    </span>
+                </button>
+
+                <!-- Collapsible Content -->
+                <div id="content-1" class="hidden overflow-hidden transition-all duration-500 ease-in-out pt-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-sm leading-relaxed">
+                        <div>
+                            <p class="mb-4">
+                                We are a collective of visionaries, designers, and engineers dedicated to crafting
+                                exceptional digital experiences and world-class physical aesthetics. Our approach
+                                combines brutalist minimalism with fluid modern interactivity.
+                            </p>
+                            <p>
+                                Established with a passion for unmatched quality, we push the boundaries of design and
+                                utility to ensure every detail resonates with purpose and timeless elegance.
+                            </p>
+                        </div>
+                        <div class="bg-zinc-900 p-6 rounded-lg border border-zinc-800">
+                            <h4 class="text-white font-bold mb-2 uppercase text-xs tracking-wider">Our Core Milestones
+                            </h4>
+                            <ul class="space-y-2 text-xs">
+                                <li class="flex justify-between border-b border-zinc-800 pb-2"><span>Global
+                                        Studios</span> <span class="text-white font-bold">12 Locations</span></li>
+                                <li class="flex justify-between border-b border-zinc-800 pb-2"><span>Completed
+                                        Projects</span> <span class="text-white font-bold">+348 Unique Works</span></li>
+                                <li class="flex justify-between pb-2"><span>Design Awards</span> <span
+                                        class="text-white font-bold">45 Accolades</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion Item 2 -->
+            <div class="border-b border-zinc-800 pb-6 transition-all duration-300">
+                <button onclick="toggleAccordion('content-2', 'arrow-2', 'title-2')"
+                    class="w-full flex items-center justify-between text-left group focus:outline-none">
+                    <span id="title-2"
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-500 group-hover:text-zinc-200 transition-all duration-300">
+                        Services
+                    </span>
+                    <span id="arrow-2"
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-600 transition-all duration-300 group-hover:text-zinc-400">
+                        &rarr;
+                    </span>
+                </button>
+                <div id="content-2" class="hidden overflow-hidden transition-all duration-500 ease-in-out pt-6">
+                    <p class="text-zinc-400 text-sm max-w-2xl">
+                        From bespoke software development to high-end architectural concept creation, our services span
+                        multiple disciplines tailored to elevate your brand to unprecedented heights.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Accordion Item 3 -->
+            <div class="border-b border-zinc-800 pb-6 transition-all duration-300">
+                <button onclick="toggleAccordion('content-3', 'arrow-3', 'title-3')"
+                    class="w-full flex items-center justify-between text-left group focus:outline-none">
+                    <span id="title-3"
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-500 group-hover:text-zinc-200 transition-all duration-300">
+                        Contact
+                    </span>
+                    <span id="arrow-3"
+                        class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-zinc-600 transition-all duration-300 group-hover:text-zinc-400">
+                        &rarr;
+                    </span>
+                </button>
+                <div id="content-3" class="hidden overflow-hidden transition-all duration-500 ease-in-out pt-6">
+                    <p class="text-zinc-400 text-sm max-w-2xl">
+                        Get in touch with our management team for inquiries, collaborations, or custom commissions. We
+                        respond within 24 hours globally.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            function toggleAccordion(contentId, arrowId, titleId) {
+                const content = document.getElementById(contentId);
+                const arrow = document.getElementById(arrowId);
+                const title = document.getElementById(titleId);
+
+                // Toggle content visibility
+                if (content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    // Enlarge left title when opened
+                    title.classList.remove('text-zinc-500');
+                    title.classList.add('text-white', 'scale-105', 'origin-left');
+                    arrow.classList.add('text-white');
+                } else {
+                    content.classList.add('hidden');
+                    // Revert left title size/color when closed
+                    title.classList.add('text-zinc-500');
+                    title.classList.remove('text-white', 'scale-105', 'origin-left');
+                    arrow.classList.remove('text-white');
+                }
+            }
+        </script>
+    </section>
+
+    <section>
+        <div
+            class="w-full grid grid-cols-1 lg:grid-cols-12 min-h-[85vh] shadow-2xl overflow-hidden bg-neutral-100 border border-neutral-200">
+
+            <div
+                class="lg:col-span-3 bg-white p-8 md:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-neutral-200 relative">
+
+                <!-- Top brand tag or small indicator -->
+                <div class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-neutral-900"></span>
+                    <span class="text-xs uppercase tracking-widest text-neutral-500 font-medium">Minimalist™</span>
+                </div>
+
+                <!-- Central Typography: 04 Minimalism 2018 -->
+                <div class="my-12 lg:my-0 flex flex-col justify-center">
+                    <h1 class="text-7xl lg:text-8xl font-light tracking-tighter text-neutral-900 leading-none mb-4">04
+                    </h1>
+                    <div class="flex items-baseline space-x-3">
+                        <span
+                            class="text-xl md:text-2xl font-medium tracking-wide uppercase text-neutral-800">Minimalism</span>
+                        <span class="text-lg md:text-xl font-light text-neutral-400">2018</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Left Info & Social Links -->
+                <div class="flex items-end justify-between pt-6 border-t border-neutral-100">
+                    <span class="text-xs text-neutral-400 tracking-wider">Sudden looked elinour</span>
+
+                    <!-- Vertical Social Media label & icons -->
+                    <div class="flex items-center space-x-3 text-neutral-400 text-xs">
+                        <span class="vertical-text tracking-widest text-[10px] text-neutral-400 uppercase">Our social
+                            media</span>
+                        <div class="flex flex-col space-y-2">
+                            <a href="#" class="hover:text-neutral-900 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.55-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="hover:text-neutral-900 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                                </svg>
+                            </a>
+                            <a href="#" class="hover:text-neutral-900 transition-colors">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 relative bg-neutral-200">
+                <!-- Single full-span image panel -->
+                <div class="relative min-h-[350px] h-full flex flex-col justify-between p-6 overflow-hidden group">
+                    <div id="showcase-bg"
+                        class="absolute inset-0 bg-cover bg-center transition-all duration-700 group-hover:scale-105"
+                        style="background-image: url('https://placehold.co/1200x900/d4d4d4/525252?text=Beauty');">
+                    </div>
+                    <div class="absolute inset-0 bg-neutral-900/10"></div>
+
+                    <!-- Floating category indicator -->
+                    <div class="relative z-10 flex justify-end">
+                        <span id="showcase-category"
+                            class="vertical-text text-[10px] tracking-widest text-neutral-700 uppercase font-medium">Beauty</span>
+                    </div>
+
+                    <!-- Bottom descriptive tagline -->
+                    <div class="relative z-10">
+                        <span id="showcase-label"
+                            class="text-[11px] uppercase tracking-wider text-neutral-600 block mb-1">01 — Beauty</span>
+                        <p class="text-xs text-neutral-800 font-medium max-w-[180px]">We have gathered products from
+                            around the world.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 flex flex-col bg-neutral-100">
+
+                <!-- Olive Green Number Navigator Section -->
+                <div class="bg-[#78816f] text-white p-8 flex flex-col justify-between h-full relative">
+                    <!-- List of items 01 to 05 -->
+                    <div class="space-y-6" id="showcase-nav">
+                        <div onclick="setShowcaseActive(0)"
+                            class="showcase-item flex items-baseline justify-between cursor-pointer transition-all duration-300 border-l-2 border-white pl-4 -ml-4 bg-white/10 py-2"
+                            data-label="Beauty" data-num="01">
+                            <span class="text-3xl font-light tracking-tight">01</span>
+                            <span class="text-xs tracking-wider uppercase font-medium">Beauty</span>
+                        </div>
+                        <div onclick="setShowcaseActive(1)"
+                            class="showcase-item flex items-baseline justify-between opacity-60 hover:opacity-100 cursor-pointer transition-all duration-300"
+                            data-label="Prestige" data-num="02">
+                            <span class="text-3xl font-light tracking-tight">02</span>
+                            <span class="text-xs tracking-wider uppercase font-medium">Prestige</span>
+                        </div>
+                        <div onclick="setShowcaseActive(2)"
+                            class="showcase-item flex items-baseline justify-between opacity-60 hover:opacity-100 cursor-pointer transition-all duration-300"
+                            data-label="Luxe & More" data-num="03">
+                            <span class="text-3xl font-light tracking-tight">03</span>
+                            <span class="text-xs tracking-wider uppercase font-medium">Luxe & More</span>
+                        </div>
+                        <div onclick="setShowcaseActive(3)"
+                            class="showcase-item flex items-baseline justify-between opacity-60 hover:opacity-100 cursor-pointer transition-all duration-300"
+                            data-label="Minimalism" data-num="04">
+                            <span class="text-3xl font-medium tracking-tight">04</span>
+                            <span class="text-xs tracking-wider uppercase font-semibold">Minimalism</span>
+                        </div>
+                        <div onclick="setShowcaseActive(4)"
+                            class="showcase-item flex items-baseline justify-between opacity-60 hover:opacity-100 cursor-pointer transition-all duration-300"
+                            data-label="Perfection" data-num="05">
+                            <span class="text-3xl font-light tracking-tight">05</span>
+                            <span class="text-xs tracking-wider uppercase font-medium">Perfection</span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrow Controls -->
+                    <div class="flex items-center space-x-4 pt-10">
+                        <button onclick="setShowcaseActive(Math.max(0, currentShowcase - 1))"
+                            class="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button onclick="setShowcaseActive(Math.min(4, currentShowcase + 1))"
+                            class="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center hover:bg-white/20 transition-colors">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                let currentShowcase = 0; // 01 Beauty aktif di awal
+
+                function setShowcaseActive(index) {
+                    currentShowcase = index;
+                    const items = document.querySelectorAll('.showcase-item');
+                    items.forEach((item, i) => {
+                        if (i === index) {
+                            item.classList.remove('opacity-60');
+                            item.classList.add('border-l-2', 'border-white', 'pl-4', '-ml-4', 'bg-white/10', 'py-2');
+                        } else {
+                            item.classList.add('opacity-60');
+                            item.classList.remove('border-l-2', 'border-white', 'pl-4', '-ml-4', 'bg-white/10', 'py-2');
+                        }
+                    });
+
+                    const activeItem = items[index];
+                    const label = activeItem.dataset.label;
+                    const num = activeItem.dataset.num;
+                    const encodedLabel = encodeURIComponent(label);
+
+                    // Update image
+                    document.getElementById('showcase-bg').style.backgroundImage =
+                        `url('https://placehold.co/1200x900/d4d4d4/525252?text=${encodedLabel}')`;
+
+                    // Update teks
+                    document.getElementById('showcase-category').textContent = label;
+                    document.getElementById('showcase-label').textContent = num + ' — ' + label;
+                }
+            </script>
+
+        </div>
+    </section>
+
+
+    <footer class="bg-white text-black min-h-screen flex flex-col justify-between p-8 md:p-16">
+
+        <!-- Kandungan Utama (Layout 2 Kolum) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-7xl mx-auto items-start">
+
+            <!-- Kolum Kiri: Tajuk Utama -->
+            <div>
+                <h1 class="text-6xl md:text-8xl font-normal tracking-tight">Contact us</h1>
+            </div>
+
+            <!-- Kolum Kanan: Penerangan, Garisan Pemisah, & Maklumat Perhubungan -->
+            <div class="flex flex-col space-y-12">
+                <!-- Teks Deskripsi -->
+                <p class="text-sm md:text-base text-neutral-800 leading-relaxed max-w-md">
+                    If you have questions or need any general information, please complete this form to request the
+                    information you need. It will be an honor to help you.
+                </p>
+
+                <!-- Garisan Pemisah Nipis -->
+                <hr class="border-t border-neutral-200">
+
+                <!-- Bahagian Bawah Kolum Kanan: General Enquires & Social Media -->
+                <div class="grid grid-cols-2 gap-8 text-xs md:text-sm">
+                    <!-- General Enquires -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold tracking-wider text-neutral-500 uppercase">GENERAL ENQUIRES</h3>
+                        <div>
+                            <p class="font-medium text-neutral-900">Stan Rochester</p>
+                            <p class="text-neutral-600">Head of Interior Design</p>
+                            <p class="text-neutral-600">Advisor & Product Specialist</p>
+                        </div>
+                        <div>
+                            <p class="text-neutral-500 mt-2">Phone</p>
+                            <p class="text-neutral-900">+42 55 231 5322</p>
+                        </div>
+                        <div>
+                            <p class="text-neutral-500 mt-2">Email</p>
+                            <p class="text-neutral-900">stan.r@laboatiginori.com</p>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold tracking-wider text-neutral-500 uppercase">SOCIAL MEDIA</h3>
+                        <ul class="space-y-1 text-neutral-900">
+                            <li><a href="#" class="hover:underline">Instagram</a></li>
+                            <li><a href="#" class="hover:underline">Facebook</a></li>
+                            <li><a href="#" class="hover:underline">Twitter</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+</body>
+
+
+</html>

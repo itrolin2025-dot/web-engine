@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLQCreatesDIY - Full Landing Page</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        .font-script { font-family: 'Caveat', cursive; }
+        .font-sans-custom { font-family: 'DM Sans', sans-serif; }
+        .font-serif-custom { font-family: 'Lora', serif; }
+
+        /* ==== Pink grid background ("What I Do") ==== */
+        .pink-grid-bg {
+            background-color: #E45858;
+            background-image:
+                linear-gradient(to right, rgba(163, 34, 34, 0.45) 3px, transparent 3px),
+                linear-gradient(to bottom, rgba(163, 34, 34, 0.45) 3px, transparent 3px),
+                linear-gradient(to right, rgba(255, 255, 255, 0.10) 2px, transparent 2px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.10) 2px, transparent 2px);
+            background-size: 46px 46px, 46px 46px, 23px 23px, 23px 23px;
+        }
+
+        /* ==== Green gingham (hero ring + video frame) ==== */
+        .green-gingham {
+            background-color: #6F8449;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(255,255,255,.55) 0 14px, rgba(255,255,255,0) 14px 28px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,.55) 0 14px, rgba(255,255,255,0) 14px 28px);
+        }
+
+        /* ==== Flower-shaped image mask (6 petals) ==== */
+        .flower-mask {
+            -webkit-mask-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='25'/%3E%3Ccircle cx='50' cy='22' r='19'/%3E%3Ccircle cx='74.2' cy='36' r='19'/%3E%3Ccircle cx='74.2' cy='64' r='19'/%3E%3Ccircle cx='50' cy='78' r='19'/%3E%3Ccircle cx='25.8' cy='64' r='19'/%3E%3Ccircle cx='25.8' cy='36' r='19'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='25'/%3E%3Ccircle cx='50' cy='22' r='19'/%3E%3Ccircle cx='74.2' cy='36' r='19'/%3E%3Ccircle cx='74.2' cy='64' r='19'/%3E%3Ccircle cx='50' cy='78' r='19'/%3E%3Ccircle cx='25.8' cy='64' r='19'/%3E%3Ccircle cx='25.8' cy='36' r='19'/%3E%3C/svg%3E");
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-position: center;
+        }
+
+        /* ==== Marquee animation ==== */
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            display: inline-flex;
+            white-space: nowrap;
+            animation: marquee 28s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-[#FBF7EC] m-0 p-0 overflow-x-hidden font-serif-custom text-[#3D2314]">
+
+    <!-- 1. Marquee Announcement Bar -->
+    <div class="w-full bg-[#C74A3C] text-white overflow-hidden">
+        <div class="marquee-track py-2 text-[11px] font-sans-custom font-bold tracking-[0.25em] uppercase">
+            <span class="pr-8">NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp; NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp; NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp; NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp;</span>
+            <span class="pr-8">NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp; NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp; NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp; NOW BOOKING FROM NOVEMBER AND BEYOND &nbsp;&rarr;&nbsp;</span>
+        </div>
+    </div>
+
+    <!-- 2. Header & Navigasi -->
+    <header class="w-full bg-[#FBF7EC] py-5 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between">
+        <nav class="flex items-center gap-8 text-xs font-sans-custom font-semibold tracking-[0.15em] text-[#4A3B2E] order-2 md:order-1">
+            <a href="#" class="hover:text-[#C74A3C] transition-colors">SERVICES</a>
+            <a href="#" class="hover:text-[#C74A3C] transition-colors">PRODUCTS</a>
+        </nav>
+        <div class="my-3 md:my-0 order-1 md:order-2">
+            <span class="font-script text-4xl md:text-5xl font-bold tracking-wide">
+                <span class="text-[#D9534F]">C</span><span class="text-[#E89BB5]">L</span><span class="text-[#7A8C4F]">Q</span><span class="text-[#4A3B2E]">Creates</span><span class="text-[#F0B429]">D</span><span class="text-[#D9534F]">I</span><span class="text-[#7A8C4F]">Y</span>
+            </span>
+        </div>
+        <nav class="flex items-center gap-8 text-xs font-sans-custom font-semibold tracking-[0.15em] text-[#4A3B2E] order-3">
+            <a href="#" class="underline underline-offset-4 hover:text-[#C74A3C] transition-colors">ABOUT</a>
+            <a href="#" class="hover:text-[#C74A3C] transition-colors">CONTACT</a>
+        </nav>
+    </header>
+
+    <!-- 3. Hero Section (Sky Background) -->
+    <section class="w-full relative overflow-hidden bg-gradient-to-br from-[#BFDFF5] via-[#DCEEFB] to-[#E9F5EE] py-14 md:py-20 px-6 md:px-20">
+        <!-- Clouds -->
+        <div class="absolute top-6 left-[8%] w-64 h-24 bg-white/70 rounded-full blur-2xl"></div>
+        <div class="absolute bottom-10 right-[6%] w-80 h-28 bg-white/60 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-[45%] w-52 h-20 bg-white/50 rounded-full blur-2xl"></div>
+
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 items-center relative z-10">
+            <!-- Foto lingkaran dengan ring gingham berbunga -->
+            <div class="md:col-span-6 flex justify-center relative">
+                <div class="green-gingham relative w-72 h-72 md:w-[26rem] md:h-[26rem] rounded-full flex items-center justify-center shadow-xl">
+                    <!-- Bunga-bunga kecil di ring -->
+                    <span class="absolute top-6 left-1/2 -translate-x-1/2 text-white text-lg font-bold">✽</span>
+                    <span class="absolute top-1/4 left-[14%] text-white text-sm font-bold">✽</span>
+                    <span class="absolute top-1/4 right-[14%] text-white text-sm font-bold">✽</span>
+                    <span class="absolute top-1/2 left-[6%] text-white text-lg font-bold">✽</span>
+                    <span class="absolute top-1/2 right-[6%] text-white text-lg font-bold">✽</span>
+                    <span class="absolute bottom-1/4 left-[14%] text-white text-sm font-bold">✽</span>
+                    <span class="absolute bottom-1/4 right-[14%] text-white text-sm font-bold">✽</span>
+                    <span class="absolute bottom-5 left-1/2 -translate-x-1/2 text-white text-lg font-bold">✽</span>
+                    <div class="w-60 h-60 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-inner">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Crafting Hands" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teks hero -->
+            <div class="md:col-span-6 text-center md:text-left flex flex-col items-center md:items-start">
+                <h1 class="font-script text-6xl md:text-8xl font-bold text-[#55682B] leading-[0.95] mb-5">
+                    DIY Content<br>For The Crafty.
+                </h1>
+                <p class="text-sm md:text-base text-[#4A3B2E] max-w-md mb-8 leading-relaxed">
+                    Create something new with me today and take your skills and brand to the next level with my templates and tutorials.
+                </p>
+                <div class="relative inline-block">
+                    <button class="bg-[#C74A3C] hover:bg-[#A83B21] text-white font-sans-custom font-bold px-9 py-3.5 rounded-lg shadow-md uppercase tracking-[0.15em] text-xs transition-transform transform hover:scale-105">
+                        LET'S CONNECT
+                    </button>
+                    <span class="absolute -bottom-3 -right-4 text-xl rotate-12">🐦</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Logofolio Section -->
+    <section class="w-full bg-[#FBF7EC] py-12 px-6 text-center">
+        <p class="text-[10px] md:text-xs font-sans-custom font-bold tracking-[0.3em] text-[#9A8C78] uppercase mb-8">LOGOFOLIO</p>
+        <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-8 md:gap-14 text-[#5F7036]">
+            <span class="text-xl md:text-2xl font-sans-custom font-extrabold tracking-tighter">LINKSY<span class="text-[10px] align-super">®</span></span>
+            <div class="flex flex-col items-center gap-1">
+                <div class="w-10 h-10 rounded-full border-2 border-[#5F7036] flex items-center justify-center text-lg">🌿</div>
+                <span class="text-[9px] font-sans-custom font-bold tracking-[0.2em]">SKILLSVS</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="text-lg md:text-xl font-serif-custom font-bold tracking-wide">🍒 CHERRYON TOP</span>
+                <span class="text-[8px] font-sans-custom tracking-[0.25em] mt-0.5">CAKE DECOR &amp; BAKE SHOP</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="text-lg md:text-xl font-serif-custom font-semibold tracking-[0.3em]">EDEN&nbsp;ROSE</span>
+                <span class="text-[8px] font-sans-custom tracking-[0.35em] mt-0.5">PHOTOGRAPHY</span>
+            </div>
+            <div class="transform -rotate-3">
+                <span class="text-lg md:text-xl font-sans-custom font-black tracking-wide uppercase block leading-none">WRANGLER<br>WATER</span>
+                <span class="text-[8px] font-sans-custom font-bold tracking-[0.3em]">• EST 2012 •</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. "What I Do..." Section (Pink Grid, Torn Paper Edges) -->
+    <section class="w-full relative mt-4">
+        <!-- Torn paper top edge (image overlay) -->
+        <img src="/images/torn-paper.png" alt="" aria-hidden="true"
+             class="absolute top-0 left-0 w-full z-20 pointer-events-none select-none [filter:drop-shadow(0_6px_10px_rgba(70,35,30,0.18))]">
+
+        <div class="pink-grid-bg relative pt-28 pb-28 px-6">
+            <!-- Dekorasi pensil -->
+            <svg class="hidden md:block absolute top-8 right-[10%] w-56 rotate-[135deg] drop-shadow-lg z-10" viewBox="0 0 220 40" aria-hidden="true">
+                <rect x="0" y="12" width="14" height="16" rx="4" fill="#E8A0A8"/>
+                <rect x="12" y="11" width="8" height="18" fill="#9DB4CE"/>
+                <rect x="20" y="10" width="150" height="20" fill="#5F7036"/>
+                <rect x="20" y="17" width="150" height="6" fill="#4A5A28"/>
+                <polygon points="170,10 202,20 170,30" fill="#E8C99B"/>
+                <polygon points="197,17.5 207,20 197,22.5" fill="#3D2314"/>
+            </svg>
+
+            <div class="max-w-5xl mx-auto text-center mb-12 relative z-10">
+                <h2 class="font-script text-6xl md:text-7xl font-bold text-white">What I Do...</h2>
+                <svg class="mx-auto mt-1 w-40" viewBox="0 0 160 12" fill="none" aria-hidden="true">
+                    <path d="M2,8 Q12,2 22,8 T42,8 T62,8 T82,8 T102,8 T122,8 T142,8 T158,6" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <!-- 3 Cards -->
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10 mb-12">
+                <!-- Card 1: Branding -->
+                <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
+                    <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
+                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80" alt="Branding" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
+                        BRANDING
+                    </div>
+                    <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
+                        <li>▪&nbsp; LOGOS</li>
+                        <li>▪&nbsp; PACKAGE DESIGN</li>
+                        <li>▪&nbsp; SOCIAL MEDIA MANAGEMENT</li>
+                        <li>▪&nbsp; ILLUSTRATIONS</li>
+                        <li>▪&nbsp; WEB DESIGN</li>
+                    </ul>
+                </div>
+
+                <!-- Card 2: 3D Modeling -->
+                <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
+                    <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="3D Modeling" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
+                        3D MODELING
+                    </div>
+                    <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
+                        <li>▪&nbsp; LOGOS</li>
+                        <li>▪&nbsp; PACKAGE DESIGN</li>
+                        <li>▪&nbsp; SOCIAL MEDIA MANAGEMENT</li>
+                        <li>▪&nbsp; ILLUSTRATIONS</li>
+                        <li>▪&nbsp; WEB DESIGN</li>
+                    </ul>
+                </div>
+
+                <!-- Card 3: How-To & DIY -->
+                <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
+                    <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
+                        <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80" alt="How-To & DIY" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
+                        HOW-TO &amp; DIY
+                    </div>
+                    <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
+                        <li>▪&nbsp; LOGOS</li>
+                        <li>▪&nbsp; PACKAGE DESIGN</li>
+                        <li>▪&nbsp; SOCIAL MEDIA MANAGEMENT</li>
+                        <li>▪&nbsp; ILLUSTRATIONS</li>
+                        <li>▪&nbsp; WEB DESIGN</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Torn paper bottom edge (image overlay, flipped) -->
+        <img src="/images/torn-paper.png" alt="" aria-hidden="true"
+             class="absolute bottom-0 left-0 w-full z-20 rotate-180 pointer-events-none select-none [filter:drop-shadow(0_-6px_10px_rgba(70,35,30,0.15))]">
+
+        <!-- Dekorasi penggaris biru -->
+        <div class="hidden md:block absolute -bottom-6 left-4 lg:left-16 z-30 rotate-[-12deg]">
+            <div class="w-[430px] h-14 bg-[#BFD6EC] border-2 border-white rounded-md shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-4" style="background: repeating-linear-gradient(90deg, #3E6491 0 2px, transparent 2px 26px);"></div>
+                <div class="absolute inset-0 flex items-end justify-between px-5 pb-1.5 font-sans-custom font-bold text-[#3E6491] text-sm">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. "I'm Clo." Bio & Video Section -->
+    <section class="w-full bg-[#FBF7EC] py-20 px-6 md:px-20">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+
+            <!-- Bio Kiri -->
+            <div class="md:col-span-6 flex flex-col items-start">
+                <h2 class="font-script text-6xl md:text-7xl font-bold mb-6 text-[#5F7036]">I'm Clo.</h2>
+                <p class="text-sm md:text-base text-[#4A3B2E] leading-relaxed mb-4">
+                    I'm a Canadian-Texan transplant living in San Antonio. As a self-taught artist and designer, my mission is to share my discoveries and personal growth with you all to show how you can do anything you set your mind to. It's never too late to start a new hobby.
+                </p>
+                <p class="text-sm md:text-base text-[#4A3B2E] leading-relaxed mb-4">
+                    My husband and I have a fur-baby named Toby. We never used to let him sleep in the bed with us, but he kept complaining that his back was sore everyday before work. My husband doesn't like this joke.
+                </p>
+                <p class="text-sm md:text-base text-[#4A3B2E] leading-relaxed">
+                    I love all things silly, cute and organized. You can always find me reorganizing shelves in the grocery stores as I shop.
+                </p>
+            </div>
+
+            <!-- Video Player Kanan (Green Gingham Frame) -->
+            <div class="md:col-span-6 flex justify-center">
+                <div class="green-gingham p-5 md:p-6 rounded-[28px] shadow-2xl relative w-full max-w-md">
+                    <div class="relative rounded-2xl overflow-hidden shadow-lg border-4 border-white bg-black">
+                        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80" alt="Video Thumbnail" class="w-full h-64 object-cover opacity-90">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform">
+                                <span class="text-xl text-[#3D2314] ml-1">▶</span>
+                            </div>
+                        </div>
+                        <span class="absolute top-3 left-4 font-script text-3xl text-[#F4A9B8] drop-shadow-md -rotate-3">Rebrand Me</span>
+                        <div class="absolute bottom-3 right-3 bg-black/70 text-white px-3 py-1 rounded-md text-xs font-sans-custom font-bold tracking-wider">
+                            10:30
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 7. Footer Section -->
+    <footer class="w-full bg-[#B7CCE2] py-12 px-6 text-center relative overflow-hidden">
+        <!-- Siluet bunga dekoratif -->
+        <svg class="absolute -left-16 top-1/2 -translate-y-1/2 w-72 h-72 opacity-80" viewBox="0 0 100 100" aria-hidden="true">
+            <g fill="#9FB8D4">
+                <circle cx="50" cy="20" r="20"/><circle cx="76" cy="35" r="20"/><circle cx="76" cy="65" r="20"/>
+                <circle cx="50" cy="80" r="20"/><circle cx="24" cy="65" r="20"/><circle cx="24" cy="35" r="20"/>
+                <circle cx="50" cy="50" r="17"/>
+            </g>
+        </svg>
+        <svg class="absolute -right-10 bottom-[-40px] w-52 h-52 rotate-45 opacity-70" viewBox="0 0 100 100" aria-hidden="true">
+            <g fill="#9FB8D4">
+                <circle cx="50" cy="20" r="20"/><circle cx="76" cy="35" r="20"/><circle cx="76" cy="65" r="20"/>
+                <circle cx="50" cy="80" r="20"/><circle cx="24" cy="65" r="20"/><circle cx="24" cy="35" r="20"/>
+                <circle cx="50" cy="50" r="17"/>
+            </g>
+        </svg>
+
+        <div class="relative z-10">
+            <p class="text-xs font-sans-custom font-bold tracking-[0.3em] text-[#4A6785] uppercase mb-5">MY LINKS</p>
+            <div class="flex items-center justify-center gap-4 mb-6">
+                <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform" aria-label="Website">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#4A6785" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>
+                </a>
+                <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform" aria-label="YouTube">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="#4A6785"><polygon points="8,5 19,12 8,19"/></svg>
+                </a>
+                <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform" aria-label="Pinterest">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#4A6785" stroke-width="2" stroke-linecap="round"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/></svg>
+                </a>
+                <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform" aria-label="TikTok">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#4A6785" stroke-width="2" stroke-linecap="round"><path d="M9 18V6l8-2v12"/><circle cx="7" cy="18" r="2.2"/><circle cx="15" cy="16" r="2.2"/></svg>
+                </a>
+                <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform" aria-label="Email">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#4A6785" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                </a>
+            </div>
+            <p class="text-xs text-[#4A6785] mb-2">chiostoreyhagerfridge@gmail.com</p>
+            <p class="text-[11px] text-[#6B84A0]">website designed by clqcreatesdiy © 2024</p>
+        </div>
+    </footer>
+
+</body>
+</html>

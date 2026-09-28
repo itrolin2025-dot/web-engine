@@ -27,13 +27,13 @@
             #stageWrap:hover { width: 40%; }
         }
 
-        /* Stage: berwarna penuh (tidak monochrome); klik di tab Client membuka tab baru */
+        /* Stage: default hitam putih, hover berwarna */
         #stage {
+            filter: grayscale(1);
+            transition: filter .7s ease;
             cursor: pointer;
-            transition: transform .7s cubic-bezier(.22,1,.36,1);
         }
-        #stageLink:not([href]) #stage { cursor: default; transform: none; }
-        #stageWrap:hover a[href] #stage { transform: scale(1.02); }
+        #stageWrap:hover #stage { filter: grayscale(0); }
 
         /* Caption di bawah foto aktif */
         #caption {
@@ -70,14 +70,10 @@
             </div>
             <!-- Brand -->
             <div class="text-center text-xs md:text-sm tabular-nums whitespace-nowrap" id="brand">Rolin Web Lab.</div>
-            <!-- Nav (tabs) -->
+            <!-- Nav -->
             <nav class="flex justify-end gap-4 md:gap-7 text-xs md:text-sm">
-                <a href="?tab=client"
-                   class="transition-opacity {{ $tab === 'client' ? 'underline underline-offset-4' : 'hover:opacity-50' }}">Client Website</a>
-                <a href="?tab=template"
-                   class="transition-opacity {{ $tab === 'template' ? 'underline underline-offset-4' : 'hover:opacity-50' }}">Template</a>
-                <a href="?tab=section"
-                   class="transition-opacity {{ $tab === 'section' ? 'underline underline-offset-4' : 'hover:opacity-50' }}">Section</a>
+                <a href="#" class="hover:opacity-50 transition-opacity">Template</a>
+                <a href="#" class="hover:opacity-50 transition-opacity">Section</a>
             </nav>
         </header>
 
@@ -110,13 +106,10 @@
 
             <!-- MAIN IMAGE + CAPTION (caption selalu di bawah foto aktif) -->
             <div id="stageWrap" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <!-- Tab Client: klik item membuka URL website yang terdaftar di tab baru -->
-                <a id="stageLink" href="#" target="_blank" rel="noopener" class="block" aria-label="Open website">
-                    <div id="stage" class="relative w-full aspect-[437/556] overflow-hidden bg-white">
-                        <img id="stageImgA" src="" alt="main slide" class="stage-layer absolute inset-0 w-full h-full object-contain object-top">
-                        <img id="stageImgB" src="" alt="" class="stage-layer absolute inset-0 w-full h-full object-contain object-top">
-                    </div>
-                </a>
+                <div id="stage" class="relative w-full aspect-[437/556] overflow-hidden">
+                    <img id="stageImgA" src="" alt="main slide" class="stage-layer absolute inset-0 w-full h-full object-cover">
+                    <img id="stageImgB" src="" alt="" class="stage-layer absolute inset-0 w-full h-full object-cover">
+                </div>
                 <p id="caption" class="text-center text-xs md:text-sm mt-3 md:mt-4 opacity-80 whitespace-nowrap">Nova Studio</p>
             </div>
 
@@ -140,11 +133,8 @@
 <script>
     const FALLBACK_IMG = '{{ asset('images/default/broken.png') }}';
 
-    // ================= DATA SLIDES (sesuai tab navbar yang aktif) =================
+    // ================= DATA SLIDES (dari tabel template via controller) =================
     const slides = @json($slides);
-
-    // Hanya tab Client yang item-nya punya URL terdaftar & bisa dibuka ke tab baru
-    const IS_CLIENT_TAB = @json($tab === 'client');
 
     // Fallback: jika gambar gagal dimuat -> broken image
     function handleImgError(img) {
@@ -168,7 +158,6 @@
     let activeLayer = layerA;
     const counter   = document.getElementById('counter');
     const caption   = document.getElementById('caption');
-    const stageLink = document.getElementById('stageLink');
     const thumbs    = [...document.querySelectorAll('.slide-thumb')];
 
     // Preload semua gambar agar transisi mulus
@@ -177,18 +166,6 @@
     // ================= RENDER =================
     function render() {
         const slide = slides[current];
-
-        // Tab Client: item aktif di-link ke URL yang terdaftar (target="_blank" -> tab baru).
-        // Tab lain (template/section tidak punya URL) -> link dimatikan.
-        if (IS_CLIENT_TAB && slide.url && slide.url !== '#') {
-            stageLink.href = slide.url;
-            stageLink.classList.remove('pointer-events-none');
-            stage.style.cursor = 'pointer';
-        } else {
-            stageLink.removeAttribute('href');
-            stageLink.classList.add('pointer-events-none');
-            stage.style.cursor = 'default';
-        }
 
         // Crossfade tanpa flash kosong: decode dulu, baru fade
         const nextLayer = (activeLayer === layerA) ? layerB : layerA;

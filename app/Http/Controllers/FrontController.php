@@ -7,13 +7,112 @@ use Illuminate\Support\Facades\DB;
 
 class FrontController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $websites = DB::table('customers_website')
             ->where('is_active', 1)
             ->get();
 
-        return view('welcome', compact('websites'));
+        // Halaman awal = showcase slider dengan tab navbar:
+        // client | template | section
+        $tab = $request->query('tab', 'client');
+        if (!in_array($tab, ['client', 'template', 'section'], true)) {
+            $tab = 'client';
+        }
+
+        $slides = match ($tab) {
+            'template' => self::getTemplateSlides(),
+            'section'  => self::getSectionSlides(),
+            default    => self::getWebsiteSlides(),
+        };
+
+        return view('welcome', compact('websites', 'slides', 'tab'));
+    }
+
+    /**
+     * Menu client website aktif untuk halaman awal.
+     * Data dari `customers_website` (is_active = 1); gambar = logo dari
+     * `customers_website_identities`. Jika logo tidak ada (atau file hilang)
+     * -> broken image.
+     *
+     * Fungsi terpisah (reusable) agar bisa dipakai di tempat lain.
+     */
+    public static function getWebsiteSlides()
+    {
+        $websites = DB::table('customers_website')
+            ->leftJoin('customers_website_identities', 'customers_website_identities.customers_website_id', '=', 'customers_website.id')
+            ->where('customers_website.is_active', 1)
+            ->orderBy('customers_website.id')
+            ->select(
+                'customers_website.id',
+                'customers_website.title',
+                'customers_website.domain',
+                'customers_website_identities.logo'
+            )
+            ->get();
+
+        return $websites->map(function ($w) {
+            $logo = (!empty($w->logo) && file_exists(public_path($w->logo)))
+                ? asset($w->logo)
+                : asset('images/default/broken.png');
+
+            return [
+                'src'   => $logo,
+                'title' => $w->title ?? $w->domain ?? 'Website',
+                'url'   => $w->domain ? url('/' . $w->domain) : '#',
+            ];
+        })->values();
+    }
+
+    /**
+     * Data slider dari tabel `templates_section` (dipakai untuk tab Section).
+     * Menampilkan preview tiap section; fallback ke broken image bila
+     * section tidak punya preview atau file-nya tidak ada.
+     *
+     * Fungsi terpisah (reusable) agar bisa dipakai di tempat lain.
+     */
+    public static function getSectionSlides()
+    {
+        $sections = DB::table('templates_section')
+            ->orderBy('id')
+            ->get(['id', 'name', 'preview']);
+
+        return $sections->map(function ($s) {
+            $preview = (!empty($s->preview) && file_exists(public_path($s->preview)))
+                ? asset($s->preview)
+                : asset('images/default/broken.png');
+
+            return [
+                'src'   => $preview,
+                'title' => $s->name ?? 'Section',
+            ];
+        })->values();
+    }
+
+    /**
+     * Data slider dari tabel `template` (dipakai untuk tab Template).
+     * Menampilkan preview tiap template; fallback ke broken image bila
+     * template tidak punya preview atau file-nya tidak ada.
+     *
+     * Dibuat sebagai fungsi terpisah (reusable) karena akan dibutuhkan
+     * di tempat lain juga.
+     */
+    public static function getTemplateSlides()
+    {
+        $templates = DB::table('template')
+            ->orderBy('id')
+            ->get(['id', 'name', 'preview']);
+
+        return $templates->map(function ($t) {
+            $preview = (!empty($t->preview) && file_exists(public_path($t->preview)))
+                ? asset($t->preview)
+                : asset('images/default/broken.png');
+
+            return [
+                'src'   => $preview,
+                'title' => $t->name ?? 'Template',
+            ];
+        })->values();
     }
 
     public function template($client = null)

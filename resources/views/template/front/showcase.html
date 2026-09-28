@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rolin Web — Showcase</title>
+    <title>Nova Studio — Showcase</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!-- Inter font -->
@@ -27,13 +27,13 @@
             #stageWrap:hover { width: 40%; }
         }
 
-        /* Stage: berwarna penuh (tidak monochrome); klik di tab Client membuka tab baru */
+        /* Stage: default hitam putih, hover berwarna */
         #stage {
+            filter: grayscale(1);
+            transition: filter .7s ease;
             cursor: pointer;
-            transition: transform .7s cubic-bezier(.22,1,.36,1);
         }
-        #stageLink:not([href]) #stage { cursor: default; transform: none; }
-        #stageWrap:hover a[href] #stage { transform: scale(1.02); }
+        #stageWrap:hover #stage { filter: grayscale(0); }
 
         /* Caption di bawah foto aktif */
         #caption {
@@ -56,10 +56,10 @@
         .stage-layer.is-active { opacity: 1; }
     </style>
 </head>
-<body class="bg-white m-0 p-0 min-h-screen">
+<body class="bg-black m-0 p-0 min-h-screen flex items-center justify-center">
 
-    <!-- ===== WHITE CANVAS (FULL PAGE) ===== -->
-    <div class="relative w-full min-h-screen bg-white text-black overflow-hidden">
+    <!-- ===== WHITE CANVAS ===== -->
+    <div class="relative w-full max-w-[1200px] bg-white text-black my-6 aspect-[4/5] md:aspect-[1200/838] overflow-hidden">
 
         <!-- TOP BAR -->
         <header class="absolute top-0 inset-x-0 grid grid-cols-3 items-center px-6 md:px-8 pt-6 z-30">
@@ -68,16 +68,13 @@
                 <span class="w-4 h-4 md:w-5 md:h-5 rounded-full bg-black inline-block"></span>
                 <span class="w-4 h-4 md:w-5 md:h-5 rounded-full bg-black inline-block -ml-1.5"></span>
             </div>
-            <!-- Brand -->
-            <div class="text-center text-xs md:text-sm tabular-nums whitespace-nowrap" id="brand">Rolin Web Lab.</div>
-            <!-- Nav (tabs) -->
+            <!-- Live clock -->
+            <div class="text-center text-xs md:text-sm tabular-nums" id="clock">18:27</div>
+            <!-- Nav -->
             <nav class="flex justify-end gap-4 md:gap-7 text-xs md:text-sm">
-                <a href="?tab=client"
-                   class="transition-opacity {{ $tab === 'client' ? 'underline underline-offset-4' : 'hover:opacity-50' }}">Client Website</a>
-                <a href="?tab=template"
-                   class="transition-opacity {{ $tab === 'template' ? 'underline underline-offset-4' : 'hover:opacity-50' }}">Template</a>
-                <a href="?tab=section"
-                   class="transition-opacity {{ $tab === 'section' ? 'underline underline-offset-4' : 'hover:opacity-50' }}">Section</a>
+                <a href="#" class="hover:opacity-50 transition-opacity">About</a>
+                <a href="#" class="hover:opacity-50 transition-opacity">Works</a>
+                <a href="#" class="hover:opacity-50 transition-opacity">Contacts</a>
             </nav>
         </header>
 
@@ -110,13 +107,10 @@
 
             <!-- MAIN IMAGE + CAPTION (caption selalu di bawah foto aktif) -->
             <div id="stageWrap" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-                <!-- Tab Client: klik item membuka URL website yang terdaftar di tab baru -->
-                <a id="stageLink" href="#" target="_blank" rel="noopener" class="block" aria-label="Open website">
-                    <div id="stage" class="relative w-full aspect-[437/556] overflow-hidden bg-white">
-                        <img id="stageImgA" src="" alt="main slide" class="stage-layer absolute inset-0 w-full h-full object-contain object-top">
-                        <img id="stageImgB" src="" alt="" class="stage-layer absolute inset-0 w-full h-full object-contain object-top">
-                    </div>
-                </a>
+                <div id="stage" class="relative w-full aspect-[437/556] overflow-hidden">
+                    <img id="stageImgA" src="" alt="main slide" class="stage-layer absolute inset-0 w-full h-full object-cover">
+                    <img id="stageImgB" src="" alt="" class="stage-layer absolute inset-0 w-full h-full object-cover">
+                </div>
                 <p id="caption" class="text-center text-xs md:text-sm mt-3 md:mt-4 opacity-80 whitespace-nowrap">Nova Studio</p>
             </div>
 
@@ -138,23 +132,17 @@
     </div>
 
 <script>
-    const FALLBACK_IMG = '{{ asset('images/default/broken.png') }}';
-
-    // ================= DATA SLIDES (sesuai tab navbar yang aktif) =================
-    const slides = @json($slides);
-
-    // Hanya tab Client yang item-nya punya URL terdaftar & bisa dibuka ke tab baru
-    const IS_CLIENT_TAB = @json($tab === 'client');
-
-    // Fallback: jika gambar gagal dimuat -> broken image
-    function handleImgError(img) {
-        if (img.dataset.fallbackApplied) return;
-        img.dataset.fallbackApplied = '1';
-        img.src = FALLBACK_IMG;
-    }
-    document.addEventListener('error', (e) => {
-        if (e.target.tagName === 'IMG') handleImgError(e.target);
-    }, true);
+    // ================= DATA SLIDES =================
+    const slides = [
+        { src: 'https://images.unsplash.com/photo-1520975954732-35dd22299614?auto=format&fit=crop&w=1000&q=80', title: 'Nova Studio' },
+        { src: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=1000&q=80', title: 'Nova Studio' },
+        { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80', title: 'Atelier Noir' },
+        { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1000&q=80', title: 'Mono Agency' },
+        { src: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=1000&q=80', title: 'Nova Studio' },
+        { src: 'https://images.unsplash.com/photo-1492447166138-50c3889fccb1?auto=format&fit=crop&w=1000&q=80', title: 'Studio Kova' },
+        { src: 'https://images.unsplash.com/photo-1488161628813-04466f872be2?auto=format&fit=crop&w=1000&q=80', title: 'Fold Works' },
+        { src: 'https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=1000&q=80', title: 'Arc Creative' },
+    ];
 
     // ================= STATE =================
     let current = 0;
@@ -168,7 +156,6 @@
     let activeLayer = layerA;
     const counter   = document.getElementById('counter');
     const caption   = document.getElementById('caption');
-    const stageLink = document.getElementById('stageLink');
     const thumbs    = [...document.querySelectorAll('.slide-thumb')];
 
     // Preload semua gambar agar transisi mulus
@@ -177,18 +164,6 @@
     // ================= RENDER =================
     function render() {
         const slide = slides[current];
-
-        // Tab Client: item aktif di-link ke URL yang terdaftar (target="_blank" -> tab baru).
-        // Tab lain (template/section tidak punya URL) -> link dimatikan.
-        if (IS_CLIENT_TAB && slide.url && slide.url !== '#') {
-            stageLink.href = slide.url;
-            stageLink.classList.remove('pointer-events-none');
-            stage.style.cursor = 'pointer';
-        } else {
-            stageLink.removeAttribute('href');
-            stageLink.classList.add('pointer-events-none');
-            stage.style.cursor = 'default';
-        }
 
         // Crossfade tanpa flash kosong: decode dulu, baru fade
         const nextLayer = (activeLayer === layerA) ? layerB : layerA;
@@ -265,12 +240,10 @@
         if (e.key === 'ArrowLeft') prev();
     });
 
-    // ================= CLOCK (opsional: aktifkan bila elemen #clock ada) =================
+    // ================= CLOCK =================
     function tick() {
-        const el = document.getElementById('clock');
-        if (!el) return;
         const d = new Date();
-        el.textContent =
+        document.getElementById('clock').textContent =
             String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     }
     tick();

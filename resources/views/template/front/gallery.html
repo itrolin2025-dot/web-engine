@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Other ° - Creative Studio Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans for a clean minimal modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#ffffff',
+                            text: '#111111',
+                            muted: '#777777',
+                            light: '#f4f4f4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #111111;
+        }
+    </style>
+</head>
+<body class="bg-white text-brand-text antialiased selection:bg-black selection:text-white">
+
+    <header class="w-full px-6 sm:px-12 py-6 flex flex-col md:flex-row justify-between items-start md:items-center text-xs tracking-wide uppercase border-b border-gray-100 gap-4 md:gap-0">
+        <!-- Top Left -->
+        <div class="flex items-center space-x-6">
+            <span class="font-bold tracking-normal text-sm">Other *</span>
+            <span class="text-brand-muted hidden sm:inline">Creative Studio</span>
+        </div>
+
+        <!-- Top Center -->
+        <div class="flex items-center space-x-6 text-brand-muted">
+            <span class="text-black font-medium cursor-pointer hover:text-black transition">Index</span>
+            <span class="cursor-pointer hover:text-black transition">Info</span>
+        </div>
+
+        <!-- Top Right -->
+        <div class="flex flex-wrap items-center gap-4 text-brand-muted">
+            <a href="mailto:contact@other.is" class="text-black lowercase font-medium hover:underline">contact@other.is</a>
+            <span class="hidden sm:inline text-gray-300">/</span>
+            <a href="#" class="hover:text-black transition">Linkedin</a>
+            <a href="#" class="hover:text-black transition">Instagram</a>
+            <a href="#" class="hover:text-black transition">X</a>
+        </div>
+    </header>
+
+    <section class="w-full px-6 sm:px-12 pt-16 pb-12 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
+        <div>
+            <h1 class="text-6xl sm:text-8xl md:text-9xl font-light tracking-tight">Other <span class="text-4xl sm:text-6xl md:text-7xl align-super font-normal">°</span></h1>
+        </div>
+        <div class="max-w-md lg:pb-6">
+            <p class="text-sm sm:text-base text-brand-muted font-normal leading-relaxed">
+                Other is a creative agency dedicated to branding that delivers real outcomes, meaningful, measurable, and human.
+            </p>
+        </div>
+    </section>
+
+    <section class="w-full px-6 sm:px-12 py-6 flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm border-t border-gray-100 gap-4 sm:gap-0">
+        <div class="font-medium text-black">
+            Selected Works <span class="text-brand-muted text-xs align-super">(12)</span>
+        </div>
+        <div class="flex items-center space-x-6 text-xs uppercase tracking-wider">
+            <span class="text-black font-semibold cursor-pointer">Grid</span>
+            <span class="text-brand-muted hover:text-black cursor-pointer transition">List</span>
+            <span class="text-brand-muted hover:text-black cursor-pointer transition">Feed</span>
+            <span class="text-brand-muted hover:text-black cursor-pointer transition">Full</span>
+        </div>
+    </section>
+
+    <main class="w-full px-4 sm:px-6 pb-20">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Item 1: Fashion / Apparel -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800" 
+                     alt="Fashion Editorial" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Fashion+Editorial'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    01 / Brand Lookbook
+                </div>
+            </div>
+
+            <!-- Item 2: Beauty / Lips & Ice -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=800" 
+                     alt="Beauty Campaign" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Beauty+Campaign'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    02 / Mode Cosmetics
+                </div>
+            </div>
+
+            <!-- Item 3: Organic Product / Soap & Foam -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1608248597359-994b633bfd3f?auto=format&fit=crop&q=80&w=800" 
+                     alt="Organic Skincare" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Skincare+Product'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    03 / Botanical Bar
+                </div>
+            </div>
+
+            <!-- Item 4: Industrial / Metal Container -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&q=80&w=800" 
+                     alt="Product Design" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Industrial+Design'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    04 / Metallic Vessel
+                </div>
+            </div>
+
+            <!-- Item 5: Minimalist Bottle -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800" 
+                     alt="Packaging Design" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Packaging'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    05 / Liquid Identity
+                </div>
+            </div>
+
+            <!-- Item 6: Portrait / Aesthetic Styling -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800" 
+                     alt="Portrait Styling" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Portrait'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    06 / Modern Portrait
+                </div>
+            </div>
+
+            <!-- Item 7: Floral Abstract -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&q=80&w=800" 
+                     alt="Floral Motion" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Floral+Motion'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    07 / Flora Dynamics
+                </div>
+            </div>
+
+            <!-- Item 8: Lifestyle Outdoor -->
+            <div class="group relative bg-gray-100 overflow-hidden aspect-[4/5] cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" 
+                     alt="Lifestyle Campaign" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition duration-700 ease-out"
+                     onerror="this.src='https://placehold.co/800x1000/e2e8f0/475569?text=Lifestyle'">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-300"></div>
+                <div class="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition duration-300 text-xs font-medium tracking-wide">
+                    08 / Human Experience
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="w-full px-6 sm:px-12 py-12 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center text-xs text-brand-muted gap-4">
+        <div>
+            © 2026 Other Studio. All rights reserved.
+        </div>
+        <div class="flex space-x-6">
+            <a href="#" class="hover:text-black transition">Privacy Policy</a>
+            <a href="#" class="hover:text-black transition">Terms of Service</a>
+        </div>
+    </footer>
+
+</body>
+</html>
