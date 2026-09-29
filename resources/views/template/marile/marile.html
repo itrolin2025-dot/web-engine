@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confeitaria Marilê - Identidade Visual</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Playfair Display, Plus Jakarta Sans, Shrikhand, Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Shrikhand&display=swap" rel="stylesheet">
+    <style>
+        .font-serif-vintage {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .font-brand {
+            font-family: 'Shrikhand', cursive;
+        }
+
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .font-modern {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Hover animation on bento blocks */
+        .bento-tile {
+            transition: opacity 0.2s ease, transform 0.25s ease;
+        }
+
+        .bento-tile:hover {
+            opacity: 0.97;
+        }
+    </style>
+</head>
+
+<body class="bg-[#FAF1E4] m-0 p-0 overflow-x-hidden font-sans-custom antialiased text-[#522115] selection:bg-[#522115] selection:text-[#FAF1E4]">
+
+    <!-- Full Width Bento Layout Container -->
+    <div class="w-full min-h-screen flex flex-col">
+
+        <!-- ================= BARIS 1: TEXT CENTER DAN IMAGE BACKGROUND ================= -->
+        <!-- Background: Warm Cream (#FAF1E4 / #FDF5E6) -->
+        <section class="w-full bg-[#FAF1E4] border-b border-[#522115]/10 flex flex-col justify-between min-h-[380px] sm:min-h-[460px] md:min-h-[540px] select-none">
+            
+            <!-- Top Header Bar -->
+            <div class="w-full px-6 sm:px-10 md:px-14 py-4 flex items-center justify-between text-[11px] sm:text-xs font-semibold tracking-widest uppercase text-[#522115]/75">
+                <span>MARILÊ</span>
+                <span>CONFEITARIA</span>
+            </div>
+
+            <!-- Center Content: Logo Text Center & Image Background / Character -->
+            <div class="w-full flex-1 flex flex-col items-center justify-center py-10 px-6 text-center relative">
+                <!-- Character & Logo Container -->
+                <div class="flex flex-col items-center max-w-xl mx-auto z-10">
+                    
+                    <!-- Logo & Mascot Lockup -->
+                    <div class="flex items-center justify-center gap-3 sm:gap-5 mb-2">
+                        <!-- Mascot Avatar (Girl with strawberry cake hat) -->
+                        <div class="w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-[#522115] text-[#FAF1E4] p-1 flex items-center justify-center shadow-sm relative overflow-hidden group">
+                            <img src="/images/default/broken.png" alt="Marilê Mascot" class="w-full h-full object-contain group-hover:scale-105 transition-transform">
+                        </div>
+
+                        <!-- Brand Title Lockup -->
+                        <div class="flex flex-col items-start text-left">
+                            <span class="text-[10px] sm:text-xs md:text-sm font-bold tracking-[0.25em] uppercase text-[#522115] pl-1">
+                                CONFEITARIA
+                            </span>
+                            <h1 class="font-serif-vintage font-bold italic text-5xl sm:text-7xl md:text-8xl tracking-tight text-[#522115] leading-none -mt-1">
+                                marilê
+                            </h1>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Subtle Image Background Texture / Illustration -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none overflow-hidden">
+                    <img src="/images/default/broken.png" alt="Confeitaria Texture Background" class="w-full h-full object-cover">
+                </div>
+            </div>
+
+            <!-- Bottom Sub-Header Bar -->
+            <div class="w-full px-6 sm:px-10 md:px-14 py-3 flex items-center justify-between text-[10px] sm:text-[11px] font-medium tracking-wider uppercase text-[#522115]/60">
+                <span>IDENTIDADE VISUAL</span>
+                <span>MAIO 2025</span>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 2: TEXT KIRI, IMAGE TENGAH, TEXT KANAN ================= -->
+        <!-- Background: Chocolate Warm Brown (#522115) -->
+        <section class="w-full bg-[#522115] text-[#FAF1E4] flex flex-col justify-between py-6 px-6 sm:px-10 md:px-14 relative overflow-hidden">
+            
+            <!-- Top Sub-Bar inside Section 2 -->
+            <div class="w-full py-2 flex items-center justify-between text-[11px] sm:text-xs font-semibold tracking-widest uppercase text-[#FAF1E4]/70">
+                <span>MARILÊ</span>
+                <span>CONFEITARIA</span>
+            </div>
+
+            <!-- 3 Columns Layout: Text Kiri, Image Tengah, Text Kanan -->
+            <div class="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 items-center py-10 sm:py-16 md:py-20">
+                
+                <!-- Kolom 1 (Kiri): Text Sobre (4 cols) -->
+                <div class="md:col-span-4 flex flex-col justify-center space-y-4 text-left">
+                    <h2 class="font-serif-vintage font-bold italic text-3xl sm:text-4xl text-[#FAF1E4] lowercase mb-1">
+                        sobre:
+                    </h2>
+                    <div class="text-xs sm:text-sm text-[#FAF1E4]/85 leading-relaxed space-y-3 font-normal">
+                        <p>
+                            A Marilê nasceu de uma receita antiga: amor de mãe, cheirinho de bolo no forno e a vontade de tornar momentos simples em lembranças inesquecíveis.
+                        </p>
+                        <p>
+                            O nome carrega a essência de Maria Leuda, mãe da fundadora, inspiração de vida e doçura.
+                        </p>
+                        <p>
+                            Foi com ela que tudo começou — entre panelas, risadas e histórias contadas enquanto o bolo assava.
+                        </p>
+                        <p>
+                            Hoje, essa memória ganha forma em cada doce preparado com afeto.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Kolom 2 (Tengah): Image Tengah (Rolo de Massa / Rolling Pin & Dough) (4 cols) -->
+                <div class="md:col-span-4 flex flex-col items-center justify-center p-4 relative group">
+                    <div class="w-full max-w-xs sm:max-w-sm aspect-square flex flex-col items-center justify-center relative overflow-hidden rounded-2xl bg-[#3E160D]/40 p-4 border border-[#FAF1E4]/10 shadow-inner">
+                        <img src="/images/default/broken.png" alt="Rolo de Massa e Farinha" class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300">
+                        <span class="mt-2 text-[11px] uppercase tracking-widest text-[#FAF1E4]/60 font-semibold">Massa e Rolo de Madeira</span>
+                    </div>
+                </div>
+
+                <!-- Kolom 3 (Kanan): Text Kanan Filosofi (4 cols) -->
+                <div class="md:col-span-4 flex flex-col justify-center space-y-4 text-left md:text-right">
+                    <div class="text-xs sm:text-sm text-[#FAF1E4]/85 leading-relaxed space-y-3 font-normal">
+                        <p>
+                            Na Marilê, cada receita é pensada para despertar emoções, resgatar afetos e envolver quem prova em uma experiência sensorial completa.
+                        </p>
+                        <p>
+                            Mais do que confeitaria, somos um ponto de encontro entre o sabor e a saudade.
+                        </p>
+                        <p>
+                            Um convite para reviver lembranças da infância, da casa da mãe ou da avó — e criar novas memórias com quem a gente ama.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Sub-Bar inside Section 2 -->
+            <div class="w-full py-2 flex items-center justify-between text-[10px] sm:text-[11px] font-medium tracking-wider uppercase text-[#FAF1E4]/60">
+                <span>IDENTIDADE VISUAL</span>
+                <span>MAIO 2025</span>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 3: IMAGE BACKGROUND (BENTO GRAPHIC & CONFEITARIA ASSETS) ================= -->
+        <!-- Background: Bento Brand Grid / Confectionery Collage -->
+        <section class="w-full bg-[#FCECE8] py-8 sm:py-12 md:py-16 px-6 sm:px-10 md:px-14 min-h-[360px] sm:min-h-[460px] md:min-h-[560px] flex items-center justify-center relative overflow-hidden bento-tile">
+            
+            <div class="w-full max-w-7xl mx-auto flex flex-col items-center justify-center text-center relative z-10">
+                <div class="w-full max-w-3xl flex flex-col items-center justify-center p-8 bg-white/70 backdrop-blur-sm rounded-3xl border border-[#522115]/10 shadow-sm group">
+                    <img src="/images/default/broken.png" alt="Confeitaria Bento Identity Patterns & Donuts" class="max-h-56 sm:max-h-72 md:max-h-96 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-widest text-[#522115]">
+                        Identidade Visual & Moodboard Confeitaria
+                    </span>
+                </div>
+            </div>
+
+            <!-- Decorative Ambient Background Texture -->
+            <div class="absolute inset-0 opacity-15 pointer-events-none">
+                <img src="/images/default/broken.png" alt="Pattern Background" class="w-full h-full object-cover">
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 4: IMAGE JUGA FULL WIDTH (STICKER TAPE & PACKAGING SEALS) ================= -->
+        <!-- Background: Raspberry Rose / Red (#C22543 / #B81D35) -->
+        <section class="w-full bg-[#C22543] text-[#FAF1E4] flex flex-col justify-between py-6 px-6 sm:px-10 md:px-14 min-h-[300px] sm:min-h-[380px] md:min-h-[460px] relative overflow-hidden bento-tile select-none">
+            
+            <!-- Top Sub-Bar inside Section 4 -->
+            <div class="w-full py-2 flex items-center justify-between text-[11px] sm:text-xs font-semibold tracking-widest uppercase text-[#FAF1E4]/80">
+                <span>MARILÊ</span>
+                <span>CONFEITARIA</span>
+            </div>
+
+            <!-- Center Image Container (Full Width Sticker Tape & Badges) -->
+            <div class="w-full max-w-7xl mx-auto flex-1 flex flex-col items-center justify-center py-6">
+                <div class="w-full flex flex-col items-center justify-center text-center group">
+                    <img src="/images/default/broken.png" alt="Sticker Tape Confeitaria Marilê" class="max-h-48 sm:max-h-64 md:max-h-80 w-full object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-3 text-xs sm:text-sm font-bold uppercase tracking-widest text-white/90">
+                        Fita Adesiva e Selos de Embalagem
+                    </span>
+                </div>
+            </div>
+
+            <!-- Bottom Sub-Bar inside Section 4 -->
+            <div class="w-full py-2 flex items-center justify-between text-[10px] sm:text-[11px] font-medium tracking-wider uppercase text-[#FAF1E4]/60">
+                <span>IDENTIDADE VISUAL</span>
+                <span>MAIO 2025</span>
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+
+</html>

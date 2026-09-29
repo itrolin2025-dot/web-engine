@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evergreen Vegan Café - Bento Grid Showcase</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Comfortaa (Organic Modern), Quicksand, Fredoka, Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Fredoka:wght@500;600;700&family=Montserrat:wght@500;600;700;800&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-brand {
+            font-family: 'Comfortaa', cursive, sans-serif;
+        }
+
+        .font-rounded {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .font-sans-custom {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* 3-Petal Sprout Repeating Pattern */
+        .sprout-pattern-bg {
+            background-color: #F7BC37;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='60' viewBox='0 0 80 60'%3E%3Cg fill='%23FDE38C' opacity='0.85'%3E%3Cpath d='M40,35 C37,25 35,14 40,7 C45,14 43,25 40,35 Z'/%3E%3Cpath d='M38,36 C30,33 21,24 24,17 C30,19 36,28 38,36 Z'/%3E%3Cpath d='M42,36 C50,33 59,24 56,17 C50,19 44,28 42,36 Z'/%3E%3Cpath d='M0,5 C-3,-5 -5,-16 0,-23 C5,-16 3,-5 0,5 Z'/%3E%3Cpath d='M80,5 C77,-5 75,-16 80,-23 C85,-16 83,-5 80,5 Z'/%3E%3Cpath d='M0,65 C-3,55 -5,44 0,37 C5,44 3,55 0,65 Z'/%3E%3Cpath d='M80,65 C77,55 75,44 80,37 C85,44 83,55 80,65 Z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 70px 52px;
+        }
+
+        /* Card Hover Effects */
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+
+<body class="bg-[#F8F9FA] text-[#2C3E35] min-h-screen py-8 md:py-14 px-4 sm:px-6 lg:px-8 font-sans-custom antialiased selection:bg-[#92C2A3] selection:text-[#1E3B2B]">
+
+    <!-- Reusable SVG Symbols (3-Petal Sprout Icon) -->
+    <svg class="hidden absolute w-0 h-0" aria-hidden="true">
+        <defs>
+            <g id="sprout-symbol">
+                <!-- Center Leaf -->
+                <path d="M50,75 C45,55 42,30 50,16 C58,30 55,55 50,75 Z" />
+                <!-- Left Leaf -->
+                <path d="M46,76 C31,70 14,51 21,37 C34,41 43,60 46,76 Z" />
+                <!-- Right Leaf -->
+                <path d="M54,76 C69,70 86,51 79,37 C66,41 57,60 54,76 Z" />
+            </g>
+        </defs>
+    </svg>
+
+    <!-- Main Bento Grid Container -->
+    <main class="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+
+        <!-- ================= ROW 0: COLOR SWATCHES (4 Cards) ================= -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+
+            <!-- Swatch 1: Flamingo -->
+            <div class="bg-[#EC543E] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex items-center justify-between shadow-sm min-h-[64px] sm:min-h-[72px] bento-card">
+                <span class="font-rounded font-semibold text-xs sm:text-sm tracking-wide">Flamingo</span>
+                <span class="font-mono text-[10px] sm:text-xs font-bold opacity-90">#EC543E</span>
+            </div>
+
+            <!-- Swatch 2: Saffron -->
+            <div class="bg-[#F7BC37] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex items-center justify-between shadow-sm min-h-[64px] sm:min-h-[72px] bento-card">
+                <span class="font-rounded font-semibold text-xs sm:text-sm tracking-wide">Saffron</span>
+                <span class="font-mono text-[10px] sm:text-xs font-bold opacity-90">#F7BC37</span>
+            </div>
+
+            <!-- Swatch 3: Summer Green -->
+            <div class="bg-[#92C2A3] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex items-center justify-between shadow-sm min-h-[64px] sm:min-h-[72px] bento-card">
+                <span class="font-rounded font-semibold text-xs sm:text-sm tracking-wide leading-tight">Summer<br>Green</span>
+                <span class="font-mono text-[10px] sm:text-xs font-bold opacity-90">#92C2A3</span>
+            </div>
+
+            <!-- Swatch 4: Spring Leaves -->
+            <div class="bg-[#568266] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex items-center justify-between shadow-sm min-h-[64px] sm:min-h-[72px] bento-card">
+                <span class="font-rounded font-semibold text-xs sm:text-sm tracking-wide leading-tight">Spring<br>Leaves</span>
+                <span class="font-mono text-[10px] sm:text-xs font-bold opacity-90">#568266</span>
+            </div>
+
+        </div>
+
+        <!-- ================= ROW 1: HERO LOGO BANNER ================= -->
+        <div class="w-full bg-[#568266] rounded-[28px] sm:rounded-[36px] p-8 sm:p-12 md:p-16 flex flex-col items-center justify-center text-center text-white shadow-sm relative overflow-hidden bento-card">
+            <!-- Brand Logo -->
+            <div class="flex flex-col items-center select-none py-2">
+                <!-- 3-Petal Sprout Icon above 'g' -->
+                <div class="relative flex items-center justify-center">
+                    <h1 class="font-brand font-bold text-5xl sm:text-7xl md:text-8xl tracking-tight leading-none text-white drop-shadow-sm flex items-center">
+                        ever
+                        <span class="inline-block relative">
+                            <!-- Sprout Icon on top of g -->
+                            <svg class="w-6 h-6 sm:w-9 sm:h-9 md:w-11 md:h-11 absolute -top-5 sm:-top-8 md:-top-10 left-1/2 -translate-x-1/2 text-white" viewBox="0 0 100 100" fill="currentColor">
+                                <use href="#sprout-symbol" />
+                            </svg>
+                            g
+                        </span>
+                        reen
+                    </h1>
+                </div>
+                <!-- Subtitle: VEGAN CAFÉ with underline swash -->
+                <div class="mt-2 sm:mt-3 flex flex-col items-center">
+                    <span class="font-sans-custom font-extrabold text-sm sm:text-xl md:text-2xl tracking-[0.25em] uppercase text-white">
+                        VEGAN CAFÉ
+                    </span>
+                    <!-- Organic wave underline swash -->
+                    <svg class="w-44 sm:w-64 md:w-80 h-3 text-white mt-1" viewBox="0 0 200 10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                        <path d="M5,5 Q50,9 100,5 T195,5" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ROW 2: 3 SQUARE ICON CARDS ================= -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+
+            <!-- Card 1: Flamingo (#EC543E) with Saffron Emblem -->
+            <div class="bg-[#EC543E] rounded-[28px] sm:rounded-[36px] aspect-square flex items-center justify-center p-6 sm:p-8 shadow-sm bento-card">
+                <!-- Saffron Organic Pebble/Circle Emblem -->
+                <div class="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 bg-[#F7BC37] rounded-full flex items-center justify-center shadow-inner relative p-4 border-4 border-white/20">
+                    <svg class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-white drop-shadow-sm" viewBox="0 0 100 100" fill="currentColor">
+                        <use href="#sprout-symbol" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Card 2: Summer Green (#92C2A3) with Dark Green Emblem -->
+            <div class="bg-[#92C2A3] rounded-[28px] sm:rounded-[36px] aspect-square flex items-center justify-center p-6 sm:p-8 shadow-sm bento-card">
+                <!-- Dark Green Organic Pebble/Circle Emblem -->
+                <div class="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 bg-[#568266] rounded-full flex items-center justify-center shadow-inner relative p-4 border-4 border-white/20">
+                    <svg class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-white drop-shadow-sm" viewBox="0 0 100 100" fill="currentColor">
+                        <use href="#sprout-symbol" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Card 3: Saffron (#F7BC37) with Flamingo Emblem -->
+            <div class="bg-[#F7BC37] rounded-[28px] sm:rounded-[36px] aspect-square flex items-center justify-center p-6 sm:p-8 shadow-sm bento-card">
+                <!-- Flamingo Organic Pebble/Circle Emblem -->
+                <div class="w-32 h-32 sm:w-36 sm:h-36 md:w-44 md:h-44 bg-[#EC543E] rounded-full flex items-center justify-center shadow-inner relative p-4 border-4 border-white/20">
+                    <svg class="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 text-white drop-shadow-sm" viewBox="0 0 100 100" fill="currentColor">
+                        <use href="#sprout-symbol" />
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= ROW 3: MOCKUP SHOWCASE CARD ================= -->
+        <div class="w-full bg-[#FDF6EA] rounded-[28px] sm:rounded-[36px] p-6 sm:p-10 md:p-14 flex flex-col items-center justify-center relative overflow-hidden min-h-[260px] sm:min-h-[340px] md:min-h-[400px] shadow-sm bento-card border border-stone-200/50">
+            <!-- Product Mockup Container (Broken Image Placeholder) -->
+            <div class="w-full h-full flex flex-col items-center justify-center relative z-10">
+                <div class="w-full max-w-lg bg-white/70 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border-2 border-dashed border-[#568266]/30 flex flex-col items-center justify-center text-center group hover:border-[#568266]/60 transition-colors">
+                    <img src="/images/default/broken.png" alt="Evergreen Products Mockup" class="max-h-40 sm:max-h-52 object-contain opacity-85 group-hover:scale-105 transition-transform">
+                    <span class="mt-4 font-rounded font-bold text-xs sm:text-sm text-[#568266] uppercase tracking-wider">
+                        Takeaway Cups, Ceramic Mugs & Gift Cards Showcase
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ROW 4: SPATTERED SPROUT PATTERN BANNER ================= -->
+        <div class="w-full sprout-pattern-bg rounded-[24px] sm:rounded-[32px] h-24 sm:h-32 md:h-36 shadow-sm bento-card border border-yellow-200/40">
+        </div>
+
+        <!-- ================= ROW 5: FOOD & LIFESTYLE PHOTOS BENTO GRID ================= -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
+
+            <!-- Col 1 (Left - 3 cols): Tall Salad Bowl Lifestyle Image -->
+            <div class="md:col-span-3 bg-[#E8ECE9] rounded-[24px] sm:rounded-[32px] overflow-hidden min-h-[220px] md:min-h-[320px] relative shadow-sm bento-card group flex items-center justify-center p-4">
+                <div class="w-full h-full bg-white/60 rounded-2xl border-2 border-dashed border-stone-300 flex flex-col items-center justify-center p-4 text-center">
+                    <img src="/images/default/broken.png" alt="Salad Bowl" class="max-h-24 sm:max-h-32 object-contain opacity-80 group-hover:scale-105 transition-transform">
+                    <span class="mt-2 text-[11px] font-semibold text-[#568266]">Fresh Vegan Bowls</span>
+                </div>
+            </div>
+
+            <!-- Col 2 (Middle - 6 cols): Stacked Grid (Top 2 photos + Bottom Wide photo) -->
+            <div class="md:col-span-6 flex flex-col gap-4 sm:gap-6">
+
+                <!-- Middle Top: 2 Photos Side-by-Side (Girls Chatting + Salad with Iced Drink) -->
+                <div class="grid grid-cols-12 gap-4 sm:gap-6">
+                    <!-- Photo A: 2 Girls Chatting at Cafe (8 cols) -->
+                    <div class="col-span-8 bg-[#E8ECE9] rounded-[24px] sm:rounded-[32px] overflow-hidden min-h-[140px] sm:min-h-[160px] relative shadow-sm bento-card group flex items-center justify-center p-3">
+                        <div class="w-full h-full bg-white/60 rounded-2xl border-2 border-dashed border-stone-300 flex flex-col items-center justify-center p-3 text-center">
+                            <img src="/images/default/broken.png" alt="Café Lifestyle" class="max-h-16 sm:max-h-20 object-contain opacity-80 group-hover:scale-105 transition-transform">
+                            <span class="mt-1 text-[10px] sm:text-[11px] font-semibold text-[#568266]">Café Social Dining</span>
+                        </div>
+                    </div>
+
+                    <!-- Photo B: Salad with Drink (4 cols) -->
+                    <div class="col-span-4 bg-[#E8ECE9] rounded-[24px] sm:rounded-[32px] overflow-hidden min-h-[140px] sm:min-h-[160px] relative shadow-sm bento-card group flex items-center justify-center p-3">
+                        <div class="w-full h-full bg-white/60 rounded-2xl border-2 border-dashed border-stone-300 flex flex-col items-center justify-center p-2 text-center">
+                            <img src="/images/default/broken.png" alt="Drink & Dish" class="max-h-14 sm:max-h-18 object-contain opacity-80 group-hover:scale-105 transition-transform">
+                            <span class="mt-1 text-[9px] sm:text-[10px] font-semibold text-[#568266]">Smoothies</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Middle Bottom: Wide Salad Platter (Full Width of Middle Col) -->
+                <div class="w-full bg-[#E8ECE9] rounded-[24px] sm:rounded-[32px] overflow-hidden min-h-[140px] sm:min-h-[160px] relative shadow-sm bento-card group flex items-center justify-center p-4">
+                    <div class="w-full h-full bg-white/60 rounded-2xl border-2 border-dashed border-stone-300 flex flex-col items-center justify-center p-3 text-center">
+                        <img src="/images/default/broken.png" alt="Warm Healthy Entrees" class="max-h-16 sm:max-h-20 object-contain opacity-80 group-hover:scale-105 transition-transform">
+                        <span class="mt-1 text-[11px] font-semibold text-[#568266]">Warm Healthy Entrées</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Col 3 (Right - 3 cols): Tall Woman at Table Image -->
+            <div class="md:col-span-3 bg-[#E8ECE9] rounded-[24px] sm:rounded-[32px] overflow-hidden min-h-[220px] md:min-h-[320px] relative shadow-sm bento-card group flex items-center justify-center p-4">
+                <div class="w-full h-full bg-white/60 rounded-2xl border-2 border-dashed border-stone-300 flex flex-col items-center justify-center p-4 text-center">
+                    <img src="/images/default/broken.png" alt="Customer Dining" class="max-h-24 sm:max-h-32 object-contain opacity-80 group-hover:scale-105 transition-transform">
+                    <span class="mt-2 text-[11px] font-semibold text-[#568266]">Customer Experience</span>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

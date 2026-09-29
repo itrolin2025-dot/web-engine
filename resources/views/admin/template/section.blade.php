@@ -11,6 +11,35 @@
             opacity: 0.9;
             transform: rotate(1deg);
         }
+
+        /* Feedback visual pemilihan tag */
+        .tag-card { transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease; }
+        .tag-card .tag-check { display: none; }
+        .tag-card.tag-on,
+        .tag-card:has(input[type="checkbox"]:checked) {
+            border-color: #6366f1;
+            background-color: rgba(99, 102, 241, 0.10);
+            box-shadow: 0 0 0 1px #6366f1;
+        }
+        .tag-card.tag-on .tag-name,
+        .tag-card:has(input[type="checkbox"]:checked) .tag-name {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        .tag-card.tag-on .tag-check,
+        .tag-card:has(input[type="checkbox"]:checked) .tag-check {
+            display: inline-flex;
+        }
+        .dark .tag-card.tag-on,
+        .dark .tag-card:has(input[type="checkbox"]:checked) {
+            border-color: #818cf8;
+            background-color: rgba(129, 140, 248, 0.12);
+            box-shadow: 0 0 0 1px #818cf8;
+        }
+        .dark .tag-card.tag-on .tag-name,
+        .dark .tag-card:has(input[type="checkbox"]:checked) .tag-name {
+            color: #a5b4fc;
+        }
     </style>
 
     {{-- Breadcrumb --}}
@@ -134,6 +163,34 @@
                                     class="form-input mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400/70 hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent"
                                     type="text">
                             </label>
+                        </div>
+
+                        {{-- Tags (type: section) --}}
+                        <div class="block">
+                            <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Tags</span>
+                            <span class="text-[11px] text-slate-400">— pilih satu atau lebih (type: section)</span>
+
+                            <div class="mt-1.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                @forelse($sectionTags as $tag)
+                                    <label class="tag-card flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm cursor-pointer hover:border-slate-400 dark:border-navy-450 dark:hover:border-navy-400">
+                                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ old('tags', []) && in_array($tag->id, old('tags')) ? 'checked' : '' }}
+                                            class="form-checkbox is-basic rounded border-slate-400/70 bg-slate-100 checked:border-primary checked:bg-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:border-accent dark:checked:bg-accent">
+                                        <span class="tag-name text-slate-700 dark:text-navy-100">{{ $tag->nama }}</span>
+                                        <span class="ml-auto text-[10px] font-mono text-slate-400">{{ $tag->code }}</span>
+                                        <span class="tag-check size-5 shrink-0 items-center justify-center rounded-full bg-primary text-white dark:bg-accent">
+                                            <i class="fa-solid fa-check text-[9px]"></i>
+                                        </span>
+                                    </label>
+                                @empty
+                                    <p class="text-xs text-slate-400">Belum ada tag section. Tambahkan di bawah.</p>
+                                @endforelse
+                            </div>
+
+                            {{-- Add new tag inline --}}
+                            <div class="mt-2 space-y-2 new-tag-list"></div>
+                            <button type="button" class="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline dark:text-accent-light add-tag-btn">
+                                <i class="fa-solid fa-plus"></i> Add New Tag
+                            </button>
                         </div>
 
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -297,6 +354,38 @@
                                             class="form-input mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent"
                                             type="text">
                                     </label>
+                                </div>
+
+                                {{-- Tags (type: section) --}}
+                                <div class="block">
+                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Tags</span>
+                                    <span class="text-[11px] text-slate-400">— pilih satu atau lebih (type: section)</span>
+
+                                    @php
+                                        $selectedSectionTagIds = old('tags', $section->tags->pluck('id')->all());
+                                    @endphp
+
+                                    <div class="mt-1.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                        @forelse($sectionTags as $tag)
+                                            <label class="tag-card flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-1.5 text-sm cursor-pointer hover:border-slate-400 dark:border-navy-450 dark:hover:border-navy-400">
+                                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ in_array($tag->id, $selectedSectionTagIds) ? 'checked' : '' }}
+                                                    class="form-checkbox is-basic rounded border-slate-400/70 bg-slate-100 checked:border-primary checked:bg-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:border-accent dark:checked:bg-accent">
+                                                <span class="tag-name text-slate-700 dark:text-navy-100">{{ $tag->nama }}</span>
+                                                <span class="ml-auto text-[10px] font-mono text-slate-400">{{ $tag->code }}</span>
+                                                <span class="tag-check size-5 shrink-0 items-center justify-center rounded-full bg-primary text-white dark:bg-accent">
+                                                    <i class="fa-solid fa-check text-[9px]"></i>
+                                                </span>
+                                            </label>
+                                        @empty
+                                            <p class="text-xs text-slate-400">Belum ada tag section. Tambahkan di bawah.</p>
+                                        @endforelse
+                                    </div>
+
+                                    {{-- Add new tag inline --}}
+                                    <div class="mt-2 space-y-2 new-tag-list"></div>
+                                    <button type="button" class="mt-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline dark:text-accent-light add-tag-btn">
+                                        <i class="fa-solid fa-plus"></i> Add New Tag
+                                    </button>
                                 </div>
 
                                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -526,6 +615,34 @@
                     }
                 });
             }
+
+            // Sinkronisasi tampilan kartu tag dengan state checkbox
+            document.querySelectorAll('.tag-card input[type="checkbox"]').forEach(function (cb) {
+                var sync = function () { cb.closest('.tag-card').classList.toggle('tag-on', cb.checked); };
+                cb.addEventListener('change', sync);
+                sync();
+            });
+
+            // Inline Add New Tag (type otomatis 'section', code otomatis)
+            document.querySelectorAll('.add-tag-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const list = btn.closest('.block, form').querySelector('.new-tag-list');
+                    if (!list) return;
+
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center gap-2';
+                    row.innerHTML =
+                        '<input type="text" name="new_tag_names[]" placeholder="Nama tag baru (type: section)" ' +
+                        'class="form-input w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm placeholder:text-slate-400/70 ' +
+                        'hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">' +
+                        '<button type="button" class="btn h-8 w-8 shrink-0 rounded-full bg-error/10 p-0 font-medium text-error hover:bg-error/20 focus:bg-error/20 active:bg-error/25" title="Remove">' +
+                        '<i class="fa-solid fa-xmark text-xs"></i></button>';
+
+                    row.querySelector('button').addEventListener('click', function () { row.remove(); });
+                    list.appendChild(row);
+                    row.querySelector('input').focus();
+                });
+            });
         });
     </script>
 </x-app-layout>

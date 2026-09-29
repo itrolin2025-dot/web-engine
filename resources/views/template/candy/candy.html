@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nectar - The Swedish Candy Cart of Your Dreams</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nectarPink: '#f7b2cb',
+                        nectarDarkPink: '#e595b8',
+                        nectarBg: '#fcf8f5',
+                        nectarText: '#4a1525',
+                        nectarAccent: '#c73e5f'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        script: ['"Caveat"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #fcf8f5;
+            color: #4a1525;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Grid Background Pattern */
+        .grid-bg {
+            background-image:
+                linear-gradient(to right, rgba(230, 180, 190, 0.25) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(230, 180, 190, 0.25) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Navbar with exact SVG Scalloped/Wavy Bottom Effect */
+        .wavy-header {
+            background-color: #f8b8cf;
+            position: relative;
+            padding-bottom: 24px;
+            /* Space for the wave */
+        }
+
+        .wavy-svg-container {
+            position: absolute;
+            bottom: -18px;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            z-index: 10;
+        }
+
+        .wavy-svg-container svg {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 20px;
+        }
+
+        /* Floating animations for decorative elements */
+        @keyframes floatSlow {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-8px) rotate(3deg);
+            }
+        }
+
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+
+        /* Canvas for particle trail */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+    </style>
+</head>
+
+<section class="grid-bg min-h-screen flex flex-col selection:bg-pink-200">
+
+    <canvas id="particle-canvas"></canvas>
+
+    <header class="wavy-header py-4 px-6 md:px-12 shadow-sm relative z-20">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Left Navigation Links -->
+            <nav
+                class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-[#4a1525]">
+                <a href="#cart" class="hover:opacity-75 transition-opacity">Find the Cart</a>
+                <a href="#event" class="hover:opacity-75 transition-opacity">Book an Event</a>
+            </nav>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-btn" class="text-[#4a1525] focus:outline-none">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Logo in Center -->
+            <div class="absolute left-1/2 transform -translate-x-1/2">
+                <span
+                    class="font-serif italic font-bold text-3xl md:text-4xl tracking-tight text-[#4a1525]">nectar</span>
+            </div>
+
+            <!-- Right Navigation & Cart -->
+            <div class="flex items-center space-x-6">
+                <nav
+                    class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider text-[#4a1525]">
+                    <a href="#club" class="hover:opacity-75 transition-opacity">Candy Club</a>
+                    <a href="#buy" class="hover:opacity-75 transition-opacity">Buy Candy</a>
+                </nav>
+                <div class="relative cursor-pointer group flex items-center space-x-1 bg-white/40 px-3 py-1.5 rounded-full border border-pink-200 shadow-sm hover:bg-white/70 transition-all"
+                    onclick="openCartModal()">
+                    <i class="fa-solid fa-bag-shopping text-sm text-[#4a1525]"></i>
+                    <span id="cart-badge" class="text-xs font-bold text-[#4a1525]">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu"
+            class="hidden md:hidden pt-4 pb-2 border-t border-pink-300/40 mt-3 flex flex-col space-y-2 text-xs font-semibold uppercase tracking-wider text-[#4a1525]">
+            <a href="#cart" class="py-1">Find the Cart</a>
+            <a href="#event" class="py-1">Book an Event</a>
+            <a href="#club" class="py-1">Candy Club</a>
+            <a href="#buy" class="py-1">Buy Candy</a>
+        </div>
+
+        <!-- Precise SVG Wavy/Scalloped Bottom Edge -->
+        <div class="wavy-svg-container">
+            <svg viewBox="0 0 1200 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0,0 C30,20 60,20 90,0 C120,20 150,20 180,0 C210,20 240,20 270,0 C300,20 330,20 360,0 C390,20 420,20 450,0 C480,20 510,20 540,0 C570,20 600,20 630,0 C660,20 690,20 720,0 C750,20 780,20 810,0 C840,20 870,20 900,0 C930,20 960,20 990,0 C1020,20 1050,20 1080,0 C1110,20 1140,20 1170,0 C1200,20 1230,20 1260,0 L1200,0 L0,0 Z"
+                    fill="#f8b8cf"></path>
+            </svg>
+        </div>
+    </header>
+
+    <main
+        class="flex-grow max-w-7xl mx-auto w-full px-6 md:px-12 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+
+        <!-- Left Column: Content & Typography -->
+        <div class="lg:col-span-6 flex flex-col justify-center space-y-6 relative">
+
+            <!-- Subtitle based in Pittsburgh -->
+            <div class="text-xs uppercase tracking-widest font-bold text-[#4a1525]/70">
+                (Based in Pittsburgh, PA)
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="font-serif italic font-bold text-4xl sm:text-5xl lg:text-6xl text-[#4a1525] leading-tight">
+                The Swedish Candy Cart of Your Dreams
+            </h1>
+
+            <!-- Description -->
+            <p class="text-sm md:text-base text-[#4a1525]/80 max-w-md leading-relaxed font-normal">
+                Your go-to cart to call for events and catering, monthly candy club deliveries, online candy fixes, and
+                more.
+            </p>
+
+            <!-- Call to Action Button & Curved Arrow -->
+            <div class="pt-4 flex items-center space-x-6 relative">
+                <button onclick="joinClubAction()"
+                    class="bg-[#c2b2f0] hover:bg-[#b09de8] text-[#4a1525] text-xs font-bold uppercase tracking-wider py-3.5 px-7 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                    Join the Club
+                </button>
+
+                <!-- Decorative Curved Arrow SVG pointing to the cart -->
+                <div class="hidden sm:block absolute left-48 top-8 animate-pulse text-[#4a1525]">
+                    <svg width="110" height="60" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 10C30 50 80 50 95 30M95 30L80 20M95 30L85 42" stroke="#4a1525" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Small gummy bear decoration floating -->
+            <div
+                class="absolute -bottom-10 left-12 animate-float text-2xl select-none pointer-events-none hidden md:block">
+                🧸
+            </div>
+        </div>
+
+        <!-- Right Column: Distinct Candy Cart Card & Background Elements -->
+        <div class="lg:col-span-6 flex justify-center items-center relative">
+
+            <!-- Card Container with distinct background styling & soft shadow -->
+            <div
+                class="relative bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-3xl shadow-xl border border-pink-200/60 w-full max-w-lg group hover:shadow-2xl transition-all duration-300">
+
+                <!-- Candy Cart Image with fallback -->
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 p-2">
+                    <img src="b683fd019455efca44e7cc6bae601089.jpg" alt="The Swedish Candy Cart"
+                        onerror="this.src='https://placehold.co/600x400/fde2e4/4a1525?text=Nectar+Candy+Cart'"
+                        class="w-full h-auto object-cover rounded-xl transform group-hover:scale-105 transition-transform duration-500">
+                </div>
+
+                <!-- Handwritten text overlay: catch me if you candy! -->
+                <div
+                    class="absolute -bottom-6 -right-2 sm:-right-6 bg-pink-100/90 backdrop-blur-sm border border-pink-300 px-4 py-2 rounded-2xl shadow-md rotate-3 animate-float">
+                    <span class="font-script text-xl text-[#c73e5f] font-bold tracking-wide">
+                        catch me if you candy!
+                    </span>
+                </div>
+
+                <!-- Floating Cherry Icon attached near top right of cart card -->
+                <div class="absolute -top-4 -right-3 text-3xl animate-float select-none pointer-events-none">
+                    🍒
+                </div>
+            </div>
+
+            <!-- Background decorative sweets -->
+            <div class="absolute -top-10 left-4 animate-float text-3xl select-none pointer-events-none">
+                🍬
+            </div>
+            <div class="absolute -bottom-8 right-12 animate-float text-3xl select-none pointer-events-none"
+                style="animation-delay: 2s;">
+                🍓
+            </div>
+        </div>
+    </main>
+
+    <div id="cart-modal"
+        class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative border border-pink-100">
+            <button onclick="closeCartModal()" class="absolute top-4 right-4 text-gray-400 hover:text-[#4a1525]">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <h3 class="font-serif italic font-bold text-2xl text-[#4a1525] mb-4">Your Nectar Cart</h3>
+            <div id="cart-content" class="py-6 text-center text-[#4a1525]/70 text-sm">
+                Keranjang kamu masih kosong. Yuk pilih permen favoritmu!
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                <span class="font-bold text-sm text-[#4a1525]">Total: Rp 0</span>
+                <button onclick="checkoutAction()"
+                    class="bg-[#f8b8cf] hover:bg-[#f29ebb] text-[#4a1525] text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-full shadow transition-all">
+                    Checkout Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 bg-[#4a1525] text-white px-5 py-3 rounded-2xl shadow-xl text-xs font-medium tracking-wide transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-candy-cane text-pink-300 text-sm"></i>
+        <span id="toast-message">Notifikasi Nectar</span>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Cart Modal Handlers
+        let cartCount = 0;
+        function openCartModal() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+        function closeCartModal() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+        function joinClubAction() {
+            cartCount++;
+            document.getElementById('cart-badge').textContent = cartCount;
+            showToast("Berhasil bergabung dengan Nectar Candy Club! 🎉");
+        }
+        function checkoutAction() {
+            showToast("Fitur checkout sedang disiapkan. Stay sweet! 🍬");
+            closeCartModal();
+        }
+
+        // Toast Notification Helper
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Interactive Cursor Particle Trail Effect
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const candyEmojis = ['🍬', '🍭', '🍓', '🍒', '⭐', '🍥'];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.emoji = candyEmojis[Math.floor(Math.random() * candyEmojis.length)];
+                this.size = Math.random() * 12 + 10;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = Math.random() * -1.5 - 0.5;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.02 + 0.015;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.font = `${this.size}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.emoji, this.x, this.y);
+                ctx.restore();
+            }
+        }
+
+        // Track mouse movement to spawn particles
+        let lastSpawn = 0;
+        window.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastSpawn > 50) { // throttle spawn rate
+                particles.push(new Particle(e.clientX, e.clientY));
+                lastSpawn = now;
+            }
+        });
+
+        // Track touch events for mobile users
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                particles.push(new Particle(touch.clientX, touch.clientY));
+            }
+        }, { passive: true });
+
+        // Animation Loop
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</section>
+
+<section class="bg-red-500 min-h-screen flex items-center justify-center p-4 md:p-8 font-sans selection:bg-pink-200">
+
+    <div class="w-full max-w-6xl mx-auto flex flex-col items-center">
+
+        <!-- Agenda Book Container -->
+        <div
+            class="w-full bg-white rounded-3xl shadow-2xl relative overflow-hidden pt-8 pb-10 px-4 md:px-10 border-4 border-agendaRed/20">
+
+            <!-- Spiral Binding Header Circles -->
+            <div
+                class="absolute top-0 left-0 w-full flex justify-around px-4 md:px-8 py-3 bg-white z-20 border-b border-red-100/50">
+                <!-- Loop of 12 red binding rings -->
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+                <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-red-500 shadow-inner border-2 border-white">
+                </div>
+            </div>
+
+            <div class="text-center mt-6 mb-8">
+                <p class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#4a1525]/70 mb-1">
+                    Where to Catch the Cart
+                </p>
+                <h2 class="font-serif italic font-bold text-2xl md:text-4xl text-[#4a1525] tracking-tight">
+                    THIS WEEK
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mb-8">
+
+                <!-- Day 1: None -->
+                <div
+                    class="bg-[#721c2e] text-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-md min-h-[180px]">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider opacity-80">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto font-serif italic text-lg font-medium opacity-90">
+                        None
+                    </div>
+                    <div class="text-[10px] opacity-0">-</div>
+                </div>
+
+                <!-- Day 2: Product Card -->
+                <div
+                    class="bg-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-sm border border-red-200/50 hover:shadow-md transition-all min-h-[180px]">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider text-[#4a1525]/60">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto text-3xl my-2">
+                        🍩
+                    </div>
+                    <div>
+                        <p class="font-bold text-xs text-[#4a1525] leading-tight mb-1">Rocko Candy Vendor</p>
+                        <p class="text-[11px] text-[#4a1525]/70 font-medium">3:00-4:00pm</p>
+                    </div>
+                </div>
+
+                <!-- Day 3: Product Card -->
+                <div
+                    class="bg-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-sm border border-red-200/50 hover:shadow-md transition-all min-h-[180px]">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider text-[#4a1525]/60">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto text-3xl my-2">
+                        🧸
+                    </div>
+                    <div>
+                        <p class="font-bold text-xs text-[#4a1525] leading-tight mb-1">Rocko Candy Vendor</p>
+                        <p class="text-[11px] text-[#4a1525]/70 font-medium">3:00-4:00pm</p>
+                    </div>
+                </div>
+
+                <!-- Day 4: Product Card -->
+                <div
+                    class="bg-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-sm border border-red-200/50 hover:shadow-md transition-all min-h-[180px]">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider text-[#4a1525]/60">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto text-3xl my-2">
+                        🍫
+                    </div>
+                    <div>
+                        <p class="font-bold text-xs text-[#4a1525] leading-tight mb-1">Rocko Candy Vendor</p>
+                        <p class="text-[11px] text-[#4a1525]/70 font-medium">3:00-4:00pm</p>
+                    </div>
+                </div>
+
+                <!-- Day 5: Product Card -->
+                <div
+                    class="bg-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-sm border border-red-200/50 hover:shadow-md transition-all min-h-[180px]">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider text-[#4a1525]/60">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto text-3xl my-2">
+                        🍒
+                    </div>
+                    <div>
+                        <p class="font-bold text-xs text-[#4a1525] leading-tight mb-1">Rocko Candy Vendor</p>
+                        <p class="text-[11px] text-[#4a1525]/70 font-medium">3:00-4:00pm</p>
+                    </div>
+                </div>
+
+                <!-- Day 6: Product Card -->
+                <div
+                    class="bg-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-sm border border-red-200/50 hover:shadow-md transition-all min-h-[180px]">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider text-[#4a1525]/60">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto text-3xl my-2">
+                        🍬
+                    </div>
+                    <div>
+                        <p class="font-bold text-xs text-[#4a1525] leading-tight mb-1">Rocko Candy Vendor</p>
+                        <p class="text-[11px] text-[#4a1525]/70 font-medium">3:00-4:00pm</p>
+                    </div>
+                </div>
+
+                <!-- Day 7: Product Card -->
+                <div
+                    class="bg-white rounded-2xl p-4 flex flex-col justify-between items-center text-center shadow-sm border border-red-200/50 hover:shadow-md transition-all min-h-[180px] col-span-2 sm:col-span-1">
+                    <div
+                        class="w-full flex justify-between items-center text-[10px] uppercase font-bold tracking-wider text-[#4a1525]/60">
+                        <span>MAR 03</span>
+                        <span>(TUE)</span>
+                    </div>
+                    <div class="my-auto text-3xl my-2">
+                        🥤
+                    </div>
+                    <div>
+                        <p class="font-bold text-xs text-[#4a1525] leading-tight mb-1">Rocko Candy Vendor</p>
+                        <p class="text-[11px] text-[#4a1525]/70 font-medium">3:00-4:00pm</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="handleFindUs()"
+                    class="bg-[#721c2e] hover:bg-[#5a1523] text-white text-xs font-bold uppercase tracking-wider py-3.5 px-8 rounded-full shadow-md transition-all transform hover:-translate-y-0.5">
+                    Find Us Today
+                </button>
+            </div>
+
+        </div>
+
+        <div
+            class="w-full bg-red-400 rounded-2xl p-6 mt-6 shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 border border-pink-300">
+            <div class="text-[#4a1525] font-bold text-xs md:text-sm tracking-wide text-center md:text-left">
+                PSST! GET THE SCHEDULE IN YOUR INBOX EVERY WEEK!
+            </div>
+
+            <form onsubmit="handleSubscribe(event)"
+                class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+                <input type="email" id="subscriber-email" placeholder="EMAIL ADDRESS" required
+                    class="bg-white text-[#4a1525] placeholder-[#4a1525]/50 text-xs font-semibold py-3 px-5 rounded-full border border-pink-200 focus:outline-none focus:ring-2 focus:ring-[#721c2e] w-full sm:w-64">
+                <button type="submit"
+                    class="bg-[#721c2e] hover:bg-[#5a1523] text-white text-xs font-bold uppercase tracking-wider py-3 px-6 rounded-full shadow transition-all w-full sm:w-auto">
+                    Sign Up
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 bg-[#4a1525] text-white px-5 py-3 rounded-2xl shadow-xl text-xs font-medium tracking-wide transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-candy-cane text-pink-300 text-sm"></i>
+        <span id="toast-message">Notifikasi Berhasil</span>
+    </div>
+
+    <script>
+        function handleFindUs() {
+            showToast("Membuka peta lokasi cart minggu ini! 🗺️");
+        }
+
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const emailInput = document.getElementById('subscriber-email');
+            if (emailInput.value) {
+                showToast("Terima kasih! Jadwal mingguan telah dikirim ke email kamu 💌");
+                emailInput.value = '';
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</section>
+
+<section class="bg-[#FAF6F0] min-h-screen flex flex-col justify-between selection:bg-pink-200">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nectarBgCream: '#FAF6F0',
+                        nectarTextRed: '#4a1525',
+                        nectarButtonRed: '#c73e5f',
+                        nectarStripePink: '#f9d2de',
+                        nectarStripeWhite: '#ffffff',
+                    },
+                    fontFamily: {
+                        serif: ['"Instrument Serif"', '"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        script: ['"Caveat"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Vertical Pink Stripes Background Pattern */
+        .pink-stripe-bg {
+            background: repeating-linear-gradient(to right,
+                    #fce8f0,
+                    #fce8f0 30px,
+                    #ffffff 30px,
+                    #ffffff 60px);
+        }
+
+        /* Custom SVG Badge Clip-paths / Styles */
+        .scalloped-peach {
+            background-color: #f7a379;
+            border-radius: 24px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+        }
+
+        .starburst-maroon {
+            background-color: #611328;
+            clip-path: polygon(50% 0%, 61% 10%, 75% 5%, 80% 18%, 95% 20%,
+                    90% 35%, 100% 48%, 90% 62%, 95% 78%, 80% 80%,
+                    75% 95%, 61% 90%, 50% 100%, 39% 90%, 25% 95%,
+                    20% 80%, 5% 78%, 10% 62%, 0% 48%, 10% 35%,
+                    5% 20%, 20% 18%, 25% 5%, 39% 10%);
+        }
+
+        .scalloped-pink {
+            background-color: #fbd6e3;
+            border-radius: 20px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+        }
+
+        /* Retro Red & White Striped Bottom Border */
+        .retro-bottom-stripes {
+            height: 16px;
+            background: repeating-linear-gradient(135deg,
+                    #8b1e32,
+                    #8b1e32 15px,
+                    #ffffff 15px,
+                    #ffffff 30px);
+        }
+    </style>
+    <!-- Main Section Container -->
+    <div class="p-7">
+        <div
+            class="w-full mt-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-stretch shadow-xl my-auto rounded-3xl overflow-hidden border border-rose-100">
+
+            <!-- LEFT COLUMN: Cream Background & Event Details -->
+            <div
+                class="w-full lg:w-1/2 bg-[#FAF6F0] p-8 sm:p-12 md:p-16 flex flex-col justify-center space-y-6 relative">
+
+                <!-- Small Uppercase Header -->
+                <div class="text-[11px] sm:text-xs uppercase font-bold tracking-[0.2em] text-[#611328]">
+                    WEDDINGS &nbsp;·&nbsp; BIRTHDAYS &nbsp;·&nbsp; POP-UPS &nbsp;&amp;&nbsp; MORE
+                </div>
+
+                <!-- Main Heading with Instrument Serif -->
+                <h1
+                    class="font-serif italic text-5xl sm:text-6xl md:text-7xl text-[#4a1525] leading-[0.95] tracking-tight">
+                    Your event called.<br>It wants candy!
+                </h1>
+
+                <!-- Description Paragraph -->
+                <p class="text-sm sm:text-base text-[#4a1525]/80 font-normal leading-relaxed max-w-lg">
+                    Candy concierge-guided tastings, a mix-your-own candy bag for every guest, and a candy cart that
+                    doubles
+                    as a conversation piece.
+                </p>
+
+                <!-- Three Price Badges in a Row -->
+                <div class="flex flex-wrap items-center gap-4 pt-2">
+
+                    <!-- Badge 1: $399 Cart Fee -->
+                    <div
+                        class="scalloped-peach w-28 h-28 flex flex-col items-center justify-center text-center p-2 transform -rotate-2 hover:rotate-0 transition-transform">
+                        <span class="font-serif font-bold text-2xl text-[#4a1525]">$399</span>
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-wider text-[#4a1525] leading-tight mt-0.5">CART
+                            FEE<br>(3HRS)</span>
+                    </div>
+
+                    <!-- Badge 2: $8 Per Guest -->
+                    <div
+                        class="starburst-maroon w-28 h-28 flex flex-col items-center justify-center text-center p-3 transform rotate-3 hover:rotate-0 transition-transform text-white">
+                        <span class="font-serif font-bold text-2xl">$8</span>
+                        <span
+                            class="text-[10px] font-bold uppercase tracking-wider leading-tight mt-0.5">PER<br>GUEST</span>
+                    </div>
+
+                    <!-- Badge 3: $99 Per Added Hr -->
+                    <div
+                        class="scalloped-pink w-28 h-28 flex flex-col items-center justify-center text-center p-2 transform -rotate-3 hover:rotate-0 transition-transform text-[#4a1525]">
+                        <span class="font-serif font-bold text-2xl">$99</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider leading-tight mt-0.5">PER<br>ADDED
+                            HR</span>
+                    </div>
+
+                </div>
+
+                <!-- Plan Your Event Button -->
+                <div class="pt-4">
+                    <button onclick="handlePlanEvent()"
+                        class="bg-[#c23b59] hover:bg-[#a9324d] text-white text-xs font-bold uppercase tracking-widest py-3.5 px-8 rounded-full shadow-md transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                        PLAN YOUR EVENT
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Pink Striped Background & Photo Frame with Stickers -->
+            <div
+                class="w-full lg:w-1/2 pink-stripe-bg p-8 sm:p-12 md:p-16 flex items-center justify-center relative overflow-hidden">
+
+                <!-- Container for Tilted Polaroid Frame & Stickers -->
+                <div
+                    class="relative max-w-md w-full transform rotate-1 hover:rotate-0 transition-transform duration-500">
+
+                    <!-- Top-Left Peach Sticker Badge ("designed to delight!") -->
+                    <div
+                        class="absolute -top-6 -left-6 z-30 bg-[#fce4d6] border-2 border-[#b54530] px-4 py-2 rounded-full transform -rotate-12 shadow-md flex items-center space-x-1">
+                        <span class="font-script text-xs sm:text-sm font-bold text-[#b54530] tracking-wide">designed to
+                            delight!</span>
+                    </div>
+
+                    <!-- Top-Left Round Peach Logo Sticker -->
+                    <div
+                        class="absolute top-6 -left-10 z-30 w-16 h-16 bg-[#e05643] rounded-full border-4 border-white shadow-lg flex items-center justify-center transform -rotate-6 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1595855759920-86582396756a?w=150&auto=format&fit=crop&q=80"
+                            alt="Nectar peach icon" class="w-full h-full object-cover opacity-90">
+                        <span
+                            class="absolute text-[9px] font-bold text-white uppercase tracking-tighter bg-black/30 px-1 rounded">nectar</span>
+                    </div>
+
+                    <!-- Red Sticky Tape at Top-Right -->
+                    <div class="absolute -top-3 right-12 z-30 w-24 h-8 bg-[#c73e5f]/90 transform rotate-6 shadow-sm">
+                    </div>
+
+                    <!-- White Polaroid / Photo Frame -->
+                    <div class="bg-white p-4 sm:p-5 rounded-sm shadow-2xl border border-gray-200 relative">
+
+                        <!-- Image Display Area with Switcher Capability -->
+                        <div class="relative overflow-hidden rounded bg-pink-50">
+                            <img id="active-cart-image" src="b683fd019455efca44e7cc6bae601089.jpg"
+                                alt="The Swedish Candy Cart"
+                                onerror="this.src='https://placehold.co/600x450/fde2e4/4a1525?text=Nectar+Cart'"
+                                class="w-full h-[320px] sm:h-[380px] object-cover rounded">
+                        </div>
+
+                        <!-- Image Switcher Navigation Bar inside the frame -->
+                        <div class="flex items-center justify-center space-x-3 mt-3 pt-2 border-t border-gray-100">
+                            <span class="text-[10px] uppercase font-bold text-gray-400">Pilih Tampilan:</span>
+                            <button onclick="switchImage(1)"
+                                class="w-3 h-3 rounded-full bg-[#c73e5f] focus:outline-none ring-2 ring-offset-1 ring-[#c73e5f]"
+                                id="dot-1" title="Tampilan 1"></button>
+                            <button onclick="switchImage(2)"
+                                class="w-3 h-3 rounded-full bg-gray-300 focus:outline-none ring-2 ring-offset-1 ring-gray-300"
+                                id="dot-2" title="Tampilan 2"></button>
+                        </div>
+                    </div>
+
+                    <!-- Red Sticky Tape at Bottom-Left -->
+                    <div class="absolute -bottom-3 left-8 z-30 w-28 h-8 bg-[#c73e5f]/90 transform -rotate-12 shadow-sm">
+                    </div>
+
+                    <!-- Bottom-Right Tag: "Candy Curated By: Your Tastebuds" with Purple Bow & Ribbons -->
+                    <div
+                        class="absolute -bottom-8 -right-4 sm:-right-8 z-30 bg-[#fffefc] border-2 border-dashed border-[#b54530] p-3 rounded shadow-lg transform rotate-6 max-w-[200px]">
+                        <div class="text-[10px] text-[#4a1525]/70 font-bold uppercase tracking-wider">Candy Curated By:
+                        </div>
+                        <div class="font-script text-xl font-bold text-[#c73e5f]">Your Tastebuds</div>
+
+                        <!-- Purple Ribbons Graphic (SVG) -->
+                        <div class="absolute -top-4 -left-6 w-12 h-12 pointer-events-none">
+                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M50 30 C40 10, 10 20, 20 40 C30 60, 50 50, 50 50 C50 50, 70 60, 80 40 C90 20, 60 10, 50 30 Z"
+                                    fill="#b19cd9" stroke="#7b52ab" stroke-width="3" />
+                                <path d="M45 50 Q 30 80, 15 90 M 55 50 Q 70 85, 85 95" stroke="#b19cd9" stroke-width="4"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Retro Bottom Striped Footer Decoration -->
+    <div class="w-full retro-bottom-stripes mt-8"></div>
+
+    <!-- Notification Toast -->
+    <div id="toast"
+        class="fixed bottom-6 right-6 bg-[#4a1525] text-white px-5 py-3 rounded-2xl shadow-xl text-xs font-medium tracking-wide transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center space-x-2">
+        <i class="fa-solid fa-candy-cane text-pink-300 text-sm"></i>
+        <span id="toast-message">Notifikasi Nectar</span>
+    </div>
+
+    <script>
+        // Image Switcher Functionality
+        const images = [
+            "b683fd019455efca44e7cc6bae601089.jpg",
+            "https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?w=800&auto=format&fit=crop&q=80"
+        ];
+
+        function switchImage(index) {
+            const imgElement = document.getElementById('active-cart-image');
+            const dot1 = document.getElementById('dot-1');
+            const dot2 = document.getElementById('dot-2');
+
+            if (index === 1) {
+                imgElement.src = images[0];
+                dot1.className = "w-3 h-3 rounded-full bg-[#c73e5f] focus:outline-none ring-2 ring-offset-1 ring-[#c73e5f]";
+                dot2.className = "w-3 h-3 rounded-full bg-gray-300 focus:outline-none ring-2 ring-offset-1 ring-gray-300";
+            } else {
+                imgElement.src = images[1];
+                dot2.className = "w-3 h-3 rounded-full bg-[#c73e5f] focus:outline-none ring-2 ring-offset-1 ring-[#c73e5f]";
+                dot1.className = "w-3 h-3 rounded-full bg-gray-300 focus:outline-none ring-2 ring-offset-1 ring-gray-300";
+            }
+            showToast("Foto troli permen berhasil diganti! 🍬");
+        }
+
+        function handlePlanEvent() {
+            showToast("Membuka formulir pemesanan event Nectar! 🎉");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</section>
+
+<!-- Section Utama tanpa header, full-bleed memenuhi layar -->
+<section class="w-full min-h-screen bg-[#B8B4FF] flex items-center justify-center p-6 md:p-12">
+
+    <style>
+        .font-serif-custom {
+            font-family: 'Instrument Serif', serif;
+        }
+
+        .font-sans-custom {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        /* Scalloped Box with exact SVG Wavy Edges on all 4 sides */
+        .scalloped-box {
+            background-color: #FAF6F0;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.07);
+        }
+
+        .wavy-edge-top,
+        .wavy-edge-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 18px;
+            overflow: hidden;
+            line-height: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .wavy-edge-top {
+            top: -17px;
+        }
+
+        .wavy-edge-bottom {
+            bottom: -17px;
+        }
+
+        .wavy-edge-left,
+        .wavy-edge-right {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 18px;
+            overflow: hidden;
+            line-height: 0;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .wavy-edge-left {
+            left: -17px;
+        }
+
+        .wavy-edge-right {
+            right: -17px;
+        }
+
+        .wavy-edge-top svg,
+        .wavy-edge-bottom svg,
+        .wavy-edge-left svg,
+        .wavy-edge-right svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Card Tengah dengan Efek Wavy/Scalloped di Seluruh Tepinya -->
+    <div
+        class="scalloped-box w-full max-w-4xl mx-auto p-8 md:p-16 text-center relative flex flex-col items-center justify-center my-6">
+
+        <!-- Top Wavy Edge -->
+        <div class="wavy-edge-top">
+            <svg viewBox="0 0 1200 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" class="rotate-180">
+                <path
+                    d="M0,0 C30,20 60,20 90,0 C120,20 150,20 180,0 C210,20 240,20 270,0 C300,20 330,20 360,0 C390,20 420,20 450,0 C480,20 510,20 540,0 C570,20 600,20 630,0 C660,20 690,20 720,0 C750,20 780,20 810,0 C840,20 870,20 900,0 C930,20 960,20 990,0 C1020,20 1050,20 1080,0 C1110,20 1140,20 1170,0 C1200,20 1230,20 1260,0 L1200,0 L0,0 Z"
+                    fill="#FAF6F0"></path>
+            </svg>
+        </div>
+
+        <!-- Bottom Wavy Edge -->
+        <div class="wavy-edge-bottom">
+            <svg viewBox="0 0 1200 24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0,0 C30,20 60,20 90,0 C120,20 150,20 180,0 C210,20 240,20 270,0 C300,20 330,20 360,0 C390,20 420,20 450,0 C480,20 510,20 540,0 C570,20 600,20 630,0 C660,20 690,20 720,0 C750,20 780,20 810,0 C840,20 870,20 900,0 C930,20 960,20 990,0 C1020,20 1050,20 1080,0 C1110,20 1140,20 1170,0 C1200,20 1230,20 1260,0 L1200,0 L0,0 Z"
+                    fill="#FAF6F0"></path>
+            </svg>
+        </div>
+
+        <!-- Left Wavy Edge -->
+        <div class="wavy-edge-left">
+            <svg viewBox="0 0 24 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M24,0 C4,25 4,50 24,75 C4,100 4,125 24,150 C4,175 4,200 24,225 C4,250 4,275 24,300 C4,325 4,350 24,375 C4,400 4,425 24,450 C4,475 4,500 24,525 C4,550 4,575 24,600 C4,625 4,650 24,675 C4,700 4,725 24,750 C4,775 4,800 24,800 L24,800 L24,0 Z"
+                    fill="#FAF6F0"></path>
+            </svg>
+        </div>
+
+        <!-- Right Wavy Edge -->
+        <div class="wavy-edge-right">
+            <svg viewBox="0 0 24 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M0,0 C20,25 20,50 0,75 C20,100 20,125 0,150 C20,175 20,200 0,225 C20,250 20,275 0,300 C20,325 20,350 0,375 C20,400 20,425 0,450 C20,475 20,500 0,525 C20,550 20,575 0,600 C20,625 20,650 0,675 C20,700 20,725 0,750 C20,775 20,800 0,800 L0,800 L0,0 Z"
+                    fill="#FAF6F0"></path>
+            </svg>
+        </div>
+
+        <!-- Badge Tiket di Atas -->
+        <div
+            class="mb-6 bg-white/80 border border-purple-200 px-4 py-1.5 rounded-lg shadow-sm inline-flex items-center gap-2 transform -rotate-1 relative z-20">
+            <span class="text-xs font-bold tracking-wider text-[#5B4636] uppercase font-sans-custom">nectar Candy
+                Club</span>
+        </div>
+
+        <!-- Subtitle Tag -->
+        <div class="mb-3 bg-[#F8D7DA] px-3 py-1 rounded-md inline-block relative z-20">
+            <span class="text-[11px] font-bold tracking-widest text-[#721C24] uppercase font-sans-custom">MONTHLY CANDY
+                SUBSCRIPTION</span>
+        </div>
+
+        <!-- Judul Utama -->
+        <h2 class="text-5xl md:text-7xl font-serif-custom text-[#3D2314] tracking-tight leading-none mb-4 relative z-20">
+            Join the Nectar<br>Candy Club
+        </h2>
+
+        <!-- Harga -->
+        <p class="text-2xl md:text-3xl font-serif-custom text-[#3D2314] italic mb-6 relative z-20">
+            $25/month
+        </p>
+
+        <!-- Deskripsi -->
+        <p class="text-sm md:text-base text-[#5B4636] max-w-xl mx-auto leading-relaxed mb-8 relative z-20">
+            Candy concierge-guided tastings, a mix-your-own candy bag for every guest, and a candy cart that doubles as
+            a conversation piece.
+        </p>
+
+        <!-- Tombol Aksi -->
+        <button
+            class="bg-[#C84B31] hover:bg-[#A83B21] text-white font-bold px-8 py-3.5 rounded-full shadow-lg transition-transform transform hover:scale-105 uppercase tracking-wider text-sm relative z-20">
+            JOIN THE CLUB NOW
+        </button>
+
+        <!-- Ilustrasi / Stiker Dekoratif Pendukung -->
+        <!-- Stiker Hati Kanan Atas -->
+        <div
+            class="absolute -top-6 -right-4 md:-top-8 md:-right-6 bg-[#C84B31] text-white w-20 h-20 md:w-24 md:h-24 rounded-full flex flex-col items-center justify-center p-2 transform rotate-12 shadow-md border-2 border-white z-30">
+            <span class="text-[10px] md:text-xs font-serif-custom italic text-center leading-tight">Just a Lil Something
+                Sweet</span>
+        </div>
+
+        <!-- Stiker Permen Kiri Tengah -->
+        <div
+            class="absolute top-1/3 -left-4 md:-left-6 transform -rotate-12 bg-[#FFB6C1] p-3 rounded-xl shadow-md border-2 border-white hidden sm:block z-30">
+            <span class="text-2xl">🍬</span>
+        </div>
+
+        <!-- Stiker Ceri Kanan Tengah -->
+        <div
+            class="absolute top-1/2 -right-4 md:-right-6 transform rotate-12 bg-white p-3 rounded-full shadow-md border-2 border-pink-200 hidden sm:block z-30">
+            <span class="text-2xl">🍒</span>
+        </div>
+
+    </div>
+
+</section>
+
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLUP - Good Coffee Great Vibes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Titan One, Fredoka, Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Titan+One&display=swap" rel="stylesheet">
+    <style>
+        .font-bubble {
+            font-family: 'Titan One', 'Fredoka', cursive, sans-serif;
+        }
+
+        .font-chunky {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Scalloped Star/Flower Badge */
+        .scalloped-badge {
+            clip-path: polygon(
+                50% 0%, 63% 10%, 79% 5%, 86% 20%, 99% 25%, 97% 41%, 100% 57%, 91% 70%, 93% 87%, 77% 93%, 68% 100%, 50% 95%, 32% 100%, 23% 93%, 7% 87%, 9% 70%, 0% 57%, 3% 41%, 1% 25%, 14% 20%, 21% 5%, 37% 10%
+            );
+        }
+
+        /* Hover animations */
+        .bento-card {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 36px -10px rgba(0, 0, 0, 0.12);
+        }
+        /* Blob/organic shape for section 1 images */
+        .blob-shape-1 {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        .blob-shape-2 {
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+        .blob-shape-3 {
+            border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        }
+        .blob-shape-4 {
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+        }
+        .blob-shape-5 {
+            border-radius: 50% 50% 30% 70% / 50% 70% 30% 50%;
+        }
+    </style>
+</head>
+
+<body class="bg-white min-h-screen m-0 p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col font-sans-custom antialiased selection:bg-[#F5B82E] selection:text-[#1346A0]">
+
+    <!-- Full Screen Container -->
+    <div class="w-full max-w-[1600px] mx-auto flex-1 flex flex-col justify-between">
+
+        <!-- ================= NAVBAR ================= -->
+        <header class="w-full flex items-center justify-between pb-6 sm:pb-8">
+            <!-- Brand Logo -->
+            <a href="#" class="font-bubble text-3xl sm:text-4xl text-[#1346A0] tracking-tight lowercase">
+                blup
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center space-x-10 text-sm sm:text-base font-bold text-[#1346A0]">
+                <a href="#" class="hover:text-[#E63C78] transition-colors">Home</a>
+                <a href="#" class="hover:text-[#E63C78] transition-colors">About</a>
+                <a href="#" class="hover:text-[#E63C78] transition-colors">Menu</a>
+                <a href="#" class="hover:text-[#E63C78] transition-colors">Contact</a>
+            </nav>
+
+            <!-- Order Now CTA Button -->
+            <a href="#" class="bg-[#1346A0] hover:bg-[#0e3782] text-white font-bold text-xs sm:text-sm px-6 sm:px-8 py-3 rounded-full shadow-md hover:shadow-lg transition-all">
+                Order Now
+            </a>
+        </header>
+
+
+        <!-- ================= MAIN HERO BENTO GRID (FULL SCREEN) ================= -->
+        <div class="w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 md:gap-7 items-stretch">
+
+            <!-- ================= LEFT BENTO: PINK HERO CARD (7 cols) ================= -->
+            <div class="lg:col-span-7 bg-[#E63C78] rounded-[32px] sm:rounded-[44px] p-8 sm:p-12 md:p-14 lg:p-16 text-white relative overflow-hidden bento-card flex flex-col justify-between min-h-[520px] sm:min-h-[580px] lg:min-h-[620px]">
+                
+                <!-- Background Image (User can replace with custom image) -->
+                <div class="absolute inset-0 bg-cover bg-center opacity-30 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+
+                <!-- Top Row: Badge Flower -->
+                <div class="w-full flex justify-end relative z-10">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-[#F5B82E] text-[#E63C78] scalloped-badge flex items-center justify-center font-bubble text-xl sm:text-2xl md:text-3xl shadow-md rotate-12">
+                        B
+                    </div>
+                </div>
+
+                <!-- Middle Content: Big Chunky Headline -->
+                <div class="relative z-10 my-auto max-w-lg">
+                    <h1 class="font-bubble text-5xl sm:text-7xl md:text-8xl lg:text-[84px] leading-[0.92] tracking-tight uppercase drop-shadow-sm">
+                        GOOD<br>
+                        COFFEE<br>
+                        GREAT<br>
+                        VIBES
+                    </h1>
+                </div>
+
+                <!-- Floating Drink/Latte Background Graphic Container on Bottom Right -->
+                <div class="absolute right-[-10%] sm:right-0 bottom-[-10px] sm:bottom-0 w-[55%] sm:w-[50%] h-[75%] pointer-events-none z-10 flex items-end justify-center">
+                    <!-- Background image container for Iced Coffee Splash -->
+                    <div class="w-full h-full bg-contain bg-bottom bg-no-repeat" style="background-image: url('/images/default/broken.png');"></div>
+                </div>
+
+                <!-- Bottom Row: Subtitle & CTA Button -->
+                <div class="relative z-20 mt-6 max-w-xs sm:max-w-sm space-y-5">
+                    <p class="text-xs sm:text-sm md:text-base text-white/95 leading-relaxed font-semibold">
+                        Freshly brewed coffee and oven-baked pastries, served daily to make every moment a little warmer.
+                    </p>
+                    <a href="#" class="inline-flex items-center gap-2 bg-white hover:bg-neutral-50 text-[#E63C78] font-bubble text-sm sm:text-base px-7 sm:px-9 py-3.5 sm:py-4 rounded-full shadow-lg transition-transform hover:scale-105">
+                        <span>Order Now</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                    </a>
+                </div>
+
+            </div>
+
+
+            <!-- ================= RIGHT BENTO: 2 STACKED CARDS (5 cols) ================= -->
+            <div class="lg:col-span-5 flex flex-col gap-5 sm:gap-6 md:gap-7 justify-between">
+
+                <!-- ===== CARD 1 (TOP): BLUE "TOP PICK" CARD ===== -->
+                <div class="flex-1 bg-[#1346A0] rounded-[28px] sm:rounded-[40px] p-7 sm:p-9 md:p-10 text-white relative overflow-hidden bento-card flex flex-col justify-between min-h-[250px] sm:min-h-[280px]">
+                    
+                    <!-- Background Image (User can replace with custom image) -->
+                    <div class="absolute inset-0 bg-cover bg-center opacity-25 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+
+                    <!-- Top Row: Label & Scalloped Badge -->
+                    <div class="flex items-start justify-between relative z-10">
+                        <div>
+                            <h2 class="font-bubble text-2xl sm:text-3xl md:text-4xl tracking-tight uppercase leading-none">
+                                TOP<br>PICK
+                            </h2>
+                        </div>
+                        <!-- Yellow Badge -->
+                        <div class="w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 bg-[#F5B82E] text-[#1346A0] scalloped-badge flex items-center justify-center font-bubble text-lg sm:text-xl shadow-sm">
+                            B
+                        </div>
+                    </div>
+
+                    <!-- Right Side Croissant & Cup Graphic Container -->
+                    <div class="absolute right-3 bottom-0 w-[45%] h-[80%] pointer-events-none z-10 flex items-end justify-center">
+                        <div class="w-full h-full bg-contain bg-bottom bg-no-repeat" style="background-image: url('/images/default/broken.png');"></div>
+                    </div>
+
+                    <!-- Bottom Content: Description, Button, and Price -->
+                    <div class="relative z-20 mt-4 max-w-[60%] space-y-3 sm:space-y-4">
+                        <p class="text-[11px] sm:text-xs md:text-sm text-white/90 leading-snug font-medium">
+                            The perfect match for your favorite coffee.
+                        </p>
+                        <div>
+                            <a href="#" class="inline-flex items-center gap-1.5 bg-[#F5B82E] hover:bg-[#e2a720] text-[#1346A0] font-bold text-xs sm:text-sm px-4 sm:px-5 py-1.5 sm:py-2 rounded-full shadow transition-all">
+                                <span>Order Now</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 17L17 7M17 7H7M17 7V17" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="font-bubble text-3xl sm:text-4xl md:text-5xl text-[#E63C78] tracking-tight pt-1">
+                            $4.00
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- ===== CARD 2 (BOTTOM): YELLOW "BAKED FRESH" CARD ===== -->
+                <div class="flex-1 bg-[#F5B82E] rounded-[28px] sm:rounded-[40px] p-7 sm:p-9 md:p-10 text-[#1346A0] relative overflow-hidden bento-card flex flex-col justify-between min-h-[250px] sm:min-h-[280px]">
+                    
+                    <!-- Background Image (User can replace with custom image) -->
+                    <div class="absolute inset-0 bg-cover bg-center opacity-25 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+
+                    <!-- Top Row: Label & Scalloped Badge -->
+                    <div class="flex items-start justify-between relative z-10">
+                        <div>
+                            <h2 class="font-bubble text-2xl sm:text-3xl md:text-4xl tracking-tight uppercase leading-none">
+                                BAKED<br>FRESH
+                            </h2>
+                        </div>
+                        <!-- Blue Badge -->
+                        <div class="w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 bg-[#1346A0] text-[#F5B82E] scalloped-badge flex items-center justify-center font-bubble text-lg sm:text-xl shadow-sm">
+                            B
+                        </div>
+                    </div>
+
+                    <!-- Right Side Floating Croissants Graphic Container -->
+                    <div class="absolute right-2 bottom-0 w-[55%] h-[85%] pointer-events-none z-10 flex items-end justify-center">
+                        <div class="w-full h-full bg-contain bg-bottom bg-no-repeat" style="background-image: url('/images/default/broken.png');"></div>
+                    </div>
+
+                    <!-- Bottom Content: Description -->
+                    <div class="relative z-20 mt-4 max-w-[55%]">
+                        <p class="text-xs sm:text-sm md:text-base text-[#1346A0]/90 font-bold leading-relaxed">
+                            Crunch outside, soft inside.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ===== ROW 2: 1 FULL-WIDTH CARD ===== -->
+        <div class="w-full mt-5 sm:mt-6 md:mt-7">
+            <div class="w-full bg-[#E63C78] rounded-[32px] sm:rounded-[44px] p-8 sm:p-12 md:p-14 relative overflow-hidden bento-card flex flex-col sm:flex-row items-center justify-between gap-6 min-h-[160px] sm:min-h-[180px]">
+
+                <!-- Background image -->
+                <div class="absolute inset-0 bg-cover bg-center opacity-20 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+
+                <!-- Left: Text content -->
+                <div class="relative z-10">
+                    <p class="text-white/80 font-sans-custom font-semibold text-xs sm:text-sm tracking-widest uppercase mb-2">Today's Special</p>
+                    <h2 class="font-bubble text-white text-4xl sm:text-5xl md:text-6xl tracking-tight leading-none uppercase">
+                        Fresh Picks
+                    </h2>
+                </div>
+
+                <!-- Center: Decorative scalloped badge -->
+                <div class="relative z-10 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#F5B82E] text-[#E63C78] scalloped-badge flex items-center justify-center font-bubble text-2xl sm:text-3xl shadow-lg rotate-12 flex-shrink-0">
+                    B
+                </div>
+
+                <!-- Right: CTA -->
+                <div class="relative z-10 flex flex-col items-end gap-3">
+                    <p class="text-white/80 text-xs sm:text-sm font-medium text-right hidden sm:block max-w-[200px] leading-relaxed">
+                        Handcrafted drinks and baked goods made fresh every morning.
+                    </p>
+                    <a href="#" class="inline-flex items-center gap-2 bg-white hover:bg-neutral-50 text-[#E63C78] font-bubble text-sm px-6 py-3 rounded-full shadow-md transition-transform hover:scale-105">
+                        <span>See Menu</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M7 17L17 7M17 7H7M17 7V17" /></svg>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ===== ROW 3: 2 CARDS SIDE BY SIDE ===== -->
+        <div class="w-full mt-5 sm:mt-6 md:mt-7 grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 md:gap-7">
+
+            <!-- Card Left: Blue -->
+            <div class="bg-[#1346A0] rounded-[32px] sm:rounded-[44px] p-8 sm:p-10 md:p-12 relative overflow-hidden bento-card flex flex-col justify-between min-h-[200px] sm:min-h-[220px]">
+                <div class="absolute inset-0 bg-cover bg-center opacity-20 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+
+                <!-- Top label -->
+                <div class="relative z-10 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#F5B82E]"></span>
+                    <span class="text-white/70 font-sans-custom font-semibold text-xs tracking-widest uppercase">Our Story</span>
+                </div>
+
+                <!-- Bottom content -->
+                <div class="relative z-10 mt-auto">
+                    <h3 class="font-bubble text-white text-3xl sm:text-4xl md:text-5xl tracking-tight leading-tight uppercase">
+                        Brewed<br>with Love
+                    </h3>
+                </div>
+            </div>
+
+            <!-- Card Right: Yellow -->
+            <div class="bg-[#F5B82E] rounded-[32px] sm:rounded-[44px] p-8 sm:p-10 md:p-12 relative overflow-hidden bento-card flex flex-col justify-between min-h-[200px] sm:min-h-[220px]">
+                <div class="absolute inset-0 bg-cover bg-center opacity-20 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+
+                <!-- Top label — rata kanan -->
+                <div class="relative z-10 flex items-center justify-end gap-2">
+                    <span class="text-[#1346A0]/70 font-sans-custom font-semibold text-xs tracking-widest uppercase">Location</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#1346A0]"></span>
+                </div>
+
+                <!-- Bottom content — rata kanan -->
+                <div class="relative z-10 mt-auto flex flex-col items-end text-right">
+                    <h3 class="font-bubble text-[#1346A0] text-3xl sm:text-4xl md:text-5xl tracking-tight leading-tight uppercase">
+                        Find<br>Us Here
+                    </h3>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- ===== ADDITIONAL SECTIONS (BELOW HERO) ===== -->
+    <!-- ============================================================ -->
+    <div class="w-full mt-5 sm:mt-7">
+
+        <!-- ================= SECTION 3: PINK WAVY SEPARATOR + YELLOW + 4 ROUND SWATCHES (FULL WIDTH) ================= -->
+        <section class="w-full relative">
+
+            <!-- Pink Wave Top with rounded top corners matching bento cards -->
+            <div class="w-full bg-[#E63C78] relative overflow-hidden rounded-t-[32px] sm:rounded-t-[44px]" style="height: 110px;">
+                <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 110" preserveAspectRatio="none" fill="none">
+                    <path d="M0,110 L0,50 Q120,120 240,60 Q380,5 520,70 Q660,125 800,60 Q940,5 1080,70 Q1220,125 1440,60 L1440,110 Z" fill="#F5B82E" />
+                </svg>
+            </div>
+
+            <!-- Yellow section — full width, no max-width constraint -->
+            <div class="w-full bg-[#F5B82E] relative pt-8 sm:pt-12 pb-16 sm:pb-20 md:pb-24">
+
+                <!-- 4 Round Color Swatches — spread full width -->
+                <div class="w-full flex items-center justify-around flex-wrap sm:flex-nowrap px-6 sm:px-10 pt-4 sm:pt-8 relative z-20">
+
+                    <!-- Circle 1: Pink Swatch -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full bg-[#F14875] border-[5px] sm:border-[6px] border-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/default/broken.png');"></div>
+                            <span class="relative z-10 font-bubble text-white text-sm sm:text-base drop-shadow">#F14875</span>
+                        </div>
+                    </div>
+
+                    <!-- Circle 2: Teal Swatch -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full bg-[#00B38C] border-[5px] sm:border-[6px] border-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/default/broken.png');"></div>
+                            <span class="relative z-10 font-bubble text-white text-sm sm:text-base drop-shadow">#00B38C</span>
+                        </div>
+                    </div>
+
+                    <!-- Circle 3: Blue Swatch -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full bg-[#11499C] border-[5px] sm:border-[6px] border-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/default/broken.png');"></div>
+                            <span class="relative z-10 font-bubble text-white text-sm sm:text-base drop-shadow">#11499C</span>
+                        </div>
+                    </div>
+
+                    <!-- Circle 4: Yellow Swatch -->
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 rounded-full bg-[#FCBE1B] border-[5px] sm:border-[6px] border-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('/images/default/broken.png');"></div>
+                            <span class="relative z-10 font-bubble text-white text-sm sm:text-base drop-shadow">#FCBE1B</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= SECTION 4: 2 TYPOGRAPHY CARDS (BENTO STYLE) ================= -->
+        <section class="w-full relative">
+
+            <!-- Wave: Yellow → Blue transition (full width) -->
+            <div class="w-full bg-[#F5B82E] relative overflow-hidden" style="height: 100px;">
+                <svg class="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 100" preserveAspectRatio="none" fill="none">
+                    <path d="M0,100 L0,45 Q160,115 320,55 Q480,0 640,60 Q800,115 960,55 Q1120,0 1280,60 Q1360,90 1440,55 L1440,100 Z" fill="#11499C" />
+                </svg>
+            </div>
+
+            <!-- Blue background with padded bento-style cards -->
+            <div class="w-full bg-[#11499C] pb-10 sm:pb-14 md:pb-16 pt-6 sm:pt-8 px-4 sm:px-6 md:px-8 lg:px-10 rounded-b-[32px] sm:rounded-b-[44px] overflow-hidden">
+                <div class="w-full max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 md:gap-7">
+
+                    <!-- Card 1: Pink - Headline "Gumike" -->
+                    <div class="bg-[#E63C78] rounded-[32px] sm:rounded-[44px] p-8 sm:p-10 md:p-12 relative overflow-hidden bento-card flex flex-col justify-between min-h-[200px] sm:min-h-[240px]">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-20 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+                        <div class="relative z-10 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-white flex-shrink-0"></span>
+                            <span class="text-white/80 font-sans-custom font-semibold text-xs sm:text-sm tracking-widest uppercase">Headline Font</span>
+                        </div>
+                        <div class="relative z-10 mt-auto pt-6">
+                            <span class="font-bubble text-white text-5xl sm:text-6xl md:text-7xl tracking-tight leading-none">
+                                Gumike
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Yellow - Subhead "Rota Pro" -->
+                    <div class="bg-[#F5B82E] rounded-[32px] sm:rounded-[44px] p-8 sm:p-10 md:p-12 relative overflow-hidden bento-card flex flex-col justify-between min-h-[200px] sm:min-h-[240px]">
+                        <div class="absolute inset-0 bg-cover bg-center opacity-20 pointer-events-none" style="background-image: url('/images/default/broken.png');"></div>
+                        <div class="relative z-10 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#1346A0] flex-shrink-0"></span>
+                            <span class="text-[#1346A0]/80 font-sans-custom font-semibold text-xs sm:text-sm tracking-widest uppercase">Subhead Font</span>
+                        </div>
+                        <div class="relative z-10 mt-auto pt-6">
+                            <span class="font-chunky font-bold text-[#1346A0] text-5xl sm:text-6xl md:text-7xl tracking-tight leading-none">
+                                Rota Pro
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="w-full bg-[#1346A0] text-white rounded-[32px] sm:rounded-[44px] mt-5 sm:mt-7 overflow-hidden">
+
+        <!-- Top Footer: Logo + Nav + Social -->
+        <div class="w-full px-6 sm:px-10 md:px-16 lg:px-24 pt-12 sm:pt-16 pb-10 sm:pb-12">
+            <div class="w-full max-w-[1600px] mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10 md:gap-6">
+
+                <!-- Brand Logo -->
+                <div class="flex flex-col gap-3">
+                    <a href="#" class="font-bubble text-4xl sm:text-5xl text-white tracking-tight lowercase leading-none">
+                        blup
+                    </a>
+                    <p class="text-white/60 text-sm font-medium max-w-xs leading-relaxed">
+                        Good coffee, great vibes. Freshly brewed every day.
+                    </p>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="flex flex-col sm:flex-row gap-4 sm:gap-10 text-sm font-bold text-white/80">
+                    <a href="#" class="hover:text-[#F5B82E] transition-colors">Home</a>
+                    <a href="#" class="hover:text-[#F5B82E] transition-colors">About</a>
+                    <a href="#" class="hover:text-[#F5B82E] transition-colors">Menu</a>
+                    <a href="#" class="hover:text-[#F5B82E] transition-colors">Contact</a>
+                </nav>
+
+                <!-- Social Icons -->
+                <div class="flex items-center gap-4">
+                    <!-- Instagram -->
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-[#E63C78] flex items-center justify-center transition-colors duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <!-- TikTok -->
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-[#E63C78] flex items-center justify-center transition-colors duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.02-.06z"/></svg>
+                    </a>
+                    <!-- Twitter/X -->
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 hover:bg-[#E63C78] flex items-center justify-center transition-colors duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.264 5.633L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bottom Footer: Copyright -->
+        <div class="w-full border-t border-white/10 px-6 sm:px-10 md:px-16 lg:px-24 py-5">
+            <div class="w-full max-w-[1600px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/40 font-medium">
+                <span>© 2026 BLUP Coffee. All rights reserved.</span>
+                <span>Good Coffee · Great Vibes</span>
+            </div>
+        </div>
+
+    </footer>
+
+</body>
+
+</html>

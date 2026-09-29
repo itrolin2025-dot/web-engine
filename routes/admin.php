@@ -19,6 +19,7 @@ use App\Http\Controllers\admin\TransactionsController;
 use App\Http\Controllers\admin\CategoryProductController;
 use App\Http\Controllers\admin\ArticleCategoryController;
 use App\Http\Controllers\admin\ArticlesController;
+use App\Http\Controllers\admin\TagController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -61,6 +62,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/article-category/{article_category}/edit', [ArticleCategoryController::class, 'edit'])->name('article-category.edit');
     Route::put('/article-category/{article_category}', [ArticleCategoryController::class, 'update'])->name('article-category.update');
     Route::delete('/article-category/{article_category}', [ArticleCategoryController::class, 'destroy'])->name('article-category.destroy');
+
+    // Tag
+    Route::get('/tags', [TagController::class, 'index'])->name('tags');
+    Route::get('/tags/index', [TagController::class, 'index'])->name('tags.index');
+    Route::get('/tags/get-data', [TagController::class, 'getData'])->name('tags.getData');
+    Route::get('/tags/get-dataRecycle', [TagController::class, 'getDataRecycle'])->name('tags.getDataRecycle');
+    Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
+    Route::get('/tags/recycle', [TagController::class, 'recycle'])->name('tags.recycle');
+    Route::post('/tags/restore/{id}', [TagController::class, 'restore'])->name('tags.restore');
+    Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
+    Route::get('/tags/{tag}/edit', [TagController::class, 'edit'])->name('tags.edit');
+    Route::put('/tags/{tag}', [TagController::class, 'update'])->name('tags.update');
+    Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
 
     // Category Product
     Route::get('/category-product', [CategoryProductController::class, 'index'])->name('category-product');

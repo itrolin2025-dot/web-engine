@@ -7,10 +7,12 @@ namespace App\Http\Controllers\admin;
  */
 
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use App\Models\Template;
 use App\Models\TemplatesSection;
 use App\Models\TemplatesSectionContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TemplateController extends Controller
@@ -66,6 +68,7 @@ class TemplateController extends Controller
         }
 
         return view('admin.template.create', [
+            'tags' => Tag::where('type', 'template')->orderBy('nama')->get(),
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
@@ -83,6 +86,10 @@ class TemplateController extends Controller
             'name' => 'required|string|max:255',
             'path' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'integer|exists:tags,id',
+            'new_tag_names' => 'nullable|array',
+            'new_tag_names.*' => 'nullable|string|max:255',
         ]);
 
         $data = [
@@ -98,7 +105,15 @@ class TemplateController extends Controller
             $data['preview'] = 'uploads/templates/' . $filename;
         }
 
-        Template::create($data);
+        DB::beginTransaction();
+        try {
+            $template = Template::create($data);
+            $this->syncTemplateTags($template, $request);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error', 'Failed to create template: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.template')->with('success', 'Template has been created successfully.');
     }
@@ -113,6 +128,7 @@ class TemplateController extends Controller
 
         return view('admin.template.edit', [
             'template' => $template,
+            'tags' => Tag::where('type', 'template')->orderBy('nama')->get(),
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
@@ -130,6 +146,10 @@ class TemplateController extends Controller
             'name' => 'required|string|max:255',
             'path' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'integer|exists:tags,id',
+            'new_tag_names' => 'nullable|array',
+            'new_tag_names.*' => 'nullable|string|max:255',
         ]);
 
         $template = Template::findOrFail($id);
@@ -152,7 +172,15 @@ class TemplateController extends Controller
             $data['preview'] = 'uploads/templates/' . $filename;
         }
 
-        $template->update($data);
+        DB::beginTransaction();
+        try {
+            $template->update($data);
+            $this->syncTemplateTags($template, $request);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error', 'Failed to update template: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.template')->with('success', 'Template has been updated successfully.');
     }
@@ -181,7 +209,8 @@ class TemplateController extends Controller
         }
 
         $template = Template::findOrFail($id);
-        $sections = TemplatesSection::with('contents')->where('template_id', $id)->orderBy('position', 'asc')->get();
+        $sections = TemplatesSection::with(['contents', 'tags'])->where('template_id', $id)->orderBy('position', 'asc')->get();
+        $sectionTags = Tag::where('type', 'section')->orderBy('nama')->get();
 
         $contentPresets = $this->getContentPresets();
         $predefinedKeys = array_column($contentPresets, 'key');
@@ -190,6 +219,7 @@ class TemplateController extends Controller
         return view('admin.template.section', [
             'template' => $template,
             'sections' => $sections,
+            'sectionTags' => $sectionTags,
             'contentPresets' => $contentPresets,
             'modul' => $this->modul,
             'modul_path' => $this->path,
@@ -210,6 +240,10 @@ class TemplateController extends Controller
             'section_contents.*.key' => 'nullable|string|max:255',
             'section_contents.*.type' => 'nullable|string|max:50',
             'section_contents.*.value' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'tags.*' => 'integer|exists:tags,id',
+            'new_tag_names' => 'nullable|array',
+            'new_tag_names.*' => 'nullable|string|max:255',
         ]);
 
         $previewPath = null;
@@ -250,6 +284,8 @@ class TemplateController extends Controller
             }
         }
 
+        $this->syncSectionTags($section, $request);
+
         $section->load('contents');
 
         if ($request->expectsJson() || $request->ajax()) {
@@ -275,6 +311,10 @@ class TemplateController extends Controller
             'section_contents.*.key' => 'nullable|string|max:255',
             'section_contents.*.type' => 'nullable|string|max:50',
             'section_contents.*.value' => 'nullable|string',
+            'tags' => 'nullable|array',
+            'tags.*' => 'integer|exists:tags,id',
+            'new_tag_names' => 'nullable|array',
+            'new_tag_names.*' => 'nullable|string|max:255',
         ]);
 
         $section = TemplatesSection::findOrFail($sectionId);
@@ -349,6 +389,8 @@ class TemplateController extends Controller
             }
         }
 
+        $this->syncSectionTags($section, $request);
+
         $section->load('contents');
 
         if ($request->expectsJson() || $request->ajax()) {
@@ -406,6 +448,66 @@ class TemplateController extends Controller
         }
 
         return redirect()->route('admin.template.section', $id)->with('success', 'Section content item deleted successfully.');
+    }
+
+    /**
+     * Sync template tags: existing checked tags + inline "add new tag" inputs
+     * (new tags are always created with type 'template' and auto-generated code).
+     */
+    private function syncTemplateTags(Template $template, Request $request): void
+    {
+        $tagIds = collect($request->input('tags', []))->map(fn ($id) => (int) $id)->filter()->values();
+
+        $newNames = collect($request->input('new_tag_names', []))
+            ->map(fn ($name) => trim((string) $name))
+            ->filter()
+            ->unique(fn ($name) => mb_strtolower($name));
+
+        foreach ($newNames as $name) {
+            $tag = Tag::whereRaw('LOWER(nama) = ?', [mb_strtolower($name)])->first();
+
+            if (!$tag) {
+                $tag = Tag::create([
+                    'code' => Tag::generateCode(),
+                    'nama' => $name,
+                    'type' => 'template',
+                ]);
+            }
+
+            $tagIds->push($tag->id);
+        }
+
+        $template->tags()->sync($tagIds->unique()->values());
+    }
+
+    /**
+     * Sync section tags: existing checked tags + inline "add new tag" inputs
+     * (new tags are always created with type 'section' and auto-generated code).
+     */
+    private function syncSectionTags(TemplatesSection $section, Request $request): void
+    {
+        $tagIds = collect($request->input('tags', []))->map(fn ($id) => (int) $id)->filter()->values();
+
+        $newNames = collect($request->input('new_tag_names', []))
+            ->map(fn ($name) => trim((string) $name))
+            ->filter()
+            ->unique(fn ($name) => mb_strtolower($name));
+
+        foreach ($newNames as $name) {
+            $tag = Tag::whereRaw('LOWER(nama) = ?', [mb_strtolower($name)])->first();
+
+            if (!$tag) {
+                $tag = Tag::create([
+                    'code' => Tag::generateCode(),
+                    'nama' => $name,
+                    'type' => 'section',
+                ]);
+            }
+
+            $tagIds->push($tag->id);
+        }
+
+        $section->tags()->sync($tagIds->unique()->values());
     }
 
     public static function getContentPresets()

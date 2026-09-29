@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What The Woof - Brand Identity & Product Showcase</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Shrikhand, Fredoka, Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Shrikhand&display=swap" rel="stylesheet">
+    <style>
+        .font-brand {
+            font-family: 'Shrikhand', cursive;
+        }
+
+        .font-chunky {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Polaroid subtle hover lift */
+        .polaroid-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .polaroid-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 28px -6px rgba(40, 45, 66, 0.18);
+        }
+
+        /* Bento tile hover */
+        .bento-tile {
+            transition: opacity 0.2s ease;
+        }
+
+        .bento-tile:hover {
+            opacity: 0.96;
+        }
+    </style>
+</head>
+
+<body class="bg-[#F9F5E3] m-0 p-0 overflow-x-hidden font-sans-custom antialiased text-[#282D42] selection:bg-[#EE4085] selection:text-white">
+
+    <!-- Full Width Bento Layout Container -->
+    <div class="w-full min-h-screen flex flex-col">
+
+        <!-- ================= BARIS 1: TEXT GRID (FULL WIDTH) ================= -->
+        <!-- Background: Cheeky Pink (#EE4085), Big Centered Brand Text "what the woof" -->
+        <section class="w-full bg-[#EE4085] py-20 sm:py-28 md:py-36 px-6 flex flex-col items-center justify-center text-center select-none">
+            <div class="flex flex-col items-center leading-none">
+                <!-- Stacked Playful Brand Typography -->
+                <div class="flex flex-col items-center">
+                    <div class="flex items-baseline gap-1.5 sm:gap-2">
+                        <span class="font-chunky font-extrabold text-white text-4xl sm:text-6xl md:text-8xl lowercase tracking-tight drop-shadow-sm">what</span>
+                    </div>
+                    <span class="font-chunky font-bold text-white text-xs sm:text-sm md:text-base lowercase tracking-widest -my-1 sm:-my-2 bg-white/20 px-2.5 py-0.5 rounded-full">the</span>
+                    <span class="font-chunky font-extrabold text-white text-5xl sm:text-7xl md:text-9xl lowercase tracking-tight drop-shadow-sm">woof</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= BARIS 2: 2 GRID IMAGE DENGAN BACKGROUND COLOR ================= -->
+        <!-- Grid 2 Kolom: Kolom 1 (Minty Magic Blue #3777FF) & Kolom 2 (Fetch Green #C0FD19) -->
+        <section class="w-full grid grid-cols-1 md:grid-cols-2">
+
+            <!-- Kolom 1: Background Minty Magic Blue (#3777FF) -->
+            <div class="w-full bg-[#3777FF] min-h-[300px] sm:min-h-[380px] md:min-h-[460px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full max-w-sm flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Woof Mascot Blue" class="max-h-48 sm:max-h-60 md:max-h-72 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white/90">Brand Visual 1</span>
+                </div>
+            </div>
+
+            <!-- Kolom 2: Background Fetch Green (#C0FD19) -->
+            <div class="w-full bg-[#C0FD19] min-h-[300px] sm:min-h-[380px] md:min-h-[460px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full max-w-sm flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="What The Woof Badge" class="max-h-48 sm:max-h-60 md:max-h-72 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#282D42]/80">Brand Visual 2</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 3: CARD PRODUCT / POLAROID SWATCHES ================= -->
+        <!-- Background: Bone White (#F9F5E3) dengan 5 Polaroid Product Swatches Card -->
+        <section class="w-full bg-[#F9F5E3] py-14 sm:py-20 md:py-24 px-6 sm:px-10 md:px-14">
+            <div class="w-full max-w-7xl mx-auto">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 md:gap-7">
+
+                    <!-- Polaroid Card 1: Cheeky Pink -->
+                    <div class="polaroid-card bg-white p-3 sm:p-4 rounded-xs shadow-md border border-black/10 flex flex-col">
+                        <!-- Replaceable Image Box / Color Canvas -->
+                        <div class="w-full aspect-square bg-[#EE4085] rounded-xs flex items-center justify-center overflow-hidden mb-3 relative group">
+                            <img src="/images/default/broken.png" alt="Cheeky Pink" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform">
+                        </div>
+                        <!-- Product / Color Swatch Info -->
+                        <div class="mt-auto pt-1">
+                            <h4 class="font-chunky font-bold text-xs sm:text-sm text-[#282D42] leading-tight">Cheeky Pink</h4>
+                            <p class="font-sans-custom text-[10px] sm:text-xs font-semibold text-neutral-500 tracking-wide mt-0.5 uppercase">#EE4085</p>
+                        </div>
+                    </div>
+
+                    <!-- Polaroid Card 2: Minty Magic -->
+                    <div class="polaroid-card bg-white p-3 sm:p-4 rounded-xs shadow-md border border-black/10 flex flex-col">
+                        <!-- Replaceable Image Box / Color Canvas -->
+                        <div class="w-full aspect-square bg-[#3777FF] rounded-xs flex items-center justify-center overflow-hidden mb-3 relative group">
+                            <img src="/images/default/broken.png" alt="Minty Magic" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform">
+                        </div>
+                        <!-- Product / Color Swatch Info -->
+                        <div class="mt-auto pt-1">
+                            <h4 class="font-chunky font-bold text-xs sm:text-sm text-[#282D42] leading-tight">Minty Magic</h4>
+                            <p class="font-sans-custom text-[10px] sm:text-xs font-semibold text-neutral-500 tracking-wide mt-0.5 uppercase">#3777FF</p>
+                        </div>
+                    </div>
+
+                    <!-- Polaroid Card 3: Fetch Green -->
+                    <div class="polaroid-card bg-white p-3 sm:p-4 rounded-xs shadow-md border border-black/10 flex flex-col">
+                        <!-- Replaceable Image Box / Color Canvas -->
+                        <div class="w-full aspect-square bg-[#C0FD19] rounded-xs flex items-center justify-center overflow-hidden mb-3 relative group">
+                            <img src="/images/default/broken.png" alt="Fetch Green" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform">
+                        </div>
+                        <!-- Product / Color Swatch Info -->
+                        <div class="mt-auto pt-1">
+                            <h4 class="font-chunky font-bold text-xs sm:text-sm text-[#282D42] leading-tight">Fetch Green</h4>
+                            <p class="font-sans-custom text-[10px] sm:text-xs font-semibold text-neutral-500 tracking-wide mt-0.5 uppercase">#C0FD19</p>
+                        </div>
+                    </div>
+
+                    <!-- Polaroid Card 4: Bone White -->
+                    <div class="polaroid-card bg-white p-3 sm:p-4 rounded-xs shadow-md border border-black/10 flex flex-col">
+                        <!-- Replaceable Image Box / Color Canvas -->
+                        <div class="w-full aspect-square bg-[#F9F5E3] border border-black/10 rounded-xs flex items-center justify-center overflow-hidden mb-3 relative group">
+                            <img src="/images/default/broken.png" alt="Bone White" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform">
+                        </div>
+                        <!-- Product / Color Swatch Info -->
+                        <div class="mt-auto pt-1">
+                            <h4 class="font-chunky font-bold text-xs sm:text-sm text-[#282D42] leading-tight">Bone White</h4>
+                            <p class="font-sans-custom text-[10px] sm:text-xs font-semibold text-neutral-500 tracking-wide mt-0.5 uppercase">#F9F5E3</p>
+                        </div>
+                    </div>
+
+                    <!-- Polaroid Card 5: Storm Black -->
+                    <div class="polaroid-card bg-white p-3 sm:p-4 rounded-xs shadow-md border border-black/10 flex flex-col col-span-2 sm:col-span-1">
+                        <!-- Replaceable Image Box / Color Canvas -->
+                        <div class="w-full aspect-square bg-[#282D42] rounded-xs flex items-center justify-center overflow-hidden mb-3 relative group">
+                            <img src="/images/default/broken.png" alt="Storm Black" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform">
+                        </div>
+                        <!-- Product / Color Swatch Info -->
+                        <div class="mt-auto pt-1">
+                            <h4 class="font-chunky font-bold text-xs sm:text-sm text-[#282D42] leading-tight">Storm Black</h4>
+                            <p class="font-sans-custom text-[10px] sm:text-xs font-semibold text-neutral-500 tracking-wide mt-0.5 uppercase">#282D42</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= BARIS 4: 3 GRID GAMBAR BACKGROUND ================= -->
+        <!-- 3 Grid Image Background (Poster / Product Bag / Merchandise) -->
+        <section class="w-full grid grid-cols-1 md:grid-cols-3">
+
+            <!-- Card 1: Poster Background (#C0FD19) -->
+            <div class="w-full bg-[#C0FD19] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Bark Better Poster" class="max-h-48 sm:max-h-64 md:max-h-80 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#282D42]/80">Poster Campaign</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Packaging Pouch Background (#CDB196) -->
+            <div class="w-full bg-[#D1BC9F] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Product Pouch" class="max-h-48 sm:max-h-64 md:max-h-80 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-800">Product Packaging</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Tote Bag Background (#FF432A) -->
+            <div class="w-full bg-[#FF4D36] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Woof Tote Bag" class="max-h-48 sm:max-h-64 md:max-h-80 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white">Merchandise Tote</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 5: 1 GRID IMAGE BACKGROUND ================= -->
+        <!-- 1 Grid Full Width Image Background (Fetch Green #C0FD19 Mascot Illustration Banner) -->
+        <section class="w-full bg-[#C0FD19] min-h-[280px] sm:min-h-[360px] md:min-h-[440px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+            <div class="w-full max-w-4xl flex flex-col items-center justify-center text-center p-4">
+                <img src="/images/default/broken.png" alt="Dog Mascot Stickers Banner" class="max-h-44 sm:max-h-60 md:max-h-72 object-contain group-hover:scale-105 transition-transform duration-300">
+                <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#282D42]/80">Brand Mascot Characters</span>
+            </div>
+        </section>
+
+
+        <!-- ================= BARIS 6: 3 GRID DENGAN IMAGE BACKGROUND ================= -->
+        <!-- 3 Grid Image Background (Cards / Packaging Boxes / Cans) -->
+        <section class="w-full grid grid-cols-1 md:grid-cols-3">
+
+            <!-- Card 1: Cards Pattern Background (#EE4085) -->
+            <div class="w-full bg-[#EE4085] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Thank You Cards" class="max-h-48 sm:max-h-64 md:max-h-80 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white">Brand Cards</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Packaging Boxes in Hand Background (#D85880) -->
+            <div class="w-full bg-[#E6628A] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Treat Boxes in Hand" class="max-h-48 sm:max-h-64 md:max-h-80 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white">Product Box Set</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Canned Food Background (#E9306E) -->
+            <div class="w-full bg-[#ED3675] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Pet Food Cans" class="max-h-48 sm:max-h-64 md:max-h-80 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white">Canned Food Packaging</span>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+
+</html>

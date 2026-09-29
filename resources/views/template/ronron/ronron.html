@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RONRON - Petiscos Naturais para Gatos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Fredoka, Plus Jakarta Sans, Chewy, Titan One -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Titan+One&display=swap" rel="stylesheet">
+    <style>
+        .font-brand-chunky {
+            font-family: 'Titan One', 'Fredoka', cursive, sans-serif;
+        }
+
+        .font-chunky {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Marquee / Running Text Animation */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 22s linear infinite;
+        }
+
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Hover animation on bento blocks */
+        .bento-tile {
+            transition: opacity 0.2s ease, transform 0.25s ease;
+        }
+
+        .bento-tile:hover {
+            opacity: 0.97;
+        }
+    </style>
+</head>
+
+<body class="bg-[#FAF3E6] m-0 p-0 overflow-x-hidden font-sans-custom antialiased text-[#282D42] selection:bg-[#EB5AE4] selection:text-white">
+
+    <!-- Full Width Bento Layout Container -->
+    <div class="w-full min-h-screen flex flex-col">
+
+        <!-- ================= BARIS 1: TEXT DAN IMAGE BACKGROUND DENGAN WAVY EFFECT ================= -->
+        <!-- Background: Bright Pink/Magenta (#EB5AE4), Large Centered Logo Text RONRON -->
+        <section class="w-full bg-[#EB5AE4] pt-20 sm:pt-28 md:pt-36 pb-12 sm:pb-16 flex flex-col items-center justify-center text-center relative overflow-hidden select-none">
+            
+            <!-- Brand Logo Typography -->
+            <div class="relative z-10 flex flex-col items-center">
+                <!-- RONRON Custom Typographic Lockup with Cat Ears -->
+                <div class="relative flex items-center justify-center font-brand-chunky text-6xl sm:text-8xl md:text-9xl text-[#FEF3A3] tracking-wider drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)] leading-none">
+                    <span>R</span>
+                    <!-- O with Cat Ears -->
+                    <span class="relative inline-block mx-0.5">
+                        <svg class="w-14 sm:w-20 md:w-24 h-14 sm:h-20 md:h-24 fill-current inline-block -mt-3 sm:-mt-5" viewBox="0 0 100 100">
+                            <!-- Cat Ears on top -->
+                            <polygon points="18,35 32,5 45,30" />
+                            <polygon points="55,30 68,5 82,35" />
+                            <!-- Head / Outer O -->
+                            <circle cx="50" cy="55" r="40" />
+                            <!-- Inner Hole -->
+                            <circle cx="50" cy="55" r="22" fill="#EB5AE4" />
+                        </svg>
+                    </span>
+                    <span>NR</span>
+                    <span>O</span>
+                    <span>N</span>
+                    
+                    <!-- Playful Tail Underline Curve -->
+                    <div class="absolute -bottom-4 sm:-bottom-6 left-1/4 w-1/2 h-3 sm:h-4 bg-[#FEF3A3] rounded-full transform -rotate-1"></div>
+                </div>
+            </div>
+
+            <!-- Image Background Overlay / Texture -->
+            <div class="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+                <img src="/images/default/broken.png" alt="Pattern Texture" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Wave Transition Divider to Baris 2 -->
+            <div class="w-full absolute bottom-0 left-0 leading-none pointer-events-none z-0">
+                <svg class="w-full h-12 sm:h-16 md:h-24" viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none">
+                    <path d="M0,40 C320,110 520,10 720,50 C920,90 1200,10 1440,60 L1440,120 L0,120 Z" fill="#795CE6" class="opacity-30" />
+                    <path d="M0,60 C360,120 720,20 1080,80 C1260,110 1360,90 1440,80 L1440,120 L0,120 Z" fill="#795CE6" />
+                </svg>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 2: 2 IMAGE BACKGROUND ================= -->
+        <!-- 2 Grid Kolom: Kolom 1 (Cat with sticks on Purple #795CE6) & Kolom 2 (Treat sticks on Cream #FAF3E6) -->
+        <section class="w-full grid grid-cols-1 md:grid-cols-2">
+
+            <!-- Kolom 1: Purple Background (#795CE6) Cat Holding Puree Sticks -->
+            <div class="w-full bg-[#795CE6] min-h-[340px] sm:min-h-[440px] md:min-h-[520px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full max-w-md flex flex-col items-center justify-center text-center p-4 z-10">
+                    <img src="/images/default/broken.png" alt="Gato com Sachês de Petisco" class="max-h-60 sm:max-h-72 md:max-h-96 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white/90">Gato com Sticks Ronron</span>
+                </div>
+            </div>
+
+            <!-- Kolom 2: Cream Background (#FAF3E6) 3 Treat Sticks Sachets -->
+            <div class="w-full bg-[#FAF3E6] min-h-[340px] sm:min-h-[440px] md:min-h-[520px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full max-w-md flex flex-col items-center justify-center text-center p-4 z-10">
+                    <img src="/images/default/broken.png" alt="Sticks Sabores Frango Atum Camarão" class="max-h-60 sm:max-h-72 md:max-h-96 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#795CE6]">Variedade de Sabores Stick</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 3: RUNNING TEXT (MARQUEE BAR) ================= -->
+        <!-- Running text ticker dengan 4 warna aksen brand: Purple, Pink, Teal, Yellow -->
+        <section class="w-full overflow-hidden bg-[#795CE6] border-y-2 border-white/20 select-none py-3 sm:py-4">
+            <div class="animate-marquee whitespace-nowrap flex items-center text-sm sm:text-base md:text-lg font-chunky font-bold tracking-wider text-white">
+                <!-- Segment Repeater 1 -->
+                <div class="flex items-center space-x-6 px-4">
+                    <span class="bg-[#EB5AE4] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">100% Natural</span>
+                    <span class="text-[#FEF3A3]">★ RONRON PETISCOS PARA GATOS ★</span>
+                    <span class="bg-[#00C49F] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">Sabor Frango</span>
+                    <span>• RICO EM PROTEÍNAS •</span>
+                    <span class="bg-[#EB5AE4] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">Sabor Atum</span>
+                    <span class="text-[#FEF3A3]">SEM CORANTES ARTIFICIAIS</span>
+                    <span class="bg-[#00C49F] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">Sabor Camarão</span>
+                    <span>• AMOR EM CADA MORDIDA •</span>
+                </div>
+                <!-- Segment Repeater 2 -->
+                <div class="flex items-center space-x-6 px-4">
+                    <span class="bg-[#EB5AE4] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">100% Natural</span>
+                    <span class="text-[#FEF3A3]">★ RONRON PETISCOS PARA GATOS ★</span>
+                    <span class="bg-[#00C49F] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">Sabor Frango</span>
+                    <span>• RICO EM PROTEÍNAS •</span>
+                    <span class="bg-[#EB5AE4] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">Sabor Atum</span>
+                    <span class="text-[#FEF3A3]">SEM CORANTES ARTIFICIAIS</span>
+                    <span class="bg-[#00C49F] text-white px-3 py-1 rounded-full uppercase text-xs sm:text-sm font-black">Sabor Camarão</span>
+                    <span>• AMOR EM CADA MORDIDA •</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= BARIS 4: 3 CARD IMAGE FULL (PACKAGING CARDS DENGAN WAVY DIVIDER) ================= -->
+        <!-- 3 Grid Kolom Card Packaging: Sabor Frango, Sabor Atum, Sabor Camarão -->
+        <section class="w-full grid grid-cols-1 md:grid-cols-3">
+
+            <!-- Card 1: Sabor Frango (Purple Top + Yellow Bottom) -->
+            <div class="w-full flex flex-col min-h-[420px] sm:min-h-[480px] bento-tile relative overflow-hidden group">
+                <!-- Top Half (Purple #795CE6) -->
+                <div class="bg-[#795CE6] flex-1 p-6 flex flex-col items-center justify-center text-center relative z-10">
+                    <h3 class="font-brand-chunky text-3xl sm:text-4xl text-[#FEF3A3] mb-4">RÖNRON</h3>
+                    <div class="w-24 h-24 rounded-full bg-black/10 flex items-center justify-center p-2 mb-2">
+                        <img src="/images/default/broken.png" alt="Black Cat Mascot" class="max-h-16 object-contain">
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#FEF3A3]">Petisco</span>
+                </div>
+                <!-- Wavy Shape Divider -->
+                <div class="w-full -my-1 z-20 pointer-events-none">
+                    <svg viewBox="0 0 500 60" preserveAspectRatio="none" class="w-full h-8 text-[#FEF3A3] fill-current">
+                        <path d="M0,20 C150,55 350,-10 500,30 L500,60 L0,60 Z" />
+                    </svg>
+                </div>
+                <!-- Bottom Half (Soft Yellow #FEF3A3) -->
+                <div class="bg-[#FEF3A3] p-6 text-[#795CE6] flex flex-col items-center justify-center text-center">
+                    <h4 class="font-chunky font-extrabold text-xl sm:text-2xl lowercase mb-3">sabor frango</h4>
+                    <div class="flex items-center justify-center mb-3">
+                        <img src="/images/default/broken.png" alt="Chicken Leg Icon" class="max-h-12 object-contain">
+                    </div>
+                    <ul class="text-[10px] sm:text-xs font-bold space-y-1 text-left opacity-90">
+                        <li>✦ Ingredientes Naturais</li>
+                        <li>✦ Sem Corantes Artificiais</li>
+                        <li>✦ Rico em Proteínas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 2: Sabor Atum (Pink Top + Purple Bottom) -->
+            <div class="w-full flex flex-col min-h-[420px] sm:min-h-[480px] bento-tile relative overflow-hidden group">
+                <!-- Top Half (Pink #EB5AE4) -->
+                <div class="bg-[#EB5AE4] flex-1 p-6 flex flex-col items-center justify-center text-center relative z-10">
+                    <h3 class="font-brand-chunky text-3xl sm:text-4xl text-[#795CE6] mb-4">RÖNRON</h3>
+                    <div class="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center p-2 mb-2">
+                        <img src="/images/default/broken.png" alt="Orange Cat Mascot" class="max-h-16 object-contain">
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#795CE6]">Petisco</span>
+                </div>
+                <!-- Wavy Shape Divider -->
+                <div class="w-full -my-1 z-20 pointer-events-none">
+                    <svg viewBox="0 0 500 60" preserveAspectRatio="none" class="w-full h-8 text-[#795CE6] fill-current">
+                        <path d="M0,20 C150,55 350,-10 500,30 L500,60 L0,60 Z" />
+                    </svg>
+                </div>
+                <!-- Bottom Half (Purple #795CE6) -->
+                <div class="bg-[#795CE6] p-6 text-white flex flex-col items-center justify-center text-center">
+                    <h4 class="font-chunky font-extrabold text-xl sm:text-2xl lowercase mb-3 text-[#EB5AE4]">sabor atum</h4>
+                    <div class="flex items-center justify-center mb-3">
+                        <img src="/images/default/broken.png" alt="Fish Icon" class="max-h-12 object-contain">
+                    </div>
+                    <ul class="text-[10px] sm:text-xs font-bold space-y-1 text-left opacity-90 text-white">
+                        <li>✦ Ingredientes Naturais</li>
+                        <li>✦ Sem Corantes Artificiais</li>
+                        <li>✦ Rico em Proteínas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 3: Sabor Camarão (Yellow Top + Teal Bottom) -->
+            <div class="w-full flex flex-col min-h-[420px] sm:min-h-[480px] bento-tile relative overflow-hidden group">
+                <!-- Top Half (Yellow #FEF3A3) -->
+                <div class="bg-[#FEF3A3] flex-1 p-6 flex flex-col items-center justify-center text-center relative z-10">
+                    <h3 class="font-brand-chunky text-3xl sm:text-4xl text-[#00C49F] mb-4">RÖNRON</h3>
+                    <div class="w-24 h-24 rounded-full bg-black/5 flex items-center justify-center p-2 mb-2">
+                        <img src="/images/default/broken.png" alt="Grey Cat Mascot" class="max-h-16 object-contain">
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-widest text-[#00C49F]">Petisco</span>
+                </div>
+                <!-- Wavy Shape Divider -->
+                <div class="w-full -my-1 z-20 pointer-events-none">
+                    <svg viewBox="0 0 500 60" preserveAspectRatio="none" class="w-full h-8 text-[#00C49F] fill-current">
+                        <path d="M0,20 C150,55 350,-10 500,30 L500,60 L0,60 Z" />
+                    </svg>
+                </div>
+                <!-- Bottom Half (Teal #00C49F) -->
+                <div class="bg-[#00C49F] p-6 text-white flex flex-col items-center justify-center text-center">
+                    <h4 class="font-chunky font-extrabold text-xl sm:text-2xl lowercase mb-3 text-[#FEF3A3]">sabor camarão</h4>
+                    <div class="flex items-center justify-center mb-3">
+                        <img src="/images/default/broken.png" alt="Shrimp Icon" class="max-h-12 object-contain">
+                    </div>
+                    <ul class="text-[10px] sm:text-xs font-bold space-y-1 text-left opacity-90 text-white">
+                        <li>✦ Ingredientes Naturais</li>
+                        <li>✦ Sem Corantes Artificiais</li>
+                        <li>✦ Rico em Proteínas</li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= BARIS 5: 3 GRID GAMBAR BACKGROUND (LIFESTYLE PHOTOS) ================= -->
+        <!-- 3 Grid Kolom: Woman & Siamese Cat, Tabby Cat Biting Pouch, Kitten with Bowl -->
+        <section class="w-full grid grid-cols-1 md:grid-cols-3">
+
+            <!-- Card 1: Woman with Cat Background (#F7ECC9) -->
+            <div class="w-full bg-[#F7ECC9] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Mulher com Gato e Sachê Ronron" class="max-h-52 sm:max-h-68 md:max-h-84 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#795CE6]">Sabor Frango Lifestyle</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Tabby Cat Background (#9F8CF0) -->
+            <div class="w-full bg-[#9F8CF0] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Gato Listrado com Pacote Rosa" class="max-h-52 sm:max-h-68 md:max-h-84 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white">Sabor Atum Lifestyle</span>
+                </div>
+            </div>
+
+            <!-- Card 3: White Kitten Background (#00C4AA) -->
+            <div class="w-full bg-[#00C4AA] min-h-[320px] sm:min-h-[400px] md:min-h-[480px] flex items-center justify-center p-8 bento-tile relative overflow-hidden group">
+                <div class="w-full h-full flex flex-col items-center justify-center text-center p-4">
+                    <img src="/images/default/broken.png" alt="Gatinho Branco com Tigela de Ração" class="max-h-52 sm:max-h-68 md:max-h-84 object-contain group-hover:scale-105 transition-transform duration-300">
+                    <span class="mt-4 text-xs sm:text-sm font-bold uppercase tracking-wider text-white">Sabor Camarão Lifestyle</span>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+</body>
+
+</html>

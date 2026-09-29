@@ -11,4 +11,12 @@ class Template extends Model
     
     protected $table = 'template';
     protected $guarded = [];
+
+    /**
+     * Tags attached to this template.
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'template_tag', 'template_id', 'tag_id');
+    }
 }
