@@ -1,7 +1,63 @@
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $background_color = $content['background_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $repeater = $content['repeater'] ?? $content['tagline'] ?? [];
+    if (!is_array($repeater)) {
+        $repeater = [];
+    } else {
+        $repeater = collect($repeater)->sortBy('sort')->values()->all();
+    }
+
+    // Jumlah kartu menentukan jumlah kolom. Kalau hanya 1-2 kartu, kolomnya
+    // ikut dikecilkan supaya kartu tetap ter-center dan tidak ada ruang kosong
+    // di sisi kanan (grid 3 kolom dengan 2 kartu terlihat jauh ke kiri).
+    $cardCount = count($repeater);
+    $cardCols = match (true) {
+        $cardCount <= 1 => 'grid-cols-1',
+        $cardCount === 2 => 'grid-cols-1 sm:grid-cols-2',
+        $cardCount === 3 => 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3',
+        default        => 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+    };
+    // Batas lebar kartu: 2 kartu tidak boleh selebar grid 3 kolom agar
+    // tidak terlalu renggang di layar besar.
+    $cardWidth = $cardCount === 2 ? 'max-w-3xl' : 'max-w-5xl';
+    $tagline_color = $content['tagline_color'] ?? '#ffffff';
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    // $hero_bg = !empty($content['hero_bg']) ? 'images/website/' . $domain . '/' . $content['hero_bg'] : 'images/default/broken.png';
+    $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
+@endphp
+
 <section class="w-full relative" style="background-color:#C74A3C">
     <!-- Torn paper top edge (image overlay) -->
-    <img src="/images/torn-paper.png" alt="" aria-hidden="true"
-            class="absolute top-0 left-0 w-full z-20 pointer-events-none select-none">
+    <img src="/images/paper/torn-white-top.png" alt="" aria-hidden="true"
+            class="absolute top-0 left-0 w-full pointer-events-none select-none">
 
     <div class="pink-grid-bg relative pt-28 pb-28 px-6">
         <!-- Dekorasi pensil -->
@@ -14,71 +70,36 @@
             <polygon points="197,17.5 207,20 197,22.5" fill="#3D2314"/>
         </svg>
 
-        <div class="max-w-5xl mx-auto text-center mb-12 relative z-10">
-            <h2 class="font-script text-6xl md:text-7xl font-bold text-white">What I Do...</h2>
+        <div class="max-w-5xl mx-auto text-center mt-16 mb-8 relative z-10">
+            <h2 class="font-script text-6xl md:text-7xl font-bold text-white">{{ $title }}</h2>
             <svg class="mx-auto mt-1 w-40" viewBox="0 0 160 12" fill="none" aria-hidden="true">
                 <path d="M2,8 Q12,2 22,8 T42,8 T62,8 T82,8 T102,8 T122,8 T142,8 T158,6" stroke="white" stroke-width="3" stroke-linecap="round"/>
             </svg>
         </div>
 
-        <!-- 3 Cards -->
-        <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10 mb-12">
-            <!-- Card 1: Branding -->
-            <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
-                <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
-                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80" alt="Branding" class="w-full h-full object-cover">
+        <!-- Feature cards -->
+        <div class="{{ $cardWidth }} mx-auto pt-16 pb-16 grid {{ $cardCols }} gap-8 relative z-10 mb-12">
+            
+            @foreach ($repeater as $img)
+                <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
+                    <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
+                        <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}" 
+                        alt="{{ $img['title'] }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
+                        {{ $img['title'] }}
+                    </div>
+                    <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
+                        {{ $img['subtitle'] }}
+                    </ul>
                 </div>
-                <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
-                    BRANDING
-                </div>
-                <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
-                    <li>▪&nbsp; LOGOS</li>
-                    <li>▪&nbsp; PACKAGE DESIGN</li>
-                    <li>▪&nbsp; SOCIAL MEDIA MANAGEMENT</li>
-                    <li>▪&nbsp; ILLUSTRATIONS</li>
-                    <li>▪&nbsp; WEB DESIGN</li>
-                </ul>
-            </div>
-
-            <!-- Card 2: 3D Modeling -->
-            <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
-                <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
-                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="3D Modeling" class="w-full h-full object-cover">
-                </div>
-                <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
-                    3D MODELING
-                </div>
-                <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
-                    <li>▪&nbsp; LOGOS</li>
-                    <li>▪&nbsp; PACKAGE DESIGN</li>
-                    <li>▪&nbsp; SOCIAL MEDIA MANAGEMENT</li>
-                    <li>▪&nbsp; ILLUSTRATIONS</li>
-                    <li>▪&nbsp; WEB DESIGN</li>
-                </ul>
-            </div>
-
-            <!-- Card 3: How-To & DIY -->
-            <div class="bg-white rounded-[22px] px-6 pt-8 pb-8 shadow-xl flex flex-col items-center text-center">
-                <div class="flower-mask w-44 h-44 mb-6 bg-[#EDE4D6]">
-                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80" alt="How-To & DIY" class="w-full h-full object-cover">
-                </div>
-                <div class="bg-[#F4A9B8] border-2 border-[#C13A3A] text-[#C13A3A] px-7 py-1.5 rounded-md font-sans-custom font-bold text-xs tracking-[0.2em] uppercase mb-6">
-                    HOW-TO &amp; DIY
-                </div>
-                <ul class="text-[11px] font-sans-custom font-semibold text-[#9E3A2B] space-y-2.5 text-left tracking-[0.12em] uppercase">
-                    <li>▪&nbsp; LOGOS</li>
-                    <li>▪&nbsp; PACKAGE DESIGN</li>
-                    <li>▪&nbsp; SOCIAL MEDIA MANAGEMENT</li>
-                    <li>▪&nbsp; ILLUSTRATIONS</li>
-                    <li>▪&nbsp; WEB DESIGN</li>
-                </ul>
-            </div>
+            @endforeach
         </div>
     </div>
+    <img src="/images/paper/torn-white-bottom.png" alt="" aria-hidden="true"
+            class="absolute bottom-0 left-0 w-full pointer-events-none select-none">
 
-    <!-- Torn paper bottom edge (image overlay, flipped) -->
-    <img src="/images/torn-paper.png" alt="" aria-hidden="true"
-            class="absolute bottom-0 left-0 w-full z-20 rotate-180 pointer-events-none select-none">
+    <div class="h-[120px] absolute bottom-0 left-0 w-full pointer-events-none select-none" aria-hidden="true"></div>
 
     <!-- Dekorasi penggaris biru -->
     <div class="hidden md:block absolute -bottom-6 left-4 lg:left-16 z-30 rotate-[-12deg]">

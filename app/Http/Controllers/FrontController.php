@@ -301,7 +301,8 @@ class FrontController extends Controller
 
         // Normalisasi item repeater: item dari DB bisa jadi hasil copy preset
         // yang tidak punya semua key ($item['image'] dll diakses langsung oleh
-        // blade). Merge dengan item default — value dari DB tetap menang.
+        // blade). Merge dengan item default — value dari DB tetap menang
+        // (union array: operand kiri yang dipertahankan, jadi $item di kiri).
         if (isset($config['repeater']) && is_array($config['repeater'])) {
             $defaultItem = [
                 'label'             => 'Tag',
@@ -320,7 +321,7 @@ class FrontController extends Controller
             ];
             $config['repeater'] = collect($config['repeater'])
                 ->map(function ($item) use ($defaultItem) {
-                    return is_array($item) ? ($defaultItem + $item) : $item;
+                    return is_array($item) ? ($item + $defaultItem) : $item;
                 })
                 ->sortBy('sort', SORT_NUMERIC)
                 ->values()

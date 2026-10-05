@@ -1,4 +1,47 @@
-<footer class="w-full bg-[#B7CCE2] py-12 px-6 text-center relative overflow-hidden">
+@php
+    $rawContent = $layout->content ?? '';
+
+    if (is_array($rawContent)) {
+        $content = $rawContent;
+    } elseif (is_string($rawContent) && !empty($rawContent)) {
+        // Strip non-standard whitespace/control characters (like raw tabs \t) that break json_decode
+        $cleanJson = preg_replace('/[\x00-\x1F\x7F]/u', ' ', $rawContent);
+        $content = json_decode($cleanJson, true) ?? json_decode($rawContent, true) ?? [];
+    } else {
+        $content = [];
+    }
+
+    $domain = $website->domain ?? '';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    $background_color = $content['background_color'] ?? '#ffffff';
+
+    $subtitle = $content['subtitle_en'] ?? $content['subtitle'] ?? '';
+    $subtitle_color = $content['subtitle_color'] ?? '#ffffff';
+
+    $desc = $content['description'] ?? '';
+    $desc_color = $content['description_color'] ?? '#000000';
+
+    $repeater = $content['repeater'] ?? $content['tagline'] ?? [];
+    if (!is_array($repeater)) {
+        $repeater = [];
+    } else {
+        $repeater = collect($repeater)->sortBy('sort')->values()->all();
+    }
+
+    $desc = $content['desc_en'] ?? $content['desc'] ?? '';
+    $desc_color = $content['desc_color'] ?? '#ffffff';
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#FF9B7A';
+    $button_color = $content['button_color'] ?? '#ffffff';
+
+    $image = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : 'images/default/broken.png';
+@endphp
+
+<footer class="w-full bg-[{{ $background_color }}] py-12 px-6 text-center relative overflow-hidden">
     <!-- Siluet bunga dekoratif -->
     <svg class="absolute -left-16 top-1/2 -translate-y-1/2 w-72 h-72 opacity-80" viewBox="0 0 100 100" aria-hidden="true">
         <g fill="#9FB8D4">
@@ -16,7 +59,7 @@
     </svg>
 
     <div class="relative z-10">
-        <p class="text-xs font-sans-custom font-bold tracking-[0.3em] text-[#4A6785] uppercase mb-5">MY LINKS</p>
+        <p class="text-xs font-sans-custom font-bold tracking-[0.3em] text-[#4A6785] uppercase mb-5">{{ $title }}</p>
         <div class="flex items-center justify-center gap-4 mb-6">
             <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform" aria-label="Website">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#4A6785" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>
@@ -34,7 +77,7 @@
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#4A6785" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
             </a>
         </div>
-        <p class="text-xs text-[#4A6785] mb-2">chiostoreyhagerfridge@gmail.com</p>
-        <p class="text-[11px] text-[#6B84A0]">website designed by clqcreatesdiy © 2024</p>
+        <p class="text-xs text-[#4A6785] mb-2">{{ $subtitle }}</p>
+        <p class="text-[11px] text-[#6B84A0]">{{ $desc }}</p>
     </div>
 </footer>
