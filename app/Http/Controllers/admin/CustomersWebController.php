@@ -708,14 +708,15 @@ class CustomersWebController extends Controller
         ]);
 
         if ($request->expectsJson() || $request->ajax()) {
+            $layout->load(['section.contents', 'section.template']);
             return response()->json([
                 'success' => true,
-                'message' => 'Layout item added successfully.',
+                'message' => 'Section berhasil ditambahkan.',
                 'layout' => $layout,
             ]);
         }
 
-        return redirect()->route('admin.customers-website.layout', [$id, $page_type])->with('success', 'Layout item added successfully.');
+        return redirect()->route('admin.customers-website.layout', [$id, $page_type])->with('success', 'Section berhasil ditambahkan.');
     }
 
     public function layoutUpdate(Request $request, $id, $page_type, $layoutId)

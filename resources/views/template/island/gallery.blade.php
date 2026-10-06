@@ -30,22 +30,34 @@
         return is_array($item) && !empty($item['image']);
     }));
 
-    $itemCount = count($galleryItems);
-    // Keep a steady speed: the longer the strip, the longer one full loop takes
-    $duration = max(14, $itemCount * 3.5);
-    $uid = 'island-gallery-' . substr(md5($layout->id ?? 'gallery' . $domain . $itemCount . $duration), 0, 8);
+    $rawCount = count($galleryItems);
 @endphp
 
-@if ($itemCount > 0)
+@if ($rawCount > 0)
+    @php
+        // Ensure 1 set has enough items to fill wide viewports (minimum 10 items)
+        $singleSet = $galleryItems;
+        while (count($singleSet) < 10) {
+            $singleSet = array_merge($singleSet, $galleryItems);
+        }
+
+        $itemsInSet = count($singleSet);
+        // Calculate a relaxed, steady speed (~3.5 seconds per item in 1 set)
+        $duration = max(30, $itemsInSet * 3.5);
+        $uid = 'island-gallery-' . substr(md5(($layout->id ?? 'gallery') . $domain . $itemsInSet . $duration), 0, 8);
+    @endphp
+
     <style>
         @keyframes {{ $uid }}-scroll {
-            from { transform: translate3d(0, 0, 0); }
-            to   { transform: translate3d(-50%, 0, 0); }
+            0%   { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
         }
 
         .{{ $uid }}-viewport {
             overflow: hidden;
             width: 100%;
+            -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
         }
 
         .{{ $uid }}-track {
@@ -64,36 +76,40 @@
             animation-play-state: paused;
         }
 
-        /* Soft fade on the left/right edges so images slide in and out cleanly */
-        .{{ $uid }}-viewport {
-            -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
-            mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
-        }
-
         @media (prefers-reduced-motion: reduce) {
             .{{ $uid }}-track { animation: none; }
         }
     </style>
 
-    <section class="w-full bg-[{{ $background_color }}]" aria-label="{{ $title !== '' ? $title : 'Gallery' }}">
+    <section class="w-full bg-[{{ $background_color }}] py-8 md:py-12" aria-label="{{ $title !== '' ? $title : 'Gallery' }}">
         @if ($title !== '')
-            <h2 class="font-script text-4xl md:text-5xl text-center text-[{{ $title_color }}] mb-6 px-6">{{ $title }}</h2>
+            <h2 class="font-script text-4xl md:text-5xl text-center text-[{{ $title_color }}] mb-8 px-6">{{ $title }}</h2>
         @endif
 
         <div class="{{ $uid }}-viewport">
             <div class="{{ $uid }}-track">
-                @for ($copy = 0; $copy < 6; $copy++)
-                    <div class="{{ $uid }}-group" @if ($copy === 1) aria-hidden="true" @endif>
-                        @foreach ($galleryItems as $img)
-                            <a href="#" class="block shrink-0 overflow-hidden">
-                                <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}"
-                                    alt="{{ $img['title'] ?? 'Gallery' }}"
-                                    loading="lazy"
-                                    class="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 object-cover transition-transform duration-300 hover:scale-105" />
-                            </a>
-                        @endforeach
-                    </div>
-                @endfor
+                {{-- Group 1 --}}
+                <div class="{{ $uid }}-group">
+                    @foreach ($singleSet as $img)
+                        <a href="#" class="block shrink-0 overflow-hidden px-1.5 md:px-2">
+                            <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}"
+                                alt="{{ $img['title'] ?? 'Gallery' }}"
+                                loading="lazy"
+                                class="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 object-cover rounded-xl transition-transform duration-300 hover:scale-105" />
+                        </a>
+                    @endforeach
+                </div>
+                {{-- Group 2 (Identical clone for seamless infinite loop) --}}
+                <div class="{{ $uid }}-group" aria-hidden="true">
+                    @foreach ($singleSet as $img)
+                        <a href="#" class="block shrink-0 overflow-hidden px-1.5 md:px-2" tabindex="-1">
+                            <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}"
+                                alt="{{ $img['title'] ?? 'Gallery' }}"
+                                loading="lazy"
+                                class="w-28 h-28 sm:w-36 sm:h-36 md:w-48 md:h-48 lg:w-56 lg:h-56 object-cover rounded-xl transition-transform duration-300 hover:scale-105" />
+                        </a>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
