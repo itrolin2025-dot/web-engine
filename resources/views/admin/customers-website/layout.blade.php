@@ -127,7 +127,7 @@
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <label class="block">
                                 <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Filter Template</span>
-                                <select id="filterTemplate" onchange="filterSections()" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
+                                <select id="filterTemplate" onchange="onTemplateFilterChange()" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
                                     <option value="">All Templates</option>
                                     @foreach($sections->pluck('template.name', 'template_id')->unique() as $tid => $tname)
                                         <option value="{{ $tid }}">{{ $tname }}</option>
@@ -403,6 +403,45 @@
             }
         }
 
+        // Update slug filter dropdown options based on selected template
+        function updateSlugFilterOptions() {
+            const templateFilter = document.getElementById('filterTemplate')?.value;
+            const slugSelect = document.getElementById('filterSlug');
+            if (!slugSelect) return;
+
+            const cards = document.querySelectorAll('.section-card');
+            const currentSlug = slugSelect.value;
+            const availableSlugs = new Set();
+
+            cards.forEach(card => {
+                if (!templateFilter || card.dataset.template === templateFilter) {
+                    if (card.dataset.slug) {
+                        availableSlugs.add(card.dataset.slug);
+                    }
+                }
+            });
+
+            const sortedSlugs = Array.from(availableSlugs).sort();
+
+            let optionsHtml = '<option value="">All Slugs</option>';
+            sortedSlugs.forEach(slug => {
+                optionsHtml += `<option value="${slug}">${slug}</option>`;
+            });
+
+            slugSelect.innerHTML = optionsHtml;
+
+            if (availableSlugs.has(currentSlug)) {
+                slugSelect.value = currentSlug;
+            } else {
+                slugSelect.value = '';
+            }
+        }
+
+        function onTemplateFilterChange() {
+            updateSlugFilterOptions();
+            filterSections();
+        }
+
         // Filter section cards by template and slug
         function filterSections() {
             const templateFilter = document.getElementById('filterTemplate').value;
@@ -498,10 +537,23 @@
                                 fileInput.name = fileInputName;
                                 fileInput.className = 'form-input w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:bg-navy-700';
 
+                                // Hidden "remove" flag (submitted when user clicks Remove)
+                                const removeFlag = document.createElement('input');
+                                removeFlag.type = 'hidden';
+                                removeFlag.name = `remove_files[${item.key}]`;
+                                removeFlag.value = '0';
+
                                 const prevDiv = document.createElement('div');
                                 prevDiv.className = 'mt-1 flex items-center space-x-2';
                                 const img = document.createElement('img');
                                 let imgSrc = val;
+
+                                // Hidden input to retain current value (cleared on remove)
+                                const hiddenCurrent = document.createElement('input');
+                                hiddenCurrent.type = 'hidden';
+                                hiddenCurrent.name = inputName;
+                                hiddenCurrent.value = '';
+
                                 if (val && typeof val === 'string' && val.length > 0) {
                                     if (!val.startsWith('http') && !val.startsWith('/')) {
                                         if (websiteDomain && websiteDomain !== '') {
@@ -512,13 +564,36 @@
                                     }
                                     img.src = imgSrc;
                                     img.className = 'h-10 w-10 object-cover rounded border border-slate-200';
-                                    const hiddenCurrent = document.createElement('input');
-                                    hiddenCurrent.type = 'hidden';
-                                    hiddenCurrent.name = inputName;
                                     hiddenCurrent.value = val;
 
                                     prevDiv.appendChild(img);
                                     prevDiv.appendChild(hiddenCurrent);
+
+                                    // Remove button
+                                    const removeBtn = document.createElement('button');
+                                    removeBtn.type = 'button';
+                                    removeBtn.className = 'btn-remove-media flex items-center space-x-1 rounded px-2 py-1 text-xs font-medium bg-error/10 text-error hover:bg-error/20 transition-colors';
+                                    removeBtn.innerHTML = '<i class="fa-solid fa-trash text-xs"></i><span>Hapus</span>';
+                                    removeBtn.addEventListener('click', function () {
+                                        // Signal server to remove file
+                                        removeFlag.value = '1';
+                                        hiddenCurrent.value = '';
+                                        // Clear file input
+                                        fileInput.value = '';
+                                        // Hide preview and button
+                                        img.src = '';
+                                        img.classList.add('hidden');
+                                        removeBtn.classList.add('hidden');
+                                        // Show an "undo" notice
+                                        undoSpan.classList.remove('hidden');
+                                    });
+                                    prevDiv.appendChild(removeBtn);
+
+                                    // Undo span
+                                    const undoSpan = document.createElement('span');
+                                    undoSpan.className = 'hidden text-xs text-slate-400 italic';
+                                    undoSpan.textContent = 'Gambar akan dihapus saat disimpan.';
+                                    prevDiv.appendChild(undoSpan);
                                 } else {
                                     img.className = 'h-10 w-10 object-cover rounded border border-slate-200 hidden';
                                     prevDiv.appendChild(img);
@@ -527,6 +602,9 @@
                                 fileInput.addEventListener('change', function(e) {
                                     const selectedFile = e.target.files[0];
                                     if (selectedFile) {
+                                        // Cancel any pending remove
+                                        removeFlag.value = '0';
+                                        hiddenCurrent.value = val || '';
                                         const reader = new FileReader();
                                         reader.onload = function(evt) {
                                             img.src = evt.target.result;
@@ -536,6 +614,7 @@
                                     }
                                 });
 
+                                label.appendChild(removeFlag);
                                 label.appendChild(fileInput);
                                 label.appendChild(prevDiv);
                             } else if (typeLower === 'action') {

@@ -752,8 +752,33 @@ class CustomersWebController extends Controller
             }
         }
 
+        // Handle explicit file removals (remove_files[key] = "1")
+        if ($request->has('remove_files') && is_array($request->remove_files)) {
+            $website = $website ?? CustomersWebsite::find($id);
+            $domainFolder = $website ? $website->domain : null;
+
+            foreach ($request->remove_files as $key => $flag) {
+                if ($flag == '1' && !empty($existingData[$key]) && is_string($existingData[$key])) {
+                    // Attempt to delete the physical file
+                    if (!empty($domainFolder)) {
+                        $targetDir = public_path('images/website/' . $domainFolder);
+                        $oldFilePath = $targetDir . '/' . basename($existingData[$key]);
+                        if (file_exists($oldFilePath) && is_file($oldFilePath)) {
+                            @unlink($oldFilePath);
+                        }
+                    } else {
+                        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($existingData[$key])) {
+                            \Illuminate\Support\Facades\Storage::disk('public')->delete($existingData[$key]);
+                        }
+                    }
+                    // Nullify the key in merged data
+                    $dynamicData[$key] = null;
+                }
+            }
+        }
+
         if ($request->hasFile('dynamic_files')) {
-            $website = CustomersWebsite::find($id);
+            $website = $website ?? CustomersWebsite::find($id);
             $domainFolder = $website ? $website->domain : null;
 
             if (!empty($domainFolder)) {
@@ -762,6 +787,10 @@ class CustomersWebController extends Controller
                     mkdir($targetDir, 0755, true);
                 }
                 foreach ($request->file('dynamic_files') as $key => $file) {
+                    // Skip upload if this key was explicitly removed
+                    if (isset($request->remove_files[$key]) && $request->remove_files[$key] == '1') {
+                        continue;
+                    }
                     if ($file->isValid()) {
                         // Delete old file if existing for this key
                         if (!empty($existingData[$key]) && is_string($existingData[$key])) {
@@ -781,6 +810,10 @@ class CustomersWebController extends Controller
                     \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
                 }
                 foreach ($request->file('dynamic_files') as $key => $file) {
+                    // Skip upload if this key was explicitly removed
+                    if (isset($request->remove_files[$key]) && $request->remove_files[$key] == '1') {
+                        continue;
+                    }
                     if ($file->isValid()) {
                         // Delete old file if existing
                         if (!empty($existingData[$key]) && is_string($existingData[$key])) {

@@ -5,6 +5,23 @@
     $navContent = $navbarPresets ?? [];
     $logoFile = $navContent['image'] ?? null;
     $favicon = $logoFile ? '/images/website/' . ($website->domain ?? '') . '/' . $logoFile : null;
+
+    $identity = null;
+    if (isset($website->id)) {
+        $identity = \Illuminate\Support\Facades\DB::table('customers_website_identities')
+            ->where('customers_website_id', $website->id)
+            ->first();
+    }
+
+    $primaryFont = !empty($identity->primary_font) ? trim($identity->primary_font) : 'Poppins';
+    $secondaryFont = !empty($identity->secondary_font) ? trim($identity->secondary_font) : 'Poppins';
+
+    $primaryColor = !empty($identity->primary_color) ? trim($identity->primary_color) : '#ffffff';
+    $secondaryColor = !empty($identity->secondary_color) ? trim($identity->secondary_color) : '#6c6c6c';
+    $accentColor = !empty($identity->accent_color) ? trim($identity->accent_color) : '#c5a3ff';
+    $fontColor = !empty($identity->font_color) ? trim($identity->font_color) : '#000000';
+
+    $fontsToLoad = array_unique(array_filter([$primaryFont, $secondaryFont]));
 @endphp
 
 <head>
@@ -20,12 +37,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-</head>
+    {{-- Load each required font (primary + secondary) dynamically --}}
+    @foreach($fontsToLoad as $font)
+        <link href="https://fonts.googleapis.com/css2?family={{ str_replace(' ', '+', $font) }}:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    @endforeach
 
-<head>
     <style>
         * {
             margin: 0;
@@ -34,6 +50,11 @@
         }
 
         :root {
+            @if($primaryColor) --primary: {{ $primaryColor }}; @endif
+            @if($secondaryColor) --secondary: {{ $secondaryColor }}; @endif
+            @if($accentColor) --accent: {{ $accentColor }}; @endif
+            @if($fontColor) --font-color: {{ $fontColor }}; @endif
+
             --coral: #FF9B7A;
             --coral-dark: #E8876A;
             --peach: #FFB8A0;
@@ -48,24 +69,29 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: '{{ $secondaryFont }}', sans-serif;
             color: var(--dark);
             line-height: 1.6;
             overflow-x: hidden;
-            /* font-family: 'Plus Jakarta Sans', sans-serif; */
             background-color: #FCFBFA;
             color: #2C2A29;
         }
 
+        p,
+        label,
+        span {
+            font-family: '{{ $secondaryFont }}', sans-serif;
+        }
+
         .font-serif-brand {
-            font-family: 'Playfair Display', serif;
+            font-family: '{{ $primaryFont }}', sans-serif;
         }
 
         h1,
         h2,
         h3,
         h4 {
-            font-family: 'Playfair Display', serif;
+            font-family: '{{ $primaryFont }}', sans-serif;
         }
 
         /* ===== FLOATING BUTTONS ===== */

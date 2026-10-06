@@ -45,7 +45,7 @@
     </defs>
 </svg>
 
-<section class="relative w-full bg-[#DDBCD3] overflow-hidden">
+<section class="relative w-full min-h-screen flex flex-col bg-[#e5b453] overflow-hidden" style="position:relative;width:100%;min-height:100vh;display:flex;flex-direction:column;background-color:#e5b453;overflow:hidden;">
     <!-- Squiggle top-left -->
     <svg class="absolute -top-6 -left-8 w-24 md:w-32 h-64 md:h-80 rotate-[30deg] z-20 opacity-90" aria-hidden="true"><use href="#squiggle"/></svg>
     <!-- Squiggle right edge -->
@@ -56,23 +56,28 @@
         <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button> -->
 
-    <!-- Two dogs -->
-    <div class="relative z-10 flex items-stretch justify-center">
-        <div class="w-full h-[380px] md:h-[540px]">
-            <img src="{{ asset($hero_img) }}" alt="French Bulldog" class="w-full h-full object-cover">
-        </div>
-    </div>
+    <!-- Hero image as background -->
+    <div class="absolute inset-0 w-full h-full min-h-screen bg-cover bg-center hero-bg"
+         style="position:absolute;inset:0;width:100%;height:100%;min-height:100vh;background-size:cover;background-position:center;background-image:url('{{ asset($hero_bg) }}');background-color:{{ $background_color }};"></div>
 
-    <!-- Groovy sticker logo -->
-    <!-- <div class="absolute inset-x-0 top-[34%] z-20 flex justify-center pointer-events-none">
-        <svg viewBox="0 0 340 210" class="w-56 md:w-96 [filter:drop-shadow(0_10px_18px_rgba(90,40,70,0.25))]" aria-label="{{ $title }}">
-            <defs>
-                <path id="logoTop" d="M30,112 Q170,42 310,112"/>
-                <path id="logoBot" d="M92,184 Q170,150 248,184"/>
-            </defs>
-            <text font-family="Shrikhand, cursive" font-size="55" fill="#F2A7C3" transform="translate(5,8)">
-                <textPath href="#logoTop" startOffset="50%" text-anchor="middle">{{ $title }}</textPath>
-            </text>
-        </svg>
-    </div> -->
+    <!-- Centered text overlay -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-30 pointer-events-none"
+         style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem;z-index:30;pointer-events:none;">
+        <span class="inline-block font-semibold tracking-widest uppercase"
+              style="display:inline-block;font-size:0.875rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;color:{{ $tag_color }};">{{ $tag }}</span>
+        <h1 class="font-bold leading-tight"
+            style="font-size:5.25rem;line-height:1.2;margin-bottom:0.4rem;color:{{ $title_color }};">{{ $title }}</h1>
+        @if($hero_img)
+            <img src="{{ asset($hero_img) }}" alt="hero image"
+                 style="display:block;margin:0 auto;margin-bottom:0.4rem;max-width:30vh;max-height:30vh;width:auto;height:auto;object-fit:contain;">
+        @endif
+        <p class="max-w-xl mx-auto mb-2 leading-relaxed"
+           style="font-size:1.125rem;line-height:1.6;max-width:36rem;margin:0 auto;margin-bottom:1.5rem;color:{{ $subtitle_color }};">{{ $subtitle }}</p>
+        @if($button_text)
+            <a href="#" class="inline-block mt-2 px-6 py-3 text-center font-medium transition"
+               style="display:inline-block; max-height:40vh; margin-top:0.5rem;padding:1rem 1.5rem;text-align:center;font-weight:500;text-decoration:none;transition:background-color 0.2s ease, opacity 0.2s ease;background-color:{{ $button_color }};color:{{ $button_text_color }};">
+                {{ $button_text }}
+            </a>
+        @endif
+    </div>
 </section>

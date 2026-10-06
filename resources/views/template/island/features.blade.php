@@ -53,7 +53,9 @@
     $about_image = !empty($content['about_image']) ? 'images/website/' . $domain . '/' . $content['about_image'] : 'images/default/broken.png';
 @endphp
 
-<svg class="block w-full relative z-20 -mt-10 -mb-px" viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true">
+{{-- Wave connector (top) --}}
+<svg class="block w-full relative z-10 h-8 md:h-16 -mt-4 md:-mt-14 -mb-px pointer-events-none"
+     viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true">
     <path fill="{{ $background_color }}" d="M0,40 C80,24 160,54 240,42 C320,30 400,56 480,42 C560,28 640,54 720,42 C800,30 880,56 960,42 C1040,28 1120,54 1200,42 C1280,30 1360,54 1440,42 L1440,64 L0,64 Z"/>
 </svg>
 
@@ -64,16 +66,17 @@
         <!-- Community -->
         @foreach ($repeater as $img)
             <div class="flex flex-col items-center">
-                <svg viewBox="0 0 80 80" class="w-20 h-20 md:w-24 md:h-24 mb-5" fill="none" stroke="{{ $title_color }}" stroke-width="2.4" stroke-linecap="round">
-                    <circle cx="40" cy="40" r="30"/>
-                    <g transform="rotate(-22 40 40)">
-                        <ellipse cx="40" cy="40" rx="10" ry="25"/>
-                        <path d="M40,15 L40,65"/>
-                    </g>
-                </svg>
+                <img src="{{ asset('images/website/' . $domain . '/' . $img['image']) }}" alt="{{ $img['title'] }}" class="h-20 md:h-40 mb-5">
                 <h3 class="font-groovy text-sm md:text-base tracking-wide text-[{{ $title_color }}] uppercase mb-3">{{ $img['title'] }}</h3>
-                <p class="text-[11px] md:text-xs leading-relaxed text-[{{ $subtitle_color }}] max-w-[220px]">{{ $img['description'] }}</p>
+                <p class="text-[11px] md:text-xs leading-relaxed text-[{{ $subtitle_color }}] max-w-[220px]">{{ $img['subtitle'] }}</p>
             </div>
         @endforeach
     </div>
 </section>
+
+{{-- Wave connector (bottom) --}}
+<svg class="block w-full relative z-30 h-8 md:h-16 -mt-px -mb-8 md:-mb-16 pointer-events-none"
+     style="transform: rotate(180deg); transform-origin: 50% 50%;"
+     viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="{{ $background_color }}" d="M0,40 C80,24 160,54 240,42 C320,30 400,56 480,42 C560,28 640,54 720,42 C800,30 880,56 960,42 C1040,28 1120,54 1200,42 C1280,30 1360,54 1440,42 L1440,64 L0,64 Z"/>
+</svg>

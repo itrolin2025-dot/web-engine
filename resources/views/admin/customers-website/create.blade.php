@@ -315,13 +315,27 @@
                             </div>
 
                             <div class="grid grid-cols-1 items-end gap-4 gap-x-3 sm:grid-cols-2">
+                                @php
+                                    $fontCategories = [
+                                        'Sans-Serif (Modern / Clean)' => ['Inter', 'Poppins', 'Roboto', 'Open Sans', 'Lato', 'Montserrat', 'Plus Jakarta Sans', 'DM Sans', 'Nunito', 'Raleway', 'Work Sans', 'Outfit', 'Space Grotesk', 'Syne', 'Urbanist'],
+                                        'Serif (Editorial / Elegant)' => ['Libre Baskerville','Playfair Display', 'Merriweather', 'Lora', 'Cinzel', 'Bodoni Moda', 'Cormorant Garamond', 'Prata', 'EB Garamond', 'Spectral'],
+                                        'Display & Vintage' => ['Shrikhand', 'Abril Fatface', 'Righteous', 'Oswald', 'Bebas Neue'],
+                                        'Handwriting & Script' => ['Caveat', 'Pacifico', 'Dancing Script', 'Great Vibes', 'Satisfy', 'Fredoka'],
+                                        'Monospace' => ['Fira Code', 'JetBrains Mono', 'Space Mono'],
+                                    ];
+                                @endphp
+
                                 <!-- Primary Font -->
                                 <label class="block">
                                     <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Primary Font</span>
                                     <select name="primary_font" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
                                         <option value="">-- Default --</option>
-                                        @foreach(['Inter','Poppins','Roboto','Open Sans','Lato','Montserrat','Playfair Display','Raleway','Nunito','DM Sans','Plus Jakarta Sans'] as $font)
-                                            <option value="{{ $font }}" {{ old('primary_font') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                        @foreach($fontCategories as $category => $fonts)
+                                            <optgroup label="{{ $category }}">
+                                                @foreach($fonts as $font)
+                                                    <option value="{{ $font }}" {{ old('primary_font') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                                @endforeach
+                                            </optgroup>
                                         @endforeach
                                     </select>
                                     @error('primary_font')
@@ -344,8 +358,12 @@
                                     <span class="text-sm font-medium text-slate-700 dark:text-navy-100">Secondary Font</span>
                                     <select name="secondary_font" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
                                         <option value="">-- Default --</option>
-                                        @foreach(['Inter','Poppins','Roboto','Open Sans','Lato','Montserrat','Playfair Display','Raleway','Nunito','DM Sans','Plus Jakarta Sans'] as $font)
-                                            <option value="{{ $font }}" {{ old('secondary_font') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                        @foreach($fontCategories as $category => $fonts)
+                                            <optgroup label="{{ $category }}">
+                                                @foreach($fonts as $font)
+                                                    <option value="{{ $font }}" {{ old('secondary_font') == $font ? 'selected' : '' }}>{{ $font }}</option>
+                                                @endforeach
+                                            </optgroup>
                                         @endforeach
                                     </select>
                                     @error('secondary_font')

@@ -22,7 +22,7 @@
     $desc = $content['desc_en'] ?? $content['desc'] ?? '';
     $desc_color = $content['desc_color'] ?? '#ffffff';
 
-    $repeater = $content['repeater'] ?? $content['tagline'];
+    $repeater = $content['repeater'] ?? $content['tagline'] ?? '';
     if (is_array($repeater)) {
         $repeater = collect($repeater)->sortBy('sort')->values()->all();
     }

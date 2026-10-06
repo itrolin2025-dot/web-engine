@@ -41,7 +41,7 @@
     <!-- Mascot image, breaks out above the footer top edge -->
     @if ($img !== '')
         <img src="{{ asset($img) }}" alt="{{ $title }}"
-            class="absolute left-1/2 -translate-x-1/2 -top-16 sm:-top-20 md:-top-24 z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-[#{{ $background_color }}] shadow-md" />
+            class="absolute left-1/2 -translate-x-1/2 -top-20 sm:-top-20 md:-top-20 z-10 w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain" />
     @endif
 
     <!-- Social media links -->

@@ -60,15 +60,9 @@
             class="absolute top-0 left-0 w-full pointer-events-none select-none">
 
     <div class="pink-grid-bg relative pt-28 pb-28 px-6">
-        <!-- Dekorasi pensil -->
-        <svg class="hidden md:block absolute top-8 right-[10%] w-56 rotate-[135deg] drop-shadow-lg z-30" viewBox="0 0 220 40" aria-hidden="true">
-            <rect x="0" y="12" width="14" height="16" rx="4" fill="#E8A0A8"/>
-            <rect x="12" y="11" width="8" height="18" fill="#9DB4CE"/>
-            <rect x="20" y="10" width="150" height="20" fill="#5F7036"/>
-            <rect x="20" y="17" width="150" height="6" fill="#4A5A28"/>
-            <polygon points="170,10 202,20 170,30" fill="#E8C99B"/>
-            <polygon points="197,17.5 207,20 197,22.5" fill="#3D2314"/>
-        </svg>
+        <!-- Dekorasi pensil (image) -->
+        <img src="/images/clo/pencil.png" alt="" aria-hidden="true"
+             class="hidden md:block absolute top-8 right-[10%] w-56 rotate-[135deg] drop-shadow-lg z-30">
 
         <div class="max-w-5xl mx-auto text-center mt-16 mb-8 relative z-10">
             <h2 class="font-script text-6xl md:text-7xl font-bold text-white">{{ $title }}</h2>
@@ -101,13 +95,7 @@
 
     <div class="h-[120px] absolute bottom-0 left-0 w-full pointer-events-none select-none" aria-hidden="true"></div>
 
-    <!-- Dekorasi penggaris biru -->
-    <div class="hidden md:block absolute -bottom-6 left-4 lg:left-16 z-30 rotate-[-12deg]">
-        <div class="w-[430px] h-14 bg-[#BFD6EC] border-2 border-white rounded-md shadow-lg relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-4" style="background: repeating-linear-gradient(90deg, #3E6491 0 2px, transparent 2px 26px);"></div>
-            <div class="absolute inset-0 flex items-end justify-between px-5 pb-1.5 font-sans-custom font-bold text-[#3E6491] text-sm">
-                <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
-            </div>
-        </div>
-    </div>
+    <!-- Dekorasi penggaris biru (image) -->
+    <img src="/images/clo/ruler.png" alt="" aria-hidden="true"
+         class="hidden md:block absolute bottom-16 left-4 lg:left-16 z-30 rotate-[-12deg] w-[430px] h-14 bg-[#BFD6EC] border-2 border-white rounded-md shadow-lg">
 </section>
