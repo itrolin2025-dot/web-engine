@@ -47,6 +47,22 @@
                             @enderror
                         </label>
 
+                        <!-- Template (Opsional) -->
+                        <label class="block">
+                            <span class="font-medium text-slate-700 dark:text-navy-100">Template</span>
+                            <select name="template_id" class="form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white dark:bg-navy-700 px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
+                                <option value="">-- No Template (Opsional) --</option>
+                                @foreach($templates as $template)
+                                    <option value="{{ $template->id }}" {{ old('template_id') == $template->id ? 'selected' : '' }}>
+                                        {{ $template->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('template_id')
+                                <span class="text-xs text-error mt-1">{{ $message }}</span>
+                            @enderror
+                        </label>
+
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <!-- Title -->
                             <label class="block">
