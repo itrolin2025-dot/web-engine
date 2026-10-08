@@ -10,6 +10,8 @@
     } else {
         $content = [];
     }
+    
+    $domain = $website->domain ?? '';
 
     $tag = $content['tag_en'] ?? $content['tag'] ?? 'MONTHLY CANDY SUBSCRIPTION';
     $tag_color = $content['tag_color'] ?? '#721C24';
@@ -28,6 +30,11 @@
     $button_text_color = $content['button_text_color'] ?? '#ffffff';
 
     $background_color = $content['background_color'] ?? '#B8B4FF';
+
+
+    $has_background = !empty($content['background']) && $content['background'] !== 'your image';
+    $background = $has_background ? 'images/website/' . $domain . '/' . $content['background'] : null;
+
 @endphp
 
 <style>
@@ -103,7 +110,7 @@
 @endphp
 
 <section id="club" class="w-full flex items-center justify-center p-6 md:p-12 selection:bg-pink-200"
-    style="background-color: {{ $background_color }};">
+    style="background-color: {{ $background_color }}; @if($has_background) background-image: url('{{ asset($background) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; @endif;">
 
     <!-- Card Tengah dengan Efek Wavy/Scalloped di Seluruh Tepinya -->
     <div class="candy-scalloped-box w-full max-w-4xl mx-auto p-8 md:p-16 text-center relative flex flex-col items-center justify-center my-6">
@@ -136,19 +143,6 @@
             </svg>
         </div>
 
-        <!-- Badge Tiket di Atas -->
-        <div
-            class="mb-6 bg-white/80 border border-purple-200 px-4 py-1.5 rounded-lg shadow-sm inline-flex items-center gap-2 transform -rotate-1 relative z-20">
-            <span class="text-xs font-bold tracking-wider uppercase candy-font-sans-custom"
-                style="color: {{ $title_color }};">{{ $title }} Candy Club</span>
-        </div>
-
-        <!-- Subtitle Tag -->
-        <div class="mb-3 bg-[#F8D7DA] px-3 py-1 rounded-md inline-block relative z-20">
-            <span class="text-[11px] font-bold tracking-widest uppercase candy-font-sans-custom"
-                style="color: {{ $tag_color }};">{{ $tag }}</span>
-        </div>
-
         <!-- Judul Utama -->
         <h2 class="text-5xl md:text-7xl candy-font-serif-custom tracking-tight leading-none mb-4 relative z-20"
             style="color: {{ $title_color }};">
@@ -178,8 +172,7 @@
         <div
             class="absolute -top-6 -right-4 md:-top-8 md:-right-6 text-white w-20 h-20 md:w-24 md:h-24 rounded-full flex flex-col items-center justify-center p-2 transform rotate-12 shadow-md border-2 border-white z-30"
             style="background-color: {{ $button_color }};">
-            <span class="text-[10px] md:text-xs candy-font-serif-custom italic text-center leading-tight">Just a Lil
-                Something Sweet</span>
+            <span class="text-[10px] md:text-xs candy-font-serif-custom italic text-center leading-tight">{{ $tag }}</span>
         </div>
 
         <!-- Stiker Permen Kiri Tengah -->

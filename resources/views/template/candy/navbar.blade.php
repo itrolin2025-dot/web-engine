@@ -11,9 +11,31 @@
         $content = [];
     }
 
-    $brand = $content['title_en'] ?? $content['title'] ?? 'nectar';
-    $brand_color = $content['title_color'] ?? '#4a1525';
-    $background_color = $content['background_color'] ?? '#f8b8cf';
+    $domain = $website->domain ?? '';
+
+    $tag = $content['tag_en'] ?? $content['tag'] ?? '';
+    $tag_color = $content['tag_color'] ?? '#ffffff';
+
+    $title = $content['title_en'] ?? $content['title'] ?? '';
+    $title_color = $content['title_color'] ?? '#ffffff';
+
+    //ambil logo
+    $logoFile = $navContent['image'] ?? null;
+    $logo = $logoFile ? '/images/website/' . ($website->domain ?? '') . '/' . $logoFile : null;
+
+    //ambil nama brand
+    $brand = $navContent['brand'] ?? ($website->title ?? 'My Brand');
+    //ambil menu
+    $menus = $navContent['menus'] ?? [];
+
+    $button_text = $content['button_text_en'] ?? $content['button_text'] ?? '';
+    $button_text_color = $content['button_text_color'] ?? '#000000';
+    $button_color = $content['button_color'] ?? '#000000';
+
+    $background_color = $content['background_color'] ?? '#ffffff';
+
+    $hero_bg = !empty($content['background']) ? 'images/website/' . $domain . '/' . $content['background'] : 'images/default/broken.png';
+    $image = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 @endphp
 
 <!-- Font tambahan khusus template Candy (Caveat = script, Instrument Serif, DM Sans) -->
@@ -71,40 +93,83 @@
 
 <canvas id="candy-particle-canvas"></canvas>
 
-<header class="candy-wavy-header py-4 px-6 md:px-12 shadow-sm relative z-20">
+<header class="candy-wavy-header py-8 px-6 md:px-12 shadow-sm relative z-20">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <!-- Left Navigation Links -->
-        <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider"
-            style="color: {{ $brand_color }};">
-            <a href="#cart" class="hover:opacity-75 transition-opacity">Find the Cart</a>
-            <a href="#event" class="hover:opacity-75 transition-opacity">Book an Event</a>
-        </nav>
-
-        <!-- Mobile menu button -->
+        <!-- Mobile menu button (left side) -->
         <div class="md:hidden flex items-center">
-            <button id="candy-mobile-menu-btn" class="focus:outline-none" style="color: {{ $brand_color }};">
+            <button id="candy-mobile-menu-btn" class="focus:outline-none" style="color: {{ $title_color }};">
                 <i class="fa-solid fa-bars text-lg"></i>
             </button>
         </div>
 
-        <!-- Logo in Center -->
+        <!-- Left Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider"
+            style="color: {{ $title_color }};">
+            @foreach($menus as $menu)
+                @php
+                    $menuUrl = $menu['url'] ?? '#';
+                    if (!empty($menuUrl) && $menuUrl !== '#' && !str_starts_with($menuUrl, 'http') && !str_starts_with($menuUrl, '/')) {
+                        $menuUrl = '/' . ($website->domain ?? '') . '/' . ltrim($menuUrl, '/');
+                    }
+                @endphp
+                @if(!empty($menu['children']))
+                    <div class="dropdown relative">
+                        <a href="javascript:void(0)" class="dropdown-toggle flex items-center gap-1 hover:text-teal-700 transition">
+                            {{ $menu['label'] }} &#9662;
+                        </a>
+                        <div class="dropdown-menu absolute left-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-100 z-50 hidden">
+                            @foreach($menu['children'] as $child)
+                                @php
+                                    $childUrl = $child['url'] ?? '#';
+                                    if (!empty($childUrl) && $childUrl !== '#' && !str_starts_with($childUrl, 'http') && !str_starts_with($childUrl, '/')) {
+                                        $childUrl = '/' . ($website->domain ?? '') . '/' . ltrim($childUrl, '/');
+                                    }
+                                @endphp
+                                <a href="{{ $childUrl }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-teal-700 transition">
+                                    {{ $child['label'] }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    @php
+                        $routeName = !empty($menu['url']) ? 'pages' : 'template';
+                        $routeParams = ($routeName === 'template')
+                            ? ['client' => $website->domain ?? '']
+                            : ['client' => $website->domain ?? '', 'pages' => $menu['url']];
+                    @endphp
+                    <a href="{{ route($routeName, $routeParams) }}" class="hover:text-teal-700 transition">{{ $menu['label'] }}</a>
+                @endif
+            @endforeach
+            <!-- <a href="#cart" class="hover:opacity-75 transition-opacity">Find the Cart</a>
+            <a href="#event" class="hover:opacity-75 transition-opacity">Book an Event</a> -->
+        </nav>
+
+        <!-- Logo in Center (image preferred, text fallback) -->
         <div class="absolute left-1/2 transform -translate-x-1/2">
-            <span class="candy-font-serif italic font-bold text-3xl md:text-4xl tracking-tight"
-                style="color: {{ $brand_color }};">{{ $brand }}</span>
+            @if(!empty($content['image']))
+                <img src="{{ asset($image) }}"
+                     alt="{{ $title }}"
+                     class="h-10 md:h-12 object-contain">
+            @else
+                <span class="candy-font-serif italic font-bold text-3xl md:text-4xl tracking-tight"
+                    style="color: {{ $background_color }};">{{ $title }}</span>
+            @endif
         </div>
 
         <!-- Right Navigation & Cart -->
         <div class="flex items-center space-x-6">
             <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold uppercase tracking-wider"
-                style="color: {{ $brand_color }};">
-                <a href="#club" class="hover:opacity-75 transition-opacity">Candy Club</a>
-                <a href="#buy" class="hover:opacity-75 transition-opacity">Buy Candy</a>
+                style="color: {{ $title_color }};">
+                <!-- <a href="#club" class="hover:opacity-75 transition-opacity">Candy Club</a>
+                <a href="#buy" class="hover:opacity-75 transition-opacity">Buy Candy</a> -->
             </nav>
             <div
                 class="relative cursor-pointer group flex items-center space-x-1 bg-white/40 px-3 py-1.5 rounded-full border border-pink-200 shadow-sm hover:bg-white/70 transition-all"
                 onclick="candyOpenCartModal()">
-                <i class="fa-solid fa-bag-shopping text-sm" style="color: {{ $brand_color }};"></i>
-                <span id="cart-badge" class="text-xs font-bold" style="color: {{ $brand_color }};">0</span>
+                <i class="fa-solid fa-bag-shopping text-sm" style="color: {{ $title_color }};"></i>
+                <span id="cart-badge" class="text-xs font-bold" style="color: {{ $background_color }};">0</span>
             </div>
         </div>
     </div>
@@ -112,7 +177,7 @@
     <!-- Mobile Menu Dropdown -->
     <div id="candy-mobile-menu"
         class="hidden md:hidden pt-4 pb-2 border-t border-pink-300/40 mt-3 flex-col space-y-2 text-xs font-semibold uppercase tracking-wider"
-        style="color: {{ $brand_color }};">
+        style="color: {{ $title_color }};">
         <a href="#cart" class="py-1">Find the Cart</a>
         <a href="#event" class="py-1">Book an Event</a>
         <a href="#club" class="py-1">Candy Club</a>

@@ -50,51 +50,60 @@
 
     {{-- Row 1: Website Info Full Width --}}
     <div class="mb-6 mt-2">
-        <div class="card p-4 sm:p-5">
-            <div class="mb-4 flex items-center justify-between">
-                <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Website Info</h3>
+        <div class="card">
+            {{-- Header --}}
+            <div class="border-b border-slate-150 px-4 py-3 dark:border-navy-500 sm:px-5 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-globe text-primary dark:text-accent-light"></i>
+                    <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Website Info</h3>
+                </div>
                 <a href="{{ route('admin.customers-website.edit', $website->id) }}"
-                    class="btn h-7 rounded-full bg-slate-150 px-3 text-xs+ font-medium text-slate-800 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450">
+                    class="btn h-7 rounded-full bg-slate-150 px-3 text-xs font-medium text-slate-800 hover:bg-slate-200 dark:bg-navy-500 dark:text-navy-50 dark:hover:bg-navy-450">
                     <i class="fa-solid fa-pen mr-1"></i> Edit
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div>
-                    <p class="text-xs text-slate-400 dark:text-navy-300">Title</p>
-                    <p class="font-medium text-slate-700 dark:text-navy-100 mt-0.5">{{ $website->title }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-400 dark:text-navy-300">Customer</p>
-                    <p class="font-medium text-slate-700 dark:text-navy-100 mt-0.5">{{ $website->customer->name ?? '-' }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-400 dark:text-navy-300">Template</p>
-                    <p class="font-mono text-sm text-slate-600 dark:text-navy-200 mt-0.5">{{ $website->template->name ?? '-' }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-400 dark:text-navy-300">Domain</p>
-                    <p class="font-mono text-sm text-slate-600 dark:text-navy-200 mt-0.5">{{ $website->domain ?: '-' }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-400 dark:text-navy-300">Page Type</p>
-                    <div class="mt-1">
-                        <span class="badge rounded-full bg-info/10 text-info px-2.5 py-1 text-xs font-semibold capitalize">
-                            {{ $page_type }}
-                        </span>
+            {{-- Body --}}
+            <div class="p-4 sm:p-5">
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div>
+                        <p class="text-xs text-slate-400 dark:text-navy-300">Title</p>
+                        <p class="font-medium text-slate-700 dark:text-navy-100 mt-0.5">{{ $website->title }}</p>
                     </div>
-                </div>
-                <div>
-                    <p class="text-xs text-slate-400 dark:text-navy-300">Total Layouts</p>
-                    <div class="mt-1">
-                        <span class="badge rounded-full bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light px-2.5 py-1 text-xs font-semibold">
-                            {{ $layouts->count() }}
-                        </span>
+                    <div>
+                        <p class="text-xs text-slate-400 dark:text-navy-300">Customer</p>
+                        <p class="font-medium text-slate-700 dark:text-navy-100 mt-0.5">{{ $website->customer->name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 dark:text-navy-300">Template</p>
+                        <p class="font-mono text-sm text-slate-600 dark:text-navy-200 mt-0.5">{{ $website->template->name ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 dark:text-navy-300">Domain</p>
+                        <p class="font-mono text-sm text-slate-600 dark:text-navy-200 mt-0.5">{{ $website->domain ?: '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 dark:text-navy-300">Page Type</p>
+                        <div class="mt-1">
+                            <span class="badge rounded-full bg-info/10 text-info px-2.5 py-1 text-xs font-semibold capitalize">
+                                {{ $page_type }}
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 dark:text-navy-300">Total Layouts</p>
+                        <div class="mt-1">
+                            <span id="total-layouts-badge" class="badge rounded-full bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light px-2.5 py-1 text-xs font-semibold">
+                                {{ $layouts->count() }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>    {{-- Row 2: Add New Layout (6 cols) + Layout Items (6 cols) --}}
+    </div>
+
+    {{-- Row 2: Add New Layout (6 cols) + Layout Items (6 cols) --}}
     <div class="mb-4 mt-4"></div>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
 
@@ -102,7 +111,7 @@
         <div x-data="{ showForm: true }">
             <div class="card">
                 <button type="button" @click="showForm = !showForm"
-                    class="flex w-full items-center justify-between px-4 py-3 sm:px-5 text-left">
+                    class="flex w-full items-center justify-between border-b border-slate-150 px-4 py-3 dark:border-navy-500 sm:px-5 text-left">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-plus text-primary dark:text-accent-light"></i>
                         <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Add New Layout Item</h3>
@@ -163,7 +172,8 @@
                                         data-template="{{ $sec->template_id }}"
                                         data-slug="{{ $sec->slug }}"
                                         data-image="{{ $sec->preview ? asset($sec->preview) : '' }}"
-                                        onclick="selectSection(this)">
+                                        onclick="selectSection(this)"
+                                        ondblclick="saveSectionOnDblClick(this)">
                                         {{-- Image Preview --}}
                                         <div class="relative h-28 w-full overflow-hidden bg-slate-100 dark:bg-navy-800">
                                             @if($sec->preview)
@@ -226,148 +236,154 @@
         {{-- END COLUMN LEFT: Add Layout Form --}}
 
         {{-- COLUMN RIGHT: Layout Items --}}
-        <div class="min-w-0">
-
+        <div class="card">
             {{-- Header --}}
-            <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-table-cells-large text-sm text-slate-400 dark:text-navy-300"></i>
-                    <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Layout Items</h3>
+            <div class="border-b border-slate-150 px-4 py-3 dark:border-navy-500 sm:px-5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-table-cells-large text-primary dark:text-accent-light"></i>
+                        <h3 class="text-base font-semibold text-slate-700 dark:text-navy-100">Layout Items</h3>
+                    </div>
+                    <span id="layout-items-count-badge" class="badge rounded-full bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light px-2.5 py-1 text-xs font-semibold">
+                        {{ $layouts->count() }}
+                    </span>
                 </div>
-                <span class="badge rounded-full bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light px-2.5 py-0.5 text-xs font-semibold">
-                    {{ $layouts->count() }}
-                </span>
+                <div id="drag-hint" class="mt-2 flex items-center gap-1.5 text-xs text-slate-400 dark:text-navy-300 {{ $layouts->isEmpty() ? 'hidden' : '' }}">
+                    <i class="fa-solid fa-grip-vertical text-slate-400"></i>
+                    <span>Drag cards to reorder sections</span>
+                </div>
             </div>
 
-            @if($layouts->isEmpty())
-                <div class="card flex flex-col items-center justify-center py-12 text-slate-400 dark:text-navy-300">
-                    <i class="fa-solid fa-table-cells-large text-4xl mb-3 opacity-40"></i>
-                    <p class="text-sm">No layout items yet for {{ $page_type }}.</p>
-                    <p class="text-xs mt-1 opacity-70">Click "Add New Layout Item" above to create one.</p>
-                </div>
-            @else
-                {{-- Drag Hint --}}
-                <div class="h-2"></div>
-                <p class="text-xs text-slate-400 dark:text-navy-300 flex items-center gap-1">
-                    <i class="fa-solid fa-grip-vertical"></i> Drag cards to reorder sections
-                </p>
-                <div class="h-3"></div>
-
-                {{-- Sortable Container --}}
-                <div id="layout-sortable" class="space-y-3" x-data="{ expandedCardId: null, toggleCard(cardId) { this.expandedCardId = this.expandedCardId === cardId ? null : cardId; } }">
-                    @foreach($layouts as $layout)
-                    <div id="layout-row-{{ $layout->id }}" data-id="{{ $layout->id }}" class="layout-card card p-4 cursor-move h-full">
-                        {{-- Card Header: Drag Handle + Info + Actions --}}
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3 min-w-0">
-                                {{-- Drag Handle --}}
-                                <div class="drag-handle flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-navy-600 text-slate-400 dark:text-navy-300 hover:bg-slate-200 dark:hover:bg-navy-500 transition-colors">
-                                    <i class="fa-solid fa-grip-vertical text-xs"></i>
-                                </div>
-                                {{-- Position Badge --}}
-                                <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-semibold text-xs
-                                    {{ $layout->status ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300' }}">
-                                    {{ $layout->position }}
-                                </div>
-                                {{-- Section Info --}}
-                                <div class="min-w-0">
-                                    <p id="layout-title-{{ $layout->id }}" class="font-medium text-slate-700 dark:text-navy-100 truncate">
-                                        {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
-                                    </p>
-                                    <p class="text-xs text-slate-400 dark:text-navy-300 font-mono truncate">
-                                        {{ $layout->page_type ?? 'no page type' }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex shrink-0 items-center space-x-2 ml-3">
-                                {{-- Status Badge --}}
-                                <span id="layout-status-{{ $layout->id }}" class="badge rounded-full px-2 py-0.5 text-xs font-medium
-                                    {{ $layout->status ? 'bg-success/10 text-success' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300' }}">
-                                    {{ $layout->status ? 'Active' : 'Inactive' }}
-                                </span>
-                                {{-- Toggle Button --}}
-                                <button type="button" @click.prevent="toggleCard('layout-{{ $layout->id }}')"
-                                    class="btn h-8 w-8 rounded-lg p-0 hover:bg-slate-100 dark:hover:bg-navy-600">
-                                    <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-300"
-                                        :class="expandedCardId === 'layout-{{ $layout->id }}' ? 'rotate-180' : ''"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        {{-- Card Body: Edit Form (collapsible) --}}
-                        <div x-show="expandedCardId === 'layout-{{ $layout->id }}'"
-                            x-transition:enter="transition ease-out duration-200"
-                            x-transition:enter-start="opacity-0 -translate-y-1"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-150"
-                            x-transition:leave-start="opacity-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 -translate-y-1"
-                            class="mt-4 pt-4 border-t border-slate-150 dark:border-gray-800">
-
-                            <form action="{{ route('admin.customers-website.layout.update', [$website->id, $page_type, $layout->id]) }}"
-                                method="POST" enctype="multipart/form-data" class="layout-update-form space-y-4" data-layout-id="{{ $layout->id }}"
-                                x-data="{ selectedSectionId: '{{ $layout->templates_section_id }}' }">
-                                @csrf
-                                @method('PUT')
-
-                                <input type="hidden" name="templates_section_id" id="sectionSelectUpdate-{{ $layout->id }}" value="{{ $layout->templates_section_id }}">
-                                <input type="hidden" name="position" value="{{ $layout->position }}">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center space-x-2">
-                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section:</span>
-                                        <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-accent/10 dark:text-accent-light">
-                                            <i class="fa-solid fa-puzzle-piece mr-1"></i>
-                                            {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
-                                        </span>
-                                        <span class="text-[10px] text-slate-400 dark:text-navy-300 font-mono">
-                                            [{{ $layout->section->template?->name ?? '-' }}] ({{ $layout->section->slug ?? '-' }})
-                                        </span>
-                                    </div>
-                                    <label class="inline-flex items-center space-x-2 cursor-pointer">
-                                        <input name="status" type="checkbox" value="1" {{ $layout->status ? 'checked' : '' }}
-                                            class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
-                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Active</span>
-                                    </label>
-                                </div>
-
-                                <label class="block hidden">
-                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
-                                    <textarea name="content" id="contentUpdate-{{ $layout->id }}" rows="6" placeholder="Layout content..."
-                                        class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">{{ old('content', $layout->content) }}</textarea>
-                                </label>
-
-                                <!-- Dynamic Section Content Fields loaded via AJAX -->
-                                <div id="dynamicFieldsContainerUpdate-{{ $layout->id }}" class="hidden">
-                                    <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-4 p-3"></div>
-                                </div>
-
-                                <div class="flex items-center justify-between pt-4">
-                                    {{-- form attribute links this button to the delete form OUTSIDE the update form (no nested forms) --}}
-                                    <button type="submit" form="deleteLayoutForm-{{ $layout->id }}"
-                                        class="btn bg-error/10 font-medium text-error hover:bg-error/20 dark:bg-error/10 dark:text-error dark:hover:bg-error/20">
-                                        <i class="fa-solid fa-trash mr-1.5"></i> Delete
-                                    </button>
-                                    <button type="submit"
-                                        class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
-                                        <i class="fa-solid fa-check mr-1.5"></i> Save Changes
-                                    </button>
-                                </div>
-                            </form>
-
-                            {{-- Delete form: sibling of update form (valid HTML) --}}
-                            <form id="deleteLayoutForm-{{ $layout->id }}"
-                                action="{{ route('admin.customers-website.layout.destroy', [$website->id, $page_type, $layout->id]) }}"
-                                method="POST" class="layout-delete-form hidden" data-layout-id="{{ $layout->id }}">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-                        </div>
+            <div class="p-4 sm:p-5">
+                <div id="layout-items-wrapper">
+                    <div id="empty-layout-container" class="flex flex-col items-center justify-center py-12 text-slate-400 dark:text-navy-300 {{ $layouts->isEmpty() ? '' : 'hidden' }}">
+                        <i class="fa-solid fa-table-cells-large text-4xl mb-3 opacity-40"></i>
+                        <p class="text-sm font-medium">No layout items yet for {{ $page_type }}.</p>
+                        <p class="text-xs mt-1 opacity-70">Click "Add New Layout Item" on the left to create one.</p>
                     </div>
-                    @endforeach
-                </div>
-            @endif
 
+                    {{-- Sortable Container --}}
+                    <div id="layout-sortable" class="space-y-4" x-data="{ expandedCardId: null, toggleCard(cardId) { this.expandedCardId = this.expandedCardId === cardId ? null : cardId; } }">
+                        @foreach($layouts as $layout)
+                        <div id="layout-row-{{ $layout->id }}" data-id="{{ $layout->id }}" class="layout-card card p-4 cursor-move h-full border border-slate-200 dark:border-navy-500 shadow-md shadow-slate-200/60 dark:shadow-navy-950/60 transition-all duration-200 hover:shadow-lg">
+                            {{-- Card Header: Drag Handle + Info + Actions --}}
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3 min-w-0">
+                                    {{-- Drag Handle --}}
+                                    <div class="drag-handle flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-navy-600 text-slate-400 dark:text-navy-300 hover:bg-slate-200 dark:hover:bg-navy-500 transition-colors">
+                                        <i class="fa-solid fa-grip-vertical text-xs"></i>
+                                    </div>
+                                    {{-- Direct Delete Button --}}
+                                    <button type="button" onclick="deleteLayoutDirect('{{ $layout->id }}')"
+                                        class="btn h-8 w-8 shrink-0 items-center justify-center rounded-lg p-0 bg-error/10 text-error hover:bg-error/20 transition-colors" title="Delete section">
+                                        <i class="fa-solid fa-trash text-xs"></i>
+                                    </button>
+                                    {{-- Position Badge --}}
+                                    <div id="layout-pos-{{ $layout->id }}" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-semibold text-xs
+                                        {{ $layout->status ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300' }}">
+                                        {{ $layout->position }}
+                                    </div>
+                                    {{-- Section Info --}}
+                                    <div class="min-w-0">
+                                        <p id="layout-title-{{ $layout->id }}" class="font-medium text-slate-700 dark:text-navy-100 truncate">
+                                            {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
+                                        </p>
+                                        <p class="text-xs text-slate-400 dark:text-navy-300 font-mono truncate">
+                                            {{ $layout->page_type ?? 'no page type' }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex shrink-0 items-center space-x-2 ml-3">
+                                    {{-- Status Toggle Switch --}}
+                                    <label class="inline-flex items-center cursor-pointer" title="Toggle active status">
+                                        <input type="checkbox" id="layout-status-toggle-{{ $layout->id }}"
+                                            onchange="toggleLayoutStatusDirect('{{ $layout->id }}', this.checked)"
+                                            {{ $layout->status ? 'checked' : '' }}
+                                            class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
+                                    </label>
+                                    {{-- Toggle Button --}}
+                                    <button type="button" @click.prevent="toggleCard('layout-{{ $layout->id }}')"
+                                        class="btn h-8 w-8 rounded-lg p-0 hover:bg-slate-100 dark:hover:bg-navy-600">
+                                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-300"
+                                            :class="expandedCardId === 'layout-{{ $layout->id }}' ? 'rotate-180' : ''"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {{-- Card Body: Edit Form (collapsible) --}}
+                            <div x-show="expandedCardId === 'layout-{{ $layout->id }}'"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 -translate-y-1"
+                                x-transition:enter-end="opacity-100 translate-y-0"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 translate-y-0"
+                                x-transition:leave-end="opacity-0 -translate-y-1"
+                                class="mt-4 pt-4 border-t border-slate-150 dark:border-gray-800">
+
+                                <form action="{{ route('admin.customers-website.layout.update', [$website->id, $page_type, $layout->id]) }}"
+                                    method="POST" enctype="multipart/form-data" class="layout-update-form space-y-4" data-layout-id="{{ $layout->id }}"
+                                    x-data="{ selectedSectionId: '{{ $layout->templates_section_id }}' }">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input type="hidden" name="templates_section_id" id="sectionSelectUpdate-{{ $layout->id }}" value="{{ $layout->templates_section_id }}">
+                                    <input type="hidden" name="position" value="{{ $layout->position }}">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section:</span>
+                                            <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-accent/10 dark:text-accent-light">
+                                                <i class="fa-solid fa-puzzle-piece mr-1"></i>
+                                                {{ $layout->section->name ?? 'Section #'.$layout->templates_section_id }}
+                                            </span>
+                                            <span class="text-[10px] text-slate-400 dark:text-navy-300 font-mono">
+                                                [{{ $layout->section->template?->name ?? '-' }}] ({{ $layout->section->slug ?? '-' }})
+                                            </span>
+                                        </div>
+                                        <label class="inline-flex items-center space-x-2 cursor-pointer">
+                                            <input name="status" type="checkbox" value="1" {{ $layout->status ? 'checked' : '' }}
+                                                class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
+                                            <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Active</span>
+                                        </label>
+                                    </div>
+
+                                    <label class="block hidden">
+                                        <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
+                                        <textarea name="content" id="contentUpdate-{{ $layout->id }}" rows="6" placeholder="Layout content..."
+                                            class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">{{ old('content', $layout->content) }}</textarea>
+                                    </label>
+
+                                    <!-- Dynamic Section Content Fields loaded via AJAX -->
+                                    <div id="dynamicFieldsContainerUpdate-{{ $layout->id }}" class="hidden">
+                                        <div id="dynamicFieldsListUpdate-{{ $layout->id }}" class="space-y-4 p-3"></div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between pt-4">
+                                        {{-- form attribute links this button to the delete form OUTSIDE the update form (no nested forms) --}}
+                                        <button type="submit" form="deleteLayoutForm-{{ $layout->id }}"
+                                            class="btn bg-error/10 font-medium text-error hover:bg-error/20 dark:bg-error/10 dark:text-error dark:hover:bg-error/20">
+                                            <i class="fa-solid fa-trash mr-1.5"></i> Delete
+                                        </button>
+                                        <button type="submit"
+                                            class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
+                                            <i class="fa-solid fa-check mr-1.5"></i> Save Changes
+                                        </button>
+                                    </div>
+                                </form>
+
+                                {{-- Delete form: sibling of update form (valid HTML) --}}
+                                <form id="deleteLayoutForm-{{ $layout->id }}"
+                                    action="{{ route('admin.customers-website.layout.destroy', [$website->id, $page_type, $layout->id]) }}"
+                                    method="POST" class="layout-delete-form hidden" data-layout-id="{{ $layout->id }}">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
         {{-- END COLUMN RIGHT: Layout Items --}}
 
@@ -400,6 +416,19 @@
             const contentTextarea = document.getElementById('contentAdd');
             if (containerEl && listEl && contentTextarea && typeof window.loadSectionContents === 'function') {
                 window.loadSectionContents(id, containerEl, listEl, contentTextarea, contentTextarea.value);
+            }
+        }
+
+        // Double-click on section card to select & automatically save
+        function saveSectionOnDblClick(card) {
+            selectSection(card);
+            const form = document.getElementById('add-layout-form');
+            if (form) {
+                if (typeof form.requestSubmit === 'function') {
+                    form.requestSubmit();
+                } else {
+                    form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+                }
             }
         }
 
@@ -1258,6 +1287,207 @@
                 }
             });
 
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            function updateLayoutCountBadges() {
+                const cards = document.querySelectorAll('#layout-sortable .layout-card');
+                const count = cards.length;
+
+                const badge1 = document.getElementById('total-layouts-badge');
+                if (badge1) badge1.textContent = count;
+
+                const badge2 = document.getElementById('layout-items-count-badge');
+                if (badge2) badge2.textContent = count;
+
+                const emptyContainer = document.getElementById('empty-layout-container');
+                const dragHint = document.getElementById('drag-hint');
+
+                if (count === 0) {
+                    if (emptyContainer) emptyContainer.classList.remove('hidden');
+                    if (dragHint) dragHint.classList.add('hidden');
+                } else {
+                    if (emptyContainer) emptyContainer.classList.add('hidden');
+                    if (dragHint) dragHint.classList.remove('hidden');
+                }
+            }
+
+            window.toggleLayoutStatusDirect = function(layoutId, isChecked) {
+                const form = document.querySelector(`.layout-update-form[data-layout-id="${layoutId}"]`);
+                if (!form) return;
+
+                const formCheckbox = form.querySelector('input[name="status"]');
+                if (formCheckbox) {
+                    formCheckbox.checked = isChecked;
+                }
+
+                handleFormSubmit(form, function(data) {
+                    if (data.layout) {
+                        const posBadge = document.getElementById(`layout-pos-${layoutId}`);
+                        if (posBadge) {
+                            posBadge.className = `flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-semibold text-xs ${
+                                data.layout.status ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300'
+                            }`;
+                        }
+                        const headerToggle = document.getElementById(`layout-status-toggle-${layoutId}`);
+                        if (headerToggle) {
+                            headerToggle.checked = !!data.layout.status;
+                        }
+                    }
+                });
+            };
+
+            window.deleteLayoutDirect = function(layoutId) {
+                if (!confirm('Are you sure you want to delete this layout item?')) return;
+
+                const deleteForm = document.getElementById(`deleteLayoutForm-${layoutId}`) || document.querySelector(`.layout-delete-form[data-layout-id="${layoutId}"]`);
+                if (!deleteForm) return;
+
+                handleFormSubmit(deleteForm, function() {
+                    const row = document.querySelector(`.layout-card[data-id="${layoutId}"]`);
+                    if (row) {
+                        row.style.transition = 'all 0.3s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'scale(0.98)';
+                        setTimeout(() => {
+                            row.remove();
+                            updateLayoutCountBadges();
+                        }, 300);
+                    }
+                });
+            };
+
+            function createLayoutCardElement(layout) {
+                const layoutId = layout.id;
+                const sectionName = (layout.section && layout.section.name) ? layout.section.name : ('Section #' + layout.templates_section_id);
+                const templateName = (layout.section && layout.section.template && layout.section.template.name) ? layout.section.template.name : '-';
+                const sectionSlug = (layout.section && layout.section.slug) ? layout.section.slug : '-';
+                const pageType = layout.page_type || '{{ $page_type }}';
+                const websiteId = '{{ $website->id }}';
+
+                const updateUrl = `{{ url('admin/customers-website') }}/${websiteId}/layout/${pageType}/${layoutId}`;
+                const deleteUrl = `{{ url('admin/customers-website') }}/${websiteId}/layout/${pageType}/${layoutId}`;
+                const csrfToken = '{{ csrf_token() }}';
+
+                const card = document.createElement('div');
+                card.id = `layout-row-${layoutId}`;
+                card.dataset.id = layoutId;
+                card.className = 'layout-card card p-4 cursor-move h-full border border-slate-200 dark:border-navy-500 shadow-md shadow-slate-200/60 dark:shadow-navy-950/60 transition-all duration-200 hover:shadow-lg';
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3 min-w-0">
+                            <div class="drag-handle flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-navy-600 text-slate-400 dark:text-navy-300 hover:bg-slate-200 dark:hover:bg-navy-500 transition-colors">
+                                <i class="fa-solid fa-grip-vertical text-xs"></i>
+                            </div>
+                            <button type="button" onclick="deleteLayoutDirect('${layoutId}')"
+                                class="btn h-8 w-8 shrink-0 items-center justify-center rounded-lg p-0 bg-error/10 text-error hover:bg-error/20 transition-colors" title="Delete section">
+                                <i class="fa-solid fa-trash text-xs"></i>
+                            </button>
+                            <div id="layout-pos-${layoutId}" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-semibold text-xs ${layout.status ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300'}">
+                                ${layout.position || 1}
+                            </div>
+                            <div class="min-w-0">
+                                <p id="layout-title-${layoutId}" class="font-medium text-slate-700 dark:text-navy-100 truncate">
+                                    ${escapeHtml(sectionName)}
+                                </p>
+                                <p class="text-xs text-slate-400 dark:text-navy-300 font-mono truncate">
+                                    ${escapeHtml(pageType)}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex shrink-0 items-center space-x-2 ml-3">
+                            <label class="inline-flex items-center cursor-pointer" title="Toggle active status">
+                                <input type="checkbox" id="layout-status-toggle-${layoutId}"
+                                    onchange="toggleLayoutStatusDirect('${layoutId}', this.checked)"
+                                    ${layout.status ? 'checked' : ''}
+                                    class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
+                            </label>
+                            <button type="button" @click.prevent="toggleCard('layout-${layoutId}')"
+                                class="btn h-8 w-8 rounded-lg p-0 hover:bg-slate-100 dark:hover:bg-navy-600">
+                                <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-300"
+                                    :class="expandedCardId === 'layout-${layoutId}' ? 'rotate-180' : ''"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div x-show="expandedCardId === 'layout-${layoutId}'"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-1"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-1"
+                        class="mt-4 pt-4 border-t border-slate-150 dark:border-gray-800">
+
+                        <form action="${updateUrl}"
+                            method="POST" enctype="multipart/form-data" class="layout-update-form space-y-4" data-layout-id="${layoutId}"
+                            x-data="{ selectedSectionId: '${layout.templates_section_id}' }">
+                            <input type="hidden" name="_token" value="${csrfToken}">
+                            <input type="hidden" name="_method" value="PUT">
+
+                            <input type="hidden" name="templates_section_id" id="sectionSelectUpdate-${layoutId}" value="${layout.templates_section_id}">
+                            <input type="hidden" name="position" value="${layout.position || 1}">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Section:</span>
+                                    <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:bg-accent/10 dark:text-accent-light">
+                                        <i class="fa-solid fa-puzzle-piece mr-1"></i>
+                                        ${escapeHtml(sectionName)}
+                                    </span>
+                                    <span class="text-[10px] text-slate-400 dark:text-navy-300 font-mono">
+                                        [${escapeHtml(templateName)}] (${escapeHtml(sectionSlug)})
+                                    </span>
+                                </div>
+                                <label class="inline-flex items-center space-x-2 cursor-pointer">
+                                    <input name="status" type="checkbox" value="1" ${layout.status ? 'checked' : ''}
+                                        class="form-switch is-outline h-5 w-10 rounded-full border border-slate-400/70 bg-slate-100 transition-colors checked:bg-primary checked:border-primary dark:border-navy-400 dark:bg-navy-900 dark:checked:bg-accent dark:checked:border-accent">
+                                    <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Active</span>
+                                </label>
+                            </div>
+
+                            <label class="block hidden">
+                                <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Content (JSON / Custom Raw)</span>
+                                <textarea name="content" id="contentUpdate-${layoutId}" rows="6" placeholder="Layout content..."
+                                    class="form-textarea mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-1.5 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">${escapeHtml(layout.content || '')}</textarea>
+                            </label>
+
+                            <div id="dynamicFieldsContainerUpdate-${layoutId}" class="hidden">
+                                <div id="dynamicFieldsListUpdate-${layoutId}" class="space-y-4 p-3"></div>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-4">
+                                <button type="submit" form="deleteLayoutForm-${layoutId}"
+                                    class="btn bg-error/10 font-medium text-error hover:bg-error/20 dark:bg-error/10 dark:text-error dark:hover:bg-error/20">
+                                    <i class="fa-solid fa-trash mr-1.5"></i> Delete
+                                </button>
+                                <button type="submit"
+                                    class="btn bg-primary font-medium text-white hover:bg-primary-focus focus:bg-primary-focus dark:bg-accent dark:hover:bg-accent-focus">
+                                    <i class="fa-solid fa-check mr-1.5"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+
+                        <form id="deleteLayoutForm-${layoutId}"
+                            action="${deleteUrl}"
+                            method="POST" class="layout-delete-form hidden" data-layout-id="${layoutId}">
+                            <input type="hidden" name="_token" value="${csrfToken}">
+                            <input type="hidden" name="_method" value="DELETE">
+                        </form>
+                    </div>
+                `;
+
+                return card;
+            }
+
             // Global submit delegation to ensure no form submit is missed
             document.addEventListener('submit', function (e) {
                 const targetForm = e.target;
@@ -1270,8 +1500,65 @@
 
                 if (targetForm.id === 'add-layout-form') {
                     e.preventDefault();
-                    handleFormSubmit(targetForm, function () {
-                        setTimeout(() => window.location.reload(), 500);
+                    handleFormSubmit(targetForm, function (data) {
+                        if (data.layout) {
+                            const layout = data.layout;
+                            const layoutId = layout.id;
+
+                            // Store in content map
+                            try {
+                                window.__layoutContentData[layoutId] = JSON.parse(layout.content || '{}');
+                            } catch (err) {
+                                window.__layoutContentData[layoutId] = {};
+                            }
+
+                            // Create and append card element
+                            const sortableContainer = document.getElementById('layout-sortable');
+                            if (sortableContainer) {
+                                const cardEl = createLayoutCardElement(layout);
+                                sortableContainer.appendChild(cardEl);
+
+                                if (window.Alpine) {
+                                    window.Alpine.initTree(cardEl);
+                                }
+
+                                // Load dynamic content fields for the edit form of the new card
+                                const selectEl = document.getElementById(`sectionSelectUpdate-${layoutId}`);
+                                const containerEl = document.getElementById(`dynamicFieldsContainerUpdate-${layoutId}`);
+                                const listEl = document.getElementById(`dynamicFieldsListUpdate-${layoutId}`);
+                                const contentTextarea = document.getElementById(`contentUpdate-${layoutId}`);
+                                if (selectEl && containerEl && listEl && contentTextarea) {
+                                    const existingJson = JSON.stringify(window.__layoutContentData[layoutId] || {});
+                                    window.loadSectionContents(selectEl.value, containerEl, listEl, contentTextarea, existingJson);
+                                }
+                            }
+
+                            updateLayoutCountBadges();
+
+                            // Reset Add New Layout Item Form
+                            targetForm.reset();
+                            const sectionSelect = document.getElementById('sectionSelect');
+                            if (sectionSelect) {
+                                sectionSelect.value = '';
+                                sectionSelect.dispatchEvent(new Event('change'));
+                            }
+
+                            // Deselect card selection UI
+                            document.querySelectorAll('.section-card').forEach(c => {
+                                c.classList.remove('border-primary', 'dark:border-accent', 'bg-primary/5', 'dark:bg-accent/5');
+                                c.classList.add('border-slate-200', 'dark:border-navy-500');
+                                const check = c.querySelector('.section-check');
+                                if (check) check.classList.add('hidden');
+                            });
+
+                            // Hide dynamic container add
+                            const addContainer = document.getElementById('dynamicFieldsContainerAdd');
+                            const addList = document.getElementById('dynamicFieldsListAdd');
+                            const addContent = document.getElementById('contentAdd');
+                            if (addContainer) addContainer.classList.add('hidden');
+                            if (addList) addList.innerHTML = '';
+                            if (addContent) addContent.value = '';
+                        }
                     });
                 } else if (targetForm.classList.contains('layout-update-form')) {
                     e.preventDefault();
@@ -1295,12 +1582,15 @@
                                 const updatedJson = JSON.stringify(window.__layoutContentData[layoutId] || {});
                                 window.loadSectionContents(selectEl.value, containerEl, listEl, contentTextarea, updatedJson);
                             }
-                            const statusEl = document.getElementById(`layout-status-${layoutId}`);
-                            if (statusEl) {
-                                statusEl.textContent = data.layout.status ? 'Active' : 'Inactive';
-                                statusEl.className = `badge rounded-full px-2 py-0.5 text-xs font-medium ${
-                                    data.layout.status ? 'bg-success/10 text-success' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300'
+                            const posBadge = document.getElementById(`layout-pos-${layoutId}`);
+                            if (posBadge) {
+                                posBadge.className = `flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-semibold text-xs ${
+                                    data.layout.status ? 'bg-primary/10 text-primary dark:bg-accent/10 dark:text-accent-light' : 'bg-slate-150 text-slate-500 dark:bg-navy-600 dark:text-navy-300'
                                 }`;
+                            }
+                            const headerToggle = document.getElementById(`layout-status-toggle-${layoutId}`);
+                            if (headerToggle) {
+                                headerToggle.checked = !!data.layout.status;
                             }
                         }
                     });
@@ -1314,7 +1604,10 @@
                             row.style.transition = 'all 0.3s ease';
                             row.style.opacity = '0';
                             row.style.transform = 'scale(0.98)';
-                            setTimeout(() => row.remove(), 300);
+                            setTimeout(() => {
+                                row.remove();
+                                updateLayoutCountBadges();
+                            }, 300);
                         }
                     });
                 }

@@ -47,23 +47,23 @@
     $dayIcons = ['🍩', '🧸', '🍫', '🍒', '🍬', '🥤', '🍭'];
 @endphp
 
-<section id="cart" class="bg-[{{ $background_color }}] min-h-screen font-sans selection:bg-pink-200 py-10 sm:py-16"
-    style="min-height:100vh;">
-    <div class="w-full max-w-6xl mx-auto flex flex-col items-center px-4 sm:px-6 md:px-0">
+<section id="cart" class="bg-[{{ $background_color }}] min-h-screen font-sans selection:bg-pink-200"
+    style="min-height:100vh; align-content: center;">
+    <div class="w-full max-w-6xl mx-auto flex flex-col items-center">
 
         <!-- Agenda Book Container -->
         <div
-            class="w-full bg-white rounded-3xl shadow-2xl relative overflow-hidden flex flex-col items-center justify-center py-12 px-5 sm:px-8 md:px-10 border-4 border-[#721c2e]/20" style="background-color: {{ $background_color }}; @if($has_background) background-image: url('{{ asset($background) }}'); background-size: auto; background-position: top left; background-repeat: repeat; @endif;">
+            class="w-full bg-white rounded-3xl shadow-2xl relative overflow-hidden flex flex-col items-center justify-center py-12 px-8 md:px-10 border-4 border-[#721c2e]/20" style="background-color: {{ $background_color }}; @if($has_background) background-image: url('{{ asset($background) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; @endif;">
 
             <!-- Spiral Binding Header Circles -->
             <div
-                class="absolute top-0 left-0 w-full flex justify-around px-4 md:px-8 py-3 bg-white z-20 border-b border-red-100/50" style="background-color: {{ $background_color }}; @if($has_background) background-image: url('{{ asset($background) }}'); background-size: auto; background-position: top left; background-repeat: repeat; @endif;">
+                class="absolute top-0 left-0 w-full flex justify-around px-4 md:px-8 py-3 bg-white z-20 border-b border-red-100/50" style="background-color: {{ $background_color }}; @if($has_background) background-image: url('{{ asset($background) }}'); background-size: cover; background-position: center; background-repeat: no-repeat; @endif;">
                 @for ($i = 0; $i < 8; $i++)
                     <div class="w-5 h-5 md:w-7 md:h-7 rounded-full bg-[{{ $background_color }}] shadow-inner border-2 border-white"></div>
                 @endfor
             </div>
 
-            <!-- <div class="w-full flex flex-col items-center py-12 text-center">
+            <div class="w-full flex flex-col items-center py-12 text-center">
                 <p class="text-center text-[10px] font-bold uppercase tracking-widest mb-1" style="color: {{ $tag_color }};">
                     {{ $tag }}
                 </p>
@@ -71,31 +71,32 @@
                     style="color: {{ $title_color }};">
                     {{ $title }}
                 </h2>
-            </div> -->
+            </div>
         
-            <div class="w-full flex-1 flex flex-wrap justify-center pt-8 gap-2 sm:gap-3">
+            <div class="w-full flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
                 @foreach ($repeater as $index => $item)
                     @php
                         $isClosed = strtolower(trim($item['title'] ?? '')) === 'none' || empty($item['title']);
                         $icon = !empty($item['image']) ? $item['image'] : ($dayIcons[$index % count($dayIcons)] ?? '🍬');
                     @endphp
                     <div
-                        class="group relative flex flex-col items-center justify-center rounded-2xl p-3 text-center overflow-hidden aspect-square w-[calc(50%-0.25rem)] sm:w-[calc(33.333%-0.5rem)] md:w-[calc(25%-0.75rem)] {{ $isClosed ? 'bg-[#721c2e] text-white shadow-md' : 'bg-white shadow-sm border border-red-200/50 hover:shadow-md transition-all' }}">
-                        {{-- Image as background layer --}}
-                        @if(!empty($item['image']) && $item['image'] !== 'your image')
-                            <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
+                        class="group w-full flex flex-col items-center rounded-2xl px-5 py-10 text-center min-h-[220px] {{ $isClosed ? 'bg-[#721c2e] text-white shadow-md' : 'bg-white shadow-sm border border-red-200/50 hover:shadow-md transition-all' }}">
+                        <div
+                            class="w-full text-center text-[10px] uppercase font-bold tracking-wider mb-3 {{ $isClosed ? 'opacity-80' : 'text-[#4a1525]/60' }}">
+                            <span>{{ $item['label'] ?? '' }}</span>
+                        </div>
+                        <div class="my-auto w-100 h-100 mx-auto flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-100">
+                            @if(!empty($item['image']) && $item['image'] !== 'your image')
                                 <img src="{{ asset('images/website/' . ($website->domain ?? '') . '/' . $item['image']) }}"
                                      alt=""
-                                     class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105">
-                            </div>
-                        @endif
-                        {{-- Label & Title on top --}}
-                        <div class="relative z-10 flex flex-col items-center justify-between w-full h-full">
-                            <div
-                                class="w-full text-center text-[10px] uppercase font-bold tracking-wider {{ $isClosed ? 'opacity-80' : 'text-[#4a1525]/60' }}">
-                                <span>{{ $item['label'] ?? '' }}</span>
-                            </div>
-                            <p class="text-[12px] font-semibold {{ $isClosed ? 'opacity-0' : 'text-[#4a1525]/80' }}">
+                                     class="w-50 h-50 object-contain transition-transform duration-300 group-hover:scale-10 group-hover:scale-100">
+                            @endif
+                        </div>
+                        <div class="mt-2 w-full flex flex-col items-center">
+                            <!-- <p class="font-bold text-sm leading-tight mb-1 {{ $isClosed ? 'opacity-90 font-serif italic text-base' : 'text-[#4a1525]' }}">
+                                {{ $item['title'] ?? 'None' }}
+                            </p> -->
+                            <p class="text-[12px] font-medium {{ $isClosed ? 'opacity-0' : 'text-[#4a1525]/70' }}">
                                 {{ $item['title'] ?? '' }}
                             </p>
                         </div>
@@ -103,7 +104,7 @@
                 @endforeach
             </div>
 
-            <div class="w-full flex flex-col items-center justify-center mt-12">
+            <div class="w-full flex flex-col items-center justify-center mt-4 md:mt-6">
                 <button onclick="candyFindUs()"
                     class="text-xs font-bold uppercase tracking-wider py-3 px-7 rounded-full shadow-md transition-all transform hover:-translate-y-0.5"
                     style="background-color: {{ $button_color }}; color: {{ $button_text_color }};">
