@@ -30,14 +30,17 @@
     $background = !empty($content['background']) ? 'images/website/' . $domain . '/' . $content['background'] : 'images/default/broken.png';
     $image = !empty($content['image']) ? 'images/website/' . $domain . '/' . $content['image'] : '';
 
-    $repeater = $content['repeater'] ?? $content['tagline'];
-    if (is_array($repeater)) {
+    $repeater = $content['repeater'] ?? $content['tagline'] ?? [];
+    if (!is_array($repeater)) {
+        $repeater = [];
+    } else {
         $repeater = collect($repeater)->sortBy('sort')->values()->all();
     }
+    
 @endphp
 
-<section class="py-12 px-4 max-w-7xl mx-auto font-sans text-[#2d3748]">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<section class="py-10 px-2 max-w-7xl mx-auto font-sans text-[#2d3748]">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         @foreach($repeater as $i => $item)
             @php

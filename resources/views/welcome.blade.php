@@ -238,6 +238,19 @@
 
     // ================= RENDER =================
     function render() {
+        if (!slides || slides.length === 0) {
+            counter.textContent = '(00 / 00)';
+            captionLeft.textContent = '/ 00';
+            captionRight.textContent = 'NO ITEMS';
+            bigTitle.textContent = 'No Items';
+            if (stageLink) {
+                stageLink.removeAttribute('href');
+                stageLink.classList.add('pointer-events-none');
+            }
+            if (stage) stage.style.cursor = 'default';
+            return;
+        }
+
         const slide = slides[current];
 
         // Tab Client & Template: item aktif di-link ke URL-nya
@@ -293,6 +306,7 @@
 
     // ================= NAVIGASI =================
     function goTo(i) {
+        if (!slides || slides.length === 0) return;
         current = (i + slides.length) % slides.length;
         render();
         restartAuto();
@@ -303,6 +317,7 @@
     // ================= AUTO SLIDE =================
     function startAuto() {
         stopAuto();
+        if (!slides || slides.length <= 1) return;
         autoTimer = setInterval(next, AUTO_MS);
     }
     function stopAuto() {

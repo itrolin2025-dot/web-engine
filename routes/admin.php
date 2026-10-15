@@ -130,6 +130,7 @@ Route::middleware('auth')->group(function () {
     Route::post('template/{id}/section/reorder', [TemplateController::class, 'sectionReorder'])->name('template.section.reorder');
     Route::delete('template/{id}/section-content/{contentId}', [TemplateController::class, 'sectionContentDestroy'])->name('template.section.content.destroy');
     Route::put('template/{id}', [TemplateController::class, 'update'])->name('template.update');
+    Route::post('template/{id}/toggle-favorite', [TemplateController::class, 'toggleFavorite'])->name('template.toggle-favorite');
     Route::delete('template/{id}', [TemplateController::class, 'destroy'])->name('template.destroy');
 
     Route::get('website', [WebsiteController::class, 'index'])->name('website');
@@ -142,6 +143,7 @@ Route::middleware('auth')->group(function () {
     Route::get('customers-website/{id}/edit', [CustomersWebController::class, 'edit'])->name('customers-website.edit');
     Route::put('customers-website/{id}', [CustomersWebController::class, 'update'])->name('customers-website.update');
     Route::delete('customers-website/{id}', [CustomersWebController::class, 'destroy'])->name('customers-website.destroy');
+    Route::get('customers-website/{id}/preview', [CustomersWebController::class, 'preview'])->name('customers-website.preview');
     Route::post('customers-website/{id}/toggle-selected', [CustomersWebController::class, 'toggleSelected'])->name('customers-website.toggle-selected');
     Route::post('customers-website/{id}/duplicate', [CustomersWebController::class, 'duplicate'])->name('customers-website.duplicate');
     Route::get('customers-website/{id}/page', [CustomersWebController::class, 'page'])->name('customers-website.page');

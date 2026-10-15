@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sage — Conscious Simplicity & Skincare</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        sage: {
+                            50: '#F5F7F5',
+                            100: '#E7EBE7',
+                            200: '#D2DCD2',
+                            300: '#B5C4B5',
+                            400: '#95A895',
+                            500: '#7B8E7B',
+                            600: '#647564',
+                            700: '#515E51',
+                            btn: '#859585',
+                            bg: '#F3EFEB',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-editorial {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+    </style>
+</head>
+<body class="bg-[#F4F1ED] text-[#222222] font-sans antialiased min-h-screen selection:bg-sage-600 selection:text-white">
+
+    <!-- ================= HERO SECTION (FULL PAGE / FULL WIDTH) ================= -->
+    <section class="w-full relative min-h-[580px] sm:min-h-[700px] md:min-h-screen flex flex-col justify-between p-4 sm:p-8 md:p-12 overflow-hidden bg-[#DCD4CB]">
+        
+        <!-- Hero Full Edge-to-Edge Background Image -->
+        <div class="absolute inset-0 w-full h-full bg-[#D5CCC2] pointer-events-none">
+            <img 
+                src="/images/default/broken.png" 
+                alt="Hero Face Beauty Shot" 
+                class="w-full h-full object-cover opacity-80"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35"></div>
+        </div>
+
+        <!-- Floating Top Glass Navbar -->
+        <header class="w-full max-w-4xl mx-auto bg-white/20 backdrop-blur-md rounded-full px-5 sm:px-8 py-3.5 flex items-center justify-between border border-white/30 shadow-sm relative z-20">
+            <!-- Brand Monogram -->
+            <a href="#" class="w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-neutral-800 font-editorial text-lg font-bold shadow-xs hover:bg-white transition">
+                <svg class="w-4 h-4 text-neutral-800" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14.5c0 .83-.67 1.5-1.5 1.5S10 17.33 10 16.5c0-.62.38-1.16.92-1.38L9.5 13.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5c.62 0 1.16.38 1.38.92l1.62-1.42c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5c-.62 0-1.16-.38-1.38-.92L11 12.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5c-.62 0-1.16-.38-1.38-.92l-1.62 1.42z"/>
+                </svg>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-medium text-white/95 drop-shadow-xs">
+                <a href="#about" class="hover:text-white transition-colors">About us</a>
+                <a href="#catalog" class="hover:text-white transition-colors">Catalog</a>
+                <a href="#skincare" class="hover:text-white transition-colors">Skincare</a>
+                <a href="#hair" class="hover:text-white transition-colors">Hair&Body</a>
+                <a href="#accessories" class="hover:text-white transition-colors">Accessories</a>
+                <a href="#blog" class="hover:text-white transition-colors">Blog</a>
+            </nav>
+
+            <!-- Cart Icon -->
+            <a href="#cart" class="text-white hover:text-white/80 transition-colors p-1" aria-label="Cart">
+                <svg class="w-5 h-5 drop-shadow-xs" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+            </a>
+        </header>
+
+        <!-- Giant Typography Across Hero -->
+        <div class="w-full text-center relative z-10 my-auto py-12 sm:py-20 select-none pointer-events-none">
+            <h1 class="font-editorial text-8xl sm:text-9xl md:text-[180px] lg:text-[250px] font-normal italic tracking-tight text-white drop-shadow-lg leading-none">
+                sage
+            </h1>
+        </div>
+
+        <!-- Empty spacer bottom for balancing -->
+        <div class="h-6"></div>
+    </section>
+
+    <!-- ================= SECTION 1: NEW PHILOSOPHY ================= -->
+    <section class="w-full py-16 sm:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                
+                <!-- Left Column: Philosophy Description & CTA -->
+                <div class="lg:col-span-6 space-y-6 sm:space-y-8">
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#1E1E1E] leading-[1.12]">
+                        New philosophy<br>
+                        of selfcare: healthy<br>
+                        skin&hair
+                    </h2>
+
+                    <div class="space-y-4 max-w-lg text-sm sm:text-base leading-relaxed text-neutral-600 font-normal">
+                        <p>
+                            Sage is about conscious simplicity — effective formulas, thoughtful ingredients, and soft textures designed for real everyday life.
+                        </p>
+                        <p>
+                            We believe skincare should support your skin, not overwhelm it, combining modern science with a calm, minimal approach.
+                        </p>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="#about" class="inline-flex items-center justify-center bg-[#849584] hover:bg-[#758675] text-white rounded-full px-8 py-3 text-xs sm:text-sm font-medium tracking-wide transition-all shadow-sm hover:shadow-md">
+                            More about Sage
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Amber Cream Jar Mockup Image -->
+                <div class="lg:col-span-6 flex justify-center items-center">
+                    <div class="w-full max-w-md aspect-square bg-[#E8E2D9] rounded-3xl overflow-hidden p-6 sm:p-8 shadow-md flex items-center justify-center group relative">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="Sage Cream Jar" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 2: PURE CARE BY NATURE ================= -->
+    <section class="w-full py-16 sm:py-24 bg-[#EFEBE6]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-stretch">
+                
+                <!-- Column 1: Amber Spray Bottle Image -->
+                <div class="md:col-span-4 bg-[#E8E2D9] rounded-3xl overflow-hidden p-6 sm:p-8 shadow-sm flex items-center justify-center group aspect-[3/4] md:aspect-auto md:min-h-[480px]">
+                    <img 
+                        src="/images/default/broken.png" 
+                        alt="Sage Spray Amber Bottle on Stone" 
+                        class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
+
+                <!-- Column 2: Amber Pump Bottle Image -->
+                <div class="md:col-span-4 bg-[#E8E2D9] rounded-3xl overflow-hidden p-6 sm:p-8 shadow-sm flex items-center justify-center group aspect-[3/4] md:aspect-auto md:min-h-[480px]">
+                    <img 
+                        src="/images/default/broken.png" 
+                        alt="Sage Pump Bottle on Stone" 
+                        class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
+
+                <!-- Column 3: Text & Landscape Image -->
+                <div class="md:col-span-4 flex flex-col justify-between gap-6 sm:gap-8">
+                    <!-- Text Top -->
+                    <div class="space-y-4 pt-2">
+                        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#1E1E1E] leading-[1.15]">
+                            Pure care<br>
+                            by nature
+                        </h2>
+                        <div class="space-y-3 text-xs sm:text-sm leading-relaxed text-neutral-600 font-normal">
+                            <p>
+                                Thoughtfully crafted formulas designed to bring balance and calm to your daily routine.
+                            </p>
+                            <p>
+                                Lightweight textures, gentle ingredients, and a minimalist approach help support healthy-looking skin — effortlessly, every day.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Landscape Image Bottom -->
+                    <div class="w-full bg-[#E8E2D9] rounded-3xl overflow-hidden p-6 shadow-sm aspect-[16/10] flex items-center justify-center group">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="Sage Shampoo and Conditioner Tube on Linen" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 3: ALL-IN-ONE COMPLEX & 'NEW' ================= -->
+    <section class="w-full py-16 sm:py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Top Header & Top Product Image Row -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-8">
+                <!-- Title & Subtitle Left -->
+                <div class="md:col-span-5 space-y-3">
+                    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#1E1E1E] leading-[1.15]">
+                        All-in-One<br>
+                        Skincare Complex
+                    </h2>
+                    <p class="text-xs sm:text-sm text-neutral-600 font-normal max-w-sm">
+                        Multifunctional line designed to simplify your daily routine without compromising results.
+                    </p>
+                </div>
+
+                <!-- 3 Pastel Pump Bottles Image Right -->
+                <div class="md:col-span-7 flex md:justify-end">
+                    <div class="w-full max-w-md bg-[#E8E2D9] rounded-3xl overflow-hidden p-6 shadow-sm aspect-[16/10] flex items-center justify-center group">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="Sage Pastel Pump Bottles Lineup" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Giant Watermark Typography 'new' with Overlapping Products & Text -->
+            <div class="relative w-full pt-4 sm:pt-8">
+                
+                <!-- Giant 'new' Serif Typography across the background -->
+                <div class="w-full select-none pointer-events-none overflow-hidden">
+                    <span class="font-editorial text-[160px] sm:text-[240px] md:text-[320px] lg:text-[380px] font-normal italic tracking-tight text-[#BAC8BA]/50 leading-none block -mt-10 sm:-mt-16 md:-mt-24">
+                        new
+                    </span>
+                </div>
+
+                <!-- Overlapping Content Grid (Bottles Left, Copy & Catalog CTA Right) -->
+                <div class="relative z-10 -mt-20 sm:-mt-36 md:-mt-48 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-end">
+                    
+                    <!-- 4 Amber Bottles Image (Overlapping the 'n') -->
+                    <div class="md:col-span-6">
+                        <div class="w-full max-w-md bg-[#E8E2D9] rounded-3xl overflow-hidden p-6 shadow-md aspect-[16/10] flex items-center justify-center group">
+                            <img 
+                                src="/images/default/broken.png" 
+                                alt="Four Sage Bottles in a Row" 
+                                class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Body Paragraph & Catalog Pill Button Right -->
+                    <div class="md:col-span-6 space-y-4 md:pl-6 pb-2">
+                        <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal max-w-md">
+                            Each formula combines hydration, barrier support, and skin-balancing ingredients to work in one effortless step. The collection focuses on smart minimalism — fewer products, more impact, and consistent care for healthy-looking skin.
+                        </p>
+                        <div>
+                            <a href="#catalog" class="inline-flex items-center justify-center border border-neutral-700 hover:border-black rounded-full px-8 py-2.5 text-xs sm:text-sm font-medium text-neutral-800 hover:bg-neutral-900 hover:text-white transition-all shadow-xs">
+                                Catalog
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="w-full py-12 border-t border-neutral-300/60 bg-[#ECE8E3] text-xs text-neutral-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <span class="font-editorial text-xl font-bold text-neutral-900 italic">sage</span>
+                <span class="text-neutral-400">|</span>
+                <span>Conscious simplicity & natural care</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-black transition-colors">Instagram</a>
+                <a href="#" class="hover:text-black transition-colors">Terms</a>
+                <a href="#" class="hover:text-black transition-colors">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -100,6 +100,11 @@
                         <i class="fa-solid fa-folder-open mr-1"></i>{{ $template->path ?: '-' }}
                     </p>
                     <div class="mt-2 flex items-center justify-end space-x-1.5">
+                        <button type="button" data-id="{{ $template->id }}" data-favorite="{{ (int) ($template->is_favorite ?? 0) }}"
+                            class="toggle-favorite btn h-7 w-7 rounded-full transition-colors {{ ($template->is_favorite ?? 0) ? 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20' : 'bg-slate-150 text-slate-400 hover:bg-amber-500/10 hover:text-amber-500 dark:bg-navy-500 dark:text-navy-300 dark:hover:bg-amber-500/20 dark:hover:text-amber-300' }}"
+                            title="{{ ($template->is_favorite ?? 0) ? 'Remove from favorite' : 'Add to favorite' }}">
+                            <i class="{{ ($template->is_favorite ?? 0) ? 'fa-solid' : 'fa-regular' }} fa-star text-[11px]"></i>
+                        </button>
                         <a href="{{ route('preview.template', $template->id) }}" target="_blank" class="btn h-7 w-7 rounded-full bg-success/10 p-0 font-medium text-success hover:bg-success/20 focus:bg-success/20 active:bg-success/25" title="Preview Template">
                             <i class="fa-solid fa-eye text-[11px]"></i>
                         </a>
@@ -190,9 +195,7 @@
 
     <!-- GLightbox CSS & JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/css/glightbox.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>
-
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox@3.3.0/dist/js/glightbox.min.js"></script>        <script>
         document.addEventListener('DOMContentLoaded', function() {
             GLightbox({
                 selector: '.template-preview',
@@ -227,6 +230,39 @@
                     }, 3000);
                 });
             }
+        });
+
+        $(document).on('click', '.toggle-favorite', function () {
+            var $btn = $(this);
+            var id = $btn.data('id');
+            var isFavorite = $btn.data('favorite') == 1;
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('admin.template.toggle-favorite', ':id:') }}".replace(':id:', id),
+                type: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    _method: 'POST',
+                    is_favorite: isFavorite ? 0 : 1
+                },
+                success: function (res) {
+                    if (typeof toastr !== 'undefined' && res.message) {
+                        toastr.success(res.message);
+                    }
+                    location.reload();
+                },
+                error: function (xhr) {
+                    var msg = (xhr.responseJSON && xhr.responseJSON.message) || 'Gagal mengubah status favorite.';
+                    if (typeof toastr !== 'undefined') {
+                        toastr.error(msg);
+                    } else {
+                        alert(msg);
+                    }
+                    $btn.prop('disabled', false);
+                }
+            });
         });
     </script>
 </x-app-layout>

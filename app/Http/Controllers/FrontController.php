@@ -122,6 +122,7 @@ class FrontController extends Controller
     public static function getTemplateSlides()
     {
         $templates = DB::table('template')
+            ->where('is_favorite', 1)
             ->orderBy('id')
             ->get(['id', 'name', 'preview']);
 

@@ -278,7 +278,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3 min-w-0">
                                 {{-- Drag Handle --}}
-                                <div class="drag-handle flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-navy-600 text-slate-400 dark:text-navy-300 hover:bg-slate-200 dark:hover:bg-navy-500 transition-colors">
+                                <div class="drag-handle flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-navy-600 text-slate-400 dark:text-navy-300 hover:bg-slate-200 dark:hover:bg-navy-500 transition-colors" title="Drag untuk mengubah urutan">
                                     <i class="fa-solid fa-grip-vertical text-xs"></i>
                                 </div>
                                 {{-- Position Badge --}}
@@ -479,7 +479,9 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    {{-- SortableJS dilayani lokal (public/vendors/sortablejs) agar fungsi sorting tidak
+         bergantung pada CDN — kalau CDN gagal dimuat, drag & drop mati tanpa pesan. --}}
+    <script src="{{ asset('vendors/sortablejs/Sortable.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const csrfToken = '{{ csrf_token() }}';
@@ -580,17 +582,32 @@
                 });
             });
 
-            // SortableJS
+            // SortableJS — drag & drop urutan section
+            //
+            // Seluruh kartu bisa di-drag (bukan hanya ikon grip) supaya "Drag cards to
+            // reorder sections" benar-benar berfungsi, sementara elemen interaktif
+            // (input/button/link/label) dikecualikan agar tidak ikut ter-drag.
             const sortableContainer = document.getElementById('section-sortable');
-            if (sortableContainer && typeof Sortable !== 'undefined') {
+            if (!sortableContainer) {
+                // tidak ada section, tidak perlu sortable
+            } else if (typeof Sortable === 'undefined') {
+                console.error('[section] SortableJS tidak termuat — fungsi sorting tidak aktif. Cek public/vendors/sortablejs/Sortable.min.js.');
+            } else {
                 Sortable.create(sortableContainer, {
-                    handle: '.drag-handle',
                     animation: 200,
-                    ghostClass: 'opacity-50',
-                    chosenClass: 'ring-2 ring-primary dark:ring-accent',
+                    ghostClass: 'sortable-ghost',
+                    chosenClass: 'sortable-chosen',
+                    dragClass: 'sortable-drag',
+                    filter: 'input, textarea, select, button, a, label, form',
+                    preventOnFilter: false,
                     onEnd: function(evt) {
-                        const order = Array.from(sortableContainer.children).map(el => el.dataset.id);
-                        fetch('{{ route("admin.template.section.reorder", $template->id) }}', {
+                        const order = Array.from(sortableContainer.querySelectorAll('.section-card'))
+                            .map(el => el.dataset.id)
+                            .filter(id => id);
+
+                        if (!order.length) return;
+
+                        fetch('{{ route('admin.template.section.reorder', $template->id) }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken,
@@ -600,18 +617,24 @@
                             },
                             body: JSON.stringify({ order: order })
                         })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                const cards = sortableContainer.querySelectorAll('.section-card');
-                                cards.forEach((card, index) => {
-                                    const badge = card.querySelector('.rounded-full.font-semibold');
-                                    if (badge) badge.textContent = index;
-                                });
-                                showToast('Section order updated!', 'success');
-                            }
+                        .then(res => {
+                            if (!res.ok) throw new Error('HTTP ' + res.status);
+                            return res.json();
                         })
-                        .catch(err => showToast('Failed to update order', 'error'));
+                        .then(data => {
+                            if (!data.success) throw new Error(data.message || 'Gagal menyimpan urutan');
+
+                            const cards = sortableContainer.querySelectorAll('.section-card');
+                            cards.forEach((card, index) => {
+                                const badge = card.querySelector('.rounded-full.font-semibold');
+                                if (badge) badge.textContent = index + 1;
+                            });
+                            showToast('Section order updated!', 'success');
+                        })
+                        .catch(err => {
+                            console.error('[section] reorder gagal:', err);
+                            showToast('Failed to update order: ' + err.message, 'error');
+                        });
                     }
                 });
             }

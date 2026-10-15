@@ -12,13 +12,15 @@ use App\Models\TemplatesSection;
 use App\Models\TemplatesSectionContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomersWebController extends Controller
 {
-    protected $modul = "customers-website";
-    protected $path = "customers-website";
-    protected $modul_name = "Customers Website";
+    protected $modul = 'customers-website';
+    protected $path = 'customers-website';
+    protected $modul_name = 'Customers Website';
+    protected $modul_type = 'List';
 
     protected function getProductId()
     {
@@ -27,11 +29,13 @@ class CustomersWebController extends Controller
 
     public function index()
     {
-        if (canAccess('customers', $this->getProductId(), 'view') == false) {
+        if (canAccess('customers', $this->getProductId(), 'view') === false) {
             return redirect()->route('admin.dashboard');
         }
 
-        $websites = CustomersWebsite::with(['customer', 'template'])->orderBy('id', 'desc')->get();
+        $websites = CustomersWebsite::with(['customer', 'template'])
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('admin.customers-website.index', [
             'websites' => $websites,
@@ -41,7 +45,7 @@ class CustomersWebController extends Controller
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
-            'modul_type' => 'List'
+            'modul_type' => $this->modul_type,
         ]);
     }
 
@@ -59,8 +63,8 @@ class CustomersWebController extends Controller
         if ($request->filled('filter_title')) {
             $query->where(function ($q) use ($request) {
                 $q->where('customers_website.title', 'like', "%{$request->filter_title}%")
-                  ->orWhere('customers_website.domain', 'like', "%{$request->filter_title}%")
-                  ->orWhere('customers.name', 'like', "%{$request->filter_title}%");
+                    ->orWhere('customers_website.domain', 'like', "%{$request->filter_title}%")
+                    ->orWhere('customers.name', 'like', "%{$request->filter_title}%");
             });
         }
 
@@ -71,25 +75,33 @@ class CustomersWebController extends Controller
                 $cust = '<p class="text-xs text-slate-400 dark:text-navy-300 truncate max-w-xs">' . e($row->customer_name ?? '-') . '</p>';
                 return '<p class="font-semibold dark:text-navy-100 text-sm">' . e($row->title) . '</p>' . $cust;
             })
-            // Template kept in the payload (template_name) but the column is hidden from the table.
             ->addColumn('domain_view', function ($row) {
-                if (!$row->domain) return '-';
-                $url = \Illuminate\Support\Str::startsWith($row->domain, 'http') ? $row->domain : 'https://' . $row->domain;
-                return '<a href="' . e($url) . '" target="_blank" class="text-primary hover:underline dark:text-accent-light text-xs font-mono">'
+                if (!$row->domain) {
+                    return '-';
+                }
+                $previewUrl = url('admin/customers-website/' . $row->id . '/preview');
+                return '<a href="' . e($previewUrl) . '" target="_blank" class="text-primary hover:underline dark:text-accent-light text-xs font-mono">'
                     . e($row->domain) . ' <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i></a>';
+            })
+            ->addColumn('preview_url', function ($row) {
+                if (!$row->domain) {
+                    return null;
+                }
+                return url('admin/customers-website/' . $row->id . '/preview');
             })
             ->addColumn('selected_view', function ($row) {
                 $selected = (int) $row->is_selected === 1;
-                $csrf = csrf_token();
+                $selectedClass = $selected
+                    ? 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20'
+                    : 'bg-slate-150 text-slate-400 hover:bg-amber-500/10 hover:text-amber-500 dark:bg-navy-500 dark:text-navy-300 dark:hover:bg-amber-500/20 dark:hover:text-amber-300';
+                $iconClass = $selected ? 'fa-solid' : 'fa-regular';
                 $title = $selected ? 'Unselect (remove star)' : 'Select as highlighted product';
-                $btn = '<button type="button" data-id="' . $row->id . '" data-selected="' . ($selected ? 1 : 0) . "\" class=\"toggle-selected btn h-8 w-8 rounded-full p-0 text-sm transition-colors "
-                    . ($selected
-                        ? 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/20'
-                        : 'bg-slate-150 text-slate-400 hover:bg-amber-500/10 hover:text-amber-500 dark:bg-navy-500 dark:text-navy-300 dark:hover:bg-amber-500/20 dark:hover:text-amber-300')
-                    . '" title="' . $title . '">'
-                    . '<i class="' . ($selected ? 'fa-solid' : 'fa-regular') . ' fa-star"></i>'
+
+                return '<button type="button" data-id="' . $row->id . '" data-selected="' . ($selected ? 1 : 0) . '" '
+                    . 'class="toggle-selected btn h-8 w-8 rounded-full p-0 text-sm transition-colors ' . $selectedClass . '" '
+                    . 'title="' . $title . '">'
+                    . '<i class="' . $iconClass . ' fa-star"></i>'
                     . '</button>';
-                return $btn;
             })
             ->addColumn('status_view', function ($row) {
                 $active = (int) $row->is_active === 1;
@@ -102,7 +114,7 @@ class CustomersWebController extends Controller
                 $btn = '<div class="flex justify-end space-x-1.5">';
 
                 if ($canEdit) {
-                    $btn .= '<a href="' . route('admin.customers-website.page', $row->id) . '" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20" title="Manage Pages"><i class="fa-solid fa-list text-xs"></i></a>';
+                    $btn .= '<a href="' . route('admin.customers-website.page', $row->id) . '" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20 focus:bg-info/20" title="Manage Pages"><i class="fa-solid fa-list text-xs"></i></a>';
                     $btn .= '<a href="' . route('admin.customers-website.edit', $row->id) . '" class="btn h-8 w-8 rounded-full bg-info/10 p-0 font-medium text-info hover:bg-info/20 focus:bg-info/20" title="Edit Website"><i class="fa-solid fa-pen text-xs"></i></a>';
                 }
                 if ($canDelete) {
@@ -114,13 +126,13 @@ class CustomersWebController extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['title_view', 'selected_view', 'domain_view', 'status_view', 'action'])
+            ->rawColumns(['title_view', 'domain_view', 'preview_url', 'selected_view', 'status_view', 'action'])
             ->make(true);
     }
 
     public function create()
     {
-        if (canAccess('customers', $this->getProductId(), 'add') == false) {
+        if (canAccess('customers', $this->getProductId(), 'add') === false) {
             return redirect()->route('admin.customers-website')->with('warning', 'Tidak Memiliki Akses');
         }
 
@@ -133,13 +145,13 @@ class CustomersWebController extends Controller
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
-            'modul_type' => 'Create'
+            'modul_type' => 'Create',
         ]);
     }
 
     public function store(Request $request)
     {
-        if (canAccess('customers', $this->getProductId(), 'add') == false) {
+        if (canAccess('customers', $this->getProductId(), 'add') === false) {
             return redirect()->back()->with('error', 'Tidak Memiliki Akses');
         }
 
@@ -158,8 +170,6 @@ class CustomersWebController extends Controller
             'threads' => 'nullable|string|max:255',
             'shopee' => 'nullable|string|max:255',
             'tokopedia' => 'nullable|string|max:255',
-
-            // Website Identity (opsional)
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
             'remove_logo' => 'nullable|boolean',
             'primary_color' => 'nullable|string|max:20',
@@ -196,7 +206,7 @@ class CustomersWebController extends Controller
 
     public function edit($id)
     {
-        if (canAccess('customers', $this->getProductId(), 'edit') == false) {
+        if (canAccess('customers', $this->getProductId(), 'edit') === false) {
             return redirect()->route('admin.customers-website')->with('warning', 'Tidak Memiliki Akses');
         }
 
@@ -211,13 +221,13 @@ class CustomersWebController extends Controller
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
-            'modul_type' => 'Edit'
+            'modul_type' => 'Edit',
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        if (canAccess('customers', $this->getProductId(), 'edit') == false) {
+        if (canAccess('customers', $this->getProductId(), 'edit') === false) {
             return redirect()->back()->with('error', 'Tidak Memiliki Akses');
         }
 
@@ -242,7 +252,6 @@ class CustomersWebController extends Controller
         $qrPath = $this->handleQrUpload($request, $website->qr_payment);
 
         $website->update([
-
             'customer_id' => $request->customer_id,
             'template_id' => $request->template_id,
             'title' => $request->title,
@@ -266,7 +275,7 @@ class CustomersWebController extends Controller
 
     public function destroy($id)
     {
-        if (canAccess('customers', $this->getProductId(), 'delete') == false) {
+        if (canAccess('customers', $this->getProductId(), 'delete') === false) {
             return redirect()->back()->with('error', 'Tidak Memiliki Akses');
         }
 
@@ -278,16 +287,14 @@ class CustomersWebController extends Controller
 
     public function duplicate($id)
     {
-        if (canAccess('customers', $this->getProductId(), 'add') == false) {
+        if (canAccess('customers', $this->getProductId(), 'add') === false) {
             return redirect()->back()->with('error', 'Tidak Memiliki Akses');
         }
 
         $website = CustomersWebsite::findOrFail($id);
 
-        // Create new domain with -dupe suffix
         $newDomain = $website->domain ? $website->domain . '-dupe' : null;
 
-        // Check if domain already exists, add number suffix if needed
         if ($newDomain) {
             $counter = 1;
             $originalDomain = $newDomain;
@@ -297,14 +304,13 @@ class CustomersWebController extends Controller
             }
         }
 
-        // Duplicate the website
         $newWebsite = CustomersWebsite::create([
             'customer_id' => $website->customer_id,
             'template_id' => $website->template_id,
             'title' => $website->title . ' (Copy)',
             'domain' => $newDomain,
             'description' => $website->description,
-            'is_active' => 0, // Set as inactive by default
+            'is_active' => 0,
             'instagram' => $website->instagram,
             'tiktok' => $website->tiktok,
             'facebook' => $website->facebook,
@@ -314,8 +320,6 @@ class CustomersWebController extends Controller
             'tokopedia' => $website->tokopedia,
         ]);
 
-        // Duplicate identity (logo, colors, fonts) — logo file is copied so each
-        // website owns its own file
         if ($website->identity) {
             $identityData = $website->identity->only([
                 'logo', 'primary_color', 'secondary_color', 'accent_color',
@@ -338,10 +342,8 @@ class CustomersWebController extends Controller
             $newWebsite->identity()->create($identityData);
         }
 
-        // Duplicate all layout items
         $layouts = CustomersWebsiteLayout::where('customers_website_id', $id)->get();
         foreach ($layouts as $layout) {
-            // Copy content and update image paths if needed
             $newContent = $layout->content;
 
             CustomersWebsiteLayout::create([
@@ -359,69 +361,23 @@ class CustomersWebController extends Controller
             ->with('success', 'Website duplicated successfully. Domain: ' . ($newDomain ?? 'N/A'));
     }
 
-    // =================== WEBSITE IDENTITY ===================
-
-    /**
-     * Create/update the identity row of a customer website
-     * (logo, colors, fonts). Logo upload replaces the old file on disk.
-     */
-    private function saveIdentity(Request $request, CustomersWebsite $website): void
+    public function preview($id)
     {
-        $identity = $website->identity;
-        $logoPath = $identity->logo ?? null;
+        $website = CustomersWebsite::findOrFail($id);
 
-        // Explicit removal
-        if ($request->boolean('remove_logo')) {
-            if ($logoPath && file_exists(public_path($logoPath))) {
-                @unlink(public_path($logoPath));
-            }
-            $logoPath = null;
+        if ($website->domain) {
+            return redirect()->away(url('/' . $website->domain));
         }
 
-        // New upload replaces the old file
-        if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
-            if ($logoPath && file_exists(public_path($logoPath))) {
-                @unlink(public_path($logoPath));
-            }
-
-            $file = $request->file('logo');
-            $ext = strtolower($file->getClientOriginalExtension());
-            $filename = time() . '_logo_' . uniqid() . '.' . $ext;
-
-            $domainFolder = $website->domain ?: 'shared';
-            $targetDir = public_path('images/website/' . $domainFolder);
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0755, true);
-            }
-            $file->move($targetDir, $filename);
-            $logoPath = 'images/website/' . $domainFolder . '/' . $filename;
-        }
-
-        $payload = [
-            'logo'            => $logoPath,
-            'primary_color'   => $request->primary_color,
-            'secondary_color' => $request->secondary_color,
-            'accent_color'    => $request->accent_color,
-            'primary_font'    => $request->primary_font,
-            'secondary_font'  => $request->secondary_font,
-            'font_color'      => $request->font_color,
-        ];
-
-        if ($identity) {
-            $identity->update($payload);
-        } else {
-            $website->identity()->create($payload);
-        }
+        // Admin-only preview wrapper when the website has no domain.
+        return view('admin.customers-website.preview', [
+            'website' => $website,
+        ]);
     }
 
-    // =================== SELECTED PRODUCT (STAR) ===================
-
-    /**
-     * Toggle the "Selected Product" star for a customer website (AJAX).
-     */
     public function toggleSelected(Request $request, $id)
     {
-        if (canAccess('customers', $this->getProductId(), 'edit') == false) {
+        if (canAccess('customers', $this->getProductId(), 'edit') === false) {
             return response()->json(['success' => false, 'message' => 'Tidak Memiliki Akses'], 403);
         }
 
@@ -443,49 +399,6 @@ class CustomersWebController extends Controller
         ]);
     }
 
-    // =================== QR PAYMENT ===================
-
-    /**
-     * Handle the QR payment image upload.
-     *
-     * Returns the stored path (or null when removed / not provided).
-     * Replaces the old image (and deletes it from disk) when a new one is uploaded
-     * or when the remove checkbox is ticked.
-     */
-    private function handleQrUpload(Request $request, ?string $currentPath): ?string
-    {
-        $qrDir = public_path('images/qr_payment');
-        if (!file_exists($qrDir)) {
-            mkdir($qrDir, 0755, true);
-        }
-
-        // Explicit removal
-        if ($request->boolean('remove_qr_payment')) {
-            if ($currentPath && file_exists(public_path($currentPath))) {
-                @unlink(public_path($currentPath));
-            }
-            return null;
-        }
-
-        // New upload replaces the old file
-        if ($request->hasFile('qr_payment') && $request->file('qr_payment')->isValid()) {
-            if ($currentPath && file_exists(public_path($currentPath))) {
-                @unlink(public_path($currentPath));
-            }
-
-            $file = $request->file('qr_payment');
-            $filename = time() . '_qr_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
-            $file->move($qrDir, $filename);
-
-            return 'images/qr_payment/' . $filename;
-        }
-
-        // Keep the current image
-        return $currentPath;
-    }
-
-    // =================== LAYOUT METHODS ===================
-
     public function page($id)
     {
         $website = CustomersWebsite::with(['customer', 'template'])->findOrFail($id);
@@ -497,7 +410,7 @@ class CustomersWebController extends Controller
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
-            'modul_type' => 'Pages'
+            'modul_type' => 'Pages',
         ]);
     }
 
@@ -505,14 +418,11 @@ class CustomersWebController extends Controller
     {
         $website = CustomersWebsite::with('template')->findOrFail($id);
 
-        // Get sections from the website's template
         $sections = TemplatesSection::with(['contents', 'template'])
-            // ->where('template_id', $website->template_id)
             ->orderBy('template_id', 'asc')
             ->orderBy('position', 'asc')
             ->get();
 
-        // Get existing layout items for this website filtered by page_type
         $layouts = CustomersWebsiteLayout::with(['section.contents'])
             ->where('customers_website_id', $id)
             ->where('page_type', $page_type)
@@ -527,103 +437,94 @@ class CustomersWebController extends Controller
             'modul' => $this->modul,
             'modul_path' => $this->path,
             'modul_name' => $this->modul_name,
-            'modul_type' => 'Layout'
+            'modul_type' => 'Layout',
         ]);
     }
 
     public function getSectionContents($sectionId)
     {
         $contents = TemplatesSectionContent::where('templates_sections_id', $sectionId)->get();
+
         return response()->json([
             'success' => true,
-            'contents' => $contents
+            'contents' => $contents,
         ]);
     }
 
-    /**
-     * Recursively scan data for base64 image data URIs, save them as files,
-     * and replace the base64 strings with file paths.
-     */
-    private function processBase64Images(&$data, $websiteId)
+    private function saveIdentity(Request $request, CustomersWebsite $website): void
     {
-        if (is_array($data)) {
-            foreach ($data as $key => &$value) {
-                $this->processBase64Images($value, $websiteId);
-            }
-            unset($value);
-        } elseif (is_string($data) && preg_match('/^data:image\/(\w+);base64,/', $data, $matches)) {
-            $website = CustomersWebsite::find($websiteId);
-            $domainFolder = $website ? $website->domain : null;
-            $ext = strtolower($matches[1]);
-            if ($ext === 'jpeg') $ext = 'jpg';
-            $filename = time() . '_' . uniqid() . '.' . $ext;
+        $identity = $website->identity;
+        $logoPath = $identity->logo ?? null;
 
-            $rawData = preg_replace('/^data:image\/\w+;base64,/', '', $data);
-            $decoded = base64_decode($rawData);
-            if ($decoded === false) return;
-
-            if (!empty($domainFolder)) {
-                $targetDir = public_path('images/website/' . $domainFolder);
-                if (!file_exists($targetDir)) {
-                    mkdir($targetDir, 0755, true);
-                }
-                file_put_contents($targetDir . '/' . $filename, $decoded);
-                $data = $filename;
-            } else {
-                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
-                }
-                \Illuminate\Support\Facades\Storage::disk('public')->put('layout_content/' . $filename, $decoded);
-                $data = 'layout_content/' . $filename;
+        if ($request->boolean('remove_logo')) {
+            if ($logoPath && file_exists(public_path($logoPath))) {
+                @unlink(public_path($logoPath));
             }
+            $logoPath = null;
+        }
+
+        if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
+            if ($logoPath && file_exists(public_path($logoPath))) {
+                @unlink(public_path($logoPath));
+            }
+
+            $file = $request->file('logo');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $filename = time() . '_logo_' . uniqid() . '.' . $ext;
+
+            $domainFolder = $website->domain ?: 'shared';
+            $targetDir = public_path('images/website/' . $domainFolder);
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0755, true);
+            }
+            $file->move($targetDir, $filename);
+            $logoPath = 'images/website/' . $domainFolder . '/' . $filename;
+        }
+
+        $payload = [
+            'logo' => $logoPath,
+            'primary_color' => $request->primary_color,
+            'secondary_color' => $request->secondary_color,
+            'accent_color' => $request->accent_color,
+            'primary_font' => $request->primary_font,
+            'secondary_font' => $request->secondary_font,
+            'font_color' => $request->font_color,
+        ];
+
+        if ($identity) {
+            $identity->update($payload);
+        } else {
+            $website->identity()->create($payload);
         }
     }
 
-    /**
-     * Recursively collect all image file paths from content data.
-     * Handles nested repeater arrays and flat key-value pairs.
-     */
-    private function collectImageFiles($data, &$files)
+    private function handleQrUpload(Request $request, ?string $currentPath): ?string
     {
-        if (is_array($data)) {
-            foreach ($data as $value) {
-                $this->collectImageFiles($value, $files);
-            }
-        } elseif (is_string($data) && !empty($data)) {
-            // Skip base64 data URIs and non-file values
-            if (str_starts_with($data, 'data:') || str_starts_with($data, 'http') || str_starts_with($data, '#')) {
-                return;
-            }
-            $files[] = $data;
+        $qrDir = public_path('images/qr_payment');
+        if (!file_exists($qrDir)) {
+            mkdir($qrDir, 0755, true);
         }
-    }
 
-    /**
-     * Delete image files from disk given an array of file paths.
-     */
-    private function deleteImageFiles($files, $websiteId)
-    {
-        $website = CustomersWebsite::find($websiteId);
-        $domainFolder = $website ? $website->domain : null;
-
-        foreach ($files as $filePath) {
-            // Delete from domain folder
-            if (!empty($domainFolder)) {
-                $fullPath = public_path('images/website/' . $domainFolder . '/' . basename($filePath));
-                if (file_exists($fullPath) && is_file($fullPath)) {
-                    @unlink($fullPath);
-                }
+        if ($request->boolean('remove_qr_payment')) {
+            if ($currentPath && file_exists(public_path($currentPath))) {
+                @unlink(public_path($currentPath));
             }
-            // Delete from storage layout_content
-            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($filePath);
-            }
-            // Also try direct path (for files stored in layout_content)
-            $directPath = public_path('storage/' . $filePath);
-            if (file_exists($directPath) && is_file($directPath)) {
-                @unlink($directPath);
-            }
+            return null;
         }
+
+        if ($request->hasFile('qr_payment') && $request->file('qr_payment')->isValid()) {
+            if ($currentPath && file_exists(public_path($currentPath))) {
+                @unlink(public_path($currentPath));
+            }
+
+            $file = $request->file('qr_payment');
+            $filename = time() . '_qr_' . uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+            $file->move($qrDir, $filename);
+
+            return 'images/qr_payment/' . $filename;
+        }
+
+        return $currentPath;
     }
 
     public function layoutStore(Request $request, $id, $page_type)
@@ -664,8 +565,8 @@ class CustomersWebController extends Controller
                     }
                 }
             } else {
-                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
+                if (!Storage::disk('public')->exists('layout_content')) {
+                    Storage::disk('public')->makeDirectory('layout_content');
                 }
                 foreach ($request->file('dynamic_files') as $key => $file) {
                     if ($file->isValid()) {
@@ -692,7 +593,6 @@ class CustomersWebController extends Controller
             $finalContent = json_encode($merged, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         }
 
-        // Auto position: always append to end
         $maxPosition = CustomersWebsiteLayout::where('customers_website_id', $id)
             ->where('page_type', $page_type)
             ->max('position');
@@ -744,7 +644,7 @@ class CustomersWebController extends Controller
                 if (is_string($v) && (str_starts_with(trim($v), '['))) {
                     $decodedVal = json_decode($v, true);
                     $dynamicData[$k] = (json_last_error() === JSON_ERROR_NONE) ? $decodedVal : $v;
-                } else if (is_string($v) && (str_starts_with(trim($v), '{'))) {
+                } elseif (is_string($v) && (str_starts_with(trim($v), '{'))) {
                     $decodedVal = json_decode($v, true);
                     $dynamicData[$k] = (json_last_error() === JSON_ERROR_NONE) ? $decodedVal : $v;
                 } else {
@@ -753,14 +653,12 @@ class CustomersWebController extends Controller
             }
         }
 
-        // Handle explicit file removals (remove_files[key] = "1")
         if ($request->has('remove_files') && is_array($request->remove_files)) {
             $website = $website ?? CustomersWebsite::find($id);
             $domainFolder = $website ? $website->domain : null;
 
             foreach ($request->remove_files as $key => $flag) {
                 if ($flag == '1' && !empty($existingData[$key]) && is_string($existingData[$key])) {
-                    // Attempt to delete the physical file
                     if (!empty($domainFolder)) {
                         $targetDir = public_path('images/website/' . $domainFolder);
                         $oldFilePath = $targetDir . '/' . basename($existingData[$key]);
@@ -768,11 +666,10 @@ class CustomersWebController extends Controller
                             @unlink($oldFilePath);
                         }
                     } else {
-                        if (\Illuminate\Support\Facades\Storage::disk('public')->exists($existingData[$key])) {
-                            \Illuminate\Support\Facades\Storage::disk('public')->delete($existingData[$key]);
+                        if (Storage::disk('public')->exists($existingData[$key])) {
+                            Storage::disk('public')->delete($existingData[$key]);
                         }
                     }
-                    // Nullify the key in merged data
                     $dynamicData[$key] = null;
                 }
             }
@@ -788,12 +685,10 @@ class CustomersWebController extends Controller
                     mkdir($targetDir, 0755, true);
                 }
                 foreach ($request->file('dynamic_files') as $key => $file) {
-                    // Skip upload if this key was explicitly removed
                     if (isset($request->remove_files[$key]) && $request->remove_files[$key] == '1') {
                         continue;
                     }
                     if ($file->isValid()) {
-                        // Delete old file if existing for this key
                         if (!empty($existingData[$key]) && is_string($existingData[$key])) {
                             $oldFilePath = $targetDir . '/' . basename($existingData[$key]);
                             if (file_exists($oldFilePath) && is_file($oldFilePath)) {
@@ -807,20 +702,16 @@ class CustomersWebController extends Controller
                     }
                 }
             } else {
-                if (!\Illuminate\Support\Facades\Storage::disk('public')->exists('layout_content')) {
-                    \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('layout_content');
+                if (!Storage::disk('public')->exists('layout_content')) {
+                    Storage::disk('public')->makeDirectory('layout_content');
                 }
                 foreach ($request->file('dynamic_files') as $key => $file) {
-                    // Skip upload if this key was explicitly removed
                     if (isset($request->remove_files[$key]) && $request->remove_files[$key] == '1') {
                         continue;
                     }
                     if ($file->isValid()) {
-                        // Delete old file if existing
-                        if (!empty($existingData[$key]) && is_string($existingData[$key])) {
-                            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($existingData[$key])) {
-                                \Illuminate\Support\Facades\Storage::disk('public')->delete($existingData[$key]);
-                            }
+                        if (Storage::disk('public')->exists($existingData[$key] ?? null)) {
+                            Storage::disk('public')->delete($existingData[$key]);
                         }
 
                         $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
@@ -840,12 +731,10 @@ class CustomersWebController extends Controller
             }
         }
 
-        // Combine inputs: dynamicData (form inputs) takes precedence over contentInputData (textarea), which takes precedence over existing DB data
         $merged = array_merge($existingData, $contentInputData, $dynamicData);
         if (!empty($merged)) {
             $this->processBase64Images($merged, $id);
 
-            // Cleanup: delete old image files no longer present in the new content
             $oldFiles = [];
             $newFiles = [];
             $this->collectImageFiles($existingData, $oldFiles);
@@ -881,7 +770,7 @@ class CustomersWebController extends Controller
     public function layoutDestroy(Request $request, $id, $page_type, $layoutId)
     {
         $layout = CustomersWebsiteLayout::where('customers_website_id', $id)->findOrFail($layoutId);
-        
+
         if (!empty($layout->content)) {
             $contentData = json_decode($layout->content, true);
             if (is_array($contentData)) {
@@ -922,5 +811,79 @@ class CustomersWebController extends Controller
             'message' => 'Layout order updated successfully.',
         ]);
     }
-}
 
+    private function processBase64Images(&$data, $websiteId)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => &$value) {
+                $this->processBase64Images($value, $websiteId);
+            }
+            unset($value);
+        } elseif (is_string($data) && preg_match('/^data:image\/(\w+);base64,/', $data, $matches)) {
+            $website = CustomersWebsite::find($websiteId);
+            $domainFolder = $website ? $website->domain : null;
+            $ext = strtolower($matches[1]);
+            if ($ext === 'jpeg') {
+                $ext = 'jpg';
+            }
+            $filename = time() . '_' . uniqid() . '.' . $ext;
+
+            $rawData = preg_replace('/^data:image\/\w+;base64,/', '', $data);
+            $decoded = base64_decode($rawData);
+            if ($decoded === false) {
+                return;
+            }
+
+            if (!empty($domainFolder)) {
+                $targetDir = public_path('images/website/' . $domainFolder);
+                if (!file_exists($targetDir)) {
+                    mkdir($targetDir, 0755, true);
+                }
+                file_put_contents($targetDir . '/' . $filename, $decoded);
+                $data = $filename;
+            } else {
+                if (!Storage::disk('public')->exists('layout_content')) {
+                    Storage::disk('public')->makeDirectory('layout_content');
+                }
+                Storage::disk('public')->put('layout_content/' . $filename, $decoded);
+                $data = 'layout_content/' . $filename;
+            }
+        }
+    }
+
+    private function collectImageFiles($data, &$files)
+    {
+        if (is_array($data)) {
+            foreach ($data as $value) {
+                $this->collectImageFiles($value, $files);
+            }
+        } elseif (is_string($data) && !empty($data)) {
+            if (str_starts_with($data, 'data:') || str_starts_with($data, 'http') || str_starts_with($data, '#')) {
+                return;
+            }
+            $files[] = $data;
+        }
+    }
+
+    private function deleteImageFiles($files, $websiteId)
+    {
+        $website = CustomersWebsite::find($websiteId);
+        $domainFolder = $website ? $website->domain : null;
+
+        foreach ($files as $filePath) {
+            if (!empty($domainFolder)) {
+                $fullPath = public_path('images/website/' . $domainFolder . '/' . basename($filePath));
+                if (file_exists($fullPath) && is_file($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
+            if (Storage::disk('public')->exists($filePath)) {
+                Storage::disk('public')->delete($filePath);
+            }
+            $directPath = public_path('storage/' . $filePath);
+            if (file_exists($directPath) && is_file($directPath)) {
+                @unlink($directPath);
+            }
+        }
+    }
+}

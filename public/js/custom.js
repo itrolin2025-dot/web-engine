@@ -17,6 +17,9 @@ if ($.fn.dataTable) {
 
 function showNotification(type, message) {
     var notificationArea = $('#js-notification-area');
+    if (notificationArea.children().length > 0) {
+        notificationArea.empty();
+    }
     var bgColor, icon, alertClass;
     if (type === 'success') {
         bgColor = 'bg-success';

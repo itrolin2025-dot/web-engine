@@ -138,8 +138,10 @@
                                 <span class="text-xs font-medium text-slate-700 dark:text-navy-100">Filter Template</span>
                                 <select id="filterTemplate" onchange="onTemplateFilterChange()" class="form-select mt-1 w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm hover:border-slate-400 focus:border-primary dark:border-navy-450 dark:hover:border-navy-400 dark:focus:border-accent">
                                     <option value="">All Templates</option>
-                                    @foreach($sections->pluck('template.name', 'template_id')->unique() as $tid => $tname)
-                                        <option value="{{ $tid }}">{{ $tname }}</option>
+                                    {{-- Jangan dedupe berdasarkan nama template: nama bisa sama (mis. dua template "Empire")
+                                         sehingga satu template hilang dari daftar dan section-nya tidak bisa dipilih. --}}
+                                    @foreach($sections->pluck('template.name', 'template_id') as $tid => $tname)
+                                        <option value="{{ $tid }}">{{ $tname }}{{ $tid ? ' (id '.$tid.')' : '' }}</option>
                                     @endforeach
                                 </select>
                             </label>
@@ -193,7 +195,7 @@
                                         <div class="p-2.5">
                                             <p class="text-xs font-semibold text-slate-700 dark:text-navy-100 truncate">{{ $sec->name }}</p>
                                             <p class="mt-0.5 text-[10px] text-slate-400 dark:text-navy-300 truncate">
-                                                <span class="font-mono">[{{ $sec->template?->name ?? '-' }}]</span> ({{ $sec->slug }})
+                                                <span class="font-mono">[{{ $sec->template?->name ?? '-' }}{{ $sec->template_id ? ' #'.$sec->template_id : '' }}]</span> ({{ $sec->slug }})
                                             </p>
                                         </div>
                                     </div>
@@ -390,7 +392,7 @@
     </div>
     {{-- END Row 2 --}}
 
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="{{ asset('vendors/sortablejs/Sortable.min.js') }}"></script>
     <script>
         const websiteDomain = '{{ $website->domain ?? "" }}';
 

@@ -83,8 +83,6 @@
         <div class="flex mb-2 items-center justify-between py-1 lg:py-2">
         </div>
 
-        @include('components.forms.notification')
-
         {{-- DataTables Controls (outside card) --}}
         <div id="dt-controls" class="flex items-center justify-between gap-3 mb-4 px-1">
             <div id="dt-length-area"></div>

@@ -249,7 +249,7 @@
                     },
                 ],
                 ajax: {
-                    url: "{{ route('admin.customers-website.getData') }}",
+                    url: "{{ url('admin/customers-website/get-data') }}",
                     type: 'GET'
                 },
                 columns: [
@@ -305,7 +305,7 @@
                 $btn.prop('disabled', true);
 
                 $.ajax({
-                    url: "{{ route('admin.customers-website.toggle-selected', ':id:') }}".replace(':id:', id),
+                    url: "{{ url('admin/customers-website/' . ':id:' . '/toggle-selected') }}".replace(':id:', id),
                     type: 'POST',
                     data: {
                         _token: "{{ csrf_token() }}",

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ordinary. — Clinical Formulations with Integrity</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#ECE8E3] text-[#111111] font-sans antialiased min-h-screen py-4 sm:py-8 px-2 sm:px-6 md:px-10 flex justify-center selection:bg-black selection:text-white">
+
+    <!-- Main Container Frame -->
+    <main class="w-full max-w-[1240px] bg-white rounded-[28px] sm:rounded-[36px] shadow-2xl p-4 sm:p-6 md:p-10 flex flex-col gap-8 sm:gap-10">
+
+        <!-- ================= TOP HEADER ICONS ================= -->
+        <header class="w-full flex items-center justify-between px-2 pt-1 pb-2">
+            <!-- Left Controls: Menu Dots & Search -->
+            <div class="flex items-center gap-4 sm:gap-5">
+                <button aria-label="More options" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="5" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button aria-label="Search" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Right Controls: Profile & Cart -->
+            <div class="flex items-center gap-4 sm:gap-5">
+                <button aria-label="Profile" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </button>
+                <button aria-label="Cart" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ================= HERO BANNER (2 COLUMNS WITH FULL BACKGROUND IMAGE) ================= -->
+        <section class="w-full relative min-h-[220px] sm:min-h-[280px] md:min-h-[340px] rounded-2xl overflow-hidden flex items-center px-4 sm:px-8 md:px-12 py-8 bg-[#F8F7F4]">
+            
+            <!-- Full Background Image -->
+            <div class="absolute inset-0 w-full h-full pointer-events-none">
+                <img 
+                    src="/images/default/broken.png" 
+                    alt="Hero Texture Background" 
+                    class="w-full h-full object-cover opacity-75"
+                />
+                <div class="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
+            </div>
+
+            <!-- 2-Column Content Row -->
+            <div class="relative z-10 w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                <!-- Left Column: H1 'The Ordinary.' -->
+                <div class="md:col-span-7 flex flex-col justify-center">
+                    <h1 class="text-neutral-950 tracking-tight leading-none">
+                        <span class="block text-2xl sm:text-4xl md:text-5xl font-light mb-1 sm:mb-2">The</span>
+                        <span class="block text-5xl sm:text-7xl md:text-8xl font-extrabold tracking-tight">Ordinary<span class="text-black">.</span></span>
+                    </h1>
+                </div>
+
+                <!-- Right Column: H2 Description 'Clinical Formulations with Integrity.' -->
+                <div class="md:col-span-5 flex md:justify-end items-center">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-medium text-neutral-900 leading-snug md:text-right max-w-sm">
+                        Clinical Formulations <br class="hidden sm:inline">
+                        <span class="italic font-normal">with</span> Integrity.
+                    </h2>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= NAVBAR: NEW | BEST SELLERS ================= -->
+        <nav class="w-full border-b border-neutral-100 pb-3 -mt-2">
+            <div class="flex items-center justify-start sm:justify-center overflow-x-auto gap-3 sm:gap-6 text-xs sm:text-sm font-medium text-neutral-800 whitespace-nowrap py-1">
+                <a href="#new" class="hover:text-black transition-colors font-semibold">New</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#bestsellers" class="hover:text-black transition-colors font-semibold">Best Sellers</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#skincare" class="hover:text-black transition-colors font-semibold">Skincare</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#makeup" class="hover:text-black transition-colors font-semibold">Makeup</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#hair-body" class="hover:text-black transition-colors font-semibold">Hair & Body</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#gifts" class="hover:text-black transition-colors font-semibold">Gifts</a>
+            </div>
+        </nav>
+
+        <!-- ================= SECTION 1: NEW FORMULATIONS LOADING... ================= -->
+        <section class="w-full bg-[#F4F3EF] rounded-[24px] sm:rounded-[30px] p-6 sm:p-10 md:p-12 overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center min-h-[340px]">
+                
+                <!-- Left Content -->
+                <div class="md:col-span-6 space-y-4 sm:space-y-6">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-black tracking-tight leading-tight">
+                        New Formulations<br>
+                        Loading...
+                    </h2>
+                    <p class="text-xs sm:text-sm text-neutral-600 max-w-sm leading-relaxed font-normal">
+                        Behind the scenes, we've been experimenting with new science. Creating all new formulations just for you.
+                    </p>
+                    <div class="pt-2">
+                        <a href="#discover" class="inline-flex items-center justify-center border border-black rounded-full px-7 py-2 text-xs sm:text-sm font-semibold text-black hover:bg-black hover:text-white transition-all shadow-xs">
+                            Discover
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Visual: Flatlay Lab & Formulations Image -->
+                <div class="md:col-span-6 flex items-center justify-center">
+                    <div class="w-full max-w-lg aspect-[16/11] bg-[#ECEBE6] rounded-2xl overflow-hidden p-4 shadow-sm flex items-center justify-center group">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="Laboratory beakers and new skincare serum formulations" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: EVERYDAY ESSENTIALS ================= -->
+        <section class="w-full">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                
+                <!-- Left: 2 Square/Portrait Product Cards -->
+                <div class="md:col-span-7 grid grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Product 1 Card -->
+                    <div class="aspect-[4/5] bg-[#EAEAE6] rounded-2xl p-4 sm:p-6 shadow-sm flex items-center justify-center group overflow-hidden">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="The Ordinary Hyaluronic Acid bottle" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+
+                    <!-- Product 2 Card -->
+                    <div class="aspect-[4/5] bg-[#EAEAE6] rounded-2xl p-4 sm:p-6 shadow-sm flex items-center justify-center group overflow-hidden">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="The Ordinary Niacinamide bottle" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+
+                <!-- Right: Text & 'Shop now' Button -->
+                <div class="md:col-span-5 flex flex-col items-start space-y-4 sm:space-y-6 md:pl-4">
+                    <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-black tracking-tight leading-tight">
+                        Everyday<br>
+                        essentials
+                    </h2>
+                    <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed font-normal max-w-sm">
+                        Our beginner-friendly Hyaluronic Acid 2% + B5 boosts hydration, while Niacinamide 10% + Zinc 1% improves the look of skin radiance.
+                    </p>
+                    <div class="pt-2">
+                        <a href="#shop" class="inline-flex items-center justify-center bg-black hover:bg-neutral-800 text-white rounded-full px-8 py-3 text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md">
+                            Shop now
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= FOOTER ================= -->
+        <footer class="w-full pt-10 pb-6 border-t border-neutral-200">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10">
+                
+                <!-- Column 1: Company & Commitments & Contact -->
+                <div class="lg:col-span-4 space-y-6 text-xs text-neutral-600">
+                    <div>
+                        <h4 class="font-bold text-neutral-900 mb-2">Company</h4>
+                        <ul class="space-y-1.5">
+                            <li><a href="#" class="hover:text-black transition-colors">About Us</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Join Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-neutral-900 mb-2">Our Commitments</h4>
+                        <ul class="space-y-1.5">
+                            <li><a href="#" class="hover:text-black transition-colors">Accessibility</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Sustainability</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Commit to Change</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Everything Is Chemicals</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-neutral-900 mb-2">Contact Us</h4>
+                        <ul class="space-y-1.5">
+                            <li><a href="#" class="hover:text-black transition-colors">Track Order</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Sign In</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Store Locator</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Column 2: Customer Care & Gift Cards -->
+                <div class="lg:col-span-4 space-y-6 text-xs text-neutral-600">
+                    <div>
+                        <h4 class="font-bold text-neutral-900 mb-2">Customer Care</h4>
+                        <ul class="space-y-1.5">
+                            <li><a href="#" class="hover:text-black transition-colors">FAQ</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Disposal Instructions</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Return Policy</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Promotion Terms & Conditions</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-neutral-900 mb-2">Gift Cards</h4>
+                        <ul class="space-y-1.5">
+                            <li><a href="#" class="hover:text-black transition-colors">Purchase</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Check Balance</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Column 3: Newsletter Sign-up -->
+                <div class="lg:col-span-4 space-y-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-black tracking-tight leading-tight">
+                        Let's stay<br>
+                        In touch.
+                    </h3>
+                    
+                    <div class="pt-2">
+                        <div class="border-b border-neutral-900 pb-1.5 flex items-center justify-between">
+                            <input 
+                                type="email" 
+                                placeholder="Email address" 
+                                class="w-full bg-transparent text-xs sm:text-sm text-neutral-900 placeholder-neutral-500 outline-none"
+                            />
+                            <button aria-label="Submit Email" class="text-neutral-700 hover:text-black">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="text-[9px] text-neutral-400 leading-normal pt-1">
+                        *Yes, legal/Consent and opens to receive/consent to our emails. Cancellation or withdrawal may occur in the entire newsletter section for permissions issue is set to the used to actics this woe. I only compilation of use and tm of your email onter contents.
+                    </p>
+                </div>
+
+            </div>
+        </footer>
+
+    </main>
+
+</body>
+</html>

@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\admin;
 
-/**
- * Controller for Admin Template CRUD with Upload & Popup
- */
-
 use App\Http\Controllers\Controller;
-use App\Models\Tag;
 use App\Models\Template;
 use App\Models\TemplatesSection;
 use App\Models\TemplatesSectionContent;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -214,7 +210,6 @@ class TemplateController extends Controller
 
         $contentPresets = $this->getContentPresets();
         $predefinedKeys = array_column($contentPresets, 'key');
-
 
         return view('admin.template.section', [
             'template' => $template,
@@ -423,12 +418,17 @@ class TemplateController extends Controller
 
     public function sectionReorder(Request $request, $id)
     {
-        $order = $request->input('order', []);
+        $validated = $request->validate([
+            'order' => 'required|array|min:1',
+            'order.*' => 'integer|exists:templates_section,id',
+        ]);
 
-        foreach ($order as $position => $sectionId) {
+        foreach ($validated['order'] as $index => $sectionId) {
+            // Posisi disimpan 1-based agar konsisten dengan section yang sudah ada
+            // (sectionStore memakai max(position) + 1) dan dengan badge posisi di UI.
             TemplatesSection::where('id', $sectionId)
                 ->where('template_id', $id)
-                ->update(['position' => $position]);
+                ->update(['position' => $index + 1]);
         }
 
         return response()->json(['success' => true, 'message' => 'Section order updated.']);
@@ -510,28 +510,55 @@ class TemplateController extends Controller
         $section->tags()->sync($tagIds->unique()->values());
     }
 
+    /**
+     * Toggle the "Favorite" star for a template (AJAX).
+     */
+    public function toggleFavorite(Request $request, $id)
+    {
+        if (canAccess($this->modul, $this->getProductId(), 'edit') == false) {
+            return response()->json(['success' => false, 'message' => 'Tidak Memiliki Akses'], 403);
+        }
+
+        $request->validate([
+            'is_favorite' => 'required|boolean',
+        ]);
+
+        $template = Template::findOrFail($id);
+        $template->update([
+            'is_favorite' => $request->boolean('is_favorite') ? 1 : 0,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $template->is_favorite
+                ? 'Template ditambahkan ke favorit.'
+                : 'Template dihapus dari favorit.',
+            'is_favorite' => (int) $template->is_favorite,
+        ]);
+    }
+
     public static function getContentPresets()
-{
-    return [
-        ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
-        ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
-        ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
-        ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
-        ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
-        ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
-        ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
-        ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
-        ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
-        ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
-        ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
-        ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
-        ['key' => 'button_url', 'type' => 'text', 'default_value' => '#'],
-        ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
-        ['key' => 'button_border_color', 'type' => 'color', 'default_value' => '#ffffff'],
-        ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#000000'],
-        ['key' => 'repeater', 'type' => 'repeater', 'default_value' => '[{ "label": "Tag 1", "color":"#575757", "sort":"1" }, { "label": "Tag 2", "color":"#575757", "sort":"12" }]'],
-        ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
-        ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
-    ];
-}
+    {
+        return [
+            ['key' => 'tag', 'type' => 'text', 'default_value' => 'your tag'],
+            ['key' => 'tag_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'title', 'type' => 'text', 'default_value' => 'your title'],
+            ['key' => 'title_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'subtitle', 'type' => 'text', 'default_value' => 'your subtitle'],
+            ['key' => 'subtitle_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'description', 'type' => 'long_text', 'default_value' => 'your description'],
+            ['key' => 'description_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'image', 'type' => 'image', 'default_value' => 'your image'],
+            ['key' => 'background', 'type' => 'image', 'default_value' => 'your image'],
+            ['key' => 'background_color', 'type' => 'color', 'default_value' => '#ffffff'],
+            ['key' => 'button_text', 'type' => 'text', 'default_value' => 'check'],
+            ['key' => 'button_url', 'type' => 'text', 'default_value' => '#'],
+            ['key' => 'button_color', 'type' => 'color', 'default_value' => '#ffffff'],
+            ['key' => 'button_border_color', 'type' => 'color', 'default_value' => '#ffffff'],
+            ['key' => 'button_text_color', 'type' => 'color', 'default_value' => '#000000'],
+            ['key' => 'repeater', 'type' => 'repeater', 'default_value' => '[{ "label": "Tag 1", "color":"#575757", "sort":"1" }, { "label": "Tag 2", "color":"#575757", "sort":"12" }]'],
+            ['key' => 'data_product', 'type' => 'data', 'default_value' => 'false'],
+            ['key' => 'data_article', 'type' => 'data', 'default_value' => 'false'],
+        ];
+    }
 }

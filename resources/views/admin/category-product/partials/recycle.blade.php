@@ -86,7 +86,6 @@
         </div>
 
         @include('components.datatables.header-filter')
-        @include('components.forms.notification')
 
         {{-- DataTables Controls (outside card) --}}
         <div id="dt-controls" class="flex items-center justify-between gap-3 mb-4 px-1">

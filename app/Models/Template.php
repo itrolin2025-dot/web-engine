@@ -19,4 +19,11 @@ class Template extends Model
     {
         return $this->belongsToMany(Tag::class, 'template_tag', 'template_id', 'tag_id');
     }
+
+    /**
+     * Favorite status is cast to boolean on read/write.
+     */
+    protected $casts = [
+        'is_favorite' => 'boolean',
+    ];
 }

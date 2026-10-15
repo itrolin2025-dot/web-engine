@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ordinary. — Clinical Formulations with Integrity</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-[#111111] font-sans antialiased min-h-screen selection:bg-black selection:text-white">
+
+    <!-- ================= TOP HEADER ICONS ================= -->
+    <header class="w-full bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+            <!-- Left Controls: Menu Dots & Search -->
+            <div class="flex items-center gap-5 sm:gap-6">
+                <button aria-label="More options" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="5" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button aria-label="Search" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Right Controls: Profile & Cart -->
+            <div class="flex items-center gap-5 sm:gap-6">
+                <button aria-label="Profile" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </button>
+                <button aria-label="Cart" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= HERO BANNER (FULL WIDTH WITH FULL BACKGROUND IMAGE & 2 COLUMNS) ================= -->
+    <section class="w-full relative min-h-[calc(100vh-106px)] min-h-[calc(100dvh-106px)] flex items-center overflow-hidden bg-[#FBFBFA]">
+        
+        <!-- Full Edge-to-Edge Background Image -->
+        <div class="absolute inset-0 w-full h-full pointer-events-none">
+            <img 
+                src="/images/default/broken.png" 
+                alt="Hero Full Background" 
+                class="w-full h-full object-cover opacity-80"
+            />
+            <div class="absolute inset-0 bg-white/45 backdrop-blur-[1px]"></div>
+        </div>
+
+        <!-- 2-Column Content Container -->
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                
+                <!-- Left Column: H1 'The Ordinary.' -->
+                <div class="md:col-span-7 flex flex-col justify-center">
+                    <h1 class="text-neutral-950 tracking-tight leading-none">
+                        <span class="block text-3xl sm:text-5xl md:text-6xl font-light mb-1 sm:mb-2">The</span>
+                        <span class="block text-6xl sm:text-8xl md:text-9xl font-extrabold tracking-tight">Ordinary<span class="text-black">.</span></span>
+                    </h1>
+                </div>
+
+                <!-- Right Column: H2 Description 'Clinical Formulations with Integrity.' -->
+                <div class="md:col-span-5 flex md:justify-end items-center">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-medium text-neutral-900 leading-snug md:text-right max-w-md">
+                        Clinical Formulations <br class="hidden sm:inline">
+                        <span class="italic font-normal">with</span> Integrity.
+                    </h2>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ================= NAVBAR: NEW | BEST SELLERS (WITH SCROLL-REVEAL ICONS) ================= -->
+    <nav id="sticky-navbar" class="w-full bg-white sticky top-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+            
+            <!-- Sticky Left Icons (Visible on Scroll) -->
+            <div id="nav-left-icons" class="flex items-center gap-4 transition-all duration-300 opacity-0 pointer-events-none -translate-x-3 shrink-0">
+                <button aria-label="More options" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="5" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button aria-label="Search" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Category Links (Center) -->
+            <div class="flex-1 flex items-center justify-center overflow-x-auto gap-4 sm:gap-8 text-xs sm:text-sm font-medium text-neutral-800 whitespace-nowrap px-2">
+                <a href="#new" class="hover:text-black transition-colors font-semibold">New</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#bestsellers" class="hover:text-black transition-colors font-semibold">Best Sellers</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#skincare" class="hover:text-black transition-colors font-semibold">Skincare</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#makeup" class="hover:text-black transition-colors font-semibold">Makeup</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#hair-body" class="hover:text-black transition-colors font-semibold">Hair & Body</a>
+                <span class="text-neutral-300">|</span>
+                <a href="#gifts" class="hover:text-black transition-colors font-semibold">Gifts</a>
+            </div>
+
+            <!-- Sticky Right Icons (Visible on Scroll) -->
+            <div id="nav-right-icons" class="flex items-center gap-4 transition-all duration-300 opacity-0 pointer-events-none translate-x-3 shrink-0">
+                <button aria-label="Profile" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </button>
+                <button aria-label="Cart" class="text-neutral-800 hover:text-black transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- ================= SECTION 1: NEW FORMULATIONS LOADING... ================= -->
+    <section class="w-full py-8 sm:py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="w-full bg-[#F5F4F0] rounded-2xl sm:rounded-3xl p-6 sm:p-10 md:p-14 overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                    
+                    <!-- Left Content -->
+                    <div class="lg:col-span-5 space-y-5 sm:space-y-6">
+                        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black tracking-tight leading-tight">
+                            New Formulations<br>
+                            Loading...
+                        </h2>
+                        <p class="text-sm sm:text-base text-neutral-600 max-w-md leading-relaxed font-normal">
+                            Behind the scenes, we've been experimenting with new science. Creating all new formulations just for you.
+                        </p>
+                        <div class="pt-2">
+                            <a href="#discover" class="inline-flex items-center justify-center border-2 border-black rounded-full px-8 py-2.5 text-xs sm:text-sm font-semibold text-black hover:bg-black hover:text-white transition-all shadow-xs">
+                                Discover
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Visual: Flatlay Lab & Formulations Image -->
+                    <div class="lg:col-span-7 flex items-center justify-center">
+                        <div class="w-full aspect-[16/10] bg-[#ECEAE5] rounded-xl sm:rounded-2xl overflow-hidden p-6 sm:p-8 flex items-center justify-center group">
+                            <img 
+                                src="/images/default/broken.png" 
+                                alt="Laboratory beakers and new skincare serum formulations" 
+                                class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                            />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= SECTION 2: EVERYDAY ESSENTIALS ================= -->
+    <section class="w-full py-8 sm:py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+                
+                <!-- Left: 2 Square/Portrait Product Cards with Border-Radius -->
+                <div class="lg:col-span-7 grid grid-cols-2 gap-6 sm:gap-8">
+                    <!-- Product 1 Card -->
+                    <div class="aspect-[4/5] bg-[#F2F1ED] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex items-center justify-center group overflow-hidden shadow-xs">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="The Ordinary Hyaluronic Acid bottle" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+
+                    <!-- Product 2 Card -->
+                    <div class="aspect-[4/5] bg-[#F2F1ED] rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex items-center justify-center group overflow-hidden shadow-xs">
+                        <img 
+                            src="/images/default/broken.png" 
+                            alt="The Ordinary Niacinamide bottle" 
+                            class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                </div>
+
+                <!-- Right: Text & 'Shop now' Button -->
+                <div class="lg:col-span-5 flex flex-col items-start space-y-5 sm:space-y-6 lg:pl-6">
+                    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-black tracking-tight leading-tight">
+                        Everyday<br>
+                        essentials
+                    </h2>
+                    <p class="text-sm sm:text-base text-neutral-600 leading-relaxed font-normal max-w-md">
+                        Our beginner-friendly Hyaluronic Acid 2% + B5 boosts hydration, while Niacinamide 10% + Zinc 1% improves the look of skin radiance.
+                    </p>
+                    <div class="pt-2">
+                        <a href="#shop" class="inline-flex items-center justify-center bg-black hover:bg-neutral-800 text-white rounded-full px-9 py-3.5 text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md">
+                            Shop now
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER (FULL WIDTH) ================= -->
+    <footer class="w-full pt-16 pb-12 border-t border-neutral-200 bg-[#FAFAFA]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 sm:gap-12">
+                
+                <!-- Column 1: Company & Commitments & Contact -->
+                <div class="lg:col-span-4 space-y-8 text-xs text-neutral-600">
+                    <div>
+                        <h4 class="font-bold text-neutral-900 text-sm mb-3">Company</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:text-black transition-colors">About Us</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Join Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-neutral-900 text-sm mb-3">Our Commitments</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:text-black transition-colors">Accessibility</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Sustainability</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Commit to Change</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Everything Is Chemicals</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-neutral-900 text-sm mb-3">Contact Us</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:text-black transition-colors">Track Order</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Sign In</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Store Locator</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Column 2: Customer Care & Gift Cards -->
+                <div class="lg:col-span-4 space-y-8 text-xs text-neutral-600">
+                    <div>
+                        <h4 class="font-bold text-neutral-900 text-sm mb-3">Customer Care</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:text-black transition-colors">FAQ</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Disposal Instructions</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Return Policy</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Promotion Terms & Conditions</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-neutral-900 text-sm mb-3">Gift Cards</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="hover:text-black transition-colors">Purchase</a></li>
+                            <li><a href="#" class="hover:text-black transition-colors">Check Balance</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Column 3: Newsletter Sign-up -->
+                <div class="lg:col-span-4 space-y-5">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-black tracking-tight leading-tight">
+                        Let's stay<br>
+                        In touch.
+                    </h3>
+                    
+                    <div class="pt-2">
+                        <div class="border-b-2 border-neutral-900 pb-2 flex items-center justify-between">
+                            <input 
+                                type="email" 
+                                placeholder="Email address" 
+                                class="w-full bg-transparent text-xs sm:text-sm text-neutral-900 placeholder-neutral-500 outline-none"
+                            />
+                            <button aria-label="Submit Email" class="text-neutral-700 hover:text-black">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-neutral-400 leading-normal pt-1">
+                        *Yes, legal/Consent and opens to receive/consent to our emails. Cancellation or withdrawal may occur in the entire newsletter section for permissions issue is set to the used to actics this woe. I only compilation of use and tm of your email onter contents.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Listener Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLeft = document.getElementById('nav-left-icons');
+            const navRight = document.getElementById('nav-right-icons');
+            const stickyNavbar = document.getElementById('sticky-navbar');
+            
+            // Hero section offset to trigger icon appearance
+            const headerElement = document.querySelector('header');
+            
+            function onScroll() {
+                const headerHeight = headerElement ? headerElement.offsetHeight + 60 : 100;
+                const isScrolled = window.scrollY > headerHeight;
+
+                if (isScrolled) {
+                    navLeft.classList.remove('opacity-0', 'pointer-events-none', '-translate-x-3');
+                    navLeft.classList.add('opacity-100', 'pointer-events-auto', 'translate-x-0');
+
+                    navRight.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-3');
+                    navRight.classList.add('opacity-100', 'pointer-events-auto', 'translate-x-0');
+
+                    stickyNavbar.classList.add('shadow-sm', 'bg-white/95', 'backdrop-blur-md');
+                    stickyNavbar.classList.remove('bg-white');
+                } else {
+                    navLeft.classList.add('opacity-0', 'pointer-events-none', '-translate-x-3');
+                    navLeft.classList.remove('opacity-100', 'pointer-events-auto', 'translate-x-0');
+
+                    navRight.classList.add('opacity-0', 'pointer-events-none', 'translate-x-3');
+                    navRight.classList.remove('opacity-100', 'pointer-events-auto', 'translate-x-0');
+
+                    stickyNavbar.classList.remove('shadow-sm', 'bg-white/95', 'backdrop-blur-md');
+                    stickyNavbar.classList.add('bg-white');
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        });
+    </script>
+</body>
+</html>
